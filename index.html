@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>startup | Web Apps Full Cycle</title>
+    <meta name="description" content="startup — разработка веб-приложений полного цикла: от аналитики и интерфейсов до CI/CD, production и поддержки.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&family=Sora:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="site-bg" aria-hidden="true">
+        <canvas class="flow-field" id="flowField"></canvas>
+        <div class="bg-grid"></div>
+        <div class="bg-orb orb-a"></div>
+        <div class="bg-orb orb-b"></div>
+        <div class="bg-orb orb-c"></div>
+    </div>
+
+    <div class="scroll-progress" id="scrollProgress"></div>
+
+    <header class="site-header" id="siteHeader">
+        <div class="container header-inner">
+            <a class="brand" href="#hero" aria-label="startup home">
+                <span class="brand-mark">ST</span>
+                <span class="brand-name">startup</span>
+            </a>
+
+            <nav class="site-nav" aria-label="Основная навигация">
+                <a href="#services" class="nav-link">Услуги</a>
+                <a href="#process" class="nav-link">Процесс</a>
+                <a href="#projects" class="nav-link">Проекты</a>
+                <a href="#about" class="nav-link">Команда</a>
+                <a href="#contact" class="nav-link">Контакт</a>
+            </nav>
+
+            <a class="button button-secondary" href="#" target="_blank" rel="noreferrer"><span>Связаться</span></a>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero container" id="hero">
+            <div class="hero-copy">
+                <p class="eyebrow" data-reveal style="--delay: 0.05s;">stellar product engineering</p>
+
+                <h1 class="hero-title">
+                    <span data-reveal style="--delay: 0.12s;">Запускаем</span>
+                    <span data-reveal style="--delay: 0.2s;">веб-приложения</span>
+                    <span class="accent-line" data-reveal style="--delay: 0.28s;">от идеи до production</span>
+                </h1>
+
+                <p class="hero-text" data-reveal style="--delay: 0.36s;">
+                    startup проектирует и собирает веб-продукты полного цикла: от аналитики и интерфейсов
+                    до frontend/backend, CI/CD, production-деплоя и поддержки. Всё в одном ритме и без лишнего слоя бюрократии.
+                </p>
+
+                <div class="hero-actions" data-reveal style="--delay: 0.44s;">
+                    <a class="button button-primary" href="#services">
+                        <span>Посмотреть услуги</span>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                            <path d="M7 17L17 7"></path>
+                            <path d="M9 7h8v8"></path>
+                        </svg>
+                    </a>
+                    <a class="button button-ghost" href="#projects"><span>Готовые проекты</span></a>
+                </div>
+
+                <div class="hero-badges" data-reveal style="--delay: 0.52s;">
+                    <span>Договор и NDA</span>
+                    <span>Product UI</span>
+                    <span>Docker + VPS</span>
+                    <span>CI/CD по умолчанию</span>
+                </div>
+            </div>
+
+            <div class="hero-visual" data-reveal style="--delay: 0.24s;">
+                <div class="hero-panel hero-panel-main">
+                    <div class="panel-header">
+                        <span class="panel-dots">
+                            <i></i>
+                            <i></i>
+                            <i></i>
+                        </span>
+                        <span>launch.pipeline.yml</span>
+                    </div>
+
+                    <div class="code-lines">
+                        <span>project: aligned</span>
+                        <span>analysis: completed</span>
+                        <span>build: react + fastapi</span>
+                        <span>ci: lint / tests / review</span>
+                        <span>deploy: docker -> vps</span>
+                        <span>status: startup-ready</span>
+                    </div>
+                </div>
+
+                <div class="hero-panel hero-panel-float hero-panel-top">
+                    <strong>48h</strong>
+                    <span>на запуск первого прототипа после аналитики</span>
+                </div>
+
+                <div class="hero-panel hero-panel-float hero-panel-bottom">
+                    <strong>1 flow</strong>
+                    <span>единый контур: дизайн, код, деплой и сопровождение</span>
+                </div>
+
+                <div class="hero-ring" aria-hidden="true">
+                    <span>React</span>
+                    <span>FastAPI</span>
+                    <span>Docker</span>
+                    <span>CI/CD</span>
+                </div>
+            </div>
+
+            <a class="scroll-hint" href="#services" data-reveal style="--delay: 0.66s;">
+                <span>scroll</span>
+                <span class="scroll-line"></span>
+            </a>
+        </section>
+
+        <section class="section" id="services">
+            <div class="container">
+                <div class="section-head">
+                    <div>
+                        <p class="section-kicker" data-reveal>01 / услуги</p>
+                        <h2 class="section-title" data-reveal style="--delay: 0.08s;">Услуги полного цикла</h2>
+                    </div>
+
+                    <p class="section-text" data-reveal style="--delay: 0.16s;">
+                        Мы закрываем все этапы: от первой идеи и аналитики до стабильной работы продукта в production,
+                        инфраструктуры, документации и дальнейшего развития.
+                    </p>
+                </div>
+
+                <div class="services-lab" data-reveal style="--delay: 0.08s;">
+                    <div class="services-switcher" role="tablist" aria-label="Основные сервисы">
+                        <button class="service-pill is-current" type="button" role="tab" aria-selected="true" data-service-target="discovery">Discovery</button>
+                        <button class="service-pill" type="button" role="tab" aria-selected="false" data-service-target="architecture">Architecture</button>
+                        <button class="service-pill" type="button" role="tab" aria-selected="false" data-service-target="build">Build</button>
+                        <button class="service-pill" type="button" role="tab" aria-selected="false" data-service-target="deploy">Deploy</button>
+                        <button class="service-pill" type="button" role="tab" aria-selected="false" data-service-target="ai">AI</button>
+                        <button class="service-pill" type="button" role="tab" aria-selected="false" data-service-target="support">Support</button>
+                    </div>
+
+                    <div class="services-panels">
+                        <article class="service-panel is-current" data-service-panel="discovery">
+                            <div class="service-panel-main">
+                                <span class="service-panel-step">01</span>
+                                <h3>Discovery и стратегия продукта</h3>
+                                <p>Проводим интервью, формируем гипотезы и расставляем приоритеты так, чтобы разработка сразу шла в сторону бизнес-результата.</p>
+                                <ul class="service-panel-list">
+                                    <li>Карта требований и рисков</li>
+                                    <li>Roadmap первого релиза</li>
+                                    <li>Оценка сроков и бюджета</li>
+                                </ul>
+                            </div>
+                        </article>
+
+                        <article class="service-panel" data-service-panel="architecture">
+                            <div class="service-panel-main">
+                                <span class="service-panel-step">02</span>
+                                <h3>ТЗ и архитектурное проектирование</h3>
+                                <p>Собираем технический контур проекта: схемы данных, API-контракты, сценарии пользователей и технические ограничения.</p>
+                                <ul class="service-panel-list">
+                                    <li>Подробное ТЗ по модулям</li>
+                                    <li>API blueprint и ER-диаграммы</li>
+                                    <li>Архитектурные решения под рост</li>
+                                </ul>
+                            </div>
+                        </article>
+
+                        <article class="service-panel" data-service-panel="build">
+                            <div class="service-panel-main">
+                                <span class="service-panel-step">03</span>
+                                <h3>Разработка фронта и бэка</h3>
+                                <p>Реализуем фичи короткими итерациями. Каждый спринт заканчивается рабочим результатом и прозрачным статусом по задачам.</p>
+                                <ul class="service-panel-list">
+                                    <li>React/Vite + FastAPI</li>
+                                    <li>Code review и тесты</li>
+                                    <li>Демо после каждой итерации</li>
+                                </ul>
+                            </div>
+                        </article>
+
+                        <article class="service-panel" data-service-panel="deploy">
+                            <div class="service-panel-main">
+                                <span class="service-panel-step">04</span>
+                                <h3>DevOps, CI/CD и production-деплой</h3>
+                                <p>Настраиваем окружения, автоматизируем сборки и выкладываем релизы предсказуемо: быстро, стабильно и без ручных рисков.</p>
+                                <ul class="service-panel-list">
+                                    <li>Docker + Nginx + VPS</li>
+                                    <li>CI/CD pipeline и quality gates</li>
+                                    <li>Мониторинг и алерты</li>
+                                </ul>
+                            </div>
+                        </article>
+
+                        <article class="service-panel" data-service-panel="ai">
+                            <div class="service-panel-main">
+                                <span class="service-panel-step">05</span>
+                                <h3>AI-интеграции в продукт</h3>
+                                <p>Добавляем интеллектуальные сценарии: ассистенты, поиск, генерация контента и персонализация под ваши KPI.</p>
+                                <ul class="service-panel-list">
+                                    <li>Интеграции GPT/ML</li>
+                                    <li>Prompt/system design</li>
+                                    <li>Оценка качества ответов</li>
+                                </ul>
+                            </div>
+                        </article>
+
+                        <article class="service-panel" data-service-panel="support">
+                            <div class="service-panel-main">
+                                <span class="service-panel-step">06</span>
+                                <h3>Поддержка и развитие после релиза</h3>
+                                <p>Сопровождаем систему в бою: мониторинг, горячие фиксы, развитие фичей и масштабирование инфраструктуры под нагрузку.</p>
+                                <ul class="service-panel-list">
+                                    <li>SLA и инцидент-менеджмент</li>
+                                    <li>План развития продукта</li>
+                                    <li>Техническая документация</li>
+                                </ul>
+                            </div>
+                        </article>
+                    </div>
+
+                    <div class="services-snapshot">
+                        <article class="snapshot-item">
+                            <h4>Юридический контур</h4>
+                            <p>Договор, NDA, прозрачные этапы и фиксация ответственности.</p>
+                        </article>
+                        <article class="snapshot-item">
+                            <h4>Документация</h4>
+                            <p>Swagger/Redoc, схемы, runbooks и инструкции для команды.</p>
+                        </article>
+                        <article class="snapshot-item">
+                            <h4>Инфраструктура</h4>
+                            <p>Резервное копирование, безопасность и подготовка к масштабированию.</p>
+                        </article>
+                        <article class="snapshot-item">
+                            <h4>Ownership</h4>
+                            <p>Одна команда, полный цикл и единая ответственность за результат.</p>
+                        </article>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="process">
+            <div class="container">
+                <div class="section-head">
+                    <div>
+                        <p class="section-kicker" data-reveal>02 / процесс</p>
+                        <h2 class="section-title" data-reveal style="--delay: 0.08s;">Процесс разработки</h2>
+                    </div>
+
+                    <p class="section-text" data-reveal style="--delay: 0.16s;">
+                        Прозрачный пайплайн из семи этапов с полным контролем на каждом шаге:
+                        от первого знакомства и ТЗ до production-деплоя и поддержки.
+                    </p>
+                </div>
+
+                <div class="process-dashboard" data-reveal style="--delay: 0.05s;">
+                    <div class="process-dashboard-chip">
+                        <span class="chip-dot" aria-hidden="true"></span>
+                        <span>Pipeline online</span>
+                    </div>
+
+                    <div class="process-dashboard-metrics">
+                        <div class="process-metric">
+                            <span>Progress</span>
+                            <strong class="process-progress-value">00%</strong>
+                        </div>
+                        <div class="process-metric">
+                            <span>Current step</span>
+                            <strong class="process-current-step">01 / 07</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="process-timeline">
+                    <div class="process-line" aria-hidden="true">
+                        <div class="process-line-glow"></div>
+                        <div class="process-line-fill"></div>
+                        <div class="process-line-dot"></div>
+                    </div>
+
+                    <div class="process-step" data-reveal style="--delay: 0.08s;">
+                        <div class="step-num">01</div>
+                        <div class="step-body">
+                            <h3>Знакомство и аналитика</h3>
+                            <p>Созвон, бриф, исследование рынка и конкурентов. Формируем видение продукта.</p>
+                        </div>
+                    </div>
+
+                    <div class="process-step" data-reveal style="--delay: 0.12s;">
+                        <div class="step-num">02</div>
+                        <div class="step-body">
+                            <h3>ТЗ и прототипы</h3>
+                            <p>Детальное техзадание, wireframes, user-flow и спецификация API-эндпоинтов.</p>
+                        </div>
+                    </div>
+
+                    <div class="process-step" data-reveal style="--delay: 0.16s;">
+                        <div class="step-num">03</div>
+                        <div class="step-body">
+                            <h3>Договор и оплата</h3>
+                            <p>Фиксируем сроки, стоимость и NDA. Вы платите поэтапно, без лишних рисков и сюрпризов.</p>
+                        </div>
+                    </div>
+
+                    <div class="process-step" data-reveal style="--delay: 0.2s;">
+                        <div class="step-num">04</div>
+                        <div class="step-body">
+                            <h3>Разработка</h3>
+                            <p>Спринты по 1–2 недели, доступ к Git-репозиторию, статусы по задачам и предсказуемый темп.</p>
+                        </div>
+                    </div>
+
+                    <div class="process-step" data-reveal style="--delay: 0.24s;">
+                        <div class="step-num">05</div>
+                        <div class="step-body">
+                            <h3>Тестирование и QA</h3>
+                            <p>Unit, integration и E2E тесты, ручное QA и проверка ключевых сценариев под нагрузкой.</p>
+                        </div>
+                    </div>
+
+                    <div class="process-step" data-reveal style="--delay: 0.28s;">
+                        <div class="step-num">06</div>
+                        <div class="step-body">
+                            <h3>Деплой в production</h3>
+                            <p>Docker-образы, VPS, Nginx, SSL и мониторинг. Всё проходит по предсказуемому CI/CD пайплайну.</p>
+                        </div>
+                    </div>
+
+                    <div class="process-step" data-reveal style="--delay: 0.32s;">
+                        <div class="step-num">07</div>
+                        <div class="step-body">
+                            <h3>Поддержка и развитие</h3>
+                            <p>Мониторинг, горячие фиксы, новые фичи, масштабирование и сопровождение продукта после релиза.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section projects-section" id="projects">
+            <div class="container">
+                <div class="section-head">
+                    <div>
+                        <p class="section-kicker" data-reveal>03 / portfolio</p>
+                        <h2 class="section-title" data-reveal style="--delay: 0.08s;">Живой кейс, который уже работает в production.</h2>
+                    </div>
+
+                    <p class="section-text" data-reveal style="--delay: 0.16s;">
+                        Пока в портфолио один публичный запуск, и я решил показать это честно: один реальный
+                        live-проект плюс следующий слот для нового продукта, который можно собрать вместе с вами.
+                    </p>
+                </div>
+
+                <div class="projects-grid">
+                    <article class="project-card project-card-featured tilt-card" data-reveal style="--delay: 0.08s;">
+                        <div class="project-visual project-visual-ainocraft">
+                            <div class="project-window">
+                                <div class="project-window-bar"><i></i><i></i><i></i></div>
+                                <div class="project-site-preview">
+                                    <div class="project-site-hero">
+                                        <span class="project-site-badge">live website</span>
+                                        <strong>AiNoCraft</strong>
+                                        <p>Сайт для Minecraft-проекта, где в одной точке собраны презентация сервера, лаунчер, новости и вход в комьюнити.</p>
+                                    </div>
+                                    <div class="project-site-metrics">
+                                        <span>launcher / onboarding</span>
+                                        <span>news &amp; community</span>
+                                        <span>shop / privileges</span>
+                                    </div>
+                                    <div class="project-site-lines">
+                                        <i class="w82"></i>
+                                        <i class="w68"></i>
+                                        <i class="w100"></i>
+                                    </div>
+                                    <div class="project-site-panels">
+                                        <span><b></b><i></i><i class="short"></i></span>
+                                        <span><b></b><i></i><i class="short"></i></span>
+                                        <span><b></b><i></i><i class="short"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="project-content">
+                            <span class="project-label">live case / 01</span>
+                            <h3>AiNoCraft</h3>
+                            <p>Публичный сайт игрового Minecraft-проекта, который связывает презентацию сервера, скачивание официального лаунчера, новости, привилегии и социальные каналы в одну цельную экосистему.</p>
+                            <ul class="chip-list">
+                                <li>Minecraft</li>
+                                <li>Launcher</li>
+                                <li>Community Hub</li>
+                            </ul>
+                            <a class="button button-ghost" href="https://ainocraft.com" target="_blank" rel="noreferrer"><span>Открыть ainocraft.com</span></a>
+                        </div>
+                    </article>
+
+                    <article class="project-card project-card-next tilt-card" data-reveal style="--delay: 0.14s;">
+                        <div class="project-content project-content-compact">
+                            <span class="project-label">next slot</span>
+                            <h3>Следующий кейс может быть вашим</h3>
+                            <p>Портфолио собирается вокруг реальных запусков. Вместо набора вымышленных карточек здесь будет только то, что действительно вышло в свет.</p>
+                            <ul class="chip-list">
+                                <li>Open for launch</li>
+                                <li>Case study soon</li>
+                                <li>One more live build</li>
+                            </ul>
+                            <div class="portfolio-note">
+                                <strong>Фокус на качестве, а не на количестве.</strong>
+                                <p>Каждый следующий проект будет добавляться сюда только после полноценного production-запуска.</p>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="section stack-section" id="stack">
+            <div class="container">
+                <div class="section-head">
+                    <div>
+                        <p class="section-kicker" data-reveal>04 / стек</p>
+                        <h2 class="section-title" data-reveal style="--delay: 0.08s;">Технологический стек</h2>
+                    </div>
+
+                    <p class="section-text" data-reveal style="--delay: 0.16s;">
+                        Проверенные инструменты, которые мы используем каждый день, чтобы запускать интерфейсы,
+                        API и инфраструктуру без лишней хрупкости.
+                    </p>
+                </div>
+
+                <div class="marquee" data-reveal style="--delay: 0.08s;">
+                    <div class="marquee-track">
+                        <span>React</span>
+                        <span>Vite</span>
+                        <span>TypeScript</span>
+                        <span>FastAPI</span>
+                        <span>Python</span>
+                        <span>PostgreSQL</span>
+                        <span>Redis</span>
+                        <span>Docker</span>
+                        <span>Nginx</span>
+                        <span>CI/CD</span>
+                        <span>Swagger</span>
+                        <span>AI</span>
+                        <span>React</span>
+                        <span>Vite</span>
+                        <span>TypeScript</span>
+                        <span>FastAPI</span>
+                        <span>Python</span>
+                        <span>PostgreSQL</span>
+                        <span>Redis</span>
+                        <span>Docker</span>
+                        <span>Nginx</span>
+                        <span>CI/CD</span>
+                        <span>Swagger</span>
+                        <span>AI</span>
+                    </div>
+                </div>
+
+                <div class="marquee marquee-reverse" data-reveal style="--delay: 0.14s;">
+                    <div class="marquee-track">
+                        <span>SQLAlchemy</span>
+                        <span>Alembic</span>
+                        <span>Celery</span>
+                        <span>WebSocket</span>
+                        <span>GitHub Actions</span>
+                        <span>VPS / Cloud</span>
+                        <span>Prometheus</span>
+                        <span>Grafana</span>
+                        <span>Swagger / Redoc</span>
+                        <span>Postman</span>
+                        <span>Sentry</span>
+                        <span>Figma</span>
+                        <span>SQLAlchemy</span>
+                        <span>Alembic</span>
+                        <span>Celery</span>
+                        <span>WebSocket</span>
+                        <span>GitHub Actions</span>
+                        <span>VPS / Cloud</span>
+                        <span>Prometheus</span>
+                        <span>Grafana</span>
+                        <span>Swagger / Redoc</span>
+                        <span>Postman</span>
+                        <span>Sentry</span>
+                        <span>Figma</span>
+                    </div>
+                </div>
+
+                <div class="principles-grid">
+                    <article class="principle-card tilt-card" data-reveal style="--delay: 0.08s;">
+                        <span class="principle-label">Frontend</span>
+                        <h3>React, Vite и TypeScript</h3>
+                        <p>Собираем быстрые интерфейсы, личные кабинеты и продуктовые страницы с чистой адаптивной версткой.</p>
+                    </article>
+
+                    <article class="principle-card tilt-card" data-reveal style="--delay: 0.14s;">
+                        <span class="principle-label">Backend</span>
+                        <h3>FastAPI, PostgreSQL и Redis</h3>
+                        <p>Строим API, бизнес-логику, очереди задач и надежные модели данных под рост продукта.</p>
+                    </article>
+
+                    <article class="principle-card tilt-card" data-reveal style="--delay: 0.2s;">
+                        <span class="principle-label">DevOps</span>
+                        <h3>Docker, VPS, Nginx и CI/CD</h3>
+                        <p>Готовим production-контур, мониторинг, документацию и автоматические выкладки без ручного хаоса.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="section team-section" id="about">
+            <div class="container team-shell">
+                <div class="section-head team-head">
+                    <div>
+                        <p class="section-kicker" data-reveal>05 / команда</p>
+                        <h2 class="section-title team-title" data-reveal style="--delay: 0.08s;">Люди за проектом</h2>
+                    </div>
+
+                    <p class="section-text team-lead" data-reveal style="--delay: 0.16s;">
+                        Оба работаем с fullstack-разработкой, backend, инфраструктурой и production-процессами.
+                        Команда сочетает продуктовый frontend, надежную работу с данными, AI-интеграции
+                        и автоматизацию в одном инженерном процессе.
+                    </p>
+                </div>
+
+                <div class="team-roster">
+                    <article class="team-member tilt-card" data-reveal style="--delay: 0.2s;">
+                        <div class="team-avatar" aria-hidden="true"><span>AK</span></div>
+                        <div class="team-member-body">
+                            <span class="team-role">senior fullstack developer</span>
+                            <h3>akirakawashi</h3>
+                            <p>Проектирует продуктовую архитектуру, собирает frontend/backend, API и production-контур. Основной фокус — интерфейсы, состояние приложения, схемы данных и PostgreSQL.</p>
+                            <div class="team-tags">
+                                <span>Fullstack</span>
+                                <span>Frontend</span>
+                                <span>Databases</span>
+                                <span>PostgreSQL</span>
+                                <span>DevOps</span>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="team-member tilt-card" data-reveal style="--delay: 0.28s;">
+                        <div class="team-avatar" aria-hidden="true"><span>SE</span></div>
+                        <div class="team-member-body">
+                            <span class="team-role">senior AI engineer</span>
+                            <h3>sadeyes</h3>
+                            <p>Собирает backend на Python, LLM-интеграции, AI-ассистенты, RAG, пайплайны данных, оценка качества ответов, боты и автоматизация процессов.</p>
+                            <div class="team-tags">
+                                <span>Fullstack</span>
+                                <span>LLM</span>
+                                <span>RAG</span>
+                                <span>AI pipelines</span>
+                                <span>Automation</span>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="team-capabilities">
+                    <article class="team-capability" data-reveal style="--delay: 0.34s;">
+                        <span>01</span>
+                        <h3>Общий стек</h3>
+                        <p>React, Vite, FastAPI, Python, PostgreSQL, Docker, CI/CD и production-подход есть в общем инженерном контуре.</p>
+                    </article>
+                    <article class="team-capability" data-reveal style="--delay: 0.4s;">
+                        <span>02</span>
+                        <h3>Интерфейсы и данные</h3>
+                        <p>Проектируем понятные экраны, клиентскую логику, API-контракты и структуру данных так, чтобы продукт было удобно развивать.</p>
+                    </article>
+                    <article class="team-capability" data-reveal style="--delay: 0.46s;">
+                        <span>03</span>
+                        <h3>AI-интеграции</h3>
+                        <p>Встраиваем LLM, RAG, ботов, пайплайны и автоматизацию в реальные рабочие процессы, где они экономят время и повышают качество.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="section contact-section" id="contact">
+            <div class="container contact-shell">
+                <div class="contact-copy">
+                    <p class="section-kicker" data-reveal>06 / контакт</p>
+                    <h2 class="section-title" data-reveal style="--delay: 0.08s;">Готов обсудить ваш запуск.</h2>
+                    <p class="section-text" data-reveal style="--delay: 0.16s;">
+                        Напишите пару строк о задаче. Я предложу формат старта, помогу собрать следующий шаг
+                        и отвечу в течение 24 часов.
+                    </p>
+
+                    <div class="contact-list" data-reveal style="--delay: 0.22s;">
+                        <a class="contact-item" href="mailto:hello@startup.dev">
+                            <span class="contact-label">Email</span>
+                            <strong>hello@startup.dev</strong>
+                        </a>
+                        <a class="contact-item" href="#" target="_blank" rel="noreferrer">
+                            <span class="contact-label">Telegram</span>
+                            <strong>@startup</strong>
+                        </a>
+                        <div class="contact-item">
+                            <span class="contact-label">Reply time</span>
+                            <strong>до 24 часов</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <form class="contact-form tilt-card" id="contactForm" data-reveal style="--delay: 0.26s;">
+                    <label class="field">
+                        <span>Имя</span>
+                        <input type="text" id="name" name="name" placeholder="Как к вам обращаться" required>
+                    </label>
+
+                    <label class="field">
+                        <span>Email</span>
+                        <input type="email" id="email" name="email" placeholder="name@company.com" required>
+                    </label>
+
+                    <label class="field">
+                        <span>О проекте</span>
+                        <textarea id="message" name="message" rows="5" placeholder="Коротко опишите задачу, сроки и текущую стадию проекта" required></textarea>
+                    </label>
+
+                    <button class="button button-primary button-wide" type="submit">
+                        <span>Подготовить письмо</span>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                            <path d="M5 12h14"></path>
+                            <path d="M12 5l7 7-7 7"></path>
+                        </svg>
+                    </button>
+
+                    <p class="form-note">Форма откроет черновик письма в почтовом клиенте с уже собранной темой и описанием.</p>
+                    <p class="form-status" id="formStatus" aria-live="polite"></p>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container footer-inner">
+            <div>
+                <a class="brand brand-footer" href="#hero" aria-label="startup home">
+                    <span class="brand-mark">ST</span>
+                    <span class="brand-name">startup</span>
+                </a>
+                <p class="footer-text">Cosmic-minimal studio for web apps, product interfaces, launch systems and clean production delivery.</p>
+            </div>
+
+            <div class="footer-meta">
+                <span>React / FastAPI / Docker</span>
+                <span>&copy; 2026 startup</span>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
