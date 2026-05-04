@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -29,49 +29,71 @@
             </a>
 
             <nav class="site-nav" aria-label="Основная навигация">
-                <a href="#services" class="nav-link">Услуги</a>
-                <a href="#process" class="nav-link">Процесс</a>
-                <a href="#projects" class="nav-link">Проекты</a>
-                <a href="#about" class="nav-link">Команда</a>
-                <a href="#contact" class="nav-link">Контакт</a>
+                <a href="#services" class="nav-link" data-i18n="nav.services">Услуги</a>
+                <a href="#process" class="nav-link" data-i18n="nav.process">Процесс</a>
+                <a href="#projects" class="nav-link" data-i18n="nav.projects">Проекты</a>
+                <a href="#about" class="nav-link" data-i18n="nav.team">Команда</a>
+                <a href="#contact" class="nav-link" data-i18n="nav.contact">Контакт</a>
             </nav>
 
-            <a class="button button-secondary" href="#" target="_blank" rel="noreferrer"><span>Связаться</span></a>
+            <div class="header-controls">
+                <div class="lang-switcher" role="group" aria-label="Language">
+                    <button class="lang-btn is-active" type="button" data-lang="ru">RU</button>
+                    <button class="lang-btn" type="button" data-lang="en">EN</button>
+                </div>
+                <button class="theme-toggle" type="button" id="themeToggle" aria-label="Toggle theme">
+                    <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                    <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                </button>
+                <a class="button button-secondary" href="#" target="_blank" rel="noreferrer"><span data-i18n="nav.cta">Связаться</span></a>
+            </div>
         </div>
     </header>
 
     <main>
         <section class="hero container" id="hero">
             <div class="hero-copy">
-                <p class="eyebrow" data-reveal style="--delay: 0.05s;">stellar product engineering</p>
+                <p class="eyebrow" data-reveal style="--delay: 0.05s;" data-i18n="hero.eyebrow">stellar product engineering</p>
 
                 <h1 class="hero-title">
-                    <span data-reveal style="--delay: 0.12s;">Запускаем</span>
-                    <span data-reveal style="--delay: 0.2s;">веб-приложения</span>
-                    <span class="accent-line" data-reveal style="--delay: 0.28s;">от идеи до production</span>
+                    <span data-reveal style="--delay: 0.12s;" data-i18n="hero.title1">Запускаем</span>
+                    <span data-reveal style="--delay: 0.2s;" data-i18n="hero.title2">веб-приложения</span>
+                    <span class="accent-line" data-reveal style="--delay: 0.28s;" data-i18n="hero.title3">от идеи до production</span>
                 </h1>
 
-                <p class="hero-text" data-reveal style="--delay: 0.36s;">
+                <p class="hero-text" data-reveal style="--delay: 0.36s;" data-i18n="hero.text">
                     startup проектирует и собирает веб-продукты полного цикла: от аналитики и интерфейсов
                     до frontend/backend, CI/CD, production-деплоя и поддержки. Всё в одном ритме и без лишнего слоя бюрократии.
                 </p>
 
                 <div class="hero-actions" data-reveal style="--delay: 0.44s;">
                     <a class="button button-primary" href="#services">
-                        <span>Посмотреть услуги</span>
+                        <span data-i18n="hero.btn.services">Посмотреть услуги</span>
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
                             <path d="M7 17L17 7"></path>
                             <path d="M9 7h8v8"></path>
                         </svg>
                     </a>
-                    <a class="button button-ghost" href="#projects"><span>Готовые проекты</span></a>
+                    <a class="button button-ghost" href="#projects"><span data-i18n="hero.btn.projects">Готовые проекты</span></a>
                 </div>
 
                 <div class="hero-badges" data-reveal style="--delay: 0.52s;">
-                    <span>Договор и NDA</span>
+                    <span data-i18n="hero.badge.contract">Договор и NDA</span>
                     <span>Product UI</span>
                     <span>Docker + VPS</span>
-                    <span>CI/CD по умолчанию</span>
+                    <span data-i18n="hero.badge.ci">CI/CD по умолчанию</span>
                 </div>
             </div>
 
@@ -98,12 +120,12 @@
 
                 <div class="hero-panel hero-panel-float hero-panel-top">
                     <strong>48h</strong>
-                    <span>на запуск первого прототипа после аналитики</span>
+                    <span data-i18n="hero.panel.top">на запуск первого прототипа после аналитики</span>
                 </div>
 
                 <div class="hero-panel hero-panel-float hero-panel-bottom">
                     <strong>1 flow</strong>
-                    <span>единый контур: дизайн, код, деплой и сопровождение</span>
+                    <span data-i18n="hero.panel.bottom">единый контур: дизайн, код, деплой и сопровождение</span>
                 </div>
 
                 <div class="hero-ring" aria-hidden="true">
@@ -124,11 +146,11 @@
             <div class="container">
                 <div class="section-head">
                     <div>
-                        <p class="section-kicker" data-reveal>01 / услуги</p>
-                        <h2 class="section-title" data-reveal style="--delay: 0.08s;">Услуги полного цикла</h2>
+                        <p class="section-kicker" data-reveal data-i18n="services.kicker">01 / услуги</p>
+                        <h2 class="section-title" data-reveal style="--delay: 0.08s;" data-i18n="services.title">Услуги полного цикла</h2>
                     </div>
 
-                    <p class="section-text" data-reveal style="--delay: 0.16s;">
+                    <p class="section-text" data-reveal style="--delay: 0.16s;" data-i18n="services.desc">
                         Мы закрываем все этапы: от первой идеи и аналитики до стабильной работы продукта в production,
                         инфраструктуры, документации и дальнейшего развития.
                     </p>
@@ -148,12 +170,12 @@
                         <article class="service-panel is-current" data-service-panel="discovery">
                             <div class="service-panel-main">
                                 <span class="service-panel-step">01</span>
-                                <h3>Discovery и стратегия продукта</h3>
-                                <p>Проводим интервью, формируем гипотезы и расставляем приоритеты так, чтобы разработка сразу шла в сторону бизнес-результата.</p>
+                                <h3 data-i18n="services.discovery.title">Discovery и стратегия продукта</h3>
+                                <p data-i18n="services.discovery.desc">Проводим интервью, формируем гипотезы и расставляем приоритеты так, чтобы разработка сразу шла в сторону бизнес-результата.</p>
                                 <ul class="service-panel-list">
-                                    <li>Карта требований и рисков</li>
-                                    <li>Roadmap первого релиза</li>
-                                    <li>Оценка сроков и бюджета</li>
+                                    <li data-i18n="services.discovery.li1">Карта требований и рисков</li>
+                                    <li data-i18n="services.discovery.li2">Roadmap первого релиза</li>
+                                    <li data-i18n="services.discovery.li3">Оценка сроков и бюджета</li>
                                 </ul>
                             </div>
                         </article>
@@ -161,12 +183,12 @@
                         <article class="service-panel" data-service-panel="architecture">
                             <div class="service-panel-main">
                                 <span class="service-panel-step">02</span>
-                                <h3>ТЗ и архитектурное проектирование</h3>
-                                <p>Собираем технический контур проекта: схемы данных, API-контракты, сценарии пользователей и технические ограничения.</p>
+                                <h3 data-i18n="services.architecture.title">ТЗ и архитектурное проектирование</h3>
+                                <p data-i18n="services.architecture.desc">Собираем технический контур проекта: схемы данных, API-контракты, сценарии пользователей и технические ограничения.</p>
                                 <ul class="service-panel-list">
-                                    <li>Подробное ТЗ по модулям</li>
-                                    <li>API blueprint и ER-диаграммы</li>
-                                    <li>Архитектурные решения под рост</li>
+                                    <li data-i18n="services.architecture.li1">Подробное ТЗ по модулям</li>
+                                    <li data-i18n="services.architecture.li2">API blueprint и ER-диаграммы</li>
+                                    <li data-i18n="services.architecture.li3">Архитектурные решения под рост</li>
                                 </ul>
                             </div>
                         </article>
@@ -174,12 +196,12 @@
                         <article class="service-panel" data-service-panel="build">
                             <div class="service-panel-main">
                                 <span class="service-panel-step">03</span>
-                                <h3>Разработка фронта и бэка</h3>
-                                <p>Реализуем фичи короткими итерациями. Каждый спринт заканчивается рабочим результатом и прозрачным статусом по задачам.</p>
+                                <h3 data-i18n="services.build.title">Разработка фронта и бэка</h3>
+                                <p data-i18n="services.build.desc">Реализуем фичи короткими итерациями. Каждый спринт заканчивается рабочим результатом и прозрачным статусом по задачам.</p>
                                 <ul class="service-panel-list">
-                                    <li>React/Vite + FastAPI</li>
-                                    <li>Code review и тесты</li>
-                                    <li>Демо после каждой итерации</li>
+                                    <li data-i18n="services.build.li1">React/Vite + FastAPI</li>
+                                    <li data-i18n="services.build.li2">Code review и тесты</li>
+                                    <li data-i18n="services.build.li3">Демо после каждой итерации</li>
                                 </ul>
                             </div>
                         </article>
@@ -187,12 +209,12 @@
                         <article class="service-panel" data-service-panel="deploy">
                             <div class="service-panel-main">
                                 <span class="service-panel-step">04</span>
-                                <h3>DevOps, CI/CD и production-деплой</h3>
-                                <p>Настраиваем окружения, автоматизируем сборки и выкладываем релизы предсказуемо: быстро, стабильно и без ручных рисков.</p>
+                                <h3 data-i18n="services.deploy.title">DevOps, CI/CD и production-деплой</h3>
+                                <p data-i18n="services.deploy.desc">Настраиваем окружения, автоматизируем сборки и выкладываем релизы предсказуемо: быстро, стабильно и без ручных рисков.</p>
                                 <ul class="service-panel-list">
-                                    <li>Docker + Nginx + VPS</li>
-                                    <li>CI/CD pipeline и quality gates</li>
-                                    <li>Мониторинг и алерты</li>
+                                    <li data-i18n="services.deploy.li1">Docker + Nginx + VPS</li>
+                                    <li data-i18n="services.deploy.li2">CI/CD pipeline и quality gates</li>
+                                    <li data-i18n="services.deploy.li3">Мониторинг и алерты</li>
                                 </ul>
                             </div>
                         </article>
@@ -200,12 +222,12 @@
                         <article class="service-panel" data-service-panel="ai">
                             <div class="service-panel-main">
                                 <span class="service-panel-step">05</span>
-                                <h3>AI-интеграции в продукт</h3>
-                                <p>Добавляем интеллектуальные сценарии: ассистенты, поиск, генерация контента и персонализация под ваши KPI.</p>
+                                <h3 data-i18n="services.ai.title">AI-интеграции в продукт</h3>
+                                <p data-i18n="services.ai.desc">Добавляем интеллектуальные сценарии: ассистенты, поиск, генерация контента и персонализация под ваши KPI.</p>
                                 <ul class="service-panel-list">
-                                    <li>Интеграции GPT/ML</li>
-                                    <li>Prompt/system design</li>
-                                    <li>Оценка качества ответов</li>
+                                    <li data-i18n="services.ai.li1">Интеграции GPT/ML</li>
+                                    <li data-i18n="services.ai.li2">Prompt/system design</li>
+                                    <li data-i18n="services.ai.li3">Оценка качества ответов</li>
                                 </ul>
                             </div>
                         </article>
@@ -213,12 +235,12 @@
                         <article class="service-panel" data-service-panel="support">
                             <div class="service-panel-main">
                                 <span class="service-panel-step">06</span>
-                                <h3>Поддержка и развитие после релиза</h3>
-                                <p>Сопровождаем систему в бою: мониторинг, горячие фиксы, развитие фичей и масштабирование инфраструктуры под нагрузку.</p>
+                                <h3 data-i18n="services.support.title">Поддержка и развитие после релиза</h3>
+                                <p data-i18n="services.support.desc">Сопровождаем систему в бою: мониторинг, горячие фиксы, развитие фичей и масштабирование инфраструктуры под нагрузку.</p>
                                 <ul class="service-panel-list">
-                                    <li>SLA и инцидент-менеджмент</li>
-                                    <li>План развития продукта</li>
-                                    <li>Техническая документация</li>
+                                    <li data-i18n="services.support.li1">SLA и инцидент-менеджмент</li>
+                                    <li data-i18n="services.support.li2">План развития продукта</li>
+                                    <li data-i18n="services.support.li3">Техническая документация</li>
                                 </ul>
                             </div>
                         </article>
@@ -226,20 +248,20 @@
 
                     <div class="services-snapshot">
                         <article class="snapshot-item">
-                            <h4>Юридический контур</h4>
-                            <p>Договор, NDA, прозрачные этапы и фиксация ответственности.</p>
+                            <h4 data-i18n="services.snap.legal.title">Юридический контур</h4>
+                            <p data-i18n="services.snap.legal.desc">Договор, NDA, прозрачные этапы и фиксация ответственности.</p>
                         </article>
                         <article class="snapshot-item">
-                            <h4>Документация</h4>
-                            <p>Swagger/Redoc, схемы, runbooks и инструкции для команды.</p>
+                            <h4 data-i18n="services.snap.docs.title">Документация</h4>
+                            <p data-i18n="services.snap.docs.desc">Swagger/Redoc, схемы, runbooks и инструкции для команды.</p>
                         </article>
                         <article class="snapshot-item">
-                            <h4>Инфраструктура</h4>
-                            <p>Резервное копирование, безопасность и подготовка к масштабированию.</p>
+                            <h4 data-i18n="services.snap.infra.title">Инфраструктура</h4>
+                            <p data-i18n="services.snap.infra.desc">Резервное копирование, безопасность и подготовка к масштабированию.</p>
                         </article>
                         <article class="snapshot-item">
                             <h4>Ownership</h4>
-                            <p>Одна команда, полный цикл и единая ответственность за результат.</p>
+                            <p data-i18n="services.snap.own.desc">Одна команда, полный цикл и единая ответственность за результат.</p>
                         </article>
                     </div>
                 </div>
@@ -250,11 +272,11 @@
             <div class="container">
                 <div class="section-head">
                     <div>
-                        <p class="section-kicker" data-reveal>02 / процесс</p>
-                        <h2 class="section-title" data-reveal style="--delay: 0.08s;">Процесс разработки</h2>
+                        <p class="section-kicker" data-reveal data-i18n="process.kicker">02 / процесс</p>
+                        <h2 class="section-title" data-reveal style="--delay: 0.08s;" data-i18n="process.title">Процесс разработки</h2>
                     </div>
 
-                    <p class="section-text" data-reveal style="--delay: 0.16s;">
+                    <p class="section-text" data-reveal style="--delay: 0.16s;" data-i18n="process.desc">
                         Прозрачный пайплайн из семи этапов с полным контролем на каждом шаге:
                         от первого знакомства и ТЗ до production-деплоя и поддержки.
                     </p>
@@ -288,56 +310,56 @@
                     <div class="process-step" data-reveal style="--delay: 0.08s;">
                         <div class="step-num">01</div>
                         <div class="step-body">
-                            <h3>Знакомство и аналитика</h3>
-                            <p>Созвон, бриф, исследование рынка и конкурентов. Формируем видение продукта.</p>
+                            <h3 data-i18n="process.step1.title">Знакомство и аналитика</h3>
+                            <p data-i18n="process.step1.desc">Созвон, бриф, исследование рынка и конкурентов. Формируем видение продукта.</p>
                         </div>
                     </div>
 
                     <div class="process-step" data-reveal style="--delay: 0.12s;">
                         <div class="step-num">02</div>
                         <div class="step-body">
-                            <h3>ТЗ и прототипы</h3>
-                            <p>Детальное техзадание, wireframes, user-flow и спецификация API-эндпоинтов.</p>
+                            <h3 data-i18n="process.step2.title">ТЗ и прототипы</h3>
+                            <p data-i18n="process.step2.desc">Детальное техзадание, wireframes, user-flow и спецификация API-эндпойнтов.</p>
                         </div>
                     </div>
 
                     <div class="process-step" data-reveal style="--delay: 0.16s;">
                         <div class="step-num">03</div>
                         <div class="step-body">
-                            <h3>Договор и оплата</h3>
-                            <p>Фиксируем сроки, стоимость и NDA. Вы платите поэтапно, без лишних рисков и сюрпризов.</p>
+                            <h3 data-i18n="process.step3.title">Договор и оплата</h3>
+                            <p data-i18n="process.step3.desc">Фиксируем сроки, стоимость и NDA. Вы платите поэтапно, без лишних рисков и сюрпризов.</p>
                         </div>
                     </div>
 
                     <div class="process-step" data-reveal style="--delay: 0.2s;">
                         <div class="step-num">04</div>
                         <div class="step-body">
-                            <h3>Разработка</h3>
-                            <p>Спринты по 1–2 недели, доступ к Git-репозиторию, статусы по задачам и предсказуемый темп.</p>
+                            <h3 data-i18n="process.step4.title">Разработка</h3>
+                            <p data-i18n="process.step4.desc">Спринты по 1–2 недели, доступ к Git-репозиторию, статусы по задачам и предсказуемый темп.</p>
                         </div>
                     </div>
 
                     <div class="process-step" data-reveal style="--delay: 0.24s;">
                         <div class="step-num">05</div>
                         <div class="step-body">
-                            <h3>Тестирование и QA</h3>
-                            <p>Unit, integration и E2E тесты, ручное QA и проверка ключевых сценариев под нагрузкой.</p>
+                            <h3 data-i18n="process.step5.title">Тестирование и QA</h3>
+                            <p data-i18n="process.step5.desc">Unit, integration и E2E тесты, ручное QA и проверка ключевых сценариев под нагрузкой.</p>
                         </div>
                     </div>
 
                     <div class="process-step" data-reveal style="--delay: 0.28s;">
                         <div class="step-num">06</div>
                         <div class="step-body">
-                            <h3>Деплой в production</h3>
-                            <p>Docker-образы, VPS, Nginx, SSL и мониторинг. Всё проходит по предсказуемому CI/CD пайплайну.</p>
+                            <h3 data-i18n="process.step6.title">Деплой в production</h3>
+                            <p data-i18n="process.step6.desc">Docker-образы, VPS, Nginx, SSL и мониторинг. Всё проходит по предсказуемому CI/CD пайплайну.</p>
                         </div>
                     </div>
 
                     <div class="process-step" data-reveal style="--delay: 0.32s;">
                         <div class="step-num">07</div>
                         <div class="step-body">
-                            <h3>Поддержка и развитие</h3>
-                            <p>Мониторинг, горячие фиксы, новые фичи, масштабирование и сопровождение продукта после релиза.</p>
+                            <h3 data-i18n="process.step7.title">Поддержка и развитие</h3>
+                            <p data-i18n="process.step7.desc">Мониторинг, горячие фиксы, новые фичи, масштабирование и сопровождение продукта после релиза.</p>
                         </div>
                     </div>
                 </div>
@@ -349,10 +371,10 @@
                 <div class="section-head">
                     <div>
                         <p class="section-kicker" data-reveal>03 / portfolio</p>
-                        <h2 class="section-title" data-reveal style="--delay: 0.08s;">Живой кейс, который уже работает в production.</h2>
+                        <h2 class="section-title" data-reveal style="--delay: 0.08s;" data-i18n="projects.title">Живой кейс, который уже работает в production.</h2>
                     </div>
 
-                    <p class="section-text" data-reveal style="--delay: 0.16s;">
+                    <p class="section-text" data-reveal style="--delay: 0.16s;" data-i18n="projects.desc">
                         Пока в портфолио один публичный запуск, и я решил показать это честно: один реальный
                         live-проект плюс следующий слот для нового продукта, который можно собрать вместе с вами.
                     </p>
@@ -367,7 +389,7 @@
                                     <div class="project-site-hero">
                                         <span class="project-site-badge">live website</span>
                                         <strong>AiNoCraft</strong>
-                                        <p>Сайт для Minecraft-проекта, где в одной точке собраны презентация сервера, лаунчер, новости и вход в комьюнити.</p>
+                                        <p data-i18n="projects.ainocraft.preview">Сайт для Minecraft-проекта, где в одной точке собраны презентация сервера, лаунчер, новости и вход в комьюнити.</p>
                                     </div>
                                     <div class="project-site-metrics">
                                         <span>launcher / onboarding</span>
@@ -390,29 +412,29 @@
                         <div class="project-content">
                             <span class="project-label">live case / 01</span>
                             <h3>AiNoCraft</h3>
-                            <p>Публичный сайт игрового Minecraft-проекта, который связывает презентацию сервера, скачивание официального лаунчера, новости, привилегии и социальные каналы в одну цельную экосистему.</p>
+                            <p data-i18n="projects.ainocraft.desc">Публичный сайт игрового Minecraft-проекта, который связывает презентацию сервера, скачивание официального лаунчера, новости, привилегии и социальные каналы в одну цельную экосистему.</p>
                             <ul class="chip-list">
                                 <li>Minecraft</li>
                                 <li>Launcher</li>
                                 <li>Community Hub</li>
                             </ul>
-                            <a class="button button-ghost" href="https://ainocraft.com" target="_blank" rel="noreferrer"><span>Открыть ainocraft.com</span></a>
+                            <a class="button button-ghost" href="https://ainocraft.com" target="_blank" rel="noreferrer"><span data-i18n="projects.ainocraft.btn">Открыть ainocraft.com</span></a>
                         </div>
                     </article>
 
                     <article class="project-card project-card-next tilt-card" data-reveal style="--delay: 0.14s;">
                         <div class="project-content project-content-compact">
                             <span class="project-label">next slot</span>
-                            <h3>Следующий кейс может быть вашим</h3>
-                            <p>Портфолио собирается вокруг реальных запусков. Вместо набора вымышленных карточек здесь будет только то, что действительно вышло в свет.</p>
+                            <h3 data-i18n="projects.next.title">Следующий кейс может быть вашим</h3>
+                            <p data-i18n="projects.next.desc">Портфолио собирается вокруг реальных запусков. Вместо набора вымышленных карточек здесь будет только то, что действительно вышло в свет.</p>
                             <ul class="chip-list">
                                 <li>Open for launch</li>
                                 <li>Case study soon</li>
                                 <li>One more live build</li>
                             </ul>
                             <div class="portfolio-note">
-                                <strong>Фокус на качестве, а не на количестве.</strong>
-                                <p>Каждый следующий проект будет добавляться сюда только после полноценного production-запуска.</p>
+                                <strong data-i18n="projects.next.note.strong">Фокус на качестве, а не на количестве.</strong>
+                                <p data-i18n="projects.next.note.p">Каждый следующий проект будет добавляться сюда только после полноценного production-запуска.</p>
                             </div>
                         </div>
                     </article>
@@ -424,11 +446,11 @@
             <div class="container">
                 <div class="section-head">
                     <div>
-                        <p class="section-kicker" data-reveal>04 / стек</p>
-                        <h2 class="section-title" data-reveal style="--delay: 0.08s;">Технологический стек</h2>
+                        <p class="section-kicker" data-reveal data-i18n="stack.kicker">04 / стек</p>
+                        <h2 class="section-title" data-reveal style="--delay: 0.08s;" data-i18n="stack.title">Технологический стек</h2>
                     </div>
 
-                    <p class="section-text" data-reveal style="--delay: 0.16s;">
+                    <p class="section-text" data-reveal style="--delay: 0.16s;" data-i18n="stack.desc">
                         Проверенные инструменты, которые мы используем каждый день, чтобы запускать интерфейсы,
                         API и инфраструктуру без лишней хрупкости.
                     </p>
@@ -495,20 +517,20 @@
                 <div class="principles-grid">
                     <article class="principle-card tilt-card" data-reveal style="--delay: 0.08s;">
                         <span class="principle-label">Frontend</span>
-                        <h3>React, Vite и TypeScript</h3>
-                        <p>Собираем быстрые интерфейсы, личные кабинеты и продуктовые страницы с чистой адаптивной версткой.</p>
+                        <h3 data-i18n="stack.frontend.title">React, Vite и TypeScript</h3>
+                        <p data-i18n="stack.frontend.desc">Собираем быстрые интерфейсы, личные кабинеты и продуктовые страницы с чистой адаптивной версткой.</p>
                     </article>
 
                     <article class="principle-card tilt-card" data-reveal style="--delay: 0.14s;">
                         <span class="principle-label">Backend</span>
-                        <h3>FastAPI, PostgreSQL и Redis</h3>
-                        <p>Строим API, бизнес-логику, очереди задач и надежные модели данных под рост продукта.</p>
+                        <h3 data-i18n="stack.backend.title">FastAPI, PostgreSQL и Redis</h3>
+                        <p data-i18n="stack.backend.desc">Строим API, бизнес-логику, очереди задач и надежные модели данных под рост продукта.</p>
                     </article>
 
                     <article class="principle-card tilt-card" data-reveal style="--delay: 0.2s;">
                         <span class="principle-label">DevOps</span>
-                        <h3>Docker, VPS, Nginx и CI/CD</h3>
-                        <p>Готовим production-контур, мониторинг, документацию и автоматические выкладки без ручного хаоса.</p>
+                        <h3 data-i18n="stack.devops.title">Docker, VPS, Nginx и CI/CD</h3>
+                        <p data-i18n="stack.devops.desc">Готовим production-контур, мониторинг, документацию и автоматические выкладки без ручного хаоса.</p>
                     </article>
                 </div>
             </div>
@@ -518,11 +540,11 @@
             <div class="container team-shell">
                 <div class="section-head team-head">
                     <div>
-                        <p class="section-kicker" data-reveal>05 / команда</p>
-                        <h2 class="section-title team-title" data-reveal style="--delay: 0.08s;">Люди за проектом</h2>
+                        <p class="section-kicker" data-reveal data-i18n="team.kicker">05 / команда</p>
+                        <h2 class="section-title team-title" data-reveal style="--delay: 0.08s;" data-i18n="team.title">Люди за проектом</h2>
                     </div>
 
-                    <p class="section-text team-lead" data-reveal style="--delay: 0.16s;">
+                    <p class="section-text team-lead" data-reveal style="--delay: 0.16s;" data-i18n="team.desc">
                         Оба работаем с fullstack-разработкой, backend, инфраструктурой и production-процессами.
                         Команда сочетает продуктовый frontend, надежную работу с данными, AI-интеграции
                         и автоматизацию в одном инженерном процессе.
@@ -535,7 +557,7 @@
                         <div class="team-member-body">
                             <span class="team-role">senior fullstack developer</span>
                             <h3>akirakawashi</h3>
-                            <p>Проектирует продуктовую архитектуру, собирает frontend/backend, API и production-контур. Основной фокус — интерфейсы, состояние приложения, схемы данных и PostgreSQL.</p>
+                            <p data-i18n="team.ak.desc">Проектирует продуктовую архитектуру, собирает frontend/backend, API и production-контур. Основной фокус — интерфейсы, состояние приложения, схемы данных и PostgreSQL.</p>
                             <div class="team-tags">
                                 <span>Fullstack</span>
                                 <span>Frontend</span>
@@ -551,7 +573,7 @@
                         <div class="team-member-body">
                             <span class="team-role">senior AI engineer</span>
                             <h3>sadeyes</h3>
-                            <p>Собирает backend на Python, LLM-интеграции, AI-ассистенты, RAG, пайплайны данных, оценка качества ответов, боты и автоматизация процессов.</p>
+                            <p data-i18n="team.se.desc">Собирает backend на Python, LLM-интеграции, AI-ассистенты, RAG, пайплайны данных, оценка качества ответов, боты и автоматизация процессов.</p>
                             <div class="team-tags">
                                 <span>Fullstack</span>
                                 <span>LLM</span>
@@ -566,18 +588,18 @@
                 <div class="team-capabilities">
                     <article class="team-capability" data-reveal style="--delay: 0.34s;">
                         <span>01</span>
-                        <h3>Общий стек</h3>
-                        <p>React, Vite, FastAPI, Python, PostgreSQL, Docker, CI/CD и production-подход есть в общем инженерном контуре.</p>
+                        <h3 data-i18n="team.cap1.title">Общий стек</h3>
+                        <p data-i18n="team.cap1.desc">React, Vite, FastAPI, Python, PostgreSQL, Docker, CI/CD и production-подход есть в общем инженерном контуре.</p>
                     </article>
                     <article class="team-capability" data-reveal style="--delay: 0.4s;">
                         <span>02</span>
-                        <h3>Интерфейсы и данные</h3>
-                        <p>Проектируем понятные экраны, клиентскую логику, API-контракты и структуру данных так, чтобы продукт было удобно развивать.</p>
+                        <h3 data-i18n="team.cap2.title">Интерфейсы и данные</h3>
+                        <p data-i18n="team.cap2.desc">Проектируем понятные экраны, клиентскую логику, API-контракты и структуру данных так, чтобы продукт было удобно развивать.</p>
                     </article>
                     <article class="team-capability" data-reveal style="--delay: 0.46s;">
                         <span>03</span>
-                        <h3>AI-интеграции</h3>
-                        <p>Встраиваем LLM, RAG, ботов, пайплайны и автоматизацию в реальные рабочие процессы, где они экономят время и повышают качество.</p>
+                        <h3 data-i18n="team.cap3.title">AI-интеграции</h3>
+                        <p data-i18n="team.cap3.desc">Встраиваем LLM, RAG, ботов, пайплайны и автоматизацию в реальные рабочие процессы, где они экономят время и повышают качество.</p>
                     </article>
                 </div>
             </div>
@@ -586,9 +608,9 @@
         <section class="section contact-section" id="contact">
             <div class="container contact-shell">
                 <div class="contact-copy">
-                    <p class="section-kicker" data-reveal>06 / контакт</p>
-                    <h2 class="section-title" data-reveal style="--delay: 0.08s;">Готов обсудить ваш запуск.</h2>
-                    <p class="section-text" data-reveal style="--delay: 0.16s;">
+                    <p class="section-kicker" data-reveal data-i18n="contact.kicker">06 / контакт</p>
+                    <h2 class="section-title" data-reveal style="--delay: 0.08s;" data-i18n="contact.title">Готов обсудить ваш запуск.</h2>
+                    <p class="section-text" data-reveal style="--delay: 0.16s;" data-i18n="contact.desc">
                         Напишите пару строк о задаче. Я предложу формат старта, помогу собрать следующий шаг
                         и отвечу в течение 24 часов.
                     </p>
@@ -604,15 +626,15 @@
                         </a>
                         <div class="contact-item">
                             <span class="contact-label">Reply time</span>
-                            <strong>до 24 часов</strong>
+                            <strong data-i18n="contact.reply">до 24 часов</strong>
                         </div>
                     </div>
                 </div>
 
                 <form class="contact-form tilt-card" id="contactForm" data-reveal style="--delay: 0.26s;">
                     <label class="field">
-                        <span>Имя</span>
-                        <input type="text" id="name" name="name" placeholder="Как к вам обращаться" required>
+                        <span data-i18n="contact.form.name">Имя</span>
+                        <input type="text" id="name" name="name" placeholder="Как к вам обращаться" data-i18n-placeholder="contact.form.name.ph" required>
                     </label>
 
                     <label class="field">
@@ -621,19 +643,19 @@
                     </label>
 
                     <label class="field">
-                        <span>О проекте</span>
-                        <textarea id="message" name="message" rows="5" placeholder="Коротко опишите задачу, сроки и текущую стадию проекта" required></textarea>
+                        <span data-i18n="contact.form.project">О проекте</span>
+                        <textarea id="message" name="message" rows="5" placeholder="Коротко опишите задачу, сроки и текущую стадию проекта" data-i18n-placeholder="contact.form.project.ph" required></textarea>
                     </label>
 
                     <button class="button button-primary button-wide" type="submit">
-                        <span>Подготовить письмо</span>
+                        <span data-i18n="contact.form.submit">Подготовить письмо</span>
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
                             <path d="M5 12h14"></path>
                             <path d="M12 5l7 7-7 7"></path>
                         </svg>
                     </button>
 
-                    <p class="form-note">Форма откроет черновик письма в почтовом клиенте с уже собранной темой и описанием.</p>
+                    <p class="form-note" data-i18n="contact.form.note">Форма откроет черновик письма в почтовом клиенте с уже собранной темой и описанием.</p>
                     <p class="form-status" id="formStatus" aria-live="polite"></p>
                 </form>
             </div>
