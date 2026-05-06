@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>startup | Web Apps Full Cycle</title>
-    <meta name="description" content="startup — разработка веб-приложений полного цикла: от аналитики и интерфейсов до CI/CD, production и поддержки.">
+    <title>startup | Backend, Infra, Release</title>
+    <meta name="description" content="startup — независимая разработка веб-приложений: backend, инфраструктура, Docker, CI/CD, production и поддержка после релиза.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&family=Sora:wght@500;600;700;800&display=swap" rel="stylesheet">
@@ -57,7 +57,7 @@
                         <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
                     </svg>
                 </button>
-                <a class="button button-secondary" href="#" target="_blank" rel="noreferrer"><span data-i18n="nav.cta">Связаться</span></a>
+                <a class="button button-secondary" href="#contact"><span data-i18n="nav.cta">Обсудить проект</span></a>
             </div>
         </div>
     </header>
@@ -65,35 +65,35 @@
     <main>
         <section class="hero container" id="hero">
             <div class="hero-copy">
-                <p class="eyebrow" data-reveal style="--delay: 0.05s;" data-i18n="hero.eyebrow">stellar product engineering</p>
+                <p class="eyebrow" data-reveal style="--delay: 0.05s;" data-i18n="hero.eyebrow">backend / infra / product delivery</p>
 
                 <h1 class="hero-title">
-                    <span data-reveal style="--delay: 0.12s;" data-i18n="hero.title1">Запускаем</span>
-                    <span data-reveal style="--delay: 0.2s;" data-i18n="hero.title2">веб-приложения</span>
-                    <span class="accent-line" data-reveal style="--delay: 0.28s;" data-i18n="hero.title3">от идеи до production</span>
+                    <span data-reveal style="--delay: 0.12s;" data-i18n="hero.title1">Собираю</span>
+                    <span data-reveal style="--delay: 0.2s;" data-i18n="hero.title2">веб-продукты</span>
+                    <span class="accent-line" data-reveal style="--delay: 0.28s;" data-i18n="hero.title3">от ТЗ до production</span>
                 </h1>
 
                 <p class="hero-text" data-reveal style="--delay: 0.36s;" data-i18n="hero.text">
-                    startup проектирует и собирает веб-продукты полного цикла: от аналитики и интерфейсов
-                    до frontend/backend, CI/CD, production-деплоя и поддержки. Всё в одном ритме и без лишнего слоя бюрократии.
+                    Я беру проект целиком: помогаю собрать требования, проектирую API и данные, пишу backend,
+                    при необходимости закрываю frontend, а потом довожу релиз до Docker, CI/CD и нормального production.
                 </p>
 
                 <div class="hero-actions" data-reveal style="--delay: 0.44s;">
                     <a class="button button-primary" href="#services">
-                        <span data-i18n="hero.btn.services">Посмотреть услуги</span>
+                        <span data-i18n="hero.btn.services">Что я делаю</span>
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
                             <path d="M7 17L17 7"></path>
                             <path d="M9 7h8v8"></path>
                         </svg>
                     </a>
-                    <a class="button button-ghost" href="#projects"><span data-i18n="hero.btn.projects">Готовые проекты</span></a>
+                    <a class="button button-ghost" href="#projects"><span data-i18n="hero.btn.projects">Смотреть кейс</span></a>
                 </div>
 
                 <div class="hero-badges" data-reveal style="--delay: 0.52s;">
                     <span data-i18n="hero.badge.contract">Договор и NDA</span>
-                    <span>Product UI</span>
-                    <span>Docker + VPS</span>
-                    <span data-i18n="hero.badge.ci">CI/CD по умолчанию</span>
+                    <span>React + Vite</span>
+                    <span>Docker + Compose</span>
+                    <span data-i18n="hero.badge.ci">CI/CD без ручной рутины</span>
                 </div>
             </div>
 
@@ -109,23 +109,23 @@
                     </div>
 
                     <div class="code-lines">
-                        <span>project: aligned</span>
-                        <span>analysis: completed</span>
-                        <span>build: react + fastapi</span>
-                        <span>ci: lint / tests / review</span>
-                        <span>deploy: docker -> vps</span>
-                        <span>status: startup-ready</span>
+                        <span>brief: fixed</span>
+                        <span>api: fastapi + postgres</span>
+                        <span>frontend: react + vite</span>
+                        <span>infra: docker + compose</span>
+                        <span>release: ci/cd + nginx</span>
+                        <span>status: ready to ship</span>
                     </div>
                 </div>
 
                 <div class="hero-panel hero-panel-float hero-panel-top">
                     <strong>48h</strong>
-                    <span data-i18n="hero.panel.top">на запуск первого прототипа после аналитики</span>
+                    <span data-i18n="hero.panel.top">до первого рабочего прототипа после фиксации задачи</span>
                 </div>
 
                 <div class="hero-panel hero-panel-float hero-panel-bottom">
                     <strong>1 flow</strong>
-                    <span data-i18n="hero.panel.bottom">единый контур: дизайн, код, деплой и сопровождение</span>
+                    <span data-i18n="hero.panel.bottom">один контур: код, инфраструктура, релиз и поддержка</span>
                 </div>
 
                 <div class="hero-ring" aria-hidden="true">
@@ -146,13 +146,13 @@
             <div class="container">
                 <div class="section-head">
                     <div>
-                        <p class="section-kicker" data-reveal data-i18n="services.kicker">01 / услуги</p>
-                        <h2 class="section-title" data-reveal style="--delay: 0.08s;" data-i18n="services.title">Услуги полного цикла</h2>
+                        <p class="section-kicker" data-reveal data-i18n="services.kicker">01 / чем занимаюсь</p>
+                        <h2 class="section-title" data-reveal style="--delay: 0.08s;" data-i18n="services.title">Что беру на себя</h2>
                     </div>
 
                     <p class="section-text" data-reveal style="--delay: 0.16s;" data-i18n="services.desc">
-                        Мы закрываем все этапы: от первой идеи и аналитики до стабильной работы продукта в production,
-                        инфраструктуры, документации и дальнейшего развития.
+                        Обычно я подключаюсь там, где нужен человек, который доведет продукт до релиза,
+                        а не остановится на макетах или одном слое системы.
                     </p>
                 </div>
 
@@ -170,12 +170,12 @@
                         <article class="service-panel is-current" data-service-panel="discovery">
                             <div class="service-panel-main">
                                 <span class="service-panel-step">01</span>
-                                <h3 data-i18n="services.discovery.title">Discovery и стратегия продукта</h3>
-                                <p data-i18n="services.discovery.desc">Проводим интервью, формируем гипотезы и расставляем приоритеты так, чтобы разработка сразу шла в сторону бизнес-результата.</p>
+                                <h3 data-i18n="services.discovery.title">Разбор задачи и первый план</h3>
+                                <p data-i18n="services.discovery.desc">На старте раскладываю задачу по частям: что нужно в первом релизе, где риски и что можно не делать сейчас.</p>
                                 <ul class="service-panel-list">
-                                    <li data-i18n="services.discovery.li1">Карта требований и рисков</li>
-                                    <li data-i18n="services.discovery.li2">Roadmap первого релиза</li>
-                                    <li data-i18n="services.discovery.li3">Оценка сроков и бюджета</li>
+                                    <li data-i18n="services.discovery.li1">Требования и узкие места</li>
+                                    <li data-i18n="services.discovery.li2">План первого релиза</li>
+                                    <li data-i18n="services.discovery.li3">Оценка сроков и этапов</li>
                                 </ul>
                             </div>
                         </article>
@@ -183,12 +183,12 @@
                         <article class="service-panel" data-service-panel="architecture">
                             <div class="service-panel-main">
                                 <span class="service-panel-step">02</span>
-                                <h3 data-i18n="services.architecture.title">ТЗ и архитектурное проектирование</h3>
-                                <p data-i18n="services.architecture.desc">Собираем технический контур проекта: схемы данных, API-контракты, сценарии пользователей и технические ограничения.</p>
+                                <h3 data-i18n="services.architecture.title">ТЗ, API и архитектура</h3>
+                                <p data-i18n="services.architecture.desc">Собираю технический контур проекта: сценарии, схемы данных, интеграции и точки, в которых система будет расти дальше.</p>
                                 <ul class="service-panel-list">
-                                    <li data-i18n="services.architecture.li1">Подробное ТЗ по модулям</li>
-                                    <li data-i18n="services.architecture.li2">API blueprint и ER-диаграммы</li>
-                                    <li data-i18n="services.architecture.li3">Архитектурные решения под рост</li>
+                                    <li data-i18n="services.architecture.li1">ТЗ по ключевым модулям</li>
+                                    <li data-i18n="services.architecture.li2">API-контракты и схема данных</li>
+                                    <li data-i18n="services.architecture.li3">Архитектура без лишнего оверинжиниринга</li>
                                 </ul>
                             </div>
                         </article>
@@ -196,12 +196,12 @@
                         <article class="service-panel" data-service-panel="build">
                             <div class="service-panel-main">
                                 <span class="service-panel-step">03</span>
-                                <h3 data-i18n="services.build.title">Разработка фронта и бэка</h3>
-                                <p data-i18n="services.build.desc">Реализуем фичи короткими итерациями. Каждый спринт заканчивается рабочим результатом и прозрачным статусом по задачам.</p>
+                                <h3 data-i18n="services.build.title">Разработка frontend и backend</h3>
+                                <p data-i18n="services.build.desc">Делаю рабочие итерации. После каждого этапа у вас есть не статус-репорт, а кусок продукта, который можно смотреть и обсуждать.</p>
                                 <ul class="service-panel-list">
-                                    <li data-i18n="services.build.li1">React/Vite + FastAPI</li>
-                                    <li data-i18n="services.build.li2">Code review и тесты</li>
-                                    <li data-i18n="services.build.li3">Демо после каждой итерации</li>
+                                    <li data-i18n="services.build.li1">React/Vite и FastAPI</li>
+                                    <li data-i18n="services.build.li2">Code review, тесты, чистый API</li>
+                                    <li data-i18n="services.build.li3">Демо по готовым этапам</li>
                                 </ul>
                             </div>
                         </article>
@@ -209,12 +209,12 @@
                         <article class="service-panel" data-service-panel="deploy">
                             <div class="service-panel-main">
                                 <span class="service-panel-step">04</span>
-                                <h3 data-i18n="services.deploy.title">DevOps, CI/CD и production-деплой</h3>
-                                <p data-i18n="services.deploy.desc">Настраиваем окружения, автоматизируем сборки и выкладываем релизы предсказуемо: быстро, стабильно и без ручных рисков.</p>
+                                <h3 data-i18n="services.deploy.title">Инфраструктура, Docker и CI/CD</h3>
+                                <p data-i18n="services.deploy.desc">Собираю контейнеры, настраиваю окружения и автоматизирую выкладку, чтобы релиз не зависел от ручных шагов.</p>
                                 <ul class="service-panel-list">
-                                    <li data-i18n="services.deploy.li1">Docker + Nginx + VPS</li>
-                                    <li data-i18n="services.deploy.li2">CI/CD pipeline и quality gates</li>
-                                    <li data-i18n="services.deploy.li3">Мониторинг и алерты</li>
+                                    <li data-i18n="services.deploy.li1">Docker, Compose, Nginx, VPS</li>
+                                    <li data-i18n="services.deploy.li2">CI/CD и предсказуемые релизы</li>
+                                    <li data-i18n="services.deploy.li3">Логи, мониторинг и базовая эксплуатация</li>
                                 </ul>
                             </div>
                         </article>
@@ -222,12 +222,12 @@
                         <article class="service-panel" data-service-panel="ai">
                             <div class="service-panel-main">
                                 <span class="service-panel-step">05</span>
-                                <h3 data-i18n="services.ai.title">AI-интеграции в продукт</h3>
-                                <p data-i18n="services.ai.desc">Добавляем интеллектуальные сценарии: ассистенты, поиск, генерация контента и персонализация под ваши KPI.</p>
+                                <h3 data-i18n="services.ai.title">AI-интеграции без шума</h3>
+                                <p data-i18n="services.ai.desc">Подключаю модели там, где они реально экономят время: в поиске, классификации, генерации, ассистентах и автоматизации.</p>
                                 <ul class="service-panel-list">
-                                    <li data-i18n="services.ai.li1">Интеграции GPT/ML</li>
+                                    <li data-i18n="services.ai.li1">GPT/ML интеграции</li>
                                     <li data-i18n="services.ai.li2">Prompt/system design</li>
-                                    <li data-i18n="services.ai.li3">Оценка качества ответов</li>
+                                    <li data-i18n="services.ai.li3">Пайплайны и проверка качества</li>
                                 </ul>
                             </div>
                         </article>
@@ -235,12 +235,12 @@
                         <article class="service-panel" data-service-panel="support">
                             <div class="service-panel-main">
                                 <span class="service-panel-step">06</span>
-                                <h3 data-i18n="services.support.title">Поддержка и развитие после релиза</h3>
-                                <p data-i18n="services.support.desc">Сопровождаем систему в бою: мониторинг, горячие фиксы, развитие фичей и масштабирование инфраструктуры под нагрузку.</p>
+                                <h3 data-i18n="services.support.title">Поддержка после запуска</h3>
+                                <p data-i18n="services.support.desc">После релиза не исчезаю. Закрываю фиксы, доработки и технические хвосты, пока продукт уже живет в работе.</p>
                                 <ul class="service-panel-list">
-                                    <li data-i18n="services.support.li1">SLA и инцидент-менеджмент</li>
-                                    <li data-i18n="services.support.li2">План развития продукта</li>
-                                    <li data-i18n="services.support.li3">Техническая документация</li>
+                                    <li data-i18n="services.support.li1">Фиксы и сопровождение</li>
+                                    <li data-i18n="services.support.li2">План следующих итераций</li>
+                                    <li data-i18n="services.support.li3">Документация и handoff</li>
                                 </ul>
                             </div>
                         </article>
@@ -248,20 +248,20 @@
 
                     <div class="services-snapshot">
                         <article class="snapshot-item">
-                            <h4 data-i18n="services.snap.legal.title">Юридический контур</h4>
-                            <p data-i18n="services.snap.legal.desc">Договор, NDA, прозрачные этапы и фиксация ответственности.</p>
+                            <h4 data-i18n="services.snap.legal.title">Рабочий контур</h4>
+                            <p data-i18n="services.snap.legal.desc">Договор, NDA, этапы и понятные зоны ответственности.</p>
                         </article>
                         <article class="snapshot-item">
                             <h4 data-i18n="services.snap.docs.title">Документация</h4>
-                            <p data-i18n="services.snap.docs.desc">Swagger/Redoc, схемы, runbooks и инструкции для команды.</p>
+                            <p data-i18n="services.snap.docs.desc">Swagger, схемы, runbooks и короткие инструкции, чтобы проект не жил только в голове.</p>
                         </article>
                         <article class="snapshot-item">
                             <h4 data-i18n="services.snap.infra.title">Инфраструктура</h4>
-                            <p data-i18n="services.snap.infra.desc">Резервное копирование, безопасность и подготовка к масштабированию.</p>
+                            <p data-i18n="services.snap.infra.desc">Резервные копии, базовая безопасность и подготовка к росту нагрузки.</p>
                         </article>
                         <article class="snapshot-item">
-                            <h4>Ownership</h4>
-                            <p data-i18n="services.snap.own.desc">Одна команда, полный цикл и единая ответственность за результат.</p>
+                            <h4>One owner</h4>
+                            <p data-i18n="services.snap.own.desc">Один человек отвечает за весь маршрут: от задачи до релиза.</p>
                         </article>
                     </div>
                 </div>
@@ -272,13 +272,13 @@
             <div class="container">
                 <div class="section-head">
                     <div>
-                        <p class="section-kicker" data-reveal data-i18n="process.kicker">02 / процесс</p>
-                        <h2 class="section-title" data-reveal style="--delay: 0.08s;" data-i18n="process.title">Процесс разработки</h2>
+                        <p class="section-kicker" data-reveal data-i18n="process.kicker">02 / как иду по проекту</p>
+                        <h2 class="section-title" data-reveal style="--delay: 0.08s;" data-i18n="process.title">Как строю работу</h2>
                     </div>
 
                     <p class="section-text" data-reveal style="--delay: 0.16s;" data-i18n="process.desc">
-                        Прозрачный пайплайн из семи этапов с полным контролем на каждом шаге:
-                        от первого знакомства и ТЗ до production-деплоя и поддержки.
+                        Процесс простой: сначала фиксируем, что именно делаем, потом собираем, тестируем и выкатываем.
+                        Без длинных пауз и без сюрпризов в конце.
                     </p>
                 </div>
 
@@ -310,24 +310,24 @@
                     <div class="process-step" data-reveal style="--delay: 0.08s;">
                         <div class="step-num">01</div>
                         <div class="step-body">
-                            <h3 data-i18n="process.step1.title">Знакомство и аналитика</h3>
-                            <p data-i18n="process.step1.desc">Созвон, бриф, исследование рынка и конкурентов. Формируем видение продукта.</p>
+                            <h3 data-i18n="process.step1.title">Созвон и разбор задачи</h3>
+                            <p data-i18n="process.step1.desc">Собираю контекст: цель, сроки, ограничения, интеграции и то, что уже есть на руках.</p>
                         </div>
                     </div>
 
                     <div class="process-step" data-reveal style="--delay: 0.12s;">
                         <div class="step-num">02</div>
                         <div class="step-body">
-                            <h3 data-i18n="process.step2.title">ТЗ и прототипы</h3>
-                            <p data-i18n="process.step2.desc">Детальное техзадание, wireframes, user-flow и спецификация API-эндпойнтов.</p>
+                            <h3 data-i18n="process.step2.title">ТЗ и технический контур</h3>
+                            <p data-i18n="process.step2.desc">Фиксирую user-flow, API, данные и структуру первой версии продукта.</p>
                         </div>
                     </div>
 
                     <div class="process-step" data-reveal style="--delay: 0.16s;">
                         <div class="step-num">03</div>
                         <div class="step-body">
-                            <h3 data-i18n="process.step3.title">Договор и оплата</h3>
-                            <p data-i18n="process.step3.desc">Фиксируем сроки, стоимость и NDA. Вы платите поэтапно, без лишних рисков и сюрпризов.</p>
+                            <h3 data-i18n="process.step3.title">План, сроки и старт</h3>
+                            <p data-i18n="process.step3.desc">Согласуем этапы, стоимость и формат работы. После этого можно спокойно заходить в разработку.</p>
                         </div>
                     </div>
 
@@ -335,23 +335,23 @@
                         <div class="step-num">04</div>
                         <div class="step-body">
                             <h3 data-i18n="process.step4.title">Разработка</h3>
-                            <p data-i18n="process.step4.desc">Спринты по 1–2 недели, доступ к Git-репозиторию, статусы по задачам и предсказуемый темп.</p>
+                            <p data-i18n="process.step4.desc">Пишу фичи по этапам, держу репозиторий в порядке и показываю результат без лишнего шума.</p>
                         </div>
                     </div>
 
                     <div class="process-step" data-reveal style="--delay: 0.24s;">
                         <div class="step-num">05</div>
                         <div class="step-body">
-                            <h3 data-i18n="process.step5.title">Тестирование и QA</h3>
-                            <p data-i18n="process.step5.desc">Unit, integration и E2E тесты, ручное QA и проверка ключевых сценариев под нагрузкой.</p>
+                            <h3 data-i18n="process.step5.title">Тесты и проверка</h3>
+                            <p data-i18n="process.step5.desc">Прогоняю ключевые сценарии, проверяю интеграции и убираю то, что потом ломает релиз.</p>
                         </div>
                     </div>
 
                     <div class="process-step" data-reveal style="--delay: 0.28s;">
                         <div class="step-num">06</div>
                         <div class="step-body">
-                            <h3 data-i18n="process.step6.title">Деплой в production</h3>
-                            <p data-i18n="process.step6.desc">Docker-образы, VPS, Nginx, SSL и мониторинг. Всё проходит по предсказуемому CI/CD пайплайну.</p>
+                            <h3 data-i18n="process.step6.title">Деплой и запуск</h3>
+                            <p data-i18n="process.step6.desc">Собираю образы, настраиваю сервер, домен, SSL и выкладку так, чтобы релиз можно было повторить.</p>
                         </div>
                     </div>
 
@@ -359,7 +359,7 @@
                         <div class="step-num">07</div>
                         <div class="step-body">
                             <h3 data-i18n="process.step7.title">Поддержка и развитие</h3>
-                            <p data-i18n="process.step7.desc">Мониторинг, горячие фиксы, новые фичи, масштабирование и сопровождение продукта после релиза.</p>
+                            <p data-i18n="process.step7.desc">После запуска продолжаю работу: фиксы, новые задачи, улучшение инфраструктуры и продукта.</p>
                         </div>
                     </div>
                 </div>
@@ -371,12 +371,12 @@
                 <div class="section-head">
                     <div>
                         <p class="section-kicker" data-reveal>03 / portfolio</p>
-                        <h2 class="section-title" data-reveal style="--delay: 0.08s;" data-i18n="projects.title">Живой кейс, который уже работает в production.</h2>
+                        <h2 class="section-title" data-reveal style="--delay: 0.08s;" data-i18n="projects.title">Публичный кейс, который уже живет.</h2>
                     </div>
 
                     <p class="section-text" data-reveal style="--delay: 0.16s;" data-i18n="projects.desc">
-                        Пока в портфолио один публичный запуск, и я решил показать это честно: один реальный
-                        live-проект плюс следующий слот для нового продукта, который можно собрать вместе с вами.
+                        Я не набиваю портфолио выдуманными карточками. Сейчас здесь один реальный запуск
+                        и место под следующий проект, который тоже дойдет до production.
                     </p>
                 </div>
 
@@ -387,9 +387,9 @@
                                 <div class="project-window-bar"><i></i><i></i><i></i></div>
                                 <div class="project-site-preview">
                                     <div class="project-site-hero">
-                                        <span class="project-site-badge">live website</span>
+                                        <span class="project-site-badge">live case</span>
                                         <strong>AiNoCraft</strong>
-                                        <p data-i18n="projects.ainocraft.preview">Сайт для Minecraft-проекта, где в одной точке собраны презентация сервера, лаунчер, новости и вход в комьюнити.</p>
+                                        <p data-i18n="projects.ainocraft.preview">Сайт Minecraft-проекта, где в одном месте собраны сервер, лаунчер, новости и точка входа в комьюнити.</p>
                                     </div>
                                     <div class="project-site-metrics">
                                         <span>launcher / onboarding</span>
@@ -412,7 +412,7 @@
                         <div class="project-content">
                             <span class="project-label">live case / 01</span>
                             <h3>AiNoCraft</h3>
-                            <p data-i18n="projects.ainocraft.desc">Публичный сайт игрового Minecraft-проекта, который связывает презентацию сервера, скачивание официального лаунчера, новости, привилегии и социальные каналы в одну цельную экосистему.</p>
+                            <p data-i18n="projects.ainocraft.desc">AiNoCraft - это публичная экосистема вокруг Minecraft-проекта: сайт, страница лаунчера, новости, привилегии и связка с backend-сервисами.</p>
                             <ul class="chip-list">
                                 <li>Minecraft</li>
                                 <li>Launcher</li>
@@ -425,16 +425,16 @@
                     <article class="project-card project-card-next tilt-card" data-reveal style="--delay: 0.14s;">
                         <div class="project-content project-content-compact">
                             <span class="project-label">next slot</span>
-                            <h3 data-i18n="projects.next.title">Следующий кейс может быть вашим</h3>
-                            <p data-i18n="projects.next.desc">Портфолио собирается вокруг реальных запусков. Вместо набора вымышленных карточек здесь будет только то, что действительно вышло в свет.</p>
+                            <h3 data-i18n="projects.next.title">Следующий кейс пока свободен</h3>
+                            <p data-i18n="projects.next.desc">Новые проекты появляются здесь только после живого запуска. Это медленнее, зато честно.</p>
                             <ul class="chip-list">
                                 <li>Open for launch</li>
                                 <li>Case study soon</li>
                                 <li>One more live build</li>
                             </ul>
                             <div class="portfolio-note">
-                                <strong data-i18n="projects.next.note.strong">Фокус на качестве, а не на количестве.</strong>
-                                <p data-i18n="projects.next.note.p">Каждый следующий проект будет добавляться сюда только после полноценного production-запуска.</p>
+                                <strong data-i18n="projects.next.note.strong">Лучше один сильный кейс, чем десять пустых карточек.</strong>
+                                <p data-i18n="projects.next.note.p">Следующий проект попадет сюда только после полноценного релиза.</p>
                             </div>
                         </div>
                     </article>
@@ -447,12 +447,12 @@
                 <div class="section-head">
                     <div>
                         <p class="section-kicker" data-reveal data-i18n="stack.kicker">04 / стек</p>
-                        <h2 class="section-title" data-reveal style="--delay: 0.08s;" data-i18n="stack.title">Технологический стек</h2>
+                        <h2 class="section-title" data-reveal style="--delay: 0.08s;" data-i18n="stack.title">Чем работаю</h2>
                     </div>
 
                     <p class="section-text" data-reveal style="--delay: 0.16s;" data-i18n="stack.desc">
-                        Проверенные инструменты, которые мы используем каждый день, чтобы запускать интерфейсы,
-                        API и инфраструктуру без лишней хрупкости.
+                        Стек не ради списка технологий. Я держу только то, с чем могу спокойно собрать продукт,
+                        выкатывать его и поддерживать дальше.
                     </p>
                 </div>
 
@@ -517,20 +517,20 @@
                 <div class="principles-grid">
                     <article class="principle-card tilt-card" data-reveal style="--delay: 0.08s;">
                         <span class="principle-label">Frontend</span>
-                        <h3 data-i18n="stack.frontend.title">React, Vite и TypeScript</h3>
-                        <p data-i18n="stack.frontend.desc">Собираем быстрые интерфейсы, личные кабинеты и продуктовые страницы с чистой адаптивной версткой.</p>
+                        <h3 data-i18n="stack.frontend.title">React, Vite и продуктовый UI</h3>
+                        <p data-i18n="stack.frontend.desc">Собираю интерфейсы, личные кабинеты и лендинги, когда проекту нужен цельный frontend без отдельной команды.</p>
                     </article>
 
                     <article class="principle-card tilt-card" data-reveal style="--delay: 0.14s;">
                         <span class="principle-label">Backend</span>
-                        <h3 data-i18n="stack.backend.title">FastAPI, PostgreSQL и Redis</h3>
-                        <p data-i18n="stack.backend.desc">Строим API, бизнес-логику, очереди задач и надежные модели данных под рост продукта.</p>
+                        <h3 data-i18n="stack.backend.title">Python, FastAPI, PostgreSQL</h3>
+                        <p data-i18n="stack.backend.desc">Пишу API, бизнес-логику, интеграции, схемы данных и сервисный backend, который можно нормально развивать.</p>
                     </article>
 
                     <article class="principle-card tilt-card" data-reveal style="--delay: 0.2s;">
                         <span class="principle-label">DevOps</span>
-                        <h3 data-i18n="stack.devops.title">Docker, VPS, Nginx и CI/CD</h3>
-                        <p data-i18n="stack.devops.desc">Готовим production-контур, мониторинг, документацию и автоматические выкладки без ручного хаоса.</p>
+                        <h3 data-i18n="stack.devops.title">Docker, Compose, Nginx и CI/CD</h3>
+                        <p data-i18n="stack.devops.desc">Готовлю окружения, сборки и выкладку так, чтобы запуск не превращался в ручную операцию.</p>
                     </article>
                 </div>
             </div>
@@ -545,9 +545,8 @@
                     </div>
 
                     <p class="section-text team-lead" data-reveal style="--delay: 0.16s;" data-i18n="team.desc">
-                        Оба работаем с fullstack-разработкой, backend, инфраструктурой и production-процессами.
-                        Команда сочетает продуктовый frontend, надежную работу с данными, AI-интеграции
-                        и автоматизацию в одном инженерном процессе.
+                        В команде два сильных контура. Я держу backend, инфраструктуру, Docker, CI/CD и production-релиз,
+                        а второй фокус закрывает AI-интеграции, automation и Python backend. В сумме это даёт полный маршрут от задачи до запуска.
                     </p>
                 </div>
 
@@ -555,15 +554,17 @@
                     <article class="team-member tilt-card" data-reveal style="--delay: 0.2s;">
                         <div class="team-avatar" aria-hidden="true"><span>AK</span></div>
                         <div class="team-member-body">
-                            <span class="team-role">senior fullstack developer</span>
+                            <span class="team-role">backend / infra engineer</span>
                             <h3>akirakawashi</h3>
-                            <p data-i18n="team.ak.desc">Проектирует продуктовую архитектуру, собирает frontend/backend, API и production-контур. Основной фокус — интерфейсы, состояние приложения, схемы данных и PostgreSQL.</p>
+                            <p data-i18n="team.ak.desc">Пишу backend на Python и FastAPI, проектирую API и схемы данных, настраиваю Docker, Docker Compose и CI/CD. В отдельных задачах беру React/Vite, AI-интеграции, Oracle / PL/SQL и производственный контур целиком.</p>
                             <div class="team-tags">
-                                <span>Fullstack</span>
-                                <span>Frontend</span>
-                                <span>Databases</span>
+                                <span>Python</span>
+                                <span>FastAPI</span>
                                 <span>PostgreSQL</span>
-                                <span>DevOps</span>
+                                <span>Docker</span>
+                                <span>CI/CD</span>
+                                <span>React/Vite</span>
+                                <span>AI integrations</span>
                             </div>
                         </div>
                     </article>
@@ -573,7 +574,7 @@
                         <div class="team-member-body">
                             <span class="team-role">senior AI engineer</span>
                             <h3>sadeyes</h3>
-                            <p data-i18n="team.se.desc">Собирает backend на Python, LLM-интеграции, AI-ассистенты, RAG, пайплайны данных, оценка качества ответов, боты и автоматизация процессов.</p>
+                            <p data-i18n="team.se.desc">Собирает backend на Python, LLM-интеграции, AI-ассистентов, RAG, пайплайны данных, оценку качества ответов, ботов и автоматизацию процессов.</p>
                             <div class="team-tags">
                                 <span>Fullstack</span>
                                 <span>LLM</span>
@@ -588,18 +589,18 @@
                 <div class="team-capabilities">
                     <article class="team-capability" data-reveal style="--delay: 0.34s;">
                         <span>01</span>
-                        <h3 data-i18n="team.cap1.title">Общий стек</h3>
-                        <p data-i18n="team.cap1.desc">React, Vite, FastAPI, Python, PostgreSQL, Docker, CI/CD и production-подход есть в общем инженерном контуре.</p>
+                        <h3 data-i18n="team.cap1.title">Backend и данные</h3>
+                        <p data-i18n="team.cap1.desc">Python, FastAPI, PostgreSQL, Redis, MinIO, Kafka, Oracle и PL/SQL там, где важны API, интеграции и нормальная структура данных.</p>
                     </article>
                     <article class="team-capability" data-reveal style="--delay: 0.4s;">
                         <span>02</span>
-                        <h3 data-i18n="team.cap2.title">Интерфейсы и данные</h3>
-                        <p data-i18n="team.cap2.desc">Проектируем понятные экраны, клиентскую логику, API-контракты и структуру данных так, чтобы продукт было удобно развивать.</p>
+                        <h3 data-i18n="team.cap2.title">Инфраструктура и релизы</h3>
+                        <p data-i18n="team.cap2.desc">Docker, Compose, Nginx, VPS и CI/CD. Люблю, когда сервис можно поднять, обновить и откатить без ручной магии.</p>
                     </article>
                     <article class="team-capability" data-reveal style="--delay: 0.46s;">
                         <span>03</span>
-                        <h3 data-i18n="team.cap3.title">AI-интеграции</h3>
-                        <p data-i18n="team.cap3.desc">Встраиваем LLM, RAG, ботов, пайплайны и автоматизацию в реальные рабочие процессы, где они экономят время и повышают качество.</p>
+                        <h3 data-i18n="team.cap3.title">AI и смежные задачи</h3>
+                        <p data-i18n="team.cap3.desc">Подключаю AI-сценарии, автоматизацию, computer vision и продуктовые штуки, если они помогают проекту, а не просто красиво звучат.</p>
                     </article>
                 </div>
             </div>
@@ -609,10 +610,10 @@
             <div class="container contact-shell">
                 <div class="contact-copy">
                     <p class="section-kicker" data-reveal data-i18n="contact.kicker">06 / контакт</p>
-                    <h2 class="section-title" data-reveal style="--delay: 0.08s;" data-i18n="contact.title">Готов обсудить ваш запуск.</h2>
+                    <h2 class="section-title" data-reveal style="--delay: 0.08s;" data-i18n="contact.title">Можно обсудить ваш проект.</h2>
                     <p class="section-text" data-reveal style="--delay: 0.16s;" data-i18n="contact.desc">
-                        Напишите пару строк о задаче. Я предложу формат старта, помогу собрать следующий шаг
-                        и отвечу в течение 24 часов.
+                        Если у вас уже есть задача, черновой план или просто идея, напишите пару строк.
+                        Я посмотрю, с чего лучше начать, и отвечу в течение суток.
                     </p>
 
                     <div class="contact-list" data-reveal style="--delay: 0.22s;">
@@ -620,9 +621,9 @@
                             <span class="contact-label">Email</span>
                             <strong>hello@startup.dev</strong>
                         </a>
-                        <a class="contact-item" href="#" target="_blank" rel="noreferrer">
+                        <a class="contact-item" href="https://t.me/akirakawashi" target="_blank" rel="noreferrer">
                             <span class="contact-label">Telegram</span>
-                            <strong>@startup</strong>
+                            <strong>@akirakawashi</strong>
                         </a>
                         <div class="contact-item">
                             <span class="contact-label">Reply time</span>
@@ -644,7 +645,7 @@
 
                     <label class="field">
                         <span data-i18n="contact.form.project">О проекте</span>
-                        <textarea id="message" name="message" rows="5" placeholder="Коротко опишите задачу, сроки и текущую стадию проекта" data-i18n-placeholder="contact.form.project.ph" required></textarea>
+                        <textarea id="message" name="message" rows="5" placeholder="Что нужно сделать, какие сроки и на каком этапе вы сейчас" data-i18n-placeholder="contact.form.project.ph" required></textarea>
                     </label>
 
                     <button class="button button-primary button-wide" type="submit">
@@ -655,7 +656,7 @@
                         </svg>
                     </button>
 
-                    <p class="form-note" data-i18n="contact.form.note">Форма откроет черновик письма в почтовом клиенте с уже собранной темой и описанием.</p>
+                    <p class="form-note" data-i18n="contact.form.note">Форма откроет черновик письма с уже собранной темой и описанием.</p>
                     <p class="form-status" id="formStatus" aria-live="polite"></p>
                 </form>
             </div>
@@ -669,11 +670,11 @@
                     <span class="brand-mark">ST</span>
                     <span class="brand-name">startup</span>
                 </a>
-                <p class="footer-text">Cosmic-minimal studio for web apps, product interfaces, launch systems and clean production delivery.</p>
+                <p class="footer-text">Independent developer for backend systems, web products and calm production releases.</p>
             </div>
 
             <div class="footer-meta">
-                <span>React / FastAPI / Docker</span>
+                <span>Python / FastAPI / Docker / CI/CD</span>
                 <span>&copy; 2026 startup</span>
             </div>
         </div>
