@@ -125,17 +125,6 @@ button, input, select, textarea { font: inherit; color: inherit; }
 }
 :root[data-theme="light"] .grain { opacity: .07; }
 
-/* мягкое свечение за курсором */
-.cursor-glow {
-  position: fixed; top: 0; left: 0; z-index: 1; pointer-events: none;
-  width: 520px; height: 520px; margin: -260px 0 0 -260px; border-radius: 50%;
-  background: radial-gradient(circle, rgba(124, 77, 255, .16), transparent 62%);
-  opacity: 0; transition: opacity .5s var(--ease);
-  will-change: transform;
-}
-.cursor-glow.on { opacity: 1; }
-:root[data-theme="light"] .cursor-glow { background: radial-gradient(circle, rgba(109, 40, 217, .10), transparent 62%); }
-
 /* ---------- 3. Раскладка ---------- */
 .wrap { width: 100%; max-width: var(--wrap); margin-inline: auto; padding-inline: 24px; }
 .wrap-narrow { max-width: 840px; }
@@ -911,7 +900,6 @@ button, input, select, textarea { font: inherit; color: inherit; }
   .footer-note { margin-right: 0; }
   .contact-links li { flex-direction: column; align-items: flex-start; gap: 6px; }
   .contact-label { width: auto; }
-  .cursor-glow { display: none; }
   .checks-grid { grid-template-columns: 1fr; }
   .checks-list li { flex-wrap: wrap; row-gap: 2px; padding: 10px 14px; font-size: .85rem; }
   .checks-list span:last-child { width: 100%; padding-left: 27px; }
@@ -931,11 +919,10 @@ button, input, select, textarea { font: inherit; color: inherit; }
   .underline-grow::after { transform: scaleX(1); }
   .marquee-track { animation: none; }
   .hero-stage { display: none; }
-  .cursor-glow { display: none; }
 }
 
 @media print {
-  .topbar, .hero-stage, .hero-horizon, .checks-halo, .checks-glow, .checks-rim, .page-progress, .toast, .grain, .cursor-glow,
+  .topbar, .hero-stage, .hero-horizon, .checks-halo, .checks-glow, .checks-rim, .page-progress, .toast, .grain,
   .marquee, .contact-form, .work-aside { display: none; }
   body, .hero, .checks { background: #fff; color: #000; }
 }

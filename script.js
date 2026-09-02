@@ -249,25 +249,6 @@
   }
 
   /* ============================================================
-     Свечение за курсором
-     ============================================================ */
-  var glow = $('#cursorGlow');
-  if (glow && finePointer && !reduceMotion) {
-    var gx = 0, gy = 0, queuedGlow = false;
-    window.addEventListener('pointermove', function (e) {
-      gx = e.clientX; gy = e.clientY;
-      if (!glow.classList.contains('on')) glow.classList.add('on');
-      if (queuedGlow) return;
-      queuedGlow = true;
-      window.requestAnimationFrame(function () {
-        glow.style.transform = 'translate(' + gx + 'px,' + gy + 'px)';
-        queuedGlow = false;
-      });
-    }, { passive: true });
-    document.addEventListener('pointerleave', function () { glow.classList.remove('on'); });
-  }
-
-  /* ============================================================
      Бегущая строка: дублируем содержимое ради бесшовного цикла
      ============================================================ */
   var marquee = $('#marqueeTrack');
@@ -478,12 +459,12 @@
   var rimCanvas  = $('.checks-rim');
   if (glowCanvas && rimCanvas && glowCanvas.getContext) {
     var BLOCK  = 2;      // размер блока, px
-    var PAD    = 150;    // насколько холст шире панели с каждой стороны, px
+    var PAD    = 230;    // насколько холст шире панели с каждой стороны, px
     var RADIUS = 15;     // скругление рамки окна, px
-    var RIM    = 5;      // дальность нити, px
-    var BAND   = 34;     // дальность цветной полосы, px
-    var HAZE   = 96;     // дальность дымки, px
-    var SPAN   = 0.22;   // полуширина пятна вдоль периметра, доля периметра
+    var RIM    = 6;      // дальность нити, px
+    var BAND   = 52;     // дальность цветной полосы, px
+    var HAZE   = 160;    // дальность дымки, px
+    var SPAN   = 0.24;   // полуширина пятна вдоль периметра, доля периметра
     var STEP   = 3000;   // переход от середины стороны до следующей, мс
     var FPS    = 30;
 
@@ -591,7 +572,7 @@
         o = k * 4;
 
         // полоса и дымка — под сетку точек
-        var a = (rim * .5 + band * .9 + haze * .36) * wl;
+        var a = (rim * .5 + band * .95 + haze * .5) * wl;
         if (a > 1) a = 1;
         if (a >= .01) {
           for (c = 0; c < 3; c++) {
