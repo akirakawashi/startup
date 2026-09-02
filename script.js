@@ -466,20 +466,21 @@
      поэтому пик скорости приходится ровно на угол. Второй источник всегда
      на противоположной стороне.
 
-     Холст вдвое меньше панели, растянут с image-rendering: pixelated.
-     Один раз считаются поля: расстояние до скруглённой рамки (три слоя
-     света: нить, полоса, дымка) и положение ближайшей точки рамки на
-     периметре. Каждый кадр — только цвет и яркость по этим полям, без
-     геометрии. Пиксельная фактура — порог по матрице Байера в полосе и
-     дымке; у самой нити свет сплошной, как в оригинале. Считается только
-     пока панель на экране; при prefers-reduced-motion один кадр.
+     Два холста вдвое меньше панели: .checks-glow — полоса и дымка, поверх
+     него CSS-маска кладёт сетку точек; .checks-rim — нить у самой рамки,
+     без маски, свет там сплошной. Один раз считаются поля: расстояние до
+     скруглённой рамки и положение ближайшей точки рамки на периметре.
+     Каждый кадр — только цвет и яркость по этим полям, без геометрии.
+     Считается только пока панель на экране; при prefers-reduced-motion
+     один кадр.
      ============================================================ */
   var glowCanvas = $('.checks-glow');
-  if (glowCanvas && glowCanvas.getContext) {
+  var rimCanvas  = $('.checks-rim');
+  if (glowCanvas && rimCanvas && glowCanvas.getContext) {
     var BLOCK  = 2;      // размер блока, px
     var PAD    = 150;    // насколько холст шире панели с каждой стороны, px
     var RADIUS = 15;     // скругление рамки окна, px
-    var RIM    = 4;      // дальность нити, px
+    var RIM    = 5;      // дальность нити, px
     var BAND   = 34;     // дальность цветной полосы, px
     var HAZE   = 96;     // дальность дымки, px
     var SPAN   = 0.22;   // полуширина пятна вдоль периметра, доля периметра
@@ -490,26 +491,10 @@
     var WARM = { hot: [242, 234, 255], mid: [167, 139, 250], deep: [104, 52, 226] };
     var COOL = { hot: [226, 255, 250], mid: [ 94, 234, 212], deep: [ 16, 150, 160] };
 
-    // матрица Байера 8×8: M(2n) = [[4M, 4M+2], [4M+3, 4M+1]]
-    var bayer = [[0]];
-    for (var size = 1; size < 8; size *= 2) {
-      var grown = [];
-      for (var by = 0; by < size * 2; by++) {
-        grown[by] = [];
-        for (var bx = 0; bx < size * 2; bx++) {
-          var v = bayer[by % size][bx % size] * 4;
-          if (by < size && bx >= size) v += 2;
-          else if (by >= size && bx < size) v += 3;
-          else if (by >= size && bx >= size) v += 1;
-          grown[by][bx] = v;
-        }
-      }
-      bayer = grown;
-    }
-
-    var ctx = glowCanvas.getContext('2d');
-    var W = 0, H = 0, N = 0, img = null, px = null;
-    var fMask, fRim, fBand, fHaze, fU, fThr;
+    var ctx  = glowCanvas.getContext('2d');
+    var rctx = rimCanvas.getContext('2d');
+    var W = 0, H = 0, N = 0, img = null, px = null, rimg = null, rpx = null;
+    var fMask, fRim, fBand, fHaze, fU;
     var stops = [.125, .375, .625, .875, 1.125];   // середины сторон, уточняются в build
     var builtKey = '';
 
@@ -524,21 +509,22 @@
       W = Math.ceil((PW + PAD * 2) / BLOCK);
       H = Math.ceil((PH + PAD * 2) / BLOCK);
       N = W * H;
-      glowCanvas.width = W;
-      glowCanvas.height = H;
-      glowCanvas.style.width  = (W * BLOCK) + 'px';
-      glowCanvas.style.height = (H * BLOCK) + 'px';
-      glowCanvas.style.left = (-PAD) + 'px';
-      glowCanvas.style.top  = (-PAD) + 'px';
-      img = ctx.createImageData(W, H);
-      px = img.data;
+      [glowCanvas, rimCanvas].forEach(function (c) {
+        c.width = W;
+        c.height = H;
+        c.style.width  = (W * BLOCK) + 'px';
+        c.style.height = (H * BLOCK) + 'px';
+        c.style.left = (-PAD) + 'px';
+        c.style.top  = (-PAD) + 'px';
+      });
+      img  = ctx.createImageData(W, H);  px  = img.data;
+      rimg = rctx.createImageData(W, H); rpx = rimg.data;
 
       fMask = new Uint8Array(N);
       fRim  = new Float32Array(N);
       fBand = new Float32Array(N);
       fHaze = new Float32Array(N);
       fU    = new Float32Array(N);
-      fThr  = new Float32Array(N);
 
       var P = 2 * (PW + PH);           // периметр
       var maxd = PAD - 6;              // дальше этого — гарантированный ноль
@@ -563,7 +549,6 @@
           fRim[k]  = Math.exp(-dd / RIM);
           fBand[k] = Math.exp(-dd / BAND) * fade;
           fHaze[k] = Math.exp(-dd / HAZE) * fade * fade;
-          fThr[k]  = (bayer[j & 7][i & 7] + .5) / 64;
 
           // положение ближайшей точки рамки на периметре, по часовой
           // стрелке от верхнего левого угла: верх → право → низ → лево.
@@ -586,8 +571,8 @@
     };
 
     var paint = function (phase) {
-      var out = px;
-      for (var z = 0; z < out.length; z++) out[z] = 0;
+      var out = px, rout = rpx, o, c;
+      for (var z = 0; z < out.length; z++) { out[z] = 0; rout[z] = 0; }
       for (var k = 0; k < N; k++) {
         if (!fMask[k]) continue;
 
@@ -601,28 +586,31 @@
         var wl = w1 > w2 ? w1 : w2;
         if (wl < .004) continue;
 
-        var rim = fRim[k], band = fBand[k], haze = fHaze[k];
-        var a = (rim + band * .85 + haze * .34) * wl;
-        if (a > 1) a = 1;
-
-        // фактура: у нити сплошь, дальше порог по матрице. Негорящие блоки
-        // не гасятся до нуля — иначе вместо света получается сетка.
-        // Ниже 5% блоки не зажигаются вовсе: без этого поле точек тянется
-        // до самого края холста и по диагонали от угла выглядит квадратом
-        var aa = (a - .05) / .95;
-        if (aa <= 0) continue;
-        var tex = rim > .3 || aa > fThr[k] ? 1 : .42;
-        var alpha = a * tex;
-
         var pal = w1 > w2 ? WARM : COOL;
-        var o = k * 4;
-        for (var c = 0; c < 3; c++) {
-          var base = pal.deep[c] + (pal.mid[c] - pal.deep[c]) * band;
-          out[o + c] = base + (pal.hot[c] - base) * rim;
+        var rim = fRim[k], band = fBand[k], haze = fHaze[k];
+        o = k * 4;
+
+        // полоса и дымка — под сетку точек
+        var a = (rim * .5 + band * .9 + haze * .36) * wl;
+        if (a > 1) a = 1;
+        if (a >= .01) {
+          for (c = 0; c < 3; c++) {
+            out[o + c] = pal.deep[c] + (pal.mid[c] - pal.deep[c]) * band;
+          }
+          out[o + 3] = a * 255;
         }
-        out[o + 3] = alpha * 255;
+
+        // нить — сплошная, к рамке уходит в белый
+        var r = rim * wl;
+        if (r >= .02) {
+          for (c = 0; c < 3; c++) {
+            rout[o + c] = pal.mid[c] + (pal.hot[c] - pal.mid[c]) * rim;
+          }
+          rout[o + 3] = r * 255;
+        }
       }
       ctx.putImageData(img, 0, 0);
+      rctx.putImageData(rimg, 0, 0);
     };
 
     // фаза по времени: номер перехода выбирает пару соседних середин сторон,

@@ -761,11 +761,20 @@ button, input, select, textarea { font: inherit; color: inherit; }
       #e2fffa 100%);
 }
 
-.checks-glow {
+.checks-glow,
+.checks-rim {
   position: absolute;
   left: 0; top: 0;                 /* размер и смещение задаёт скрипт */
-  image-rendering: pixelated;      /* блоки должны остаться резкими */
   pointer-events: none;
+}
+/* сетка точек с шагом 3px поверх плавного свечения: точка непрозрачна,
+   промежуток пропускает 28% — так между точками остаётся дымка, а не чернота.
+   Нить на отдельном холсте без маски: у самой рамки свет сплошной */
+.checks-glow {
+  -webkit-mask-image: radial-gradient(circle, #000 .9px, rgba(0, 0, 0, .28) 1.35px);
+          mask-image: radial-gradient(circle, #000 .9px, rgba(0, 0, 0, .28) 1.35px);
+  -webkit-mask-size: 3px 3px;
+          mask-size: 3px 3px;
 }
 /* когда холст работает, статичный CSS-ободок не нужен: свет движется */
 .checks-shot.has-glow .checks-halo { display: none; }
@@ -779,13 +788,13 @@ button, input, select, textarea { font: inherit; color: inherit; }
   pointer-events: none;
 }
 
-/* безель: светлая внешняя линия, серая полоса, внутри тёмный экран */
+/* безель: заметная светлая линия, тёмная полоса, внутри экран */
 .checks-window {
   position: relative;
-  padding: 5px;
+  padding: 6px;
   border-radius: 15px;
-  background: #1a191f;
-  border: 1px solid rgba(255, 255, 255, .22);
+  background: #1b1a21;
+  border: 1.5px solid rgba(255, 255, 255, .34);
   box-shadow: 0 40px 90px -40px rgba(0, 0, 0, .9);
 }
 .checks-screen {
@@ -906,7 +915,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
   .checks-grid { grid-template-columns: 1fr; }
   .checks-list li { flex-wrap: wrap; row-gap: 2px; padding: 10px 14px; font-size: .85rem; }
   .checks-list span:last-child { width: 100%; padding-left: 27px; }
-  .checks-window { padding: 3px; }
+  .checks-window { padding: 4px; }
 }
 
 /* ---------- доступность ---------- */
@@ -926,7 +935,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 }
 
 @media print {
-  .topbar, .hero-stage, .hero-horizon, .checks-halo, .checks-glow, .page-progress, .toast, .grain, .cursor-glow,
+  .topbar, .hero-stage, .hero-horizon, .checks-halo, .checks-glow, .checks-rim, .page-progress, .toast, .grain, .cursor-glow,
   .marquee, .contact-form, .work-aside { display: none; }
   body, .hero, .checks { background: #fff; color: #000; }
 }
