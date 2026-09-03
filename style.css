@@ -258,11 +258,15 @@ button, input, select, textarea { font: inherit; color: inherit; }
   --faint: #837da6;
   --line:  rgba(167, 139, 250, .16);
   --line-strong: rgba(167, 139, 250, .34);
+  /* видимая высота стеклянной палубы: к ней привязан весь низ первого экрана */
+  --deck-h: clamp(190px, 17vw, 290px);
   position: relative;
   display: flex; flex-direction: column; justify-content: center;
-  min-height: min(96vh, 940px);
+  /* и min-height, и нижний отступ растут на высоту палубы: полоса, отведённая
+     под текст, не меняется, поэтому заголовок остаётся на прежнем месте */
+  min-height: calc(min(96vh, 940px) + var(--deck-h));
   /* нижний отступ оставляет место дуге, восходящей из-за края */
-  padding-block: clamp(84px, 11vw, 140px) clamp(250px, 31vw, 400px);
+  padding-block: clamp(84px, 11vw, 140px) calc(clamp(250px, 31vw, 400px) + var(--deck-h));
   background: #06050d;
   color: var(--text);
   overflow: hidden;
@@ -274,7 +278,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
    верхняя дуга, а горизонтальный луч читается линией горизонта. */
 .hero-stage {
   position: absolute; z-index: -2;
-  left: 50%; bottom: 0;
+  left: 50%; bottom: var(--deck-h);
   width: min(1920px, 176vw);
   aspect-ratio: 16 / 9;
   transform: translate(-50%, 50%);
@@ -351,7 +355,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 /* линия горизонта на самой границе секции + свет, уходящий вверх */
 .hero-horizon {
   position: absolute; z-index: -1;
-  left: 0; right: 0; bottom: -1px; height: 1px;
+  left: 0; right: 0; bottom: var(--deck-h); height: 1px;
   background: linear-gradient(90deg,
     transparent, var(--accent-line) 18%, #e9deff 50%, var(--accent-line) 82%, transparent);
   box-shadow: 0 0 30px 3px rgba(124, 77, 255, .45);
@@ -360,6 +364,174 @@ button, input, select, textarea { font: inherit; color: inherit; }
   content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 190px;
   background: radial-gradient(ellipse 46% 100% at 50% 100%, rgba(124, 77, 255, .28), transparent 72%);
   pointer-events: none;
+}
+
+/* Матовое стекло у ватерлинии: диск уходит за него, свет проходит насквозь.
+
+   Панель поднята к нижнему краю секции, а верхняя её грань — та самая линия,
+   на которую садится центр диска: горизонтальный луч ложится точно по кромке,
+   нижняя дуга остаётся под стеклом и читается размытым пятном. Низ панели
+   растворяется маской, иначе на стыке с бегущей строкой была бы видна
+   поперечная граница.
+
+   Слоёв два, и это обязательно: .hero-deck несёт backdrop-filter и остаётся
+   без точечной сетки, иначе кромка рассыплется вместо того, чтобы гореть;
+   .hero-deck-glow рисует просочившийся свет и уже разбит точками, как всё
+   остальное свечение на сайте. */
+.hero-deck {
+  position: absolute; z-index: 0;
+  left: 50%; bottom: 0;
+  transform: translateX(-50%);
+  width: min(1640px, 92vw);
+  height: var(--deck-h);
+  border-radius: 30px 30px 0 0;
+  pointer-events: none;
+  overflow: hidden;
+  /* к низу стекло плотнее: у кромки свет проходит, глубже — гаснет */
+  background: linear-gradient(to bottom,
+      rgba(24, 19, 46, .42) 0%, rgba(11, 8, 23, .72) 58%, rgba(8, 6, 17, .84) 100%);
+  /* brightness глушит настоящую дугу: сквозь стекло должно читаться пятно, а не
+     кольцо. Видимый свет даёт слой поверх — он с точечной сеткой */
+  -webkit-backdrop-filter: blur(48px) saturate(1.3) brightness(.6);
+          backdrop-filter: blur(48px) saturate(1.3) brightness(.6);
+  box-shadow:
+    inset 0 1px 0 rgba(226, 216, 255, .5),
+    inset 0 0 0 1px rgba(167, 139, 250, .16),
+    0 -40px 90px -50px rgba(124, 77, 255, .55);
+  -webkit-mask-image: linear-gradient(to bottom, #000 66%, transparent 100%);
+          mask-image: linear-gradient(to bottom, #000 66%, transparent 100%);
+}
+/* Свет, прошедший сквозь стекло. Лежит ПОВЕРХ окна, а не под ним: под окном
+   пятно закрывали плашки строк и от свечения оставались одни зазоры. Режим
+   screen только добавляет яркость, поэтому разметка окна остаётся читаемой,
+   а середина панели горит. Сетка — та же, что у ореола панели проверок. */
+.hero-deck-glow {
+  position: absolute; inset: 0;
+  display: block;
+  background: radial-gradient(ellipse 40% 88% at 50% -6%,
+      rgba(206, 192, 255, .62), rgba(140, 98, 255, .26) 42%, transparent 76%);
+  mix-blend-mode: screen;
+  -webkit-mask-image: var(--dots); mask-image: var(--dots);
+  -webkit-mask-size: var(--dots-size); mask-size: var(--dots-size);
+}
+/* Окно интерфейса на стекле. Лежит поверх слоя света, поэтому свет читается
+   как идущий из-за стекла, а окно — как напечатанное на его лицевой стороне.
+   Ячейки ЧУТЬ ТЕМНЕЕ подложки, а не светлее: над самым ярким местом пятна
+   светлые плашки исчезли бы, а тёмные держат форму и пропускают свет в
+   зазорах между собой. Низ окна срезает та же маска, что растворяет стекло.
+
+   Данные — полоски: это иллюстрация типа экрана, а не снимок проекта. */
+.deck-ui {
+  position: absolute; inset: 0;
+  padding: 16px 20px 0;
+  display: flex; flex-direction: column; gap: 13px;
+  font-family: var(--ff-mono);
+}
+
+.deck-bar {
+  flex: none;
+  display: flex; align-items: center; gap: 7px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, .07);
+}
+.deck-dot {
+  width: 9px; height: 9px; border-radius: 50%;
+  background: rgba(255, 255, 255, .16);
+}
+.deck-path {
+  margin-left: 10px;
+  font-size: .68rem; letter-spacing: .04em;
+  color: rgba(240, 236, 255, .5);
+}
+.deck-search {
+  margin-left: auto;
+  width: clamp(120px, 22%, 300px); height: 22px;
+  border-radius: 999px;
+  background: rgba(8, 6, 18, .38);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .07);
+}
+.deck-key {
+  padding: 3px 7px; border-radius: 6px;
+  font-size: .6rem; color: rgba(240, 236, 255, .42);
+  background: rgba(8, 6, 18, .38);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .07);
+}
+
+.deck-body {
+  flex: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 190px) minmax(0, 1fr) minmax(0, 230px);
+  gap: 14px;
+  min-height: 0;
+}
+
+.deck-side { display: flex; flex-direction: column; gap: 4px; }
+.deck-nav {
+  padding: 8px 11px; border-radius: 9px;
+  font-size: .72rem; color: rgba(240, 236, 255, .46);
+  background: rgba(8, 6, 18, .3);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .04);
+}
+.deck-nav.on {
+  color: rgba(240, 236, 255, .82);
+  background: rgba(124, 77, 255, .22);
+  box-shadow: inset 0 0 0 1px rgba(196, 181, 253, .28);
+}
+
+.deck-main { display: flex; flex-direction: column; gap: 5px; }
+.deck-row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 9px 12px; border-radius: 9px;
+  background: rgba(8, 6, 18, .32);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .04);
+}
+.deck-row i {
+  flex: none; width: 11px; height: 11px; border-radius: 3px;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .2);
+}
+.deck-row i.ok { background: var(--ok); box-shadow: none; }
+.deck-row b, .deck-row u, .deck-row em {
+  height: 6px; border-radius: 3px;
+  background: rgba(255, 255, 255, .14);
+}
+.deck-row b { flex: 2; max-width: 230px; }
+.deck-row u { flex: 3; max-width: 420px; }
+.deck-row em { flex: none; width: 46px; margin-left: auto; }
+/* пилюля статуса: ряд из одних полосок читался монотонно */
+.deck-row s {
+  flex: none; width: 66px; height: 15px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .06);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .07);
+}
+.deck-row.on s { background: rgba(196, 181, 253, .3); box-shadow: none; }
+.deck-row i.ok ~ s { background: rgba(94, 234, 212, .22); box-shadow: none; }
+.deck-row.deck-head { background: none; box-shadow: none; opacity: .45; }
+.deck-row.on {
+  background: rgba(124, 77, 255, .18);
+  box-shadow: inset 0 0 0 1px rgba(196, 181, 253, .22);
+}
+
+.deck-aside {
+  padding: 11px 12px; border-radius: 12px;
+  background: rgba(8, 6, 18, .32);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .05);
+}
+.deck-cap {
+  display: block; margin-bottom: 9px;
+  font-size: .6rem; letter-spacing: .1em; text-transform: uppercase;
+  color: rgba(240, 236, 255, .34);
+}
+.deck-cal { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; }
+.deck-cal i {
+  aspect-ratio: 1; border-radius: 4px;
+  background: rgba(255, 255, 255, .07);
+}
+.deck-cal i.on { background: rgba(167, 139, 250, .55); }
+
+/* без backdrop-filter стекло превратилось бы в прозрачную рамку */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .hero-deck { background: linear-gradient(to bottom, rgba(17, 13, 33, .9), #0a0817); }
 }
 
 .hero-inner { position: relative; z-index: 1; text-align: center; }
@@ -765,6 +937,255 @@ button, input, select, textarea { font: inherit; color: inherit; }
 }
 .toast.show { opacity: 1; transform: translate(-50%, 0); }
 
+
+/* ---------- Релизы: радар ----------
+   Устройство подсмотрено у reflect.app, но собрано иначе: у них кольца —
+   растровая картинка, у нас svg (одна разметка, резко на любом экране).
+   Остальное — CSS.
+
+   Три вещи держат композицию:
+     1. Видна только верхняя половина радара. Нижнюю закрывает завеса цвета
+        секции, на её кромке — линия горизонта. Та же линия, что под чёрной
+        дырой на первом экране, поэтому блоки читаются как один язык.
+     2. Сектор и его ведущая линия — РАЗНЫЕ элементы с одинаковой анимацией.
+        Сектор лежит под точечной сеткой, а сетка обязана быть на неподвижной
+        обёртке, иначе решётка крутится вместе со светом. Линию сеткой рвать
+        нельзя — она рассыпалась бы в пунктир, поэтому у неё свой слой.
+     3. Отметки вспыхивают не сами по себе: задержка каждой посчитана из её
+        угла (в разметке, --delay), поэтому вспышка приходится ровно на проход
+        луча. Период вспышки равен периоду оборота. */
+.radar {
+  --radar:     min(890px, 94vw);
+  --radar-top: clamp(16px, 3vw, 40px);
+  --gap-card:  clamp(28px, 5vw, 74px);
+  --line:      rgba(167, 139, 250, .14);
+  --muted:     #b3adcf;
+  --faint:     #837da6;
+  position: relative;
+  overflow: hidden;
+  padding-bottom: clamp(70px, 8vw, 128px);
+  /* секция всегда тёмная, как первый экран: свечение радара на светлой
+     подложке выглядело бы чужим */
+  background: #06050d;
+  color: #f3f0ff;
+  border-block: 1px solid rgba(167, 139, 250, .1);
+}
+
+/* короткие вертикальные рейки от горизонта вниз — деталь образца: они
+   привязывают радар к колонке текста. z-index нужен, иначе их накроет завеса */
+.radar::before, .radar::after {
+  content: ""; position: absolute; z-index: 1;
+  top: calc(var(--radar-top) + var(--radar) / 2);
+  width: 1px; height: 210px;
+  background: linear-gradient(to bottom, rgba(243, 238, 255, .13), transparent);
+}
+.radar::before { left:  calc(50% - min(var(--wrap), 100%) / 2 - 2px); }
+.radar::after  { right: calc(50% - min(var(--wrap), 100%) / 2 - 2px); }
+
+.radar-stage {
+  position: absolute; left: 50%; top: var(--radar-top);
+  width: var(--radar); aspect-ratio: 1;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+.radar-net { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+/* сектор: обёртка неподвижна и несёт сетку, крутится вложенный слой */
+.radar-sweep {
+  position: absolute; inset: 0;
+  border-radius: 50%;
+  -webkit-mask-image: var(--dots); mask-image: var(--dots);
+  -webkit-mask-size: var(--dots-size); mask-size: var(--dots-size);
+}
+.radar-sweep i {
+  position: absolute; inset: 0;
+  display: block; border-radius: 50%;
+  /* яркая кромка идёт ВПЕРЁД, а не тащится сзади: слой крутится по часовой,
+     значит светлый край — в конце конического градиента, у 360° */
+  background: conic-gradient(from 0deg,
+      transparent 0 83%, rgba(116, 74, 255, .08) 88%,
+      rgba(134, 96, 255, .24) 95%, rgba(163, 133, 255, .46) 100%);
+  /* луч доходит до обода и гаснет ровно на нём: у образца он тоже идёт во всю
+     длину, а у нас маска съедала его на середине и сектор терялся */
+  -webkit-mask-image: radial-gradient(circle closest-side, #000 0 88%, transparent 96%);
+          mask-image: radial-gradient(circle closest-side, #000 0 88%, transparent 96%);
+  animation: radarSpin 9s linear infinite;
+}
+/* ведущая линия сектора: без сетки, иначе распалась бы в пунктир */
+.radar-edge { position: absolute; inset: 0; }
+.radar-edge i {
+  position: absolute; inset: 0; display: block;
+  animation: radarSpin 9s linear infinite;
+}
+.radar-edge i::before {
+  content: ""; position: absolute; left: 50%; top: 0;
+  width: 1px; height: 50%;
+  background: linear-gradient(to bottom,
+      rgba(220, 210, 255, 0), rgba(226, 216, 255, .72));
+}
+@keyframes radarSpin { to { transform: rotate(360deg); } }
+
+/* отметки: вспышка приходится на проход луча */
+.radar-blips { position: absolute; inset: 0; }
+.blip {
+  position: absolute; left: var(--x); top: var(--y);
+  width: 0; height: 0;
+}
+.blip-dot, .blip-wave {
+  position: absolute; left: 0; top: 0;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+.blip-dot {
+  width: 7px; height: 7px;
+  background: var(--accent-hi);
+  box-shadow: 0 0 12px 2px rgba(167, 139, 250, .8);
+  opacity: 0;
+  animation: blipDot 9s var(--delay) linear infinite backwards;
+}
+.blip-wave {
+  width: 78px; height: 78px;
+  border: 1px solid rgba(196, 181, 253, .5);
+  opacity: 0;
+  animation: blipWave 9s var(--delay) cubic-bezier(.2, .7, .3, 1) infinite;
+}
+.blip-wave-2 { animation-delay: calc(var(--delay) + .3s); }
+
+/* подпись живёт от прохода луча и гаснет сама. backwards обязателен: без него
+   до первой задержки текст стоял бы видимым, хотя луч до отметки ещё не дошёл */
+.blip-tag {
+  position: absolute; left: 15px; top: -8px;
+  font-family: var(--ff-mono); font-size: .66rem; letter-spacing: .04em;
+  color: rgba(233, 228, 255, .78);
+  text-shadow: 0 2px 10px #06050d;
+  white-space: nowrap;
+  opacity: 0;
+  animation: blipTag 9s var(--delay) cubic-bezier(.2, .7, .3, 1) infinite backwards;
+}
+/* у правых отметок подпись уходит влево, иначе вылезает за обод */
+.blip-left .blip-tag { left: auto; right: 15px; }
+@keyframes blipDot {
+  0%        { opacity: 0;   transform: translate(-50%, -50%) scale(.3); }
+  2%        { opacity: 1;   transform: translate(-50%, -50%) scale(1); }
+  34%       { opacity: .55; }
+  56%       { opacity: .3; }
+  65%, 100% { opacity: 0;   transform: translate(-50%, -50%) scale(1); }
+}
+.blip-left .blip-tag { animation-name: blipTagLeft; }
+@keyframes blipTagLeft {
+  0%        { opacity: 0; transform: translateX(5px); }
+  3%        { opacity: 1; transform: none; }
+  56%       { opacity: 1; }
+  65%, 100% { opacity: 0; transform: none; }
+}
+@keyframes blipTag {
+  0%        { opacity: 0; transform: translateX(-5px); }
+  3%        { opacity: 1; transform: none; }
+  56%       { opacity: 1; }
+  65%, 100% { opacity: 0; transform: none; }
+}
+@keyframes blipWave {
+  0%   { opacity: 0; transform: translate(-50%, -50%) scale(.05); }
+  4%   { opacity: .85; }
+  34%  { opacity: 0; transform: translate(-50%, -50%) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(1); }
+}
+
+/* завеса: срезает нижнюю половину радара цветом секции, на её кромке горизонт */
+.radar-fade {
+  position: absolute; left: 50%; top: 50%;
+  width: 100vw; height: 62%;
+  transform: translateX(-50%);
+  background: linear-gradient(to bottom, rgba(6, 5, 13, .9) 0%, #06050d 30%);
+}
+.radar-horizon {
+  position: absolute; left: 50%; top: 50%;
+  width: 100vw; height: 1px;
+  transform: translateX(-50%);
+  background: linear-gradient(90deg,
+      transparent, rgba(167, 139, 250, .26) 20%, rgba(233, 226, 255, .72) 50%,
+      rgba(167, 139, 250, .26) 80%, transparent);
+}
+
+/* ядро: ореол отдельным слоем, потому что он свет и обязан быть в сетке,
+   а сама шайба — резкая */
+.radar-core-glow {
+  position: absolute; left: 50%; top: 50%;
+  width: 300px; height: 300px;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, rgba(158, 116, 255, .62), transparent 64%);
+  -webkit-mask-image: var(--dots); mask-image: var(--dots);
+  -webkit-mask-size: var(--dots-size); mask-size: var(--dots-size);
+}
+.radar-core {
+  position: absolute; left: 50%; top: 50%;
+  width: 74px; height: 74px;
+  transform: translate(-50%, -50%);
+  display: grid; place-items: center;
+  border-radius: 50%;
+  color: #efe9ff;
+  background:
+    radial-gradient(circle at 50% 30%, rgba(255, 255, 255, .3), transparent 60%),
+    linear-gradient(160deg, #7c4dff, #4c1d95);
+  box-shadow:
+    inset 0 0 0 1px rgba(226, 216, 255, .4),
+    0 0 0 8px rgba(124, 77, 255, .12),
+    0 0 46px -6px rgba(124, 77, 255, .9);
+}
+.radar-core svg { width: 34px; height: 34px; }
+
+/* текст начинается под горизонтом: верхняя половина радара занимает
+   ровно половину его стороны */
+.radar-copy {
+  position: relative;
+  padding-top: calc(var(--radar-top) + var(--radar) / 2 + 82px);
+  text-align: center;
+}
+.radar-pill {
+  display: inline-block; margin: 0;
+  padding: 6px 16px; border-radius: 100px;
+  border: 1px solid var(--accent-line);
+  background: rgba(124, 77, 255, .1);
+  font-family: var(--ff-mono); font-size: .74rem; letter-spacing: .06em;
+  color: var(--accent-hi);
+}
+.radar-title {
+  margin: 20px auto 0; max-width: 21ch;
+  font-size: clamp(2rem, 4.6vw, 3.3rem); line-height: 1.02; letter-spacing: -.03em;
+}
+.radar-lede {
+  margin: 18px auto 0; max-width: 62ch;
+  color: var(--muted); line-height: 1.62;
+}
+
+/* карточки с разделителями по краям и между ними — как у образца */
+.radar-cards {
+  position: relative;
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--gap-card);
+  margin-top: clamp(44px, 6vw, 78px);
+  padding-top: 30px;
+}
+.radar-cards::before, .radar-cards::after {
+  content: ""; position: absolute; top: 0; width: 1px; height: 190px;
+  background: linear-gradient(to bottom, rgba(243, 238, 255, .14), transparent);
+}
+.radar-cards::before { left: -26px; }
+.radar-cards::after  { right: -26px; }
+.radar-card { position: relative; padding-inline: clamp(0px, 2vw, 26px); }
+.radar-card + .radar-card::before {
+  content: ""; position: absolute; left: calc(var(--gap-card) / -2); top: -30px;
+  width: 1px; height: 220px;
+  background: linear-gradient(to bottom, rgba(243, 238, 255, .14), transparent);
+}
+.radar-ico {
+  display: inline-grid; place-items: center;
+  width: 42px; height: 42px; margin-bottom: 12px;
+  color: var(--accent-hi);
+}
+.radar-ico svg { width: 26px; height: 26px; }
+.radar-card h3 { margin: 0 0 10px; font-size: 1.06rem; }
+.radar-card p { margin: 0; color: var(--muted); line-height: 1.62; font-size: .95rem; }
 
 /* ---------- Проверки: панель со свечением ----------
    Секция всегда тёмная: ореол строится на сложении света и на светлом
@@ -1280,6 +1701,8 @@ button, input, select, textarea { font: inherit; color: inherit; }
 @media (max-width: 1040px) {
   .cards, .value-row, .stack-grid, .formats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .checks-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .radar-core { width: 62px; height: 62px; }
+  .radar-core svg { width: 28px; height: 28px; }
   .cases { grid-template-columns: 1fr; }
   .contact-grid, .work-grid { grid-template-columns: 1fr; }
   .work-aside { position: static; }
@@ -1303,7 +1726,15 @@ button, input, select, textarea { font: inherit; color: inherit; }
   .burger { display: inline-flex; }
   .topbar-cta { display: none; }
 
-  .hero { min-height: auto; }
+  .hero { min-height: auto; --deck-h: clamp(120px, 30vw, 176px); }
+  .hero-deck { width: calc(100% - 24px); border-radius: 22px 22px 0 0; }
+  .deck-ui { padding: 12px 14px 0; gap: 10px; }
+  .deck-side, .deck-aside, .deck-key { display: none; }
+  /* радар вдвое меньше, подписи те же: четыре отметки уходят, чтобы соседние
+     не налезали друг на друга */
+  .blip-extra { display: none; }
+  .blip-wave { width: 54px; height: 54px; }
+  .deck-body { grid-template-columns: minmax(0, 1fr); }
 
   .cards, .value-row, .stack-grid, .formats { grid-template-columns: 1fr; }
   .hero-facts { grid-template-columns: 1fr; gap: 16px; }
@@ -1315,6 +1746,11 @@ button, input, select, textarea { font: inherit; color: inherit; }
   .contact-links li { flex-direction: column; align-items: flex-start; gap: 6px; }
   .contact-label { width: auto; }
   .checks-grid { grid-template-columns: 1fr; }
+  .radar-cards { grid-template-columns: 1fr; gap: 30px; }
+  .radar-cards::before, .radar-cards::after,
+  .radar-card + .radar-card::before { display: none; }
+  .radar-card { padding-inline: 0; }
+  .blip-tag { font-size: .58rem; }
   .checks-list li { flex-wrap: wrap; row-gap: 2px; padding: 10px 14px; font-size: .85rem; }
   .checks-list span:last-child { width: 100%; padding-left: 27px; }
   .checks-window { padding: 4px; }
@@ -1334,10 +1770,14 @@ button, input, select, textarea { font: inherit; color: inherit; }
   .marquee-track { animation: none; }
   .hero-stage { display: none; }
   .hero-rim i { animation: none; }
+  .radar-sweep i, .radar-edge i { animation: none; }
+  .blip-dot, .blip-tag { opacity: 1; }
+  .blip-wave { display: none; }
 }
 
 @media print {
-  .topbar, .hero-stage, .hero-horizon, .checks-halo, .checks-glow, .checks-rim, .page-progress, .toast, .grain,
-  .marquee, .contact-form, .work-aside, .tile-art, .dial { display: none; }
-  body, .hero, .checks, .tiles { background: #fff; color: #000; }
+  .topbar, .hero-stage, .hero-deck, .hero-horizon, .checks-halo, .checks-glow, .checks-rim, .page-progress, .toast, .grain,
+  .marquee, .contact-form, .work-aside, .tile-art, .dial, .radar-stage { display: none; }
+  body, .hero, .checks, .tiles, .radar { background: #fff; color: #000; }
+  .radar-copy { padding-top: 0; }
 }
