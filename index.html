@@ -297,24 +297,49 @@
       <canvas class="checks-rim" aria-hidden="true"></canvas>
       <span class="checks-halo" aria-hidden="true"></span>
       <div class="checks-window">
-       <div class="checks-screen">
-        <div class="checks-bar">
-          <span class="checks-dots" aria-hidden="true"><i></i><i></i><i></i></span>
-          <span class="checks-path">pull request · все проверки</span>
-          <span class="checks-badge">8 / 8</span>
+        <!-- Два экрана друг над другом. Первый задаёт высоту, второй лежит
+             поверх с inset: 0 — так их высоты совпадают при любом тексте.
+             Это важно: холст свечения посчитан под высоту панели, и прыжок
+             потребовал бы пересчёта полей посреди анимации. -->
+        <div class="checks-stack">
+        <div class="checks-screen">
+          <div class="checks-bar">
+            <span class="checks-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+            <span class="checks-path">pull request · все проверки</span>
+            <span class="checks-badge">8 / 8</span>
+          </div>
+
+          <ul class="checks-list">
+            <li><span class="checks-ok" aria-hidden="true"></span><b>api-contract</b><span>публичные ручки не изменились молча</span></li>
+            <li><span class="checks-ok" aria-hidden="true"></span><b>index-contract</b><span>каждый индекс объяснён и на месте</span></li>
+            <li><span class="checks-ok" aria-hidden="true"></span><b>models-vs-migrations</b><span>модель и схема базы сходятся</span></li>
+            <li><span class="checks-ok" aria-hidden="true"></span><b>env-documented</b><span>новая переменная описана в README</span></li>
+            <li><span class="checks-ok" aria-hidden="true"></span><b>migrations-reversible</b><span>у миграции есть обратный ход</span></li>
+            <li><span class="checks-ok" aria-hidden="true"></span><b>types</b><span>строгая проверка типов без исключений</span></li>
+            <li><span class="checks-ok" aria-hidden="true"></span><b>lint</b><span>единый стиль во всей кодовой базе</span></li>
+            <li><span class="checks-ok" aria-hidden="true"></span><b>tests</b><span>прогон на живой базе, не на заглушках</span></li>
+          </ul>
         </div>
 
-        <ul class="checks-list">
-          <li><span class="checks-ok" aria-hidden="true"></span><b>api-contract</b><span>публичные ручки не изменились молча</span></li>
-          <li><span class="checks-ok" aria-hidden="true"></span><b>index-contract</b><span>каждый индекс объяснён и на месте</span></li>
-          <li><span class="checks-ok" aria-hidden="true"></span><b>models-vs-migrations</b><span>модель и схема базы сходятся</span></li>
-          <li><span class="checks-ok" aria-hidden="true"></span><b>env-documented</b><span>новая переменная описана в README</span></li>
-          <li><span class="checks-ok" aria-hidden="true"></span><b>migrations-reversible</b><span>у миграции есть обратный ход</span></li>
-          <li><span class="checks-ok" aria-hidden="true"></span><b>types</b><span>строгая проверка типов без исключений</span></li>
-          <li><span class="checks-ok" aria-hidden="true"></span><b>lint</b><span>единый стиль во всей кодовой базе</span></li>
-          <li><span class="checks-ok" aria-hidden="true"></span><b>tests</b><span>прогон на живой базе, не на заглушках</span></li>
-        </ul>
-       </div>
+        <div class="checks-screen checks-screen-alt">
+          <div class="checks-bar">
+            <span class="checks-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+            <span class="checks-path">pull request · проверка упала</span>
+            <span class="checks-badge bad">7 / 8</span>
+          </div>
+
+          <ul class="checks-list">
+            <li><span class="checks-ok" aria-hidden="true"></span><b>api-contract</b><span>публичные ручки не изменились молча</span></li>
+            <li><span class="checks-ok" aria-hidden="true"></span><b>index-contract</b><span>каждый индекс объяснён и на месте</span></li>
+            <li><span class="checks-ok" aria-hidden="true"></span><b>models-vs-migrations</b><span>модель и схема базы сходятся</span></li>
+            <li class="bad"><span class="checks-ok" aria-hidden="true"></span><b>env-documented</b><span>переменной REDIS_SENTINEL_URL нет в README</span></li>
+            <li><span class="checks-ok" aria-hidden="true"></span><b>migrations-reversible</b><span>у миграции есть обратный ход</span></li>
+            <li><span class="checks-ok" aria-hidden="true"></span><b>types</b><span>строгая проверка типов без исключений</span></li>
+            <li><span class="checks-ok" aria-hidden="true"></span><b>lint</b><span>единый стиль во всей кодовой базе</span></li>
+            <li><span class="checks-ok" aria-hidden="true"></span><b>tests</b><span>прогон на живой базе, не на заглушках</span></li>
+          </ul>
+        </div>
+        </div>
       </div>
     </div>
 
@@ -500,6 +525,122 @@
       <details class="faq-item reveal"><summary>Кому принадлежит код и доступы</summary><p>Вам. Репозиторий, сервер, домен и все учётные записи оформляются на заказчика, а не на нас. Уйти к другому подрядчику вы можете в любой момент и без нашего участия — это принципиальная позиция, а не уступка.</p></details>
       <details class="faq-item reveal"><summary>Делаете ли дизайн</summary><p>Интерфейсы приложений и админок — да, они у нас опрятные и удобные. Если нужен выразительный имиджевый дизайн, берём его подрядом у дизайнера и собираем сами — так честнее, чем выдавать вёрстку за дизайн.</p></details>
       <details class="faq-item reveal"><summary>Как оформляются отношения и оплата</summary><p>Работаем как ИП, по договору и с закрывающими документами. Оплата обычно делится на этапы: предоплата, промежуточный платёж по ходу и остаток при сдаче.</p></details>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ЧТО СОБИРАЕМ ===================== -->
+<!-- Светлая полоса среди тёмной страницы: плитка карточек разной ширины,
+     в каждой подпись сверху и живой макет интерфейса снизу. Макеты сверстаны,
+     а не нарисованы: остаются резкими на любом экране и весят ноль. -->
+<section class="tiles" id="tiles">
+  <div class="wrap">
+    <header class="tiles-head">
+      <h2 class="tiles-title reveal">Интерфейсы, которые мы собираем</h2>
+      <p class="tiles-lede reveal">
+        Не набор страниц, а рабочие инструменты: вход и права, админка с массовыми
+        действиями, карты, боты, распознавание на видео. Ниже — типы экранов,
+        которые встречаются в наших проектах чаще всего.
+      </p>
+    </header>
+
+    <div class="tiles-grid">
+
+      <!-- 1. Личные кабинеты -->
+      <article class="tile tile-a reveal">
+        <p class="tile-cap"><b>Вход и права.</b> Регистрация, роли, разграничение доступа.</p>
+        <div class="tile-art" aria-hidden="true">
+          <div class="mk mk-auth">
+            <div class="mk-roles"><i>админ</i><i>диспетчер</i><i>клиент</i></div>
+            <span class="mk-field"></span>
+            <span class="mk-field short"></span>
+            <span class="mk-btn"></span>
+          </div>
+        </div>
+      </article>
+
+      <!-- 2. Админка -->
+      <article class="tile tile-b reveal">
+        <p class="tile-cap"><b>Админка.</b> Таблицы, фильтры, массовые действия.</p>
+        <div class="tile-art" aria-hidden="true">
+          <div class="mk mk-table">
+            <div class="mk-row head"><i></i><span></span><span class="w2"></span><em></em></div>
+            <div class="mk-row on"><i class="ck"></i><span></span><span class="w2"></span><em></em></div>
+            <div class="mk-row on"><i class="ck"></i><span></span><span class="w2"></span><em></em></div>
+            <div class="mk-row"><i></i><span></span><span class="w2"></span><em></em></div>
+            <div class="mk-row"><i></i><span></span><span class="w2"></span><em></em></div>
+          </div>
+        </div>
+      </article>
+
+      <!-- 3. Круг: выкатка -->
+      <article class="tile tile-dial reveal">
+        <div class="dial" aria-hidden="true">
+          <span class="dial-ver">v1.4</span>
+          <span class="dial-sub">выкачено</span>
+          <span class="dial-plus"></span>
+        </div>
+      </article>
+
+      <!-- 4. Боты -->
+      <article class="tile tile-c reveal">
+        <p class="tile-cap"><b>Боты.</b> Telegram и VK: заявки, уведомления, задания.</p>
+        <div class="tile-art" aria-hidden="true">
+          <div class="mk mk-chat">
+            <div class="bub in"><span></span><span class="w2"></span></div>
+            <div class="bub out"><span class="w2"></span></div>
+            <div class="bub in"><span></span></div>
+            <div class="mk-input"></div>
+          </div>
+        </div>
+      </article>
+
+      <!-- 5. Документы -->
+      <article class="tile tile-d reveal">
+        <p class="tile-cap"><b>Документы.</b> Генерация, версии, хранение в S3.</p>
+        <div class="tile-art" aria-hidden="true">
+          <div class="mk mk-files">
+            <div class="file"><i></i><span></span><em></em></div>
+            <div class="file"><i></i><span class="w2"></span><em></em></div>
+            <div class="file"><i></i><span></span><em></em></div>
+          </div>
+        </div>
+      </article>
+
+      <!-- 6. Карты -->
+      <article class="tile tile-e reveal">
+        <p class="tile-cap"><b>Карты и маршруты.</b> Геозоны, треки, привязка к дорогам.</p>
+        <div class="tile-art" aria-hidden="true">
+          <svg class="mk mk-map" viewBox="0 0 420 200" preserveAspectRatio="xMidYMid slice">
+            <defs>
+              <pattern id="tgrid" width="34" height="34" patternUnits="userSpaceOnUse">
+                <path d="M34 0H0v34" fill="none" stroke="rgba(255,255,255,.06)"/>
+              </pattern>
+            </defs>
+            <rect width="420" height="200" fill="url(#tgrid)"/>
+            <path d="M18 168C90 168 96 96 150 92s70 52 128 40 84-76 128-72"
+                  fill="none" stroke="var(--accent-hi)" stroke-width="2.5" stroke-linecap="round"/>
+            <circle cx="18" cy="168" r="5" fill="var(--accent-hi)"/>
+            <circle cx="406" cy="60" r="5" fill="var(--ok)"/>
+            <rect x="196" y="34" width="96" height="62" rx="10"
+                  fill="rgba(94,234,212,.1)" stroke="rgba(94,234,212,.5)" stroke-dasharray="5 4"/>
+          </svg>
+        </div>
+      </article>
+
+      <!-- 7. Компьютерное зрение -->
+      <article class="tile tile-f reveal">
+        <p class="tile-cap"><b>Компьютерное зрение.</b> Детекция и трекинг объектов на видео.</p>
+        <div class="tile-art" aria-hidden="true">
+          <div class="mk mk-cv">
+            <span class="box b1"><i>0.94</i></span>
+            <span class="box b2"><i>0.87</i></span>
+            <span class="box b3"><i>0.71</i></span>
+            <span class="scan"></span>
+          </div>
+        </div>
+      </article>
+
     </div>
   </div>
 </section>
