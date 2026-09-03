@@ -262,7 +262,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
   display: flex; flex-direction: column; justify-content: center;
   min-height: min(96vh, 940px);
   /* нижний отступ оставляет место дуге, восходящей из-за края */
-  padding-block: clamp(84px, 11vw, 140px) clamp(210px, 27vw, 340px);
+  padding-block: clamp(84px, 11vw, 140px) clamp(250px, 31vw, 400px);
   background: #06050d;
   color: var(--text);
   overflow: hidden;
@@ -275,13 +275,72 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .hero-stage {
   position: absolute; z-index: -2;
   left: 50%; bottom: 0;
-  width: min(1240px, 132vw);
+  width: min(1920px, 176vw);
   aspect-ratio: 16 / 9;
   transform: translate(-50%, 50%);
   -webkit-mask-image: radial-gradient(ellipse 56% 56% at 50% 50%, #000 42%, transparent 76%);
           mask-image: radial-gradient(ellipse 56% 56% at 50% 50%, #000 42%, transparent 76%);
 }
-.hero-video { width: 100%; height: 100%; object-fit: cover; display: block; }
+/* Кадр разбит той же точечной сеткой, что и остальной свет на сайте.
+
+   Две маски, сложенные объединением: ядро диска остаётся сплошным, сетка
+   работает только по разлёту. Одна сетка на весь кадр съедала блики — замер
+   показал падение ярких пикселей с 0.45 % до 0.03 %, дыра теряла сердцевину.
+   Это тот же запрет, что и у панели проверок: сплошной свет там, где он
+   ярче всего, сетка — по краям.
+
+   Виньетка живёт на родителе, чтобы здесь обошлось двумя слоями: у старого
+   Safari своя семантика mask-composite, и чем меньше слоёв, тем безопаснее.
+   Яркость поднимаем тут же, до маски: между точками остаётся 28 %. */
+.hero-video {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  filter: brightness(1.12) contrast(1.03);
+  -webkit-mask-image: radial-gradient(ellipse 24% 30% at 50% 50%, #000 40%, transparent 100%), var(--dots);
+          mask-image: radial-gradient(ellipse 24% 30% at 50% 50%, #000 40%, transparent 100%), var(--dots);
+  -webkit-mask-size: 100% 100%, var(--dots-size);
+          mask-size: 100% 100%, var(--dots-size);
+  -webkit-mask-repeat: no-repeat, repeat;
+          mask-repeat: no-repeat, repeat;
+  -webkit-mask-composite: source-over;
+          mask-composite: add;
+}
+
+/* Светящийся обод диска: точки здесь ДОБАВЛЯЮТ свет, а не вычитают его.
+   Маска на самом видео только режет яркость, поэтому фактура на нём всегда
+   слабее, чем на панели проверок, где свет рисуется поверх тёмного. Этот слой
+   возвращает тот же приём: по ободу бегут два огня, тёплый и холодный, и
+   разбиты той же сеткой.
+
+   Два элемента, а не один с mask-composite: внешний несёт сетку и не
+   вращается, иначе решётка крутилась бы вместе со светом; внутренний
+   вращается, и его кольцевая маска симметрична, поэтому вращению безразлична. */
+.hero-rim {
+  position: absolute; inset: 0;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  -webkit-mask-image: var(--dots); mask-image: var(--dots);
+  -webkit-mask-size: var(--dots-size); mask-size: var(--dots-size);
+}
+.hero-rim i {
+  position: absolute; inset: 0;
+  display: block;
+  /* оба огня фиолетовые: один насыщенный, второй ближе к белому.
+     Бирюзовый рядом с фиолетовым диском читался как чужой цвет */
+  background: conic-gradient(from 0deg,
+      transparent 0 10%,
+      rgba(196, 181, 253, .85) 16%,
+      rgba(124, 77, 255, .45) 22%,
+      transparent 30% 60%,
+      rgba(124, 77, 255, .45) 68%,
+      rgba(214, 200, 255, .7) 74%,
+      transparent 82% 100%);
+  -webkit-mask-image: radial-gradient(ellipse 26% 46% at 50% 50%,
+      transparent 52%, #000 66%, #000 76%, transparent 94%);
+          mask-image: radial-gradient(ellipse 26% 46% at 50% 50%,
+      transparent 52%, #000 66%, #000 76%, transparent 94%);
+  animation: rimSpin 18s linear infinite;
+}
+@keyframes rimSpin { to { transform: rotate(360deg); } }
 
 /* верх кадра приглушаем, чтобы дуга не спорила с текстом над ней */
 .hero-stage-veil {
@@ -1274,6 +1333,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
   .underline-grow::after { transform: scaleX(1); }
   .marquee-track { animation: none; }
   .hero-stage { display: none; }
+  .hero-rim i { animation: none; }
 }
 
 @media print {
