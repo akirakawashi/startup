@@ -38,6 +38,12 @@
   --ff-body:    "Inter", system-ui, -apple-system, sans-serif;
   --ff-mono:    "JetBrains Mono", ui-monospace, monospace;
 
+  /* точечная маска 3px: ею пикселизуется всё свечение на сайте — ореол
+     панели проверок и подсветка карточек. Маска накладывается после filter,
+     поэтому режет уже размытое и остаётся резкой */
+  --dots:      radial-gradient(circle, #000 .9px, rgba(0, 0, 0, .28) 1.35px);
+  --dots-size: 3px 3px;
+
   --ease:     cubic-bezier(.22, .61, .36, 1);
   --ease-out: cubic-bezier(.16, 1, .3, 1);
   --shadow:   0 30px 70px -30px rgba(0, 0, 0, .9);
@@ -760,10 +766,8 @@ button, input, select, textarea { font: inherit; color: inherit; }
    промежуток пропускает 28% — так между точками остаётся дымка, а не чернота.
    Нить на отдельном холсте без маски: у самой рамки свет сплошной */
 .checks-glow {
-  -webkit-mask-image: radial-gradient(circle, #000 .9px, rgba(0, 0, 0, .28) 1.35px);
-          mask-image: radial-gradient(circle, #000 .9px, rgba(0, 0, 0, .28) 1.35px);
-  -webkit-mask-size: 3px 3px;
-          mask-size: 3px 3px;
+  -webkit-mask-image: var(--dots); mask-image: var(--dots);
+  -webkit-mask-size: var(--dots-size); mask-size: var(--dots-size);
 }
 /* когда холст работает, статичный CSS-ободок не нужен: свет движется */
 .checks-shot.has-glow .checks-halo { display: none; }
@@ -907,14 +911,18 @@ button, input, select, textarea { font: inherit; color: inherit; }
   --card:  #100e1a;
   --ink:   #16112b;
   --ink-2: #4a4368;
+  --fillet: 50px;
   position: relative;
-  padding-block: clamp(78px, 9vw, 132px);
+  padding-block: clamp(96px, 10vw, 156px);
   background: #f3f1f9;
   color: var(--ink);
   border-block: 1px solid rgba(60, 40, 120, .1);
 }
 
-.tiles-head { max-width: 720px; margin-bottom: clamp(38px, 5vw, 62px); }
+/* Плитка — главный объект блока, поэтому её контейнер шире общего.
+   Заголовок при этом остаётся в узкой текстовой колонке. */
+.tiles .wrap { max-width: 1440px; }
+.tiles-head { max-width: 760px; margin-bottom: clamp(44px, 5.5vw, 72px); }
 .tiles-title {
   margin: 0;
   font-size: clamp(2rem, 5vw, 3.6rem);
@@ -925,60 +933,120 @@ button, input, select, textarea { font: inherit; color: inherit; }
   color: var(--ink-2); line-height: 1.6;
 }
 
+/* 14 колонок вместо 12 — чтобы строки можно было сдвинуть друг относительно
+   друга. Верхняя начинается с третьей колонки, нижняя с первой и на две
+   не доходит до правого края: ряды заходят один за другой, и плитка читается
+   как перетекающая масса, а не как таблица */
 .tiles-grid {
   display: grid;
-  grid-template-columns: repeat(12, minmax(0, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(14, minmax(0, 1fr));
+  --tile-gap: 16px;
+  gap: var(--tile-gap);
 }
 
 /* Карточка: белая обводка снаружи вместо рамки внутри — на светлом фоне она
    отделяет тёмный прямоугольник, не съедая его площадь */
-.tile {
-  position: relative;
-  min-height: 250px;
-  padding: 18px 22px;
+/* Два слоя: .tile — только позиция и свечение, .tile-body — сама карточка.
+   Разнесены потому, что у карточки overflow: hidden ради обрезки макета,
+   и свечение, будь оно её псевдоэлементом, срезалось бы по той же границе */
+.tile { position: relative; min-height: 318px; }
+.tile-body {
+  position: relative; z-index: 1; height: 100%;
+  padding: 24px 28px;
   border-radius: 26px;
   background: var(--card);
-  outline: 4px solid rgba(255, 255, 255, .7);
   overflow: hidden;
   isolation: isolate;
 }
+
 .tile-cap {
   position: relative; z-index: 2;
-  margin: 0; max-width: 30ch;
-  font-size: .95rem; line-height: 1.35;
+  margin: 0; max-width: 32ch;
+  font-size: 1.02rem; line-height: 1.4;
   color: rgba(243, 240, 255, .62);
 }
 .tile-cap b { color: #fff; font-weight: 500; }
 
 /* подсветка под макетом: у каждой карточки свой угол и оттенок */
-.tile::after {
-  content: ""; position: absolute; z-index: 0; inset: auto -20% -35% -20%;
-  height: 75%;
-  background: radial-gradient(ellipse 62% 75% at 28% 100%, var(--tint, rgba(124, 77, 255, .5)), transparent 72%);
-  filter: blur(18px);
+/* подсветка внутри карточки: пятно на чёрном, разбитое точечной маской.
+   Маска накладывается после filter, поэтому режет уже размытое и остаётся
+   резкой — тот же приём, что у ореола панели проверок */
+.tile-body::after {
+  content: ""; position: absolute; z-index: 0; inset: 0;
+  background: radial-gradient(ellipse 58% 62% at var(--gx, 24%) var(--gy, 78%),
+      var(--tint), transparent 74%);
+  filter: blur(14px);
+  -webkit-mask-image: var(--dots); mask-image: var(--dots);
+  -webkit-mask-size: var(--dots-size); mask-size: var(--dots-size);
   pointer-events: none;
 }
-.tile-a { --tint: rgba(124, 77, 255, .75); }
-.tile-b { --tint: rgba(94, 234, 212, .42); }
-.tile-c { --tint: rgba(244, 114, 182, .45); }
-.tile-d { --tint: rgba(167, 139, 250, .5); }
-.tile-e { --tint: rgba(96, 165, 250, .5); }
-.tile-f { --tint: rgba(94, 234, 212, .4); }
+.tile-a { --tint: rgba(124, 77, 255, .85); --gx: 12%; --gy: 84%; }
+.tile-b { --tint: rgba(94, 234, 212, .3);  --gx: 84%; --gy: 82%; }
+.tile-c { --tint: rgba(244, 114, 182, .45); --gx: 88%; --gy: 74%; }
+.tile-d { --tint: rgba(167, 139, 250, .5);  --gx: 88%; --gy: 20%; }
+.tile-e { --tint: rgba(96, 165, 250, .45);  --gx: 50%; --gy: 92%; }
+.tile-f { --tint: rgba(94, 234, 212, .4);  --gx: 20%; --gy: 84%; }
 
 .tile-art {
-  position: absolute; z-index: 1; left: 22px; right: 22px; bottom: 0;
-  height: 152px;
+  position: absolute; z-index: 1; left: 28px; right: 28px; bottom: 0;
+  height: 198px;
 }
 
-/* раскладка: 12 колонок, две строки */
-.tile-a    { grid-column: span 3; }
-.tile-b    { grid-column: span 3; }
+/* Раскладка собрана как пазл: края карточек из разных рядов совпадают.
+   Правый край «Карт» совпадает с правым краем «Админки», левый край «Зрения» —
+   с левым краем круга. Слева и справа по краям блока остаются пустые колонки,
+   зеркально друг другу.
+
+   Сцепленная пара одинаковой ширины и расходится на равные доли: «Документы»
+   уходят влево на две колонки, «Вход и права» вправо на две, общая у них одна.
+
+     ряд 1:  ..  A 3–5   B 6–9   круг 10–11   C 12–14
+     ряд 2:  D 1–3   E 4–9   F 10–13   ..              */
+.tile-a    { grid-column: 3 / span 3; }
+.tile-b    { grid-column: span 4; }
 .tile-dial { grid-column: span 2; }
-.tile-c    { grid-column: span 4; }
-.tile-d    { grid-column: span 3; }
-.tile-e    { grid-column: span 5; }
+.tile-c    { grid-column: span 3; }
+.tile-d    { grid-column: 1 / span 3; }
+.tile-e    { grid-column: span 6; }
 .tile-f    { grid-column: span 4; }
+
+.tile-body { border-radius: 26px; }
+
+/* Единственная сцепка. Растёт вверх нижняя карточка, а не вниз верхняя:
+   над «Документами» стоит только «Вход и права», а под «Входом» оказались бы
+   сразу две соседки, и сцепок вышло бы две вместо одной.
+   Ноль только у тех углов, что попадают на изломы: у нижней это верхний
+   правый, у верхней — нижний левый. Остальные внешние и скруглены как все. */
+.tile-d .tile-body {
+  height: calc(100% + var(--tile-gap));
+  margin-top: calc(var(--tile-gap) * -1);
+  border-radius: 26px 0 26px 26px;
+}
+.tile-a .tile-body { border-radius: 26px 26px 26px 0; }
+
+/* Вогнутые выкружки на изломах — то, чем карточки перетекают друг в друга.
+   Обычный border-radius здесь не работает: со стороны тёмной фигуры у излома
+   270°, его угол нужно не срезать, а заполнить. Квадрат с радиальным
+   градиентом: внутри круга прозрачно, снаружи цвет карточки — выходит дуга,
+   касательная к обеим граням. Круг всегда в дальнем от излома углу квадрата. */
+.tile-a::before,
+.tile-d::after {
+  content: ""; position: absolute; z-index: 0;
+  width: var(--fillet, 40px); height: var(--fillet, 40px);
+  pointer-events: none;
+}
+.tile-a::before {
+  bottom: 0;
+  left: calc(var(--fillet, 40px) * -1);
+  background: radial-gradient(circle at 0 0,
+      transparent calc(var(--fillet, 40px) - .5px), var(--card) var(--fillet, 40px));
+}
+.tile-d::after {
+  top: calc(var(--tile-gap) * -1);
+  right: calc(var(--fillet, 40px) * -1);
+  background: radial-gradient(circle at 100% 100%,
+      transparent calc(var(--fillet, 40px) - .5px), var(--card) var(--fillet, 40px));
+}
 
 /* --- круг с версией --- */
 .tile-dial {
@@ -987,7 +1055,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 }
 .dial {
   position: relative;
-  width: min(230px, 100%);
+  width: min(276px, 100%);
   aspect-ratio: 1;   /* высоту считаем от ширины: фиксированная давала эллипс */
   border-radius: 50%;
   background:
@@ -1000,21 +1068,21 @@ button, input, select, textarea { font: inherit; color: inherit; }
 /* точечная фактура: та же шахматка, что у панели проверок */
 .dial::before {
   content: ""; position: absolute; inset: 0; border-radius: 50%;
-  background: radial-gradient(circle, rgba(255, 255, 255, .18) .8px, transparent 1.2px);
-  background-size: 5px 5px;
+  background: radial-gradient(circle, rgba(255, 255, 255, .2) .8px, transparent 1.2px);
+  background-size: 4px 4px;
   -webkit-mask-image: radial-gradient(circle at 50% 45%, #000 20%, transparent 72%);
           mask-image: radial-gradient(circle at 50% 45%, #000 20%, transparent 72%);
 }
 .dial-ver {
   position: relative;
-  font-family: var(--ff-display); font-size: 2.9rem; font-weight: 600;
+  font-family: var(--ff-display); font-size: 3.4rem; font-weight: 600;
   letter-spacing: -.04em; color: #fff;
   text-shadow: 0 0 26px rgba(255, 255, 255, .5);
 }
 .dial-sub { position: relative; font-family: var(--ff-mono); font-size: .72rem; color: rgba(243, 240, 255, .5); }
 .dial-plus {
-  position: absolute; right: -6px; bottom: 6px;
-  width: 52px; height: 52px; border-radius: 50%;
+  position: absolute; right: -8px; bottom: 8px;
+  width: 60px; height: 60px; border-radius: 50%;
   background: #f3f1f9;
   box-shadow: 0 8px 20px -8px rgba(30, 20, 70, .5);
 }
@@ -1130,14 +1198,18 @@ button, input, select, textarea { font: inherit; color: inherit; }
 @keyframes cvScan { to { transform: translateY(150px); } }
 
 @media (max-width: 1040px) {
-  .tile-a, .tile-b, .tile-d { grid-column: span 6; }
-  .tile-c, .tile-e, .tile-f { grid-column: span 6; }
-  .tile-dial { grid-column: span 12; min-height: 0; }
-  .dial { width: 190px; height: 190px; }
+  .tiles-grid { gap: 10px; }
+  .tile-a { grid-column: 1 / span 7; }
+  .tile-b, .tile-c, .tile-d, .tile-e, .tile-f { grid-column: span 7; }
+  .tile-dial { grid-column: span 14; min-height: 0; }
+  .dial { width: min(190px, 100%); }
+  .tile .tile-body { border-radius: 26px; height: 100%; margin-top: 0; }
+  .tile-a::before, .tile-d::after { display: none; }
 }
 @media (max-width: 760px) {
-  .tile, .tile-a, .tile-b, .tile-c, .tile-d, .tile-e, .tile-f { grid-column: span 12; }
-  .tile { min-height: 224px; padding: 16px 18px; border-radius: 22px; outline-width: 3px; }
+  .tile, .tile-a, .tile-b, .tile-c, .tile-d, .tile-e, .tile-f { grid-column: span 14; }
+  .tile { min-height: 224px; }
+  .tile-body { padding: 16px 18px; border-radius: 22px; }
   .tile-art { left: 18px; right: 18px; height: 132px; }
 }
 
