@@ -339,17 +339,17 @@
      Ключи: поле шифротекста и расшифровка заголовка
 
      Поле у образца (reflect.app) — видео на 830 КБ; здесь оно собирается
-     разметкой. Вспышки бегут кольцом из центра, и это не отдельный слой:
-     у каждой группы своя задержка, посчитанная из расстояния до центра.
-     Скорость кольца взята с их видео — 318 CSS px/с (см. style.css).
+     разметкой. Форма снята с их кадра: эллипс из строк, к верху и низу
+     короче, верхняя половина зеркалит нижнюю. Волну поле не считает —
+     она целиком в CSS (см. style.css): скрипт только раскладывает строки
+     и ставит каждой группе оттенок по расстоянию до центра.
 
      Набор одинаков при каждой загрузке: генератор с постоянным зерном.
      Случайное поле меняло бы блок от перезагрузки к перезагрузке, и
      сравнить два снимка при правке было бы нечем.
      ============================================================ */
   var CRYPT_ALPHA = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
-  var CRYPT_SWEEP = 2.3;   /* с — столько кольцо идёт от центра до угла поля */
-  var CRYPT_PITCH = 26;    /* px — шаг строк, как у образца */
+  var CRYPT_PITCH = 22;    /* px — шаг строк, как у образца: 26.6 видеопикселя */
   var cryptField  = $('#cryptField');
   var cryptSize   = { w: 0, h: 0 };
 
@@ -368,71 +368,104 @@
     var h = cryptField.clientHeight;
     if (!w || !h) return;
 
-    /* шрифт моноширинный, поэтому ширину знака достаточно замерить один раз;
-       дальше положение каждой группы считается арифметикой, без обращений
-       к раскладке — иначе на сотню групп пришлась бы сотня перерасчётов */
-    var probe = document.createElement('span');
-    probe.style.cssText = 'position:absolute;visibility:hidden;white-space:pre';
-    probe.textContent = new Array(41).join('0');
-    cryptField.appendChild(probe);
-    var chW = probe.getBoundingClientRect().width / 40;
-    cryptField.removeChild(probe);
-    if (!chW) return;
+    /* шрифт не моноширинный, поэтому ширина каждой группы меряется на
+       холсте тем же шрифтом, что стоит на поле: ни одного обращения к
+       раскладке на три сотни групп */
+    var cs  = window.getComputedStyle(cryptField);
+    var ctx = document.createElement('canvas').getContext('2d');
+    ctx.font = cs.fontWeight + ' ' + cs.fontSize + ' ' + cs.fontFamily;
+    var sepW = ctx.measureText(' :: ').width;
 
-    var rows = Math.ceil(h / CRYPT_PITCH);
-    var cols = Math.ceil(w / chW);
+    /* нечётное число строк: средняя лежит ровно на центре, остальные
+       зеркалятся вокруг неё */
+    var rows = 2 * Math.floor((h / CRYPT_PITCH - 1) / 2) + 1;
     var cx = w / 2, cy = h / 2;
+    /* эллипс строк чуть выше поля: крайняя строка тогда не вырождается
+       в одно слово, а держит примерно половину средней, как у образца */
+    var a = cx, b = cy * 1.12;
     var maxD = Math.sqrt(cx * cx + cy * cy);
     var rnd = cryptRandom(0x1f3a5c7);
-    var frag = document.createDocumentFragment();
-    var r, k;
+    var dim = document.createElement('div');
+    dim.className = 'crypt-dim';
+    var half = [];
+    var r, k, i;
 
-    for (r = 0; r < rows; r++) {
+    for (r = 0; r <= (rows - 1) / 2; r++) {
+      var dy = (r - (rows - 1) / 2) * CRYPT_PITCH;
+      var chord = 2 * a * Math.sqrt(Math.max(0, 1 - (dy * dy) / (b * b)));
+      var toks = [], widths = [], total = 0;
+      while (true) {
+        var len = 6 + Math.floor(rnd() * 10);
+        var s = '';
+        for (k = 0; k < len; k++) s += CRYPT_ALPHA.charAt(Math.floor(rnd() * 64));
+        var tw = ctx.measureText(s).width;
+        if (total + (toks.length ? sepW : 0) + tw > chord) break;
+        total += (toks.length ? sepW : 0) + tw;
+        toks.push(s); widths.push(tw);
+      }
+      if (!toks.length) continue;
+
       var row = document.createElement('div');
       row.className = 'crypt-row';
-      var y = (r + .5) * CRYPT_PITCH - (rows * CRYPT_PITCH - h) / 2;
-      row.style.top = (y - CRYPT_PITCH / 2) + 'px';
-
-      /* сдвиг строки на случайное число знаков: без него группы выстроились
-         бы в столбцы и поле читалось бы таблицей */
-      var col = -Math.floor(rnd() * 24);
-      var at = 0, wrote = false;
-      while (col + at < cols + 4) {
-        var len = 10 + Math.floor(rnd() * 14);
-        var mid = (col + at + len / 2) * chW;
-        var dx = (mid - cx) / cx, dy = (y - cy) / cy;
-
-        /* за эллипсом маски группы всё равно не видно — не создаём их вовсе */
-        if (dx * dx + dy * dy < 1.05) {
-          var s = '';
-          for (k = 0; k < len; k++) s += CRYPT_ALPHA.charAt(Math.floor(rnd() * 64));
-          var tok = document.createElement('i');
-          tok.textContent = s;
-          var px = mid - cx, py = y - cy;
-          tok.style.setProperty('--d',
-            (Math.sqrt(px * px + py * py) / maxD * CRYPT_SWEEP).toFixed(2));
-          if (!wrote) { row.style.left = ((col + at) * chW) + 'px'; wrote = true; }
-          row.appendChild(tok);
-        } else {
-          for (k = 0; k < len; k++) rnd();   /* зерно расходуется одинаково */
-        }
-        at += len + 4;                       /* 4 знака на разделитель " :: " */
+      var left = cx - total / 2;
+      row.style.left = left + 'px';
+      var x = left;
+      for (i = 0; i < toks.length; i++) {
+        var tok = document.createElement('i');
+        tok.textContent = toks[i];
+        /* оттенок по радиусу: шаг чуть шире полосы кольца, поэтому соседние
+           кольца приходят разного цвета — от голубого к розово-фиолетовому.
+           У образца оттенок держится за местом, а не за фазой */
+        var px = x + widths[i] / 2 - cx;
+        var u = Math.sqrt(px * px + dy * dy) / maxD;
+        tok.style.setProperty('--h', (252 + 30 * Math.sin(u * 14)).toFixed(0));
+        row.appendChild(tok);
+        x += widths[i] + sepW;
       }
-      if (wrote) frag.appendChild(row);
+      half.push({ row: row, dy: dy });
     }
 
+    /* зеркало: строка r и строка rows-1-r — один и тот же текст */
+    for (i = 0; i < half.length; i++) {
+      var top = cy + half[i].dy - CRYPT_PITCH / 2;
+      half[i].row.style.top = top + 'px';
+      dim.appendChild(half[i].row);
+      if (half[i].dy < 0) {
+        var mirror = half[i].row.cloneNode(true);
+        mirror.style.top = (cy - half[i].dy - CRYPT_PITCH / 2) + 'px';
+        dim.appendChild(mirror);
+      }
+    }
+
+    var lit = dim.cloneNode(true);
+    lit.className = 'crypt-lit';
+    var bloom = document.createElement('div');
+    bloom.className = 'crypt-bloom';
+
     cryptField.textContent = '';
-    cryptField.appendChild(frag);
+    cryptField.appendChild(dim);
+    cryptField.appendChild(lit);
+    cryptField.appendChild(bloom);
     cryptSize.w = w;
     cryptSize.h = h;
   }
 
+  /* ширина групп меряется шрифтом: до его загрузки поле разложилось бы
+     запасным и после подмены поехало */
+  function buildCryptReady() {
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(buildCrypt, buildCrypt);
+    } else {
+      buildCrypt();
+    }
+  }
+
   if (cryptField) {
     if (!('IntersectionObserver' in window)) {
-      buildCrypt();
+      buildCryptReady();
     } else {
       var cryptObserver = new IntersectionObserver(function (entries) {
-        if (entries[0].isIntersecting) { buildCrypt(); cryptObserver.disconnect(); }
+        if (entries[0].isIntersecting) { buildCryptReady(); cryptObserver.disconnect(); }
       }, { rootMargin: '400px' });
       cryptObserver.observe(cryptField);
     }
