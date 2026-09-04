@@ -961,6 +961,8 @@ button, input, select, textarea { font: inherit; color: inherit; }
   --line:      rgba(167, 139, 250, .14);
   --muted:     #b3adcf;
   --faint:     #837da6;
+  --accent-hi:   #c4b5fd;
+  --accent-line: rgba(167, 139, 250, .38);
   position: relative;
   overflow: hidden;
   padding-bottom: clamp(70px, 8vw, 128px);
@@ -1195,6 +1197,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
   --text:  #f3f0ff;
   --muted: #a49dc4;
   --faint: #7c769c;
+  --accent-hi: #c4b5fd;
   position: relative;
   padding-block: clamp(88px, 11vw, 150px);
   background: #0b0a10;
@@ -1397,6 +1400,8 @@ button, input, select, textarea { font: inherit; color: inherit; }
   --spire: min(820px, 96vw);
   --spire-top: clamp(18px, 3vw, 56px);
   --muted: #b3adcf;
+  --accent-hi:   #c4b5fd;
+  --accent-line: rgba(167, 139, 250, .38);
   position: relative;
   overflow: hidden;
   padding-bottom: clamp(70px, 8vw, 128px);
@@ -1549,6 +1554,175 @@ button, input, select, textarea { font: inherit; color: inherit; }
   .spire-cards { grid-template-columns: 1fr; gap: 26px; }
   .spire-cards::after { display: none; }
   .spire-card { padding-inline: 0; }
+}
+
+/* ---------- Ключи: поле шифротекста ----------
+   Образец — блок «Hardened security» на reflect.app. У них фон этого блока —
+   видео 1920×1080 на 830 КБ; у нас поле собирается разметкой. Дело не только
+   в весе: текст остаётся резким на любом экране и переводится правкой строки.
+
+   Что снято с их видео покадрово и повторено здесь:
+     • шаг строк 26.6 px при показе на ширине 1568 → 21.7 CSS px;
+     • вспышки бегут кольцом ровно из центра. Радиальная гистограмма ярких
+       пикселей даёт пик на 20, 60, 140, 180, 260, 300, 340, 380, 500, 540
+       и 620 px в кадрах 6…52 — это 13 px за кадр, то есть 318 CSS px/с;
+     • у каждой метки резкий фронт (0.11 с) и длинный хвост (~0.8 с),
+       в покое она не гаснет совсем: 46 из 255 на фоне (3, 0, 19);
+     • поле срезано радиальной маской, сплошной до 61 % полуразмера;
+     • заголовок у них зашифрован в самой разметке и расшифровывается,
+       когда блок попал в кадр. У нас то же, но знаки встают на место
+       постепенно, а не разом (см. script.js).
+
+   Волна не рисуется отдельным слоем: у каждой группы своя задержка,
+   посчитанная из расстояния до центра, — тот же приём, что у отметок радара.
+   Так на каждую группу приходится один композиторский слой и ни одной
+   перерисовки за кадр; анимированная маска поверх всего поля перерисовывала
+   бы 1240×660 точек шестьдесят раз в секунду. */
+.crypt {
+  --pad-t:   clamp(150px, 20vw, 300px);
+  --lock:    88px;
+  --field-w: min(1240px, 108vw);
+  /* высота поля выведена из отступа: центр эллипса обязан совпасть с центром
+     замка, иначе волна идёт не из него. При такой формуле верх поля всегда
+     упирается ровно в край секции и его не срезает overflow */
+  --field-h: calc(var(--pad-t) * 2 + var(--lock));
+  --loop:    3.6s;
+  --muted:   #b3adcf;
+  /* светлая тема не должна доставать до тёмных секций: иначе метка
+     набиралась бы тёмно-фиолетовым по почти чёрному */
+  --accent-hi:   #c4b5fd;
+  --accent-line: rgba(167, 139, 250, .38);
+  position: relative;
+  overflow: hidden;
+  padding: var(--pad-t) 0 clamp(70px, 8vw, 128px);
+  background: #06050d;
+  color: #f3f0ff;
+  border-block: 1px solid rgba(167, 139, 250, .1);
+}
+
+.crypt-stage {
+  position: absolute; left: 50%; top: 0;
+  width: var(--field-w); height: var(--field-h);
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+.crypt-field {
+  position: absolute; inset: 0;
+  overflow: hidden;
+  font-family: var(--ff-mono);
+  font-size: 13.5px; line-height: 26px;
+  -webkit-mask-image: radial-gradient(50% 50% at 50% 50%, #000 58%, transparent 100%);
+          mask-image: radial-gradient(50% 50% at 50% 50%, #000 58%, transparent 100%);
+}
+/* строка целиком в pre: иначе пробелы вокруг разделителя схлопнутся
+   и группы слипнутся в одно слово */
+.crypt-row { position: absolute; height: 26px; white-space: pre; }
+.crypt-row i {
+  color: #b3a9ff;
+  font-style: normal;
+  opacity: .14;
+  text-shadow: 0 0 10px rgba(124, 77, 255, .45);
+  animation: cryptFlash var(--loop) linear infinite;
+  /* --d ставит скрипт: расстояние группы до центра в секундах хода кольца.
+     --crypt-t сдвигает всё поле назад по времени — так снимок берётся в
+     нужный момент волны, а не в тот, когда сработал затвор */
+  animation-delay: calc((var(--d, 0) - var(--crypt-t, 0)) * 1s);
+}
+.crypt-row i::after { content: " :: "; color: rgba(148, 130, 232, .55); }
+/* вспышка занимает первую четверть цикла (0.9 с из 3.6), остальное — покой:
+   к моменту, когда кольцо вернётся в центр, дальние группы уже погасли */
+@keyframes cryptFlash {
+  0%   { opacity: .14; }
+  3%   { opacity: 1; }
+  10%  { opacity: .5; }
+  25%  { opacity: .14; }
+  100% { opacity: .14; }
+}
+
+/* замок стоит ровно в центре поля, и первая вспышка приходится на него:
+   волна читается как исходящая из замка, без подписи и без лишних колец —
+   тонкая окружность поверх текста выглядела чужой, её убрали */
+.crypt-lock {
+  position: relative;
+  width: var(--lock); height: var(--lock);
+  margin: 0 auto clamp(30px, 4vw, 46px);
+}
+.crypt-halo {
+  position: absolute; left: 50%; top: 50%;
+  width: 300px; height: 300px;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, rgba(150, 106, 255, .55), transparent 62%);
+  -webkit-mask-image: var(--dots); mask-image: var(--dots);
+  -webkit-mask-size: var(--dots-size); mask-size: var(--dots-size);
+  transition: transform .45s var(--ease), filter .45s var(--ease);
+}
+.crypt-lock svg { position: relative; display: block; width: 100%; height: 100%; }
+/* дужка нарисована раньше корпуса, поэтому её ноги прячутся за ним:
+   поднятая дужка читается как открытый замок, наведение его закрывает */
+.crypt-shackle { transform: translateY(-10px); transition: transform .45s cubic-bezier(.6, .6, 0, 1); }
+.crypt-lock:hover .crypt-shackle { transform: translateY(0); }
+.crypt-lock:hover .crypt-halo   { transform: translate(-50%, -50%) scale(1.1); filter: brightness(1.3); }
+
+.crypt-copy { position: relative; text-align: center; }
+.crypt-pill {
+  display: inline-block; margin: 0;
+  padding: 6px 16px; border-radius: 100px;
+  border: 1px solid var(--accent-line);
+  background: rgba(124, 77, 255, .1);
+  font-family: var(--ff-mono); font-size: .74rem; letter-spacing: .06em;
+  color: var(--accent-hi);
+}
+.crypt-title {
+  margin: 20px auto 0; max-width: 20ch;
+  font-size: clamp(2rem, 4.6vw, 3.3rem); line-height: 1.02; letter-spacing: -.03em;
+}
+.crypt-lede {
+  margin: 18px auto 0; max-width: 64ch;
+  color: var(--muted); line-height: 1.62;
+  text-shadow: 0 2px 14px #06050d;
+}
+/* настоящий текст остаётся в разметке для чтения с экрана: перебор знаков
+   идёт в соседнем слое с aria-hidden */
+.crypt-sr {
+  position: absolute; width: 1px; height: 1px;
+  margin: -1px; padding: 0; overflow: hidden;
+  clip-path: inset(50%); white-space: nowrap; border: 0;
+}
+
+/* четыре в ряд, а не два на два: над этим блоком точно такая же сетка
+   карточек «Одной системы», и два одинаковых квадрата подряд читались бы
+   как повтор одного блока */
+.crypt-cards {
+  position: relative;
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(20px, 3vw, 36px);
+  margin-top: clamp(48px, 6vw, 86px);
+  padding-top: 28px;
+  text-align: left;
+}
+.crypt-cards::before {
+  content: ""; position: absolute; left: 0; right: 0; top: 0; height: 1px;
+  background: linear-gradient(90deg,
+      transparent, rgba(243, 238, 255, .13) 18%, rgba(243, 238, 255, .13) 82%, transparent);
+}
+.crypt-card { position: relative; }
+.crypt-card + .crypt-card::before {
+  content: ""; position: absolute; left: calc(clamp(20px, 3vw, 36px) / -2); top: -28px;
+  width: 1px; height: 148px;
+  background: linear-gradient(to bottom, rgba(243, 238, 255, .13), transparent);
+}
+.crypt-card h3 { margin: 0 0 10px; font-size: 1rem; line-height: 1.25; min-height: 2.5em; }
+.crypt-card p  { margin: 0; color: var(--muted); line-height: 1.6; font-size: .9rem; }
+
+@media (max-width: 1040px) {
+  .crypt-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 30px 36px; }
+  .crypt-card:nth-child(odd)::before { display: none; }
+}
+@media (max-width: 760px) {
+  .crypt { --lock: 72px; }
+  .crypt-cards { grid-template-columns: 1fr; gap: 26px; }
+  .crypt-card::before { display: none; }
+  .crypt-card h3 { min-height: 0; }
 }
 
 /* ---------- Плитка «Интерфейсы, которые мы собираем» ----------
@@ -1944,11 +2118,13 @@ button, input, select, textarea { font: inherit; color: inherit; }
   .blip-dot, .blip-tag { opacity: 1; }
   .blip-wave { display: none; }
   .spire-stars i { animation: none; }
+  .crypt-row i { opacity: .3; animation: none; }
 }
 
 @media print {
   .topbar, .hero-stage, .hero-deck, .hero-horizon, .checks-halo, .checks-glow, .checks-rim, .page-progress, .toast, .grain,
-  .marquee, .contact-form, .work-aside, .tile-art, .dial, .radar-stage, .spire-stage { display: none; }
-  body, .hero, .checks, .tiles, .radar, .spire { background: #fff; color: #000; }
+  .marquee, .contact-form, .work-aside, .tile-art, .dial, .radar-stage, .spire-stage, .crypt-stage, .crypt-lock { display: none; }
+  body, .hero, .checks, .tiles, .radar, .spire, .crypt { background: #fff; color: #000; }
   .radar-copy, .spire-copy { padding-top: 0; }
+  .crypt { padding-top: 0; }
 }

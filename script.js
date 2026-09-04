@@ -336,6 +336,189 @@
   }
 
   /* ============================================================
+     Ключи: поле шифротекста и расшифровка заголовка
+
+     Поле у образца (reflect.app) — видео на 830 КБ; здесь оно собирается
+     разметкой. Вспышки бегут кольцом из центра, и это не отдельный слой:
+     у каждой группы своя задержка, посчитанная из расстояния до центра.
+     Скорость кольца взята с их видео — 318 CSS px/с (см. style.css).
+
+     Набор одинаков при каждой загрузке: генератор с постоянным зерном.
+     Случайное поле меняло бы блок от перезагрузки к перезагрузке, и
+     сравнить два снимка при правке было бы нечем.
+     ============================================================ */
+  var CRYPT_ALPHA = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+  var CRYPT_SWEEP = 2.3;   /* с — столько кольцо идёт от центра до угла поля */
+  var CRYPT_PITCH = 26;    /* px — шаг строк, как у образца */
+  var cryptField  = $('#cryptField');
+  var cryptSize   = { w: 0, h: 0 };
+
+  /* xorshift32 */
+  function cryptRandom(seed) {
+    var s = seed;
+    return function () {
+      s ^= s << 13; s ^= s >>> 17; s ^= s << 5;
+      return (s >>> 0) / 4294967296;
+    };
+  }
+
+  function buildCrypt() {
+    if (!cryptField) return;
+    var w = cryptField.clientWidth;
+    var h = cryptField.clientHeight;
+    if (!w || !h) return;
+
+    /* шрифт моноширинный, поэтому ширину знака достаточно замерить один раз;
+       дальше положение каждой группы считается арифметикой, без обращений
+       к раскладке — иначе на сотню групп пришлась бы сотня перерасчётов */
+    var probe = document.createElement('span');
+    probe.style.cssText = 'position:absolute;visibility:hidden;white-space:pre';
+    probe.textContent = new Array(41).join('0');
+    cryptField.appendChild(probe);
+    var chW = probe.getBoundingClientRect().width / 40;
+    cryptField.removeChild(probe);
+    if (!chW) return;
+
+    var rows = Math.ceil(h / CRYPT_PITCH);
+    var cols = Math.ceil(w / chW);
+    var cx = w / 2, cy = h / 2;
+    var maxD = Math.sqrt(cx * cx + cy * cy);
+    var rnd = cryptRandom(0x1f3a5c7);
+    var frag = document.createDocumentFragment();
+    var r, k;
+
+    for (r = 0; r < rows; r++) {
+      var row = document.createElement('div');
+      row.className = 'crypt-row';
+      var y = (r + .5) * CRYPT_PITCH - (rows * CRYPT_PITCH - h) / 2;
+      row.style.top = (y - CRYPT_PITCH / 2) + 'px';
+
+      /* сдвиг строки на случайное число знаков: без него группы выстроились
+         бы в столбцы и поле читалось бы таблицей */
+      var col = -Math.floor(rnd() * 24);
+      var at = 0, wrote = false;
+      while (col + at < cols + 4) {
+        var len = 10 + Math.floor(rnd() * 14);
+        var mid = (col + at + len / 2) * chW;
+        var dx = (mid - cx) / cx, dy = (y - cy) / cy;
+
+        /* за эллипсом маски группы всё равно не видно — не создаём их вовсе */
+        if (dx * dx + dy * dy < 1.05) {
+          var s = '';
+          for (k = 0; k < len; k++) s += CRYPT_ALPHA.charAt(Math.floor(rnd() * 64));
+          var tok = document.createElement('i');
+          tok.textContent = s;
+          var px = mid - cx, py = y - cy;
+          tok.style.setProperty('--d',
+            (Math.sqrt(px * px + py * py) / maxD * CRYPT_SWEEP).toFixed(2));
+          if (!wrote) { row.style.left = ((col + at) * chW) + 'px'; wrote = true; }
+          row.appendChild(tok);
+        } else {
+          for (k = 0; k < len; k++) rnd();   /* зерно расходуется одинаково */
+        }
+        at += len + 4;                       /* 4 знака на разделитель " :: " */
+      }
+      if (wrote) frag.appendChild(row);
+    }
+
+    cryptField.textContent = '';
+    cryptField.appendChild(frag);
+    cryptSize.w = w;
+    cryptSize.h = h;
+  }
+
+  if (cryptField) {
+    if (!('IntersectionObserver' in window)) {
+      buildCrypt();
+    } else {
+      var cryptObserver = new IntersectionObserver(function (entries) {
+        if (entries[0].isIntersecting) { buildCrypt(); cryptObserver.disconnect(); }
+      }, { rootMargin: '400px' });
+      cryptObserver.observe(cryptField);
+    }
+
+    var cryptTimer = null;
+    window.addEventListener('resize', function () {
+      window.clearTimeout(cryptTimer);
+      cryptTimer = window.setTimeout(function () {
+        if (!cryptSize.w) return;            /* поле ещё не собрано */
+        if (Math.abs(cryptField.clientWidth  - cryptSize.w) < 48 &&
+            Math.abs(cryptField.clientHeight - cryptSize.h) < 48) return;
+        buildCrypt();
+      }, 280);
+    });
+  }
+
+  /* Расшифровка. У образца текст перебирается целыми словами каждые 50 мс и
+     в момент появления блока разом становится настоящим. Здесь знаки встают
+     на место по одному слева направо: так видно направление, а строка не
+     скачет — перебор идёт буквами того же алфавита и того же регистра,
+     поэтому ширина почти не меняется. */
+  var DEC_LOWER = 'абвгдежзиклмнопрстуфхцчшщыэюя';
+  var DEC_UPPER = 'АБВГДЕЖЗИКЛМНОПРСТУФХЦЧШЩЭЮЯ';
+  var DEC_LAT   = 'abcdefghijklmnopqrstuvwxyz';
+  var DEC_DUR   = 1.05;   /* с на весь текст, независимо от его длины */
+  var DEC_STEP  = 45;     /* мс между перетасовками, как у образца */
+
+  function cryptNoise(ch) {
+    if (ch === 'ё') return DEC_LOWER.charAt(Math.floor(Math.random() * DEC_LOWER.length));
+    if (ch === 'Ё') return DEC_UPPER.charAt(Math.floor(Math.random() * DEC_UPPER.length));
+    if (ch >= 'а' && ch <= 'я') return DEC_LOWER.charAt(Math.floor(Math.random() * DEC_LOWER.length));
+    if (ch >= 'А' && ch <= 'Я') return DEC_UPPER.charAt(Math.floor(Math.random() * DEC_UPPER.length));
+    if (ch >= '0' && ch <= '9') return String.fromCharCode(48 + Math.floor(Math.random() * 10));
+    if (ch >= 'a' && ch <= 'z') return DEC_LAT.charAt(Math.floor(Math.random() * 26));
+    if (ch >= 'A' && ch <= 'Z') return DEC_LAT.charAt(Math.floor(Math.random() * 26)).toUpperCase();
+    return ch;                              /* пробелы и знаки препинания на месте */
+  }
+
+  function runDecode(el, delay) {
+    var real = el.textContent.replace(/\s+/g, ' ').replace(/^ | $/g, '');
+    var n = real.length;
+    if (!n) return;
+
+    var view = document.createElement('span');
+    view.setAttribute('aria-hidden', 'true');
+    var sr = document.createElement('span');
+    sr.className = 'crypt-sr';
+    sr.textContent = real;
+    el.textContent = '';
+    el.appendChild(view);
+    el.appendChild(sr);
+
+    /* момент фиксации знака: в основном слева направо, немного вразнобой */
+    var lock = [];
+    for (var i = 0; i < n; i++) {
+      lock.push(delay + DEC_DUR * (.6 * (i / n) + .4 * Math.random()));
+    }
+
+    var start = 0, rolled = -1e9;
+    function frame(now) {
+      if (!start) start = now;
+      if (now - rolled < DEC_STEP) { window.requestAnimationFrame(frame); return; }
+      rolled = now;
+      var t = (now - start) / 1000, out = '', done = true;
+      for (var j = 0; j < n; j++) {
+        if (t >= lock[j]) out += real.charAt(j);
+        else { out += cryptNoise(real.charAt(j)); done = false; }
+      }
+      view.textContent = out;
+      if (!done) window.requestAnimationFrame(frame);
+    }
+    view.textContent = real.replace(/[^ ]/g, function (c) { return cryptNoise(c); });
+    window.requestAnimationFrame(frame);
+  }
+
+  var cryptTitle = $('.crypt-title');
+  if (cryptTitle && !reduceMotion && 'IntersectionObserver' in window) {
+    var decObserver = new IntersectionObserver(function (entries) {
+      if (!entries[0].isIntersecting) return;
+      decObserver.disconnect();
+      $$('#keys [data-decode]').forEach(function (el, i) { runDecode(el, i * .12); });
+    }, { threshold: .6 });
+    decObserver.observe(cryptTitle);
+  }
+
+  /* ============================================================
      Уведомление
      ============================================================ */
   var toast = $('#toast');
