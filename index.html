@@ -338,38 +338,65 @@
   <div class="radar-stage" aria-hidden="true">
     <svg class="radar-net" viewBox="0 0 900 900" aria-hidden="true">
       <defs>
-        <!-- купол: у них яркость падает плавно от центра к ободу, а не ступенями
-             по кольцам. Замер по их картинке: в центре rgb(36,23,114) при фоне
-             (3,0,20), к r=400 сходит на нет -->
+        <!-- общий спад яркости от центра к ободу: у них он плавный, а не
+             ступенями по кольцам. Замер: rgb(36,23,114) в центре при фоне (3,0,20) -->
         <radialGradient id="radarDome">
-          <stop offset="0"   stop-color="#7a5cff" stop-opacity=".28"/>
-          <stop offset=".38" stop-color="#7a5cff" stop-opacity=".13"/>
-          <stop offset=".72" stop-color="#6b4dff" stop-opacity=".072"/>
-          <stop offset=".93" stop-color="#6b4dff" stop-opacity=".045"/>
+          <stop offset="0"   stop-color="#7a5cff" stop-opacity=".15"/>
+          <stop offset=".38" stop-color="#7a5cff" stop-opacity=".105"/>
+          <stop offset=".72" stop-color="#6b4dff" stop-opacity=".055"/>
+          <stop offset=".93" stop-color="#6b4dff" stop-opacity=".034"/>
           <stop offset="1"   stop-color="#6b4dff" stop-opacity="0"/>
+        </radialGradient>
+        <!-- свечение, прижатое к линии изнутри: у каждого кольца своё, потому
+             что полоса должна быть одной ширины в пикселях, а не в долях радиуса -->
+        <radialGradient id="radarBand104">
+          <stop offset="0.712" stop-color="#9578ff" stop-opacity="0"/>
+          <stop offset="0.870" stop-color="#9578ff" stop-opacity=".45"/>
+          <stop offset="1" stop-color="#a98fff" stop-opacity="1"/>
+        </radialGradient>
+        <radialGradient id="radarBand192">
+          <stop offset="0.844" stop-color="#9578ff" stop-opacity="0"/>
+          <stop offset="0.930" stop-color="#9578ff" stop-opacity=".45"/>
+          <stop offset="1" stop-color="#a98fff" stop-opacity="1"/>
+        </radialGradient>
+        <radialGradient id="radarBand288">
+          <stop offset="0.896" stop-color="#9578ff" stop-opacity="0"/>
+          <stop offset="0.953" stop-color="#9578ff" stop-opacity=".45"/>
+          <stop offset="1" stop-color="#a98fff" stop-opacity="1"/>
+        </radialGradient>
+        <radialGradient id="radarBand392">
+          <stop offset="0.923" stop-color="#9578ff" stop-opacity="0"/>
+          <stop offset="0.966" stop-color="#9578ff" stop-opacity=".45"/>
+          <stop offset="1" stop-color="#a98fff" stop-opacity="1"/>
+        </radialGradient>
+        <radialGradient id="radarBand424">
+          <stop offset="0.929" stop-color="#9578ff" stop-opacity="0"/>
+          <stop offset="0.968" stop-color="#9578ff" stop-opacity=".45"/>
+          <stop offset="1" stop-color="#a98fff" stop-opacity="1"/>
         </radialGradient>
       </defs>
       <circle cx="450" cy="450" r="424" fill="url(#radarDome)"/>
-      <circle cx="450" cy="450" r="104" fill="rgba(124,77,255,.012)" stroke="rgba(190,175,255,.16)" stroke-width="1" vector-effect="non-scaling-stroke"/>
-      <circle cx="450" cy="450" r="192" fill="rgba(124,77,255,.012)" stroke="rgba(190,175,255,.16)" stroke-width="1" vector-effect="non-scaling-stroke"/>
-      <circle cx="450" cy="450" r="288" fill="rgba(124,77,255,.012)" stroke="rgba(190,175,255,.16)" stroke-width="1" vector-effect="non-scaling-stroke"/>
-      <circle cx="450" cy="450" r="392" fill="rgba(124,77,255,.012)" stroke="rgba(190,175,255,.16)" stroke-width="1" vector-effect="non-scaling-stroke"/>
-      <circle cx="450" cy="450" r="424" fill="rgba(124,77,255,.012)" stroke="rgba(190,175,255,.34)" stroke-width="1" vector-effect="non-scaling-stroke"/>
+      <circle cx="450" cy="450" r="424" fill="url(#radarBand424)" opacity="0.075"/>
+      <circle cx="450" cy="450" r="392" fill="url(#radarBand392)" opacity="0.1"/>
+      <circle cx="450" cy="450" r="288" fill="url(#radarBand288)" opacity="0.1"/>
+      <circle cx="450" cy="450" r="192" fill="url(#radarBand192)" opacity="0.1"/>
+      <circle cx="450" cy="450" r="104" fill="url(#radarBand104)" opacity="0.085"/>
+      <circle cx="450" cy="450" r="104" fill="none" stroke="rgba(190,175,255,.16)" stroke-width="1" vector-effect="non-scaling-stroke"/>
+      <circle cx="450" cy="450" r="192" fill="none" stroke="rgba(190,175,255,.16)" stroke-width="1" vector-effect="non-scaling-stroke"/>
+      <circle cx="450" cy="450" r="288" fill="none" stroke="rgba(190,175,255,.16)" stroke-width="1" vector-effect="non-scaling-stroke"/>
+      <circle cx="450" cy="450" r="392" fill="none" stroke="rgba(190,175,255,.16)" stroke-width="1" vector-effect="non-scaling-stroke"/>
+      <circle cx="450" cy="450" r="424" fill="none" stroke="rgba(190,175,255,.34)" stroke-width="1" vector-effect="non-scaling-stroke"/>
       <line x1="450" y1="450" x2="789.5" y2="254.0" stroke="rgba(190,175,255,.1)" stroke-width="1" vector-effect="non-scaling-stroke"/>
       <line x1="450" y1="450" x2="646.0" y2="110.5" stroke="rgba(190,175,255,.1)" stroke-width="1" vector-effect="non-scaling-stroke"/>
       <line x1="450" y1="450" x2="450.0" y2="58.0" stroke="rgba(190,175,255,.1)" stroke-width="1" vector-effect="non-scaling-stroke"/>
       <line x1="450" y1="450" x2="254.0" y2="110.5" stroke="rgba(190,175,255,.1)" stroke-width="1" vector-effect="non-scaling-stroke"/>
       <line x1="450" y1="450" x2="110.5" y2="254.0" stroke="rgba(190,175,255,.1)" stroke-width="1" vector-effect="non-scaling-stroke"/>
-      <circle cx="450" cy="346" r="3" fill="rgba(214,206,255,.5)"/>
       <circle cx="346" cy="450" r="3" fill="rgba(214,206,255,.42)"/>
       <circle cx="554" cy="450" r="3" fill="rgba(214,206,255,.42)"/>
-      <circle cx="450" cy="258" r="3" fill="rgba(214,206,255,.5)"/>
       <circle cx="258" cy="450" r="3" fill="rgba(214,206,255,.42)"/>
       <circle cx="642" cy="450" r="3" fill="rgba(214,206,255,.42)"/>
-      <circle cx="450" cy="162" r="3" fill="rgba(214,206,255,.5)"/>
       <circle cx="162" cy="450" r="3" fill="rgba(214,206,255,.42)"/>
       <circle cx="738" cy="450" r="3" fill="rgba(214,206,255,.42)"/>
-      <circle cx="450" cy="58" r="3" fill="rgba(214,206,255,.5)"/>
       <circle cx="58" cy="450" r="3" fill="rgba(214,206,255,.42)"/>
       <circle cx="842" cy="450" r="3" fill="rgba(214,206,255,.42)"/>
       <line x1="756.2" y1="143.8" x2="764.7" y2="135.3" stroke="rgba(214,206,255,.34)" stroke-width="1" vector-effect="non-scaling-stroke"/>
@@ -668,6 +695,120 @@
         <h3>ML и зрение</h3>
         <ul><li>YOLO</li><li>OpenCV</li><li>PyTorch</li><li>TensorFlow / Keras</li><li>scikit-learn</li><li>XGBoost</li><li>pandas</li></ul>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ОДНА СИСТЕМА ===================== -->
+<!-- Шпиль света. У образца (reflect.app) это растровая картинка 806×849, у нас
+     вектор: силуэт — две вогнутые кривые от острия к подолу, залитые радиальным
+     градиентом. Кромка вынесена отдельным слоем: заливка размыта и разбита
+     точечной сеткой, а кромке нужна резкость, иначе острие рассыплется.
+     Позади — колонны света и восходящие звёзды. -->
+<section class="spire" id="system">
+
+  <div class="spire-stage" aria-hidden="true">
+    <svg class="spire-cols" viewBox="0 0 800 900" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="spireColBack" x1="0" y1="90" x2="0" y2="470" gradientUnits="userSpaceOnUse">
+          <stop offset="0"   stop-color="#a78bfa" stop-opacity="0"/>
+          <stop offset=".32" stop-color="#a78bfa" stop-opacity=".038"/>
+          <stop offset=".72" stop-color="#8b5cf6" stop-opacity=".032"/>
+          <stop offset="1"   stop-color="#7c4dff" stop-opacity="0"/>
+        </linearGradient>
+      </defs>
+      <g fill="url(#spireColBack)">
+      <rect x="166" y="90" width="58" height="380"/>
+      <rect x="258" y="90" width="40" height="380"/>
+      <rect x="326" y="90" width="52" height="380"/>
+      <rect x="422" y="90" width="52" height="380"/>
+      <rect x="502" y="90" width="40" height="380"/>
+      <rect x="576" y="90" width="58" height="380"/>
+      </g>
+    </svg>
+    <span class="spire-stars"><i></i><i></i><i></i></span>
+
+
+    <svg class="spire-glow" viewBox="0 0 800 900" preserveAspectRatio="xMidYMid meet">
+      <defs>
+        <!-- ядро вытянуто по вертикали вдвое: у образца белое пятно занимает
+             22–48 % высоты силуэта и вдвое уже, чем выше -->
+        <radialGradient id="spireCore" gradientUnits="userSpaceOnUse"
+                        cx="400" cy="240" r="300"
+                        gradientTransform="translate(400 240) scale(.5 1.05) translate(-400 -240)">
+          <stop offset="0"   stop-color="#ffffff"/>
+          <stop offset=".3"  stop-color="#fdfbff"/>
+          <stop offset=".45" stop-color="#b7a2ff"/>
+          <stop offset=".62" stop-color="#6d3ff5" stop-opacity=".8"/>
+          <stop offset=".78" stop-color="#5b21b6" stop-opacity=".35"/>
+          <stop offset="1"   stop-color="#4c1d95" stop-opacity="0"/>
+        </radialGradient>
+        <radialGradient id="spireWash" gradientUnits="userSpaceOnUse" cx="400" cy="350" r="345"
+                        gradientTransform="translate(400 350) scale(1.5 1) translate(-400 -350)">
+          <stop offset="0"   stop-color="#8b5cf6" stop-opacity=".62"/>
+          <stop offset=".3"  stop-color="#7c4dff" stop-opacity=".45"/>
+          <stop offset=".55" stop-color="#6d3ff5" stop-opacity=".22"/>
+          <stop offset=".78" stop-color="#4c1d95" stop-opacity=".05"/>
+          <stop offset="1"   stop-color="#4c1d95" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <!-- две заливки одним силуэтом: широкая холодная наполняет подол,
+           поверх — узкое горячее ядро. Одним градиентом низ оставался тёмным -->
+      <path d="M400 26 C 396 190 300 424 60 470 Q 400 760 740 470 C 500 424 404 190 400 26 Z"
+            fill="url(#spireWash)"/>
+      <path d="M400 26 C 396 190 300 424 60 470 Q 400 760 740 470 C 500 424 404 190 400 26 Z"
+            fill="url(#spireCore)"/>
+    </svg>
+
+
+
+
+    <svg class="spire-edge" viewBox="0 0 800 900" preserveAspectRatio="xMidYMid meet">
+      <defs>
+        <linearGradient id="spireEdgeL" gradientUnits="userSpaceOnUse" x1="400" y1="26" x2="60" y2="470">
+          <stop offset="0"   stop-color="#ffffff"/>
+          <stop offset=".45" stop-color="#c4b5fd" stop-opacity=".8"/>
+          <stop offset="1"   stop-color="#7c4dff" stop-opacity="0"/>
+        </linearGradient>
+        <linearGradient id="spireEdgeR" gradientUnits="userSpaceOnUse" x1="400" y1="26" x2="740" y2="470">
+          <stop offset="0"   stop-color="#ffffff"/>
+          <stop offset=".45" stop-color="#c4b5fd" stop-opacity=".8"/>
+          <stop offset="1"   stop-color="#7c4dff" stop-opacity="0"/>
+        </linearGradient>
+      </defs>
+      <path d="M400 26 C 396 190 300 424 60 470"  fill="none" stroke="url(#spireEdgeL)" stroke-width="2"/>
+      <path d="M400 26 C 404 190 500 424 740 470" fill="none" stroke="url(#spireEdgeR)" stroke-width="2"/>
+    </svg>
+
+    <span class="spire-veil"></span>
+  </div>
+
+  <div class="wrap spire-copy">
+    <p class="spire-pill reveal">одна система</p>
+    <h2 class="spire-title reveal">Сайт, бот и админка — одна система, а не три</h2>
+    <p class="spire-lede reveal">
+      Данные не переносятся руками между сервисами. Заявка с сайта, сообщение боту
+      и правка в админке попадают в одну базу — с общими ролями и одним журналом
+      событий, по которому видно, где что произошло.
+    </p>
+
+    <div class="spire-cards">
+      <article class="spire-card reveal">
+        <h3>Одна база</h3>
+        <p>Клиенты, заявки и статусы лежат в одном месте. Без выгрузок в Excel и без двух версий правды.</p>
+      </article>
+      <article class="spire-card reveal">
+        <h3>Общий вход и права</h3>
+        <p>Один аккаунт на все части системы, роли раздаются в одной админке — и там же отзываются.</p>
+      </article>
+      <article class="spire-card reveal">
+        <h3>Обмен со сторонними системами</h3>
+        <p>CRM, платежи, склад, рассылки: по расписанию или по событию, с журналом обмена и повтором при сбое.</p>
+      </article>
+      <article class="spire-card reveal">
+        <h3>Один журнал событий</h3>
+        <p>Когда что-то сломалось, видно сразу, где именно: сайт, бот или обмен. Без гаданий и переписки.</p>
+      </article>
     </div>
   </div>
 </section>
