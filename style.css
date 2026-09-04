@@ -1415,11 +1415,10 @@ button, input, select, textarea { font: inherit; color: inherit; }
 /* Колонны света позади фигуры. Неровный шаг: при ровном читаются забором.
    Внутрь конуса они не продолжаются — там свет расходится лучами, см. ниже. */
 .spire-cols {
-  position: absolute; left: 50%; top: 0;
-  width: 118%; height: 100%;
-  transform: translateX(-50%);
-  /* без размытия: боковые кромки полос должны быть резкими, а концы тают
-     градиентом внутри svg */
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  /* ширина ровно как у сцены: координаты слоя обязаны совпадать с фигурой,
+     иначе маска силуэтом ляжет мимо. Без размытия — грани должны быть резкими */
 }
 
 /* восходящие звёзды: три слоя разного шага и скорости */
@@ -1462,23 +1461,43 @@ button, input, select, textarea { font: inherit; color: inherit; }
 /* Единственный свет на сайте без точечной сетки — так решено намеренно.
    Шпиль весь состоит из плавных переходов, и сетка на таком пятне читается
    москитной сеткой, а не фактурой. Не «чинить». */
+.spire-aura {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  filter: blur(55px);
+  mix-blend-mode: screen;
+}
+
+.spire-halo {
+  position: absolute; left: 50%; top: 0;
+  width: 128%; height: 100%;
+  transform: translateX(-50%);
+  background: radial-gradient(ellipse 40% 20% at 50% 55%,
+      rgba(133, 88, 255, .48), rgba(109, 63, 245, .18) 44%, transparent 74%);
+}
+
+/* Кромка резкая сверху и растворяется книзу. Один blur на весь слой такого
+   не даёт, поэтому заливка нарисована дважды: резкая копия видна вверху,
+   размытая — внизу, а маски у них взаимно обратные, поэтому сумма яркости
+   не меняется и в месте перехода нет ни провала, ни удвоения. */
 .spire-glow {
   position: absolute; inset: 0;
   width: 100%; height: 100%;
-  filter: blur(11px);
+  filter: blur(13px);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 24%, #000 58%);
+          mask-image: linear-gradient(to bottom, transparent 24%, #000 58%);
 }
-/* кромка: без размытия, только свечение вокруг линии */
-.spire-edge {
+.spire-crisp {
   position: absolute; inset: 0;
   width: 100%; height: 100%;
-  filter: drop-shadow(0 0 7px rgba(150, 106, 255, .85));
+  -webkit-mask-image: linear-gradient(to bottom, #000 24%, transparent 58%);
+          mask-image: linear-gradient(to bottom, #000 24%, transparent 58%);
 }
-
 /* низ шпиля уводим в фон, чтобы подол не обрывался над текстом */
 .spire-veil {
-  position: absolute; left: -20%; right: -20%; bottom: -6%;
-  height: 44%;
-  background: linear-gradient(to bottom, transparent, rgba(6, 5, 13, .7) 46%, #06050d 82%);
+  position: absolute; left: -20%; right: -20%; bottom: -12%;
+  height: 40%;
+  background: linear-gradient(to bottom, transparent, rgba(6, 5, 13, .4) 58%, #06050d 94%);
 }
 
 .spire-copy {
