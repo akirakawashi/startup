@@ -15,34 +15,6 @@
   var clamp = function (v, a, b) { return Math.max(a, Math.min(b, v)); };
 
   /* ============================================================
-     Тема
-     ============================================================ */
-  var THEME_KEY = 'startup-theme';
-  var root = document.documentElement;
-
-  function applyTheme(theme) {
-    root.setAttribute('data-theme', theme);
-    var meta = document.querySelector('meta[name="theme-color"]');
-    if (meta) meta.setAttribute('content', theme === 'light' ? '#f7f6fb' : '#06050d');
-  }
-
-  (function initTheme() {
-    var saved = null;
-    try { saved = localStorage.getItem(THEME_KEY); } catch (e) { /* приватный режим */ }
-    if (saved === 'light' || saved === 'dark') applyTheme(saved);
-    else applyTheme(window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
-  })();
-
-  var themeToggle = $('#themeToggle');
-  if (themeToggle) {
-    themeToggle.addEventListener('click', function () {
-      var next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
-      applyTheme(next);
-      try { localStorage.setItem(THEME_KEY, next); } catch (e) { /* не критично */ }
-    });
-  }
-
-  /* ============================================================
      Заголовок первого экрана: разбор на слова
      Слова после тире получают акцентный градиент.
      ============================================================ */

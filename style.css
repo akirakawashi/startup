@@ -3,7 +3,7 @@
    Палитра выведена из фонового видео: фиолетовый аккреционный
    диск на почти чёрном фоне с синеватым подтоном.
 
-   1. Токены и темы      7. Ценность
+   1. Токены             7. Ценность
    2. База и типографика 8. Услуги
    3. Раскладка          9. Процесс
    4. Кнопки и метки    10. Проекты, стек, форматы, FAQ
@@ -11,7 +11,8 @@
    6. Первый экран      12. Анимации и адаптив
    ============================================================ */
 
-/* ---------- 1. Токены ---------- */
+/* ---------- 1. Токены ----------
+   Тема одна, тёмная: палитра выведена из фонового видео. */
 :root {
   --bg:            #06050d;
   --bg-soft:       #0b0916;
@@ -49,28 +50,6 @@
   --shadow:   0 30px 70px -30px rgba(0, 0, 0, .9);
   --glow:     0 0 40px -6px rgba(124, 77, 255, .55);
   color-scheme: dark;
-}
-
-:root[data-theme="light"] {
-  --bg:          #f7f6fb;
-  --bg-soft:     #eeecf7;
-  --surface:     #ffffff;
-  --surface-2:   #f4f2fc;
-  --line:        rgba(60, 40, 120, .13);
-  --line-strong: rgba(60, 40, 120, .26);
-  --text:        #16112b;
-  --muted:       #574f75;
-  --faint:       #837c9e;
-  --accent:      #6d28d9;
-  --accent-hi:   #7c3aed;
-  --accent-deep: #5b21b6;
-  --accent-ink:  #ffffff;
-  --accent-dim:  rgba(109, 40, 217, .09);
-  --accent-line: rgba(109, 40, 217, .28);
-  --ok:          #0d9488;
-  --shadow:      0 26px 56px -32px rgba(40, 20, 90, .35);
-  --glow:        0 0 34px -10px rgba(109, 40, 217, .4);
-  color-scheme: light;
 }
 
 /* ---------- 2. База ---------- */
@@ -129,8 +108,6 @@ button, input, select, textarea { font: inherit; color: inherit; }
   opacity: .16; mix-blend-mode: overlay;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
 }
-:root[data-theme="light"] .grain { opacity: .07; }
-
 /* ---------- 3. Раскладка ---------- */
 .wrap { width: 100%; max-width: var(--wrap); margin-inline: auto; padding-inline: 24px; }
 .wrap-narrow { max-width: 840px; }
@@ -240,20 +217,15 @@ button, input, select, textarea { font: inherit; color: inherit; }
 }
 .icon-btn:hover { color: var(--accent-hi); border-color: var(--accent-line); background: var(--accent-dim); }
 
-.ico-moon { display: none; }
-:root[data-theme="light"] .ico-sun  { display: none; }
-:root[data-theme="light"] .ico-moon { display: block; }
-
 .burger { display: none; flex-direction: column; gap: 5px; }
 .burger span { display: block; width: 16px; height: 1.6px; background: currentColor; border-radius: 2px; transition: transform .28s var(--ease); }
 .burger[aria-expanded="true"] span:first-child { transform: translateY(3.3px) rotate(45deg); }
 .burger[aria-expanded="true"] span:last-child  { transform: translateY(-3.3px) rotate(-45deg); }
 
 /* ---------- 6. Первый экран ---------- */
-/* Всегда тёмный: видео снято на чёрном, и светлая подложка вокруг него
-   в светлой теме выглядела бы чужеродно. */
+/* Свои токены: текст и линии лежат на видео и должны быть светлее, чем
+   на обычной подложке страницы. */
 .hero {
-  --text:  #f3f0ff;
   --muted: #b3adcf;
   --faint: #837da6;
   --line:  rgba(167, 139, 250, .16);
@@ -961,13 +933,9 @@ button, input, select, textarea { font: inherit; color: inherit; }
   --line:      rgba(167, 139, 250, .14);
   --muted:     #b3adcf;
   --faint:     #837da6;
-  --accent-hi:   #c4b5fd;
-  --accent-line: rgba(167, 139, 250, .38);
   position: relative;
   overflow: hidden;
   padding-bottom: clamp(70px, 8vw, 128px);
-  /* секция всегда тёмная, как первый экран: свечение радара на светлой
-     подложке выглядело бы чужим */
   background: #06050d;
   color: #f3f0ff;
   border-block: 1px solid rgba(167, 139, 250, .1);
@@ -1190,14 +1158,12 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .radar-card p { margin: 0; color: var(--muted); line-height: 1.62; font-size: .95rem; }
 
 /* ---------- Проверки: панель со свечением ----------
-   Секция всегда тёмная: ореол строится на сложении света и на светлом
-   фоне выцветает. Свечение — увеличенная размытая копия под панелью;
-   панель непрозрачна, поэтому наружу выходит только кромка. */
+   Свечение — увеличенная размытая копия под панелью; панель непрозрачна,
+   поэтому наружу выходит только кромка. Подложка секции своя, чуть светлее
+   общей. */
 .checks {
-  --text:  #f3f0ff;
   --muted: #a49dc4;
   --faint: #7c769c;
-  --accent-hi: #c4b5fd;
   position: relative;
   padding-block: clamp(88px, 11vw, 150px);
   background: #0b0a10;
@@ -1385,10 +1351,9 @@ button, input, select, textarea { font: inherit; color: inherit; }
 }
 
 /* ---------- Интеграции: четыре системы вокруг эмблемы ----------
-   Образец — блок «Integrations» на reflect.app. Секция не тёмная в обе
-   темы, в отличие от шпиля, «Ключей» и «Хода работы»: своего света в ней
-   почти нет — волосяные линии и маленькая эмблема, — и на светлом фоне
-   она читается тем же рисунком, если брать цвета из токенов.
+   Образец — блок «Integrations» на reflect.app. Своего света в блоке почти
+   нет — волосяные линии и маленькая эмблема, — поэтому цвета берутся из
+   токенов, а не задаются на месте, как в секциях со свечением.
 
    Оси между карточками и миллиметровка позади сходятся в одной точке:
    шаг сетки задан так, что её линии продолжают оси, а не идут рядом. */
@@ -1493,11 +1458,6 @@ button, input, select, textarea { font: inherit; color: inherit; }
   -webkit-mask-size: var(--dots-size); mask-size: var(--dots-size);
   pointer-events: none;
 }
-:root[data-theme="light"] .hub-core-halo {
-  /* на светлом фоне точечное свечение теряет около половины силы:
-     добираем насыщенностью, шаг точки общий для всего сайта */
-  background: radial-gradient(circle, rgba(109, 40, 217, .34), transparent 56%);
-}
 
 /* карточки позиционированы, чтобы лечь поверх сетки и колец */
 .hub-card {
@@ -1514,7 +1474,6 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .ico-violet { background: rgba(167, 139, 250, .14); color: var(--accent-hi); }
 .ico-teal   { background: rgba(94, 234, 212, .12);  color: var(--ok); }
 .ico-blue   { background: rgba(95, 124, 255, .14);  color: #8ea3ff; }
-:root[data-theme="light"] .ico-blue { color: #4257c9; }
 
 .hub-card h3 { margin: 0 0 10px; font-size: 1.02rem; letter-spacing: -.01em; }
 .hub-card p  { margin: 0 auto; max-width: 38ch; color: var(--muted); font-size: .93rem; line-height: 1.6; }
@@ -1551,8 +1510,6 @@ button, input, select, textarea { font: inherit; color: inherit; }
   --spire: min(820px, 96vw);
   --spire-top: clamp(18px, 3vw, 56px);
   --muted: #b3adcf;
-  --accent-hi:   #c4b5fd;
-  --accent-line: rgba(167, 139, 250, .38);
   position: relative;
   overflow: hidden;
   padding-bottom: clamp(70px, 8vw, 128px);
@@ -1737,10 +1694,6 @@ button, input, select, textarea { font: inherit; color: inherit; }
      кадр упирался бы в него срезом прямо по строкам */
   --field-h: min(calc(var(--field-w) / 2.8), calc(var(--pad-t) * 2 + var(--lock)));
   --muted:   #b3adcf;
-  /* светлая тема не должна доставать до тёмных секций: иначе метка
-     набиралась бы тёмно-фиолетовым по почти чёрному */
-  --accent-hi:   #c4b5fd;
-  --accent-line: rgba(167, 139, 250, .38);
   position: relative;
   overflow: hidden;
   /* свой контекст наложения: тогда screen у ролика смешивается с фоном
@@ -1873,9 +1826,6 @@ button, input, select, textarea { font: inherit; color: inherit; }
   --arc-top: clamp(6px, 2vw, 34px);
   --muted:   #b3adcf;
   --faint:   #7c769c;
-  /* светлая тема не должна доставать до тёмных секций */
-  --accent-hi:   #c4b5fd;
-  --accent-line: rgba(167, 139, 250, .38);
   position: relative;
   overflow: hidden;
   /* свой контекст наложения: screen у дальнего света смешивается с фоном
@@ -2120,8 +2070,8 @@ button, input, select, textarea { font: inherit; color: inherit; }
 
 /* ---------- Плитка «Интерфейсы, которые мы собираем» ----------
    Светлая полоса среди тёмной страницы: тёмные карточки на светлом фоне
-   читаются как предметы на столе и дают странице передышку. Секция светлая
-   всегда, независимо от темы, — как первый экран всегда тёмный.
+   читаются как предметы на столе и дают странице передышку. Единственное
+   светлое место на сайте.
    Макеты внутри карточек свёрстаны, а не нарисованы: резкие на любом
    экране, ноль запросов, правятся текстом. */
 .tiles {
