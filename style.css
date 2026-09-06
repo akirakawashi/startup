@@ -1384,6 +1384,157 @@ button, input, select, textarea { font: inherit; color: inherit; }
   pointer-events: none;
 }
 
+/* ---------- Интеграции: четыре системы вокруг эмблемы ----------
+   Образец — блок «Integrations» на reflect.app. Секция не тёмная в обе
+   темы, в отличие от шпиля, «Ключей» и «Хода работы»: своего света в ней
+   почти нет — волосяные линии и маленькая эмблема, — и на светлом фоне
+   она читается тем же рисунком, если брать цвета из токенов.
+
+   Оси между карточками и миллиметровка позади сходятся в одной точке:
+   шаг сетки задан так, что её линии продолжают оси, а не идут рядом. */
+.hub-copy { position: relative; text-align: center; }
+
+/* внешние стойки: у образца блок обрамлён ими сверху и растворяется книзу */
+.hub-copy::before, .hub-copy::after {
+  content: ""; position: absolute; top: 0;
+  width: 1px; height: 66%;
+  background: linear-gradient(to bottom,
+      transparent, var(--line-strong) 16%, var(--line-strong) 70%, transparent);
+}
+.hub-copy::before { left: 24px; }
+.hub-copy::after  { right: 24px; }
+
+.hub-pill {
+  display: inline-block; margin: 0;
+  padding: 6px 16px; border-radius: 100px;
+  border: 1px solid var(--accent-line);
+  background: var(--accent-dim);
+  font-family: var(--ff-mono); font-size: .74rem; letter-spacing: .06em;
+  color: var(--accent-hi);
+}
+/* вторая строка заголовка гаснет — как у образца */
+.hub-title {
+  margin: 20px auto 0; max-width: 20ch;
+  font-size: clamp(2rem, 4.8vw, 3.4rem); line-height: 1.04; letter-spacing: -.03em;
+  background: linear-gradient(180deg, var(--text) 34%, var(--muted) 100%);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent; color: transparent;
+}
+
+.hub-grid {
+  position: relative;
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-top: clamp(44px, 5.5vw, 76px);
+  padding-block: clamp(22px, 2.8vw, 38px);
+  row-gap: clamp(48px, 6vw, 84px);
+}
+/* оси: горизонтальная во всю колонку, вертикальная короче — так у образца */
+.hub-grid::before {
+  content: ""; position: absolute; left: 0; right: 0; top: 50%;
+  height: 1px;
+  background: linear-gradient(90deg,
+      transparent, var(--line-strong) 14%, var(--line-strong) 86%, transparent);
+}
+.hub-grid::after {
+  content: ""; position: absolute; left: calc(50% - .5px); top: 24%; bottom: 24%;
+  width: 1px;
+  background: linear-gradient(to bottom,
+      transparent, var(--line-strong) 26%, var(--line-strong) 74%, transparent);
+}
+
+/* миллиметровка: шаг делит расстояние до центра нацело, поэтому её линии
+   ложатся продолжением осей, а не рядом с ними */
+.hub-paper {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(to right,  var(--line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--line) 1px, transparent 1px);
+  background-size: 34px 34px;
+  background-position: calc(50% + 17px) calc(50% + 17px);
+  -webkit-mask-image: radial-gradient(circle 200px at 50% 50%, #000 26%, transparent 100%);
+          mask-image: radial-gradient(circle 200px at 50% 50%, #000 26%, transparent 100%);
+}
+.hub-ring {
+  position: absolute; left: 50%; top: 50%;
+  width: 168px; height: 168px;
+  transform: translate(-50%, -50%);
+  border: 1px solid var(--line);
+  border-radius: 50%;
+}
+.hub-ring::before {
+  content: ""; position: absolute; left: 50%; top: 50%;
+  width: 250px; height: 250px;
+  transform: translate(-50%, -50%);
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  opacity: .5;
+}
+
+/* эмблема: наш знак в кружке на пересечении осей */
+.hub-core {
+  position: absolute; left: 50%; top: 50%;
+  display: grid; place-items: center;
+  width: 46px; height: 46px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 1px solid rgba(196, 181, 253, .45);
+  background: linear-gradient(160deg, var(--accent-hi), var(--accent-deep));
+  color: #fff;
+  box-shadow: 0 10px 26px -8px var(--accent-deep);
+}
+.hub-core svg { width: 26px; height: 26px; }
+/* ореол вокруг эмблемы — свет, поэтому под общей точечной сеткой */
+.hub-core-halo {
+  position: absolute; left: 50%; top: 50%;
+  width: 132px; height: 132px;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, rgba(139, 92, 246, .42), transparent 64%);
+  -webkit-mask-image: var(--dots); mask-image: var(--dots);
+  -webkit-mask-size: var(--dots-size); mask-size: var(--dots-size);
+  pointer-events: none;
+}
+:root[data-theme="light"] .hub-core-halo {
+  /* на светлом фоне точечное свечение теряет около половины силы:
+     добираем насыщенностью, шаг точки общий для всего сайта */
+  background: radial-gradient(circle, rgba(109, 40, 217, .34), transparent 56%);
+}
+
+/* карточки позиционированы, чтобы лечь поверх сетки и колец */
+.hub-card {
+  position: relative;
+  padding-inline: clamp(0px, 4vw, 64px);
+}
+.hub-icos { display: flex; justify-content: center; gap: 10px; margin-bottom: 18px; }
+.hub-ico {
+  display: grid; place-items: center;
+  width: 44px; height: 44px; border-radius: 11px;
+  border: 1px solid var(--line-strong);
+}
+.hub-ico svg { width: 22px; height: 22px; }
+.ico-violet { background: rgba(167, 139, 250, .14); color: var(--accent-hi); }
+.ico-teal   { background: rgba(94, 234, 212, .12);  color: var(--ok); }
+.ico-blue   { background: rgba(95, 124, 255, .14);  color: #8ea3ff; }
+:root[data-theme="light"] .ico-blue { color: #4257c9; }
+
+.hub-card h3 { margin: 0 0 10px; font-size: 1.02rem; letter-spacing: -.01em; }
+.hub-card p  { margin: 0 auto; max-width: 38ch; color: var(--muted); font-size: .93rem; line-height: 1.6; }
+
+/* фигуре нужно место между колонками: кольцо шире зазора лезет на текст,
+   поэтому на узком экране от блока остаётся сетка карточек */
+@media (max-width: 900px) {
+  .hub-grid {
+    row-gap: clamp(40px, 6vw, 58px); column-gap: 26px;
+    margin-top: clamp(38px, 5vw, 60px); padding-block: 0;
+  }
+  .hub-grid::before, .hub-grid::after,
+  .hub-paper, .hub-ring, .hub-core { display: none; }
+  .hub-card { padding-inline: 0; }
+}
+@media (max-width: 620px) {
+  .hub-grid { grid-template-columns: 1fr; }
+  .hub-copy::before, .hub-copy::after { display: none; }
+}
+
 /* ---------- Одна система: шпиль света ----------
    Образец — reflect.app. У них шпиль растровая картинка 806×849, у нас вектор:
    силуэт из двух вогнутых кривых, сходящихся в острие, залит радиальным
@@ -2367,9 +2518,10 @@ button, input, select, textarea { font: inherit; color: inherit; }
 @media print {
   .topbar, .hero-stage, .hero-deck, .hero-horizon, .checks-halo, .checks-glow, .checks-rim, .page-progress, .toast, .grain,
   .marquee, .contact-form, .work-aside, .tile-art, .dial, .radar-stage, .spire-stage, .crypt-stage, .crypt-lock,
-  .arc-stage, .arc-chip, .arc-soon { display: none; }
+  .arc-stage, .arc-chip, .arc-soon,
+  .hub-paper, .hub-ring, .hub-core { display: none; }
   body, .hero, .checks, .tiles, .radar, .spire, .crypt, .arc { background: #fff; color: #000; }
   .radar-copy, .spire-copy, .arc-copy { padding-top: 0; }
   .crypt { padding-top: 0; }
-  .arc-title { -webkit-text-fill-color: #000; color: #000; }
+  .arc-title, .hub-title { -webkit-text-fill-color: #000; color: #000; }
 }
