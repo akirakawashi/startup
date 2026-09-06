@@ -862,14 +862,23 @@
 </section>
 
 <!-- ===================== КЛЮЧИ ===================== -->
-<!-- Поле шифротекста собирает script.js: разметка задаёт только сцену.
+<!-- Поле шифротекста — ролик: он шире колонки текста и уходит под маску,
+     видна только эллиптическая середина кадра (см. style.css).
      Заголовок, метка и врезка перебираются знаками и встают на место,
      когда блок попадает в кадр, — поэтому настоящий текст лежит здесь,
      а не в скрипте: без JS он просто виден сразу. -->
 <section class="crypt" id="keys">
 
   <div class="crypt-stage" aria-hidden="true">
-    <div class="crypt-field" id="cryptField"></div>
+    <video
+      id="cryptVideo"
+      class="crypt-video"
+      poster="assets/crypt-poster.jpg"
+      autoplay muted loop playsinline preload="metadata">
+      <source src="assets/crypt-800.webm"  type="video/webm" media="(max-width: 760px)">
+      <source src="assets/crypt-1600.webm" type="video/webm">
+      <source src="assets/crypt-1600.mp4"  type="video/mp4">
+    </video>
   </div>
 
   <div class="wrap crypt-copy">

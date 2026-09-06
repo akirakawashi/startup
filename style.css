@@ -1557,38 +1557,34 @@ button, input, select, textarea { font: inherit; color: inherit; }
 }
 
 /* ---------- Ключи: поле шифротекста ----------
-   Образец — блок «Hardened security» на reflect.app. У них фон этого блока —
-   видео 1920×1080 на 830 КБ; у нас поле собирается разметкой. Дело не только
-   в весе: текст остаётся резким на любом экране и переводится правкой строки.
+   Образец — блок «Hardened security» на reflect.app: фон там видео 1920×1080
+   (VP9), показанное шире колонки текста и убранное под радиальную маску.
+   Поле пробовали собирать разметкой — тремя слоями текста с кольцом-маской
+   по зарегистрированной переменной радиуса. Вышло и дороже (двести слов с
+   тенями перерисовывались под движущейся маской каждый кадр), и грубее
+   ролика: у него за кольцом живой ореол, заливающий междустрочье, а
+   text-shadow тонкой буквы этого не даёт. Оставлен ролик, как у образца.
 
-   Что снято с их видео и повторено здесь:
-     • поле — не прямоугольник под маской, а эллипс из строк: строки к верху
-       и низу короче, на ширине показа 1568 эллипс занимает ~1090×450 px,
-       21 строка с шагом 21.7 CSS px; верхняя половина зеркалит нижнюю;
-     • шрифт обычный, не моноширинный: моно при том же кегле шире в полтора
-       раза и выстраивает поле решёткой;
-     • в покое текст почти не виден — (40, 36, 80) на фоне (3, 0, 19);
-     • волна — одно кольцо, и оно режет слова пополам: «LKf» тёмное,
-       «xBl4g55MreH» горит. Значит, это не зажигание целых слов, а маска
-       по яркой копии поля. Кольцо идёт от центра до края ~2 с, внутренний
-       край мягкий (~60 px), внешний резче (~20 px), за ним широкий ореол,
-       заливающий междустрочье;
-     • на кольце знаки почти белые с фиолетовым свечением, оттенок гуляет
-       от голубого к розовому по положению, а не по фазе.
+   Кадр шире колонки: эллипс занимает около 70 % его ширины, поэтому на
+   показе в 1568 px он выходит примерно на те же 1090 px, что и у образца.
+   По высоте кадр обрезан (object-fit: cover): в 16:9 над и под эллипсом
+   лежит пустая темнота, а места над замком всего --pad-t, и полный кадр
+   верхом упирался бы в край секции с её overflow: hidden — срез шёл бы
+   прямо по строкам. Маска гасит края, screen сажает почти чёрную подложку
+   ролика в фон секции — рамки не видно даже там, где фоны расходятся
+   по синему.
 
-   Поле лежит тремя слоями: тусклая копия, яркая копия под кольцом-маской
-   и пятно ореола под сеткой. Радиус кольца — одна зарегистрированная
-   переменная на поле, её и анимируем; маска и фон слоёв читают её через
-   var(). Отдельные задержки у групп больше не нужны. */
-@property --wave-r { syntax: "<percentage>"; inherits: true; initial-value: 0%; }
-@property --wave-a { syntax: "<number>";     inherits: true; initial-value: 0; }
-
+   Сам ролик — assets/crypt-*.webm: 4 с, волна от центра и покой до конца
+   петли; сборки на 1600 и 800 px плюс mp4 для старых Safari (команды
+   в README). */
 .crypt {
   --pad-t:   clamp(120px, 15vw, 222px);
   --lock:    88px;
-  --field-w: min(1120px, 100vw);
-  --field-h: clamp(300px, 32vw, 470px);
-  --loop:    3.2s;
+  --field-w: min(1568px, 170vw);
+  /* высота — по ширине кадра, но не больше места над замком: секция режет
+     по своему верхнему краю, и на узких экранах, где --pad-t уже минимальный,
+     кадр упирался бы в него срезом прямо по строкам */
+  --field-h: min(calc(var(--field-w) / 2.8), calc(var(--pad-t) * 2 + var(--lock)));
   --muted:   #b3adcf;
   /* светлая тема не должна доставать до тёмных секций: иначе метка
      набиралась бы тёмно-фиолетовым по почти чёрному */
@@ -1596,13 +1592,16 @@ button, input, select, textarea { font: inherit; color: inherit; }
   --accent-line: rgba(167, 139, 250, .38);
   position: relative;
   overflow: hidden;
+  /* свой контекст наложения: тогда screen у ролика смешивается с фоном
+     секции, а не с тем, что окажется под ней */
+  isolation: isolate;
   padding: var(--pad-t) 0 clamp(70px, 8vw, 128px);
   background: #06050d;
   color: #f3f0ff;
   border-block: 1px solid rgba(167, 139, 250, .1);
 }
 
-/* центр поля совпадает с центром замка: волна идёт из него */
+/* центр кадра совпадает с центром замка: волна идёт из него */
 .crypt-stage {
   position: absolute; left: 50%;
   top: calc(var(--pad-t) + var(--lock) / 2 - var(--field-h) / 2);
@@ -1610,75 +1609,17 @@ button, input, select, textarea { font: inherit; color: inherit; }
   transform: translateX(-50%);
   pointer-events: none;
 }
-.crypt-field {
-  position: absolute; inset: 0;
-  overflow: hidden;
-  font: 500 12.5px/22px var(--ff-body);
-  letter-spacing: 0;
-  /* края эллипса гаснут, как у образца под его радиальной маской */
-  -webkit-mask-image: radial-gradient(50% 50% at 50% 50%, #000 58%, transparent 100%);
-          mask-image: radial-gradient(50% 50% at 50% 50%, #000 58%, transparent 100%);
-  /* --crypt-t сдвигает поле назад по времени: так снимок берётся в нужный
-     момент волны (см. AGENTS.md) */
-  animation: cryptWave var(--loop) linear infinite;
-  animation-delay: calc(var(--crypt-t, 0) * -1s);
-}
-.crypt-dim, .crypt-lit, .crypt-bloom { position: absolute; inset: 0; }
-/* строка целиком в pre: иначе пробелы вокруг разделителя схлопнутся
-   и группы слипнутся в одно слово */
-.crypt-row { position: absolute; height: 22px; white-space: pre; }
-.crypt-row i { font-style: normal; }
-.crypt-row i::after { content: " :: "; }
-.crypt-row i:last-child::after { content: none; }
-
-.crypt-dim { color: #9188d0; opacity: .22; }
-.crypt-dim i::after { color: #7a72b8; }
-
-/* яркая копия: кольцо farthest-corner — 100 % радиуса приходится ровно
-   на угол поля, так что скорость волны не зависит от размера поля */
-.crypt-lit {
-  opacity: var(--wave-a);
-  -webkit-mask-image: radial-gradient(circle farthest-corner at 50% 50%,
-      transparent calc(var(--wave-r) - 13%), #000 calc(var(--wave-r) - 2%),
-      #000 var(--wave-r), transparent calc(var(--wave-r) + 3%));
-          mask-image: radial-gradient(circle farthest-corner at 50% 50%,
-      transparent calc(var(--wave-r) - 13%), #000 calc(var(--wave-r) - 2%),
-      #000 var(--wave-r), transparent calc(var(--wave-r) + 3%));
-}
-/* --h ставит скрипт: оттенок гуляет по радиусу, соседние кольца приходят
-   разного цвета. Свечение берёт цвет знака через currentColor */
-.crypt-lit i {
-  color: hsl(var(--h, 252) 100% 87%);
-  text-shadow: 0 0 6px, 0 0 16px, 0 0 34px rgba(124, 77, 255, .55);
-}
-.crypt-lit i::after { color: hsl(var(--h, 252) 60% 74%); }
-
-/* ореол между строк: у образца на гребне фон между строками поднимается
-   до половины яркости знаков, text-shadow тонкой буквы этого не даёт.
-   Свет, как всё свечение на сайте, под точечной сеткой */
-.crypt-bloom {
-  opacity: var(--wave-a);
-  background: radial-gradient(circle farthest-corner at 50% 50%,
-      transparent calc(var(--wave-r) - 30%),
-      rgba(124, 77, 255, .12) calc(var(--wave-r) - 12%),
-      rgba(150, 110, 255, .28) calc(var(--wave-r) - 1%),
-      transparent calc(var(--wave-r) + 12%));
-  -webkit-mask-image: var(--dots); mask-image: var(--dots);
-  -webkit-mask-size: var(--dots-size); mask-size: var(--dots-size);
-}
-/* 2 с от центра до угла, затем короткий покой, как в 2,5-секундном ролике
-   образца. Кадры расставлены почаще: там, где @property не поддержан,
-   переменная не интерполируется, и по ним волна хотя бы шагает */
-@keyframes cryptWave {
-  0%     { --wave-r: 0%;   --wave-a: 0; }
-  3%     { --wave-r: 5%;   --wave-a: 1; }
-  12.5%  { --wave-r: 20%;  --wave-a: 1; }
-  25%    { --wave-r: 40%;  --wave-a: 1; }
-  37.5%  { --wave-r: 60%;  --wave-a: 1; }
-  50%    { --wave-r: 80%;  --wave-a: .9; }
-  62.5%  { --wave-r: 100%; --wave-a: .5; }
-  70%    { --wave-r: 112%; --wave-a: 0; }
-  100%   { --wave-r: 112%; --wave-a: 0; }
+.crypt-video {
+  display: block; width: 100%; height: 100%;
+  object-fit: cover;
+  mix-blend-mode: screen;
+  /* радиус по горизонтали упирается в окно: кадр шире экрана, и маска,
+     заданная от его ширины, договасала бы уже за краем — поле обрывалось бы
+     по кромке окна. Первое правило — запасное, для разбора без min() */
+  -webkit-mask-image: radial-gradient(50% 50% at 50% 50%, #000 61%, transparent 100%);
+          mask-image: radial-gradient(50% 50% at 50% 50%, #000 61%, transparent 100%);
+  -webkit-mask-image: radial-gradient(min(50%, 46vw) 50% at 50% 50%, #000 61%, transparent 100%);
+          mask-image: radial-gradient(min(50%, 46vw) 50% at 50% 50%, #000 61%, transparent 100%);
 }
 
 /* замок стоит ровно в центре поля, и первая вспышка приходится на него:
@@ -2160,8 +2101,8 @@ button, input, select, textarea { font: inherit; color: inherit; }
   .blip-dot, .blip-tag { opacity: 1; }
   .blip-wave { display: none; }
   .spire-stars i { animation: none; }
-  .crypt-field { animation: none; }
-  .crypt-lit, .crypt-bloom { display: none; }
+  /* ролик «Ключей» останавливает скрипт: на месте остаётся постер — тот же
+     кадр покоя, что и в начале ролика */
 }
 
 @media print {
