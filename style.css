@@ -1708,6 +1708,265 @@ button, input, select, textarea { font: inherit; color: inherit; }
   .crypt-card h3 { min-height: 0; }
 }
 
+/* ---------- Ход работы: дуга света и снимок журнала ----------
+   Образец — блок «Meetings» на reflect.app. Дуга у них картинка, здесь
+   обводка дуги окружности: радиус 372 при хорде 660 — та же пологая
+   геометрия, что на образце. Слоёв два, как у панели проверок: дальний
+   свет размыт и разбит точечной сеткой, нить дуги идёт без сетки —
+   у кромки свет должен быть сплошным, иначе она рассыплется.
+
+   Снимок под текстом свёрстан разметкой, как макеты в плитке: резкий на
+   любом экране, ноль запросов и правится текстом, а не в редакторе. */
+.arc {
+  --arc:     min(960px, 116vw);
+  --arc-top: clamp(6px, 2vw, 34px);
+  --muted:   #b3adcf;
+  --faint:   #7c769c;
+  /* светлая тема не должна доставать до тёмных секций */
+  --accent-hi:   #c4b5fd;
+  --accent-line: rgba(167, 139, 250, .38);
+  position: relative;
+  overflow: hidden;
+  /* свой контекст наложения: screen у дальнего света смешивается с фоном
+     секции, а не с тем, что окажется под ней */
+  isolation: isolate;
+  padding: 0 0 clamp(80px, 9vw, 140px);
+  background: #06050d;
+  color: #f3f0ff;
+  border-block: 1px solid rgba(167, 139, 250, .1);
+}
+
+.arc-stage {
+  position: absolute; left: 50%; top: var(--arc-top);
+  width: var(--arc); aspect-ratio: 900 / 420;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+.arc-cols, .arc-dome, .arc-glow, .arc-line {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+}
+
+/* полосы света позади дуги: неровный шаг, иначе читаются забором */
+.arc-cols { -webkit-mask-image: var(--dots); mask-image: var(--dots);
+            -webkit-mask-size: var(--dots-size); mask-size: var(--dots-size); }
+
+/* свет, залитый внутрь купола */
+.arc-dome {
+  filter: blur(12px);
+  mix-blend-mode: screen;
+  -webkit-mask-image: var(--dots); mask-image: var(--dots);
+  -webkit-mask-size: var(--dots-size); mask-size: var(--dots-size);
+}
+
+/* широкий ореол под дугой: у образца свет заметно выходит за неё вверх
+   и заливает низ. Эллипс посажен на вершину дуги */
+.arc-wash {
+  position: absolute; left: 50%; top: 0;
+  width: 118%; height: 130%;
+  transform: translateX(-50%);
+  background: radial-gradient(ellipse 36% 22% at 50% 39%,
+      rgba(139, 92, 246, .5), rgba(109, 63, 245, .15) 46%, transparent 73%);
+  mix-blend-mode: screen;
+  -webkit-mask-image: var(--dots); mask-image: var(--dots);
+  -webkit-mask-size: var(--dots-size); mask-size: var(--dots-size);
+}
+
+.arc-glow {
+  filter: blur(26px);
+  mix-blend-mode: screen;
+  -webkit-mask-image: var(--dots); mask-image: var(--dots);
+  -webkit-mask-size: var(--dots-size); mask-size: var(--dots-size);
+}
+/* нить дуги: ни размытия, ни сетки — filter и mask наследуются поддеревом,
+   поэтому она обязана быть отдельным элементом, а не ещё одним path в .arc-glow */
+.arc-line { mix-blend-mode: screen; }
+
+/* низ купола уводим в фон, чтобы хорда не обрывалась над меткой */
+.arc-veil {
+  position: absolute; left: -20%; right: -20%; bottom: -22%;
+  height: 54%;
+  background: linear-gradient(to bottom, transparent, rgba(6, 5, 13, .55) 40%, #06050d 82%);
+}
+
+.arc-copy {
+  position: relative;
+  padding-top: calc(var(--arc-top) + var(--arc) * .335);
+  text-align: center;
+}
+.arc-pill {
+  display: inline-block; margin: 0;
+  padding: 6px 16px; border-radius: 100px;
+  border: 1px solid var(--accent-line);
+  background: rgba(124, 77, 255, .1);
+  font-family: var(--ff-mono); font-size: .74rem; letter-spacing: .06em;
+  color: var(--accent-hi);
+}
+/* вторая строка заголовка гаснет — как у образца */
+.arc-title {
+  margin: 20px auto 0; max-width: 16ch;
+  font-size: clamp(2rem, 4.8vw, 3.4rem); line-height: 1.04; letter-spacing: -.03em;
+  background: linear-gradient(180deg, #ffffff 32%, #a8a0c8 98%);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent; color: transparent;
+}
+.arc-lede {
+  margin: 18px auto 0; max-width: 60ch;
+  color: var(--muted); line-height: 1.62;
+}
+
+/* --- снимок: журнал и календарь в одном окне --- */
+.arc-shot {
+  position: relative;
+  max-width: 920px;
+  margin: clamp(46px, 6vw, 86px) auto 0;
+  text-align: left;
+}
+.arc-window {
+  display: grid; grid-template-columns: minmax(0, 1fr) 306px;
+  min-height: 396px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, .1);
+  background: #0a0912;
+  box-shadow: 0 50px 100px -44px rgba(0, 0, 0, .95),
+              inset 0 1px 0 rgba(255, 255, 255, .04);
+  overflow: hidden;
+}
+
+.arc-log { padding: clamp(20px, 3vw, 30px); }
+.arc-day {
+  margin: 44px 0 0;
+  font-family: var(--ff-display); font-weight: 600; font-size: .95rem;
+  letter-spacing: -.01em;
+}
+.arc-day:first-child { margin-top: 0; }
+.arc-notes { margin: 12px 0 0; }
+.arc-notes li {
+  position: relative;
+  padding-left: 19px; margin-top: 6px;
+  font-size: .87rem; line-height: 1.55; color: #d2ccea;
+}
+.arc-notes li::before {
+  content: ""; position: absolute; left: 4px; top: .58em;
+  width: 5px; height: 5px; border-radius: 50%;
+  background: rgba(243, 238, 255, .26);
+}
+/* вложенные пункты: отступ и точка акцентом, как у образца */
+.arc-notes li.sub { margin-left: 22px; color: var(--muted); font-size: .84rem; }
+.arc-notes li.sub::before {
+  background: var(--accent-deep);
+  box-shadow: 0 0 0 3px rgba(124, 77, 255, .16);
+}
+.arc-notes li.dim { color: var(--faint); }
+.arc-notes li.dim::before { background: rgba(243, 238, 255, .12); box-shadow: none; }
+.arc-notes u {
+  text-decoration-color: rgba(167, 139, 250, .5);
+  text-underline-offset: 3px;
+  color: var(--accent-hi);
+}
+
+.arc-cal {
+  padding: clamp(18px, 2.4vw, 24px) clamp(14px, 1.8vw, 20px);
+  border-left: 1px solid rgba(255, 255, 255, .07);
+  background: rgba(255, 255, 255, .012);
+}
+.arc-cal-head {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 10px; margin-bottom: 16px;
+}
+.arc-cal-month {
+  font-family: var(--ff-display); font-weight: 600; font-size: .98rem;
+  letter-spacing: -.01em;
+}
+.arc-cal-nav { display: flex; align-items: center; gap: 12px; color: var(--faint); }
+.arc-cal-nav svg { width: 15px; height: 15px; }
+
+/* столбцы без зазора: нижние границы дней недели складываются в одну линию */
+.arc-cal-grid {
+  display: grid; grid-template-columns: repeat(7, minmax(0, 1fr));
+  column-gap: 0; row-gap: 3px;
+  text-align: center; font-size: .78rem;
+}
+.arc-cal-grid b {
+  padding-bottom: 10px; margin-bottom: 5px;
+  border-bottom: 1px solid rgba(255, 255, 255, .07);
+  font-weight: 500; font-size: .71rem; color: var(--faint);
+}
+.arc-cal-grid i {
+  padding: 6px 0; border-radius: 8px;
+  font-style: normal; color: #d2ccea;
+}
+.arc-cal-grid i.out { color: var(--faint); opacity: .5; }
+.arc-cal-grid i.on {
+  background: var(--accent-deep); color: #fff; font-weight: 600;
+  box-shadow: 0 8px 22px -8px var(--accent-deep);
+}
+
+/* --- карточки поверх окна --- */
+.arc-chip, .arc-soon {
+  position: absolute;
+  border: 1px solid rgba(255, 255, 255, .11);
+  background: #1b1830;
+  box-shadow: 0 26px 54px -20px rgba(0, 0, 0, .9);
+}
+.arc-chip {
+  display: flex; align-items: center; gap: 11px;
+  padding: 10px 18px 10px 11px;
+  border-radius: 14px;
+}
+.arc-chip-a { left: 37%; top: 46%; }
+.arc-chip-b { left: 22%; top: 63%; }
+.arc-chip-ico {
+  flex: none; display: grid; place-items: center;
+  width: 31px; height: 31px; border-radius: 9px;
+}
+.arc-chip-ico svg { width: 17px; height: 17px; }
+.arc-chip-a .arc-chip-ico { background: rgba(56, 132, 255, .16); color: #7fb0ff; }
+.arc-chip-b .arc-chip-ico { background: rgba(167, 139, 250, .16); color: var(--accent-hi); }
+.arc-chip-txt { display: grid; line-height: 1.35; }
+.arc-chip-txt b { font-size: .86rem; font-weight: 600; }
+.arc-chip-txt i { font-style: normal; font-size: .76rem; color: var(--faint); }
+
+/* список уходит под маску снизу: у образца он тоже обрезан, и видно,
+   что строк больше, чем помещается */
+.arc-soon {
+  right: 3.5%; top: 47%; width: min(318px, 41%);
+  padding: 13px 13px 22px;
+  border-radius: 14px;
+  -webkit-mask-image: linear-gradient(to bottom, #000 60%, transparent 98%);
+          mask-image: linear-gradient(to bottom, #000 60%, transparent 98%);
+}
+.arc-soon-cap { margin: 0 0 9px; padding-left: 4px; font-size: .74rem; color: var(--faint); }
+.arc-soon li {
+  display: flex; align-items: center; gap: 9px;
+  margin-top: 6px; padding: 9px 11px;
+  border-radius: 9px; background: rgba(255, 255, 255, .05);
+  font-size: .8rem;
+}
+.arc-soon li span { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.arc-soon li em { font-style: normal; font-size: .76rem; color: var(--muted); }
+.arc-soon li svg { flex: none; width: 14px; height: 14px; color: var(--faint); }
+
+/* список ближайшего накрыл бы календарь целиком: снимается первым,
+   колонки при этом ещё стоят рядом */
+@media (max-width: 900px) {
+  .arc-soon { display: none; }
+  .arc-chip-a { left: auto; right: 5%; top: 41%; }
+  .arc-chip-b { left: 5%; top: 63%; }
+}
+@media (max-width: 720px) {
+  .arc-window { grid-template-columns: minmax(0, 1fr); min-height: 0; }
+  .arc-cal { border-left: 0; border-top: 1px solid rgba(255, 255, 255, .07); }
+  .arc-chip-a { top: 30%; }
+  .arc-chip-b { top: 47%; }
+}
+@media (max-width: 560px) {
+  /* две карточки перекрыли бы весь журнал: остаётся одна, у нижней кромки */
+  .arc-chip-a { display: none; }
+  .arc-chip-b { left: 50%; right: auto; top: auto; bottom: -22px; transform: translateX(-50%); }
+  .arc-notes li.sub { margin-left: 12px; }
+}
+
 /* ---------- Плитка «Интерфейсы, которые мы собираем» ----------
    Светлая полоса среди тёмной страницы: тёмные карточки на светлом фоне
    читаются как предметы на столе и дают странице передышку. Секция светлая
@@ -2107,8 +2366,10 @@ button, input, select, textarea { font: inherit; color: inherit; }
 
 @media print {
   .topbar, .hero-stage, .hero-deck, .hero-horizon, .checks-halo, .checks-glow, .checks-rim, .page-progress, .toast, .grain,
-  .marquee, .contact-form, .work-aside, .tile-art, .dial, .radar-stage, .spire-stage, .crypt-stage, .crypt-lock { display: none; }
-  body, .hero, .checks, .tiles, .radar, .spire, .crypt { background: #fff; color: #000; }
-  .radar-copy, .spire-copy { padding-top: 0; }
+  .marquee, .contact-form, .work-aside, .tile-art, .dial, .radar-stage, .spire-stage, .crypt-stage, .crypt-lock,
+  .arc-stage, .arc-chip, .arc-soon { display: none; }
+  body, .hero, .checks, .tiles, .radar, .spire, .crypt, .arc { background: #fff; color: #000; }
+  .radar-copy, .spire-copy, .arc-copy { padding-top: 0; }
   .crypt { padding-top: 0; }
+  .arc-title { -webkit-text-fill-color: #000; color: #000; }
 }
