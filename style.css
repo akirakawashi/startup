@@ -1302,16 +1302,14 @@ button, input, select, textarea { font: inherit; color: inherit; }
 }
 .love-description { margin: 16px auto 0; color: #aaa4bc; font-size: .9375rem; line-height: 24px; }
 .love-heart {
-  position: absolute; top: 72px; left: 50%; width: 602px; height: 557px;
+  position: absolute; top: 40px; left: 50%; width: 602px; height: 557px;
   transform: translateX(-50%); pointer-events: none;
 }
 .love-heart-image {
-  display: block; width: 100%; height: 100%; filter: brightness(1.4);
-  -webkit-mask-image: var(--dots); mask-image: var(--dots);
-  -webkit-mask-size: var(--dots-size); mask-size: var(--dots-size);
+  display: block; width: 100%; height: 100%; filter: brightness(1.1);
 }
-/* У дымки общая точечная фактура. Тонкая кромка и блик на ней —
-   отдельные слои под исходными масками, чтобы край не рассыпался. */
+/* На дымке точечной сетки нет: свет сам и есть вся фигура. Тонкая кромка и
+   блик на ней — отдельные слои под исходными масками, чтобы край не рассыпался. */
 .love-heart-rim, .love-heart-trail {
   position: absolute; inset: 0;
   -webkit-mask-image: var(--heart-mask); mask-image: var(--heart-mask);
@@ -1333,7 +1331,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 @keyframes loveHeartRight { 0% { transform: translate(-50%, -50%) rotate(180deg); } 60%, 100% { transform: translate(-50%, -50%) rotate(540deg); } }
 .love-stars {
   position: absolute; top: 56px; left: 50%; width: 936px; height: 260px;
-  overflow: hidden; transform: translateX(-50%); opacity: .6; pointer-events: none;
+  overflow: hidden; transform: translateX(-50%); opacity: .72; pointer-events: none;
   -webkit-mask-image: linear-gradient(to bottom, transparent, #000 50%, transparent);
           mask-image: linear-gradient(to bottom, transparent, #000 50%, transparent);
 }
@@ -1343,9 +1341,9 @@ button, input, select, textarea { font: inherit; color: inherit; }
   animation: loveStars var(--duration) linear infinite;
   animation-delay: calc(var(--delay) - var(--shot-t, 0s)); will-change: transform;
 }
-.love-stars i:nth-child(1) { --duration: 70s; --delay: -17s; background-image: radial-gradient(circle at 8% 23%, #fff .45px, transparent .9px), radial-gradient(circle at 45% 71%, #fff .5px, transparent 1px), radial-gradient(circle at 78% 37%, #fff .45px, transparent .9px), radial-gradient(circle at 89% 89%, #fff .5px, transparent 1px); }
-.love-stars i:nth-child(2) { --duration: 100s; --delay: -42s; opacity: .6; background-image: radial-gradient(circle at 21% 56%, #fff .5px, transparent 1px), radial-gradient(circle at 61% 12%, #fff .5px, transparent 1px), radial-gradient(circle at 83% 74%, #fff .5px, transparent 1px); }
-.love-stars i:nth-child(3) { --duration: 130s; --delay: -76s; opacity: .4; background-image: radial-gradient(circle at 16% 81%, #fff .5px, transparent 1px), radial-gradient(circle at 57% 29%, #fff .5px, transparent 1px), radial-gradient(circle at 91% 53%, #fff .5px, transparent 1px); }
+.love-stars i:nth-child(1) { --duration: 20s; --delay: -5s; background-image: radial-gradient(circle at 8% 23%, #fff .45px, transparent .9px), radial-gradient(circle at 45% 71%, #fff .5px, transparent 1px), radial-gradient(circle at 78% 37%, #fff .45px, transparent .9px), radial-gradient(circle at 89% 89%, #fff .5px, transparent 1px), radial-gradient(circle at 30% 52%, #fff .45px, transparent .9px), radial-gradient(circle at 62% 6%, #fff .5px, transparent 1px); }
+.love-stars i:nth-child(2) { --duration: 28s; --delay: -12s; opacity: .6; background-image: radial-gradient(circle at 21% 56%, #fff .5px, transparent 1px), radial-gradient(circle at 61% 12%, #fff .5px, transparent 1px), radial-gradient(circle at 83% 74%, #fff .5px, transparent 1px), radial-gradient(circle at 38% 88%, #fff .5px, transparent 1px), radial-gradient(circle at 7% 33%, #fff .45px, transparent .9px); }
+.love-stars i:nth-child(3) { --duration: 38s; --delay: -23s; opacity: .4; background-image: radial-gradient(circle at 16% 81%, #fff .5px, transparent 1px), radial-gradient(circle at 57% 29%, #fff .5px, transparent 1px), radial-gradient(circle at 91% 53%, #fff .5px, transparent 1px), radial-gradient(circle at 36% 11%, #fff .5px, transparent 1px), radial-gradient(circle at 72% 68%, #fff .45px, transparent .9px); }
 @keyframes loveStars { to { transform: translate3d(0, -300px, 0); } }
 .love-wall { position: relative; max-width: 1376px; margin: 48px auto 0; }
 .love.is-ready .love-wall::before {
@@ -1403,7 +1401,6 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .love.idle .love-heart-trail i, .love.is-paused .love-heart-trail i,
 .love.idle .love-stars i, .love.is-paused .love-stars i,
 .love-wall:focus-within .love-track { animation-play-state: paused; }
-@media (hover: hover) and (pointer: fine) { .love-wall:hover .love-track { animation-play-state: paused; } }
 @media (max-width: 1000px) { .love.is-ready .love-wall::before { display: none; } }
 @media (max-width: 700px), (prefers-reduced-motion: reduce) {
   .love { --love-card: min(480px, calc(100vw - 48px)); --love-gap: 16px; }
@@ -1416,7 +1413,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 }
 @media (max-width: 700px) {
   .love { padding: 96px 0 64px; }
-  .love-heart { top: 64px; width: 520px; height: calc(520px * 557 / 602); }
+  .love-heart { top: 36px; width: 520px; height: calc(520px * 557 / 602); }
   .love-title { margin-top: 12px; }
   .love-card { padding: 24px; }
   .love-author { gap: 12px; }
