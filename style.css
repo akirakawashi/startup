@@ -15,6 +15,7 @@
    Тема одна, тёмная: палитра выведена из фонового видео. */
 :root {
   --bg:            #06050d;
+  --orb-bg:        #030014;
   --bg-soft:       #0b0916;
   --surface:       #100d1e;
   --surface-2:     #171331;
@@ -833,6 +834,209 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .faq-item[open] summary::after { transform: rotate(-135deg) translateY(-2px); }
 .faq-item summary:hover { color: var(--accent-hi); }
 .faq-item p { padding: 0 24px 22px; color: var(--muted); font-size: .93rem; max-width: 72ch; }
+
+/* ---------- Предложение: сфера из Reflect ----------
+   Исходный PNG 1488 × 1674 содержит свет, меридианы и отражение.
+   Шесть исходных масок лежат в assets/orb-masks.css: под каждой движется
+   одна полоса градиента. Маски неподвижны, а transform композится по
+   готовому растру. Точечной сетки здесь нет — исключение в AGENTS.md. */
+.orb {
+  --orb: min(744px, 94vw);
+  --muted: #aaa3bd;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  padding-top: clamp(80px, 7vw, 100px);
+  background: var(--orb-bg);
+  color: #f4f0ff;
+}
+
+/* На исходнике низ сферы — y=970 из 1674, кнопка — y=550.
+   Запас 562/744 диаметра под текстом держит эти координаты при переносах
+   строк. Сцена и все маски всегда имеют одно соотношение сторон 8:9. */
+.orb-stage {
+  position: absolute; left: 50%; bottom: 0;
+  width: var(--orb); height: calc(var(--orb) * 1.125);
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+.orb-image {
+  display: block;
+  width: 100%; height: 100%;
+}
+.orb-trail {
+  position: absolute; inset: 0;
+  overflow: hidden;
+  -webkit-mask-image: var(--orb-mask);
+          mask-image: var(--orb-mask);
+  -webkit-mask-size: 100% 100%; mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+}
+.orb-trail i {
+  display: block;
+  width: 100%; height: 17.92115%;
+  background: linear-gradient(to bottom, rgba(183, 164, 251, 0), #b7a4fb);
+  transform: translate3d(0, -353.33333%, 0);
+  animation: orbTrail 8s cubic-bezier(.62, .62, .14, 1) infinite;
+  animation-delay: calc(var(--delay, 0s) - var(--shot-t, 0s));
+  will-change: transform;
+}
+.orb-trail-1 { --delay: 1s; }
+.orb-trail-2 { --delay: 3s; }
+.orb-trail-3 { --delay: 2s; }
+.orb-trail-4 { --delay: 5s; }
+.orb-trail-5 { --delay: 3s; }
+.orb-trail-6 { --delay: 0s; }
+@keyframes orbTrail {
+  0%, 100% { transform: translate3d(0, -353.33333%, 0); }
+  99%      { transform: translate3d(0, 466.66667%, 0); }
+}
+
+/* Три плитки частиц повторяются с фиксированным шагом. Сдвиг ровно на
+   одну плитку делает цикл бесшовным при любой ширине сцены. */
+.orb-dust {
+  position: absolute; left: 0; top: -30.94385%;
+  width: 100%; height: 88.88889%;
+  overflow: hidden;
+  border-radius: 50%;
+  opacity: .7;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 44.15%, rgba(0, 0, 0, .35) 71.79%, #000);
+          mask-image: linear-gradient(to bottom, transparent 44.15%, rgba(0, 0, 0, .35) 71.79%, #000);
+}
+.orb-dust i {
+  position: absolute; inset: 0 0 auto;
+  display: block;
+  height: calc(100% + var(--dust-step));
+  background-repeat: repeat;
+  background-size: var(--dust-step) var(--dust-step);
+  animation: orbRise var(--dust-duration) linear infinite;
+  animation-delay: calc(var(--delay, 0s) - var(--shot-t, 0s));
+  will-change: transform;
+}
+.orb-dust i:nth-child(1) {
+  --dust-step: 300px; --dust-duration: 30s; --delay: -12s;
+  background-image:
+    radial-gradient(circle at 8% 19%, #fff .7px, transparent 1.2px),
+    radial-gradient(circle at 38% 71%, #fff .65px, transparent 1.1px),
+    radial-gradient(circle at 65% 32%, #fff .8px, transparent 1.3px),
+    radial-gradient(circle at 86% 84%, #fff .7px, transparent 1.2px),
+    radial-gradient(circle at 53% 93%, #fff .6px, transparent 1px);
+}
+.orb-dust i:nth-child(2) {
+  --dust-step: 370px; --dust-duration: 46s; --delay: -23s;
+  opacity: .6;
+  background-image:
+    radial-gradient(circle at 16% 42%, #fff .8px, transparent 1.3px),
+    radial-gradient(circle at 44% 12%, #fff .7px, transparent 1.2px),
+    radial-gradient(circle at 75% 67%, #fff .9px, transparent 1.4px),
+    radial-gradient(circle at 91% 25%, #fff .7px, transparent 1.2px);
+}
+.orb-dust i:nth-child(3) {
+  --dust-step: 460px; --dust-duration: 64s; --delay: -37s;
+  opacity: .35;
+  background-image:
+    radial-gradient(circle at 22% 78%, #fff .6px, transparent 1px),
+    radial-gradient(circle at 56% 38%, #fff .7px, transparent 1.1px),
+    radial-gradient(circle at 82% 9%, #fff .6px, transparent 1px);
+}
+@keyframes orbRise { to { transform: translate3d(0, calc(0px - var(--dust-step)), 0); } }
+.orb-stage.idle i { animation-play-state: paused; }
+
+.orb-copy {
+  position: relative;
+  text-align: center;
+  padding-bottom: calc(var(--orb) * .755376);
+}
+.orb-pill {
+  display: inline-block; margin: 0;
+  padding: 3px 13px; border-radius: 100px;
+  border: 1px solid rgba(196, 181, 253, .24);
+  background: linear-gradient(135deg, rgba(167, 139, 250, .07), transparent 60%);
+  font-size: .875rem; line-height: 24px;
+  color: #e0c9ff;
+}
+.orb-title {
+  margin: 12px auto 0; max-width: 900px;
+  font-family: var(--ff-body); font-weight: 500;
+  font-size: clamp(1.9rem, 3.45vw, 3rem); line-height: 1.17; letter-spacing: -.04em;
+  background: linear-gradient(to bottom, #f4f0ff, rgba(244, 240, 255, .72));
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent; color: transparent;
+}
+.orb-price {
+  display: flex; align-items: center; justify-content: center;
+  gap: 16px;
+  margin: clamp(40px, 4.6vw, 64px) 0 0;
+}
+.orb-price b {
+  font-family: var(--ff-display); font-weight: 500;
+  font-size: clamp(3.75rem, 6vw, 4.5rem); line-height: 1.11; letter-spacing: -.04em;
+  background: linear-gradient(90deg, #e59cff, #ba9cff 50%, #9cb2ff);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent; color: transparent;
+}
+.orb-unit { display: grid; text-align: left; }
+.orb-unit i {
+  font-style: normal; font-size: .9375rem; line-height: 1.5; color: var(--muted);
+}
+.orb-unit i + i { font-size: .875rem; }
+.orb-list {
+  display: grid; grid-template-columns: repeat(2, max-content);
+  gap: 24px 48px;
+  width: fit-content; max-width: 100%;
+  margin: 48px auto 0;
+  text-align: left;
+}
+.orb-list li {
+  display: flex; align-items: center; gap: 12px;
+  font-size: .9375rem; font-weight: 400; line-height: 24px;
+}
+.orb-tick {
+  flex: none; position: relative;
+  width: 24px; height: 24px; border-radius: 50%;
+  background: linear-gradient(to bottom, transparent, rgba(243, 238, 255, .08));
+  box-shadow: inset 0 0 0 1px rgba(243, 238, 255, .06);
+}
+.orb-tick::before {
+  content: ""; position: absolute; inset: 8px;
+  background: rgba(243, 238, 255, .55);
+  filter: blur(3px);
+  -webkit-mask-image: var(--dots); mask-image: var(--dots);
+  -webkit-mask-size: var(--dots-size); mask-size: var(--dots-size);
+}
+.orb-tick::after {
+  content: ""; position: absolute; left: 50%; top: 50%;
+  width: 4px; height: 4px;
+  transform: translate(-50%, -50%) rotate(45deg);
+  background: #f3eeff;
+}
+.orb-cta {
+  display: inline-flex; align-items: center; justify-content: center;
+  margin-top: 48px;
+  min-height: 36px; padding: 7px 16px; border-radius: 8px;
+  border: 1px solid rgba(207, 175, 255, .5);
+  background: linear-gradient(to bottom, rgba(147, 108, 213, .28), rgba(71, 29, 129, .38));
+  color: #f4f0ff; font-weight: 500; font-size: .875rem; line-height: 20px;
+  box-shadow: inset 0 0 12px rgba(191, 151, 255, .18), inset 0 1px 1px rgba(255, 255, 255, .14);
+  transition: background .25s var(--ease), border-color .25s var(--ease),
+              transform .25s var(--ease), box-shadow .25s var(--ease);
+}
+.orb-cta:hover {
+  background: rgba(107, 60, 173, .46);
+  border-color: var(--accent-hi);
+  box-shadow: inset 0 0 16px rgba(191, 151, 255, .3), inset 0 1px 1px rgba(255, 255, 255, .2);
+}
+
+@media (max-width: 700px) {
+  .orb { --orb: max(520px, 94vw); }
+  .orb-title { max-width: 540px; letter-spacing: -.035em; }
+  .orb-list { grid-template-columns: minmax(0, 1fr); gap: 16px; margin-top: 36px; }
+  .orb-list li { font-size: .875rem; }
+  .orb-cta { min-height: 44px; margin-top: 36px; padding-inline: 20px; }
+  .orb-trail { display: none; }
+  .orb-trail i { animation: none; }
+}
+
 
 /* ---------- 11. Контакт и подвал ---------- */
 .section-contact::before {
@@ -2461,6 +2665,9 @@ button, input, select, textarea { font: inherit; color: inherit; }
   .blip-dot, .blip-tag { opacity: 1; }
   .blip-wave { display: none; }
   .spire-stars i { animation: none; }
+  .orb-dust i { animation: none; }
+  .orb-trail { display: none; }
+  .orb-trail i { animation: none; }
   /* ролик «Ключей» останавливает скрипт: на месте остаётся постер — тот же
      кадр покоя, что и в начале ролика */
 }
@@ -2469,9 +2676,10 @@ button, input, select, textarea { font: inherit; color: inherit; }
   .topbar, .hero-stage, .hero-deck, .hero-horizon, .checks-halo, .checks-glow, .checks-rim, .page-progress, .toast, .grain,
   .marquee, .contact-form, .work-aside, .tile-art, .dial, .radar-stage, .spire-stage, .crypt-stage, .crypt-lock,
   .arc-stage, .arc-chip, .arc-soon,
-  .hub-paper, .hub-ring, .hub-core { display: none; }
-  body, .hero, .checks, .tiles, .radar, .spire, .crypt, .arc { background: #fff; color: #000; }
+  .hub-paper, .hub-ring, .hub-core, .orb-stage { display: none; }
+  body, .hero, .checks, .tiles, .radar, .spire, .crypt, .arc, .orb { background: #fff; color: #000; }
   .radar-copy, .spire-copy, .arc-copy { padding-top: 0; }
   .crypt { padding-top: 0; }
-  .arc-title, .hub-title { -webkit-text-fill-color: #000; color: #000; }
+  .arc-title, .hub-title, .orb-title, .orb-price b { -webkit-text-fill-color: #000; color: #000; }
+  .orb-copy { padding-bottom: 0; }
 }

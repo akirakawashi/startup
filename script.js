@@ -220,6 +220,41 @@
   }
 
   /* ============================================================
+     Световые дорожки и частицы в «Предложении»
+     Двигаются готовые слои; маски и фон неподвижны.
+     Пауза вне экрана, в скрытой вкладке и при reduced motion.
+     ============================================================ */
+  var orbStage = $('.orb-stage');
+  if (orbStage) {
+    var orbVisible = false;
+    var orbVisibilityQueued = false;
+    var syncOrbMotion = function () {
+      orbStage.classList.toggle('idle', !orbVisible || document.hidden || motionQuery.matches);
+    };
+    var checkOrbVisibility = function () {
+      if (orbVisibilityQueued) return;
+      orbVisibilityQueued = true;
+      window.requestAnimationFrame(function () {
+        orbVisibilityQueued = false;
+        var bounds = orbStage.parentNode.getBoundingClientRect();
+        orbVisible = bounds.bottom > 0 && bounds.top < window.innerHeight;
+        syncOrbMotion();
+      });
+    };
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(checkOrbVisibility).observe(orbStage.parentNode);
+    }
+    // После адаптивной перевёрстки и перехода по якорю IntersectionObserver
+    // может вернуть старые координаты. Сверяем текущие, один раз за кадр
+    // события; постоянного цикла отрисовки здесь нет.
+    window.addEventListener('scroll', checkOrbVisibility, { passive: true });
+    window.addEventListener('resize', checkOrbVisibility, { passive: true });
+    document.addEventListener('visibilitychange', syncOrbMotion);
+    if (motionQuery.addEventListener) motionQuery.addEventListener('change', syncOrbMotion);
+    checkOrbVisibility();
+  }
+
+  /* ============================================================
      Бегущая строка: дублируем содержимое ради бесшовного цикла
      ============================================================ */
   var marquee = $('#marqueeTrack');

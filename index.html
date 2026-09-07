@@ -18,6 +18,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="assets/orb-masks.css">
 </head>
 <body>
 
@@ -1383,6 +1384,48 @@
       </article>
 
     </div>
+  </div>
+</section>
+
+<!-- ===================== ПРЕДЛОЖЕНИЕ ===================== -->
+<!-- Сфера и шесть масок световых дорожек из https://reflect.app/home#pricing.
+     Изображение уже содержит кромку, меридианы и отражение. Полосы света
+     движутся под неподвижными масками, частицы поднимаются отдельными слоями.
+     Цены на сайте не называются (см. «Вопросы»), поэтому на месте суммы
+     стоит то, что мы действительно обещаем: один договор и одна точка
+     ответственности. -->
+<section class="orb" id="offer" aria-labelledby="offer-title">
+
+  <div class="orb-stage idle" aria-hidden="true">
+    <img class="orb-image" src="assets/orb-background.png" width="1488" height="1674" alt="" loading="lazy" decoding="async">
+    <span class="orb-trail orb-trail-1"><i></i></span>
+    <span class="orb-trail orb-trail-2"><i></i></span>
+    <span class="orb-trail orb-trail-3"><i></i></span>
+    <span class="orb-trail orb-trail-4"><i></i></span>
+    <span class="orb-trail orb-trail-5"><i></i></span>
+    <span class="orb-trail orb-trail-6"><i></i></span>
+    <span class="orb-dust"><i></i><i></i><i></i></span>
+  </div>
+
+  <div class="wrap orb-copy">
+    <p class="orb-pill reveal">начать</p>
+    <h2 class="orb-title reveal" id="offer-title">Мы не любим сложных схем.<br>Одна команда на весь проект.</h2>
+
+    <p class="orb-price reveal">
+      <b>1</b>
+      <span class="orb-unit"><i>договор</i><i>одна точка ответственности</i></span>
+    </p>
+
+    <ul class="orb-list reveal">
+      <li><span class="orb-tick" aria-hidden="true"></span>Проектирование и схема данных</li>
+      <li><span class="orb-tick" aria-hidden="true"></span>Резервные копии и мониторинг</li>
+      <li><span class="orb-tick" aria-hidden="true"></span>Демонстрация на каждом этапе</li>
+      <li><span class="orb-tick" aria-hidden="true"></span>Доступы и код оформлены на вас</li>
+      <li><span class="orb-tick" aria-hidden="true"></span>Запуск и настройка сервера</li>
+      <li><span class="orb-tick" aria-hidden="true"></span>Сопровождение после запуска</li>
+    </ul>
+
+    <a class="orb-cta reveal magnetic" href="#contact">Обсудить задачу</a>
   </div>
 </section>
 
