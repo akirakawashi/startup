@@ -219,6 +219,150 @@
     });
   }
 
+  /* Локальный пример AI: один таймер на всю последовательность.
+     Вне экрана и в скрытой вкладке сохраняем остаток задержки. */
+  (function initAiDemo() {
+    var section = $('#ai');
+    if (!section) return;
+    var demo = $('.ai-demo', section);
+    var trigger = $('.ai-demo-trigger', demo);
+    var triggerLabel = $('span', trigger);
+    var note = $('.ai-demo-text', demo);
+    var answerBody = $('.ai-answer-body p', demo);
+    var answerStatus = $('.ai-answer-status', demo);
+    var status = $('.ai-status', demo);
+    var question = note.textContent;
+    var answer = answerBody.textContent;
+    var running = false;
+    var visible = false;
+    var visibilityQueued = false;
+    var timer = 0;
+    var pending = null;
+    var remaining = 0;
+    var startedAt = 0;
+    var typed = 0;
+    var clickTarget = null;
+    var timing = { selection: 1050, toolbar: 1000, menu: 1350, entry: 700, typing: 40, reading: 1350, click: 580 };
+    demo.style.setProperty('--ai-click-duration', timing.click + 'ms');
+
+    function arm() {
+      if (!pending || timer || !visible || document.hidden) return;
+      startedAt = performance.now();
+      timer = window.setTimeout(function () {
+        timer = 0;
+        var next = pending;
+        pending = null;
+        if (next) next();
+      }, remaining);
+    }
+    function schedule(next, delay) {
+      window.clearTimeout(timer);
+      timer = 0;
+      pending = next;
+      remaining = delay;
+      arm();
+    }
+    function clearSequence() {
+      window.clearTimeout(timer);
+      timer = 0;
+      pending = null;
+      if (clickTarget) clickTarget.classList.remove('is-clicking');
+      clickTarget = null;
+      running = false;
+      trigger.removeAttribute('aria-disabled');
+    }
+    function finish() {
+      clearSequence();
+      note.textContent = answer;
+      answerBody.textContent = answer;
+      demo.dataset.aiState = 'done';
+      triggerLabel.textContent = 'Повторить пример';
+      trigger.setAttribute('aria-label', 'Повторить пример работы AI-помощника');
+      status.textContent = 'Пример завершён. ' + answer;
+    }
+    // Нажатие — отдельный шаг: окно остаётся на месте, пока кнопка
+    // сжимается, подсвечивается и отпускается. Потом начинается переход.
+    function clickThrough(selector, next) {
+      clickTarget = $(selector, demo);
+      clickTarget.classList.add('is-clicking');
+      schedule(function () {
+        clickTarget.classList.remove('is-clicking');
+        clickTarget = null;
+        next();
+      }, timing.click);
+    }
+    function clickReplace() { clickThrough('.ai-answer-replace', finish); }
+    function clickCommand() { clickThrough('.ai-demo-command', showAnswer); }
+    function clickSpark() { clickThrough('.ai-toolbar-spark', showMenu); }
+    function typeAnswer() {
+      typed = Math.min(typed + 2, answer.length);
+      answerBody.textContent = answer.slice(0, typed);
+      if (typed === answer.length) answerStatus.textContent = 'Готово';
+      schedule(typed < answer.length ? typeAnswer : clickReplace, typed < answer.length ? timing.typing : timing.reading);
+    }
+    function showAnswer() {
+      answerStatus.textContent = 'Пишет…';
+      demo.dataset.aiState = 'answer';
+      schedule(typeAnswer, timing.entry);
+    }
+    function showMenu() {
+      demo.dataset.aiState = 'menu';
+      schedule(clickCommand, timing.menu);
+    }
+    function showToolbar() {
+      demo.dataset.aiState = 'toolbar';
+      schedule(clickSpark, timing.toolbar);
+    }
+    function syncMotion() {
+      var active = visible && !document.hidden;
+      section.classList.toggle('idle', !active || motionQuery.matches);
+      if (motionQuery.matches && running) finish();
+      if (active) {
+        arm();
+      } else if (timer) {
+        window.clearTimeout(timer);
+        timer = 0;
+        remaining = Math.max(0, remaining - (performance.now() - startedAt));
+      }
+    }
+    function checkVisibility() {
+      if (visibilityQueued) return;
+      visibilityQueued = true;
+      window.requestAnimationFrame(function () {
+        visibilityQueued = false;
+        var bounds = section.getBoundingClientRect();
+        visible = bounds.bottom > 0 && bounds.top < window.innerHeight;
+        syncMotion();
+      });
+    }
+    trigger.hidden = false;
+    trigger.addEventListener('click', function () {
+      if (running) return;
+      running = true;
+      typed = 0;
+      note.textContent = question;
+      answerBody.textContent = '';
+      status.textContent = 'Воспроизводится пример работы AI-помощника.';
+      trigger.setAttribute('aria-disabled', 'true');
+      if (motionQuery.matches) { finish(); return; }
+      demo.dataset.aiState = 'select';
+      schedule(showToolbar, timing.selection);
+    });
+    demo.addEventListener('keydown', function (event) {
+      if (event.key !== 'Escape' || !running) return;
+      clearSequence();
+      note.textContent = question;
+      demo.dataset.aiState = 'idle';
+      status.textContent = 'Воспроизведение остановлено.';
+    });
+    if ('IntersectionObserver' in window) new IntersectionObserver(checkVisibility).observe(section);
+    window.addEventListener('scroll', checkVisibility, { passive: true });
+    window.addEventListener('resize', checkVisibility, { passive: true });
+    document.addEventListener('visibilitychange', syncMotion);
+    if (motionQuery.addEventListener) motionQuery.addEventListener('change', syncMotion);
+    checkVisibility();
+  })();
+
   /* ============================================================
      Световые дорожки и частицы в «Предложении»
      Двигаются готовые слои; маски и фон неподвижны.

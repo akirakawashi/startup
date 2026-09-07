@@ -266,6 +266,79 @@
   </div>
 </section>
 
+<!-- ===================== AI-ПОМОЩНИК ===================== -->
+<section class="ai idle" id="ai" aria-labelledby="ai-title">
+  <header class="ai-copy wrap reveal">
+    <p class="ai-pill">AI-помощник</p>
+    <h2 class="ai-title" id="ai-title">Ваш сервис с AI-помощником</h2>
+    <p class="ai-description">Помогаем быстрее разбирать обращения, работать с документами<br class="ai-break"> и находить нужное в базе знаний.</p>
+  </header>
+
+  <div class="ai-stage">
+    <div class="ai-art" aria-hidden="true">
+      <img class="ai-art-light" src="assets/ai-background.png" width="2880" height="1670" alt="" loading="lazy" decoding="async">
+      <img class="ai-art-edge" src="assets/ai-background.png" width="2880" height="1670" alt="" loading="lazy" decoding="async">
+    </div>
+    <div class="ai-stars" aria-hidden="true"><i></i><i></i><i></i></div>
+
+    <div class="ai-demo" data-ai-state="idle">
+      <div class="ai-rays" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+      <div class="ai-demo-inner">
+        <span class="ai-border-light ai-border-light-top" aria-hidden="true"></span>
+        <span class="ai-border-light ai-border-light-bottom" aria-hidden="true"></span>
+        <h3 class="ai-demo-title">Помощник внутри вашего сервиса</h3>
+        <p class="ai-demo-note"><span class="ai-demo-text">Как AI может помочь в работе с заявками?</span></p>
+        <button class="ai-demo-trigger" type="button" aria-label="Посмотреть пример работы AI-помощника" hidden>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9.75 13C14 13 14 7.75 14 7.75S14 13 18.25 13C14 13 14 18.25 14 18.25S14 13 9.75 13ZM5.75 8C8 8 8 5.75 8 5.75S8 8 10.25 8C8 8 8 10.25 8 10.25S8 8 5.75 8Z" fill="currentColor"/><path d="M7.75 16.25h.01M18.25 5.75h.01M18.25 18.25h.01" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <span>Посмотреть пример</span>
+        </button>
+      </div>
+
+      <!-- Сценарий демонстрации локальный: выделение → команда → ответ → замена. -->
+      <div class="ai-demo-sequence" aria-hidden="true">
+        <div class="ai-demo-toolbar"><span class="ai-toolbar-spark ai-click-target">✦</span><b>B</b><i>I</i><span>H₁</span><span>H₂</span><span>≡</span><span>↗</span></div>
+        <div class="ai-demo-menu">
+          <div class="ai-demo-input">Спросите AI…</div>
+          <p>Готовый сценарий</p>
+          <div class="ai-demo-command ai-click-target">Предложить решение</div>
+        </div>
+        <div class="ai-demo-answer">
+          <div class="ai-answer-heading"><span>Предложить решение</span><span>✦</span></div>
+          <div class="ai-answer-body"><p>AI выделит суть обращения, определит тему и подготовит черновик ответа. Оператор проверит результат и отправит его клиенту.</p></div>
+          <div class="ai-answer-footer"><span class="ai-answer-status">Готово</span><span class="ai-answer-replace ai-click-target">Заменить <kbd>↵</kbd></span></div>
+        </div>
+      </div>
+      <p class="ai-status" role="status" aria-live="polite" aria-atomic="true"></p>
+    </div>
+  </div>
+
+  <div class="ai-features">
+    <h3 class="ai-features-title">Что можно поручить AI?</h3>
+    <ul class="ai-features-items">
+      <li class="ai-feature">
+        <img src="assets/ai-voice.svg" width="40" height="40" alt="" loading="lazy">
+        <p>Расшифровывать записи<span>встреч и голосовых сообщений</span></p>
+      </li>
+      <li class="ai-feature">
+        <img src="assets/ai-draft.svg" width="40" height="40" alt="" loading="lazy">
+        <p>Готовить тексты<span>по вашим материалам и идеям</span></p>
+      </li>
+      <li class="ai-feature">
+        <img src="assets/ai-summary.svg" width="40" height="40" alt="" loading="lazy">
+        <p>Выделять главное<span>в документах и переписке</span></p>
+      </li>
+      <li class="ai-feature">
+        <img src="assets/ai-edit.svg" width="40" height="40" alt="" loading="lazy">
+        <p>Улучшать формулировки<span>и исправлять ошибки в тексте</span></p>
+      </li>
+      <li class="ai-feature">
+        <img src="assets/ai-prompt.svg" width="40" height="40" alt="" loading="lazy">
+        <p>Сохранять сценарии<span>для повторяющихся задач</span></p>
+      </li>
+    </ul>
+  </div>
+</section>
+
 <!-- ===================== ПРОЦЕСС ===================== -->
 <section class="section" id="work">
   <div class="wrap">
