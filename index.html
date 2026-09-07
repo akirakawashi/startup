@@ -1429,6 +1429,30 @@
   </div>
 </section>
 
+<!-- ===================== О НАС ===================== -->
+<!-- Геометрия точечного глобуса и композиция — https://reflect.app/home.
+     assets/globe.js рисует исходные точки; PNG остаётся при reduced motion
+     и недоступном WebGL. Весь декоративный слой скрыт от скринридера. -->
+<section class="team idle" id="about" aria-labelledby="about-title">
+  <div class="team-lines" aria-hidden="true"></div>
+
+  <div class="wrap team-copy">
+    <p class="team-pill reveal">о нас</p>
+    <h2 class="team-title reveal" id="about-title">Собираем веб-сервисы.<br>От идеи до запуска.</h2>
+    <p class="team-description reveal">Бэкенд, интерфейс и инфраструктура — в одних руках. Запускаем проект и остаёмся рядом после релиза.</p>
+    <a class="team-cta reveal" href="#value">Наши принципы</a>
+  </div>
+
+  <div class="team-globe" aria-hidden="true">
+    <img class="team-globe-poster" src="assets/globe-poster.png" width="1872" height="840" alt="" loading="lazy" decoding="async">
+    <div class="team-globe-rim">
+      <svg viewBox="0 0 984 984" fill="none" focusable="false"><circle cx="492" cy="492" r="475.5" stroke="white" stroke-width="1.8"/></svg>
+    </div>
+    <canvas class="team-globe-canvas"></canvas>
+  </div>
+  <div class="team-stars" aria-hidden="true"><i></i><i></i><i></i></div>
+</section>
+
 <!-- ===================== КОНТАКТ ===================== -->
 <section class="section section-contact" id="contact">
   <div class="wrap">
@@ -1497,5 +1521,6 @@
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script src="script.js"></script>
+<script src="assets/globe.js"></script>
 </body>
 </html>

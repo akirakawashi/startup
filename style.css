@@ -16,6 +16,7 @@
 :root {
   --bg:            #06050d;
   --orb-bg:        #030014;
+  --team-bg:       #030014;
   --bg-soft:       #0b0916;
   --surface:       #100d1e;
   --surface-2:     #171331;
@@ -1037,6 +1038,171 @@ button, input, select, textarea { font: inherit; color: inherit; }
   .orb-trail i { animation: none; }
 }
 
+
+/* ---------- О нас: точечный глобус Reflect ---------- */
+.team {
+  --globe-width: clamp(800px, 120vw, 1400px);
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding-top: clamp(72px, 7vw, 96px);
+  background: var(--team-bg);
+  color: #f4f0ff;
+}
+.team-copy { position: relative; z-index: 2; text-align: center; }
+.team-pill {
+  display: inline-block;
+  padding: 3px 14px;
+  border: 1px solid rgba(196, 181, 253, .24);
+  border-radius: 100px;
+  background: linear-gradient(135deg, rgba(167, 139, 250, .07), transparent 60%);
+  color: #e0c9ff;
+  font-size: .875rem; line-height: 24px;
+}
+.team-title {
+  max-width: 900px;
+  margin: 12px auto 0;
+  font-family: var(--ff-body); font-weight: 500;
+  font-size: clamp(2rem, 4vw, 3.5rem); line-height: 1.14; letter-spacing: -.04em;
+  background: linear-gradient(to bottom, #f4f0ff, rgba(244, 240, 255, .72));
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent; color: transparent;
+}
+.team-description {
+  max-width: 510px;
+  margin: 18px auto 0;
+  color: #aaa4bc;
+  font-size: .9375rem; line-height: 24px;
+}
+.team-cta {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: 36px;
+  margin-top: 40px; padding: 7px 16px;
+  border: 1px solid rgba(243, 238, 255, .1);
+  border-radius: 8px;
+  background: linear-gradient(to bottom, transparent, rgba(243, 238, 255, .035));
+  box-shadow: inset 0 0 10px rgba(243, 238, 255, .07);
+  color: #f4f0ff;
+  font-size: .875rem; font-weight: 500; line-height: 20px;
+  transition: background .2s var(--ease), border-color .2s var(--ease);
+}
+.team-cta:hover {
+  background: rgba(167, 139, 250, .1);
+  border-color: rgba(196, 181, 253, .35);
+}
+.team-lines {
+  position: absolute; top: 160px; left: 50%;
+  display: flex; justify-content: space-between;
+  width: min(1000px, calc(100% - 64px)); height: 320px;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+.team-lines::before, .team-lines::after {
+  content: ""; width: 1px; height: 100%;
+  background: linear-gradient(to bottom, rgba(243, 238, 255, .14), transparent);
+}
+.team-lines::after { transform: scaleY(-1); }
+
+/* Система координат оригинала: 1400 × 1200, камера 60°, радиус 200.
+   На экран попадает полоса y=89..509; рисуем только эти 420 px.
+   Маска плавно гасит низ, а фактуру дают сами отдельные точки. */
+.team-globe {
+  position: relative;
+  height: calc(var(--globe-width) * .3);
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to bottom, #000, transparent);
+          mask-image: linear-gradient(to bottom, #000, transparent);
+  pointer-events: none;
+}
+.team-globe-canvas {
+  position: absolute; top: 0; left: 50%;
+  display: block;
+  width: var(--globe-width); height: 100%;
+  transform: translateX(-50%);
+  image-rendering: pixelated;
+  opacity: 0;
+}
+.team-globe-poster {
+  position: absolute; left: 50%; top: calc(var(--globe-width) * 71 / 1400);
+  width: calc(var(--globe-width) * 936 / 1400); height: auto;
+  transform: translateX(-50%);
+}
+.team-globe-rim {
+  position: absolute; left: 50%; top: calc(var(--globe-width) * 31 / 1400);
+  width: calc(var(--globe-width) * 936 / 1400);
+  height: calc(var(--globe-width) * 960 / 1400);
+  transform: translateX(-50%);
+  opacity: 0;
+}
+.team-globe-rim svg { display: block; width: 100%; height: 100%; opacity: .3; }
+.team.has-globe .team-globe-canvas, .team.has-globe .team-globe-rim { opacity: 1; }
+.team.has-globe .team-globe-poster { opacity: 0; }
+
+/* Пыль — готовые плитки, движется только transform. Один период равен
+   высоте плитки, поэтому на повторе нет скачка. */
+.team-stars {
+  position: absolute; bottom: 0; left: 50%;
+  width: min(936px, 100%); height: 560px;
+  overflow: hidden;
+  transform: translateX(-50%);
+  opacity: .65;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 30%, #000 65%, transparent);
+          mask-image: linear-gradient(to bottom, transparent, #000 30%, #000 65%, transparent);
+}
+.team-stars i {
+  position: absolute; inset: 0 0 auto;
+  height: calc(100% + var(--star-step));
+  background-size: var(--star-step) var(--star-step);
+  background-repeat: repeat;
+  animation: teamStars var(--star-duration) linear infinite;
+  animation-delay: calc(var(--delay) - var(--shot-t, 0s));
+  will-change: transform;
+}
+.team-stars i:nth-child(1) {
+  --star-step: 280px; --star-duration: 70s; --delay: -18s;
+  background-image:
+    radial-gradient(circle at 11% 23%, #fff .45px, transparent .8px),
+    radial-gradient(circle at 45% 71%, #fff .4px, transparent .8px),
+    radial-gradient(circle at 78% 37%, #fff .5px, transparent .9px),
+    radial-gradient(circle at 89% 89%, #fff .4px, transparent .8px);
+}
+.team-stars i:nth-child(2) {
+  --star-step: 340px; --star-duration: 100s; --delay: -41s;
+  opacity: .6;
+  background-image:
+    radial-gradient(circle at 22% 57%, #fff .5px, transparent .9px),
+    radial-gradient(circle at 61% 12%, #fff .45px, transparent .8px),
+    radial-gradient(circle at 83% 74%, #fff .4px, transparent .8px);
+}
+.team-stars i:nth-child(3) {
+  --star-step: 430px; --star-duration: 130s; --delay: -76s;
+  opacity: .3;
+  background-image:
+    radial-gradient(circle at 17% 81%, #fff .45px, transparent .8px),
+    radial-gradient(circle at 57% 29%, #fff .4px, transparent .8px),
+    radial-gradient(circle at 91% 53%, #fff .5px, transparent .9px);
+}
+@keyframes teamStars { to { transform: translate3d(0, calc(0px - var(--star-step)), 0); } }
+.team.idle .team-stars i { animation-play-state: paused; }
+
+@media (max-width: 700px) {
+  .team-title { max-width: 540px; }
+  .team-description { max-width: 350px; margin-top: 20px; font-size: .875rem; }
+  .team-lines { display: none; }
+  .team-cta { min-height: 44px; margin-top: 32px; padding-inline: 20px; }
+  .team-stars { height: 400px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .team-stars i { animation: none; }
+  .team.has-globe .team-globe-canvas, .team.has-globe .team-globe-rim { opacity: 0; }
+  .team.has-globe .team-globe-poster { opacity: 1; }
+}
+@media print {
+  .team { background: #fff; color: #000; padding-block: 24px; }
+  .team-globe, .team-stars, .team-lines { display: none; }
+  .team-title { -webkit-text-fill-color: #000; color: #000; }
+}
 
 /* ---------- 11. Контакт и подвал ---------- */
 .section-contact::before {
