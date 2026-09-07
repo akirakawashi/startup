@@ -18,6 +18,7 @@
   --orb-bg:        #030014;
   --team-bg:       #030014;
   --ai-bg:         #030014;
+  --love-bg:       #030014;
   --bg-soft:       #0b0916;
   --surface:       #100d1e;
   --surface-2:     #171331;
@@ -1278,6 +1279,152 @@ button, input, select, textarea { font: inherit; color: inherit; }
 @media (prefers-reduced-motion: reduce) {
   .ai-stars i, .ai-rays i::before, .ai-border-light::before { animation: none; }
 }
+
+/* ---------- Отзывы: сердце и две ленты Reflect ---------- */
+.love {
+  --love-card: 480px; --love-gap: 24px;
+  position: relative; isolation: isolate; overflow: hidden;
+  padding: 108px 0 72px; background: var(--love-bg); color: #f4f0ff;
+}
+.love-copy { position: relative; z-index: 1; text-align: center; }
+.love-pill {
+  display: inline-block; padding: 3px 14px;
+  border: 1px solid rgba(196, 181, 253, .24); border-radius: 100px;
+  background: linear-gradient(135deg, rgba(167, 139, 250, .07), transparent 60%);
+  color: #e0c9ff; font-size: .875rem; line-height: 24px;
+}
+.love-title {
+  margin: 8px auto 0; font-family: var(--ff-body); font-weight: 500;
+  font-size: clamp(2rem, 4vw, 3.5rem); line-height: 1.14; letter-spacing: -.04em;
+  background: linear-gradient(to bottom, #f4f0ff, rgba(244, 240, 255, .72));
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent; color: transparent;
+}
+.love-description { margin: 16px auto 0; color: #aaa4bc; font-size: .9375rem; line-height: 24px; }
+.love-heart {
+  position: absolute; top: 72px; left: 50%; width: 602px; height: 557px;
+  transform: translateX(-50%); pointer-events: none;
+}
+.love-heart-image {
+  display: block; width: 100%; height: 100%; filter: brightness(1.4);
+  -webkit-mask-image: var(--dots); mask-image: var(--dots);
+  -webkit-mask-size: var(--dots-size); mask-size: var(--dots-size);
+}
+/* У дымки общая точечная фактура. Тонкая кромка и блик на ней —
+   отдельные слои под исходными масками, чтобы край не рассыпался. */
+.love-heart-rim, .love-heart-trail {
+  position: absolute; inset: 0;
+  -webkit-mask-image: var(--heart-mask); mask-image: var(--heart-mask);
+  -webkit-mask-size: 100% 100%; mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+}
+.love-heart-rim { background: rgba(218, 209, 255, .065); }
+.love-heart-trail i {
+  display: flex; position: absolute; top: 50%; left: 50%; width: 200%; height: 120%;
+  animation: loveHeartLeft 6s linear infinite;
+  animation-delay: calc(var(--delay, 0s) - var(--shot-t, 0s));
+  will-change: transform;
+}
+.love-heart-trail i::before, .love-heart-trail i::after { content: ""; display: block; width: 50%; height: 100%; flex-shrink: 0; }
+.love-heart-trail.love-heart-left i::before { background: conic-gradient(from 180deg at 99.99% 49.95%, transparent -202.43deg, transparent 26.8deg, #b1daff 89.95deg, transparent 157.57deg, transparent 386.8deg); }
+.love-heart-trail.love-heart-right i { --delay: 1s; animation-name: loveHeartRight; }
+.love-heart-trail.love-heart-right i::after { background: conic-gradient(from 0deg at .01% 49.95%, transparent -202.43deg, transparent 26.8deg, #c9b1ff 89.95deg, transparent 157.57deg, transparent 386.8deg); }
+@keyframes loveHeartLeft { 0% { transform: translate(-50%, -50%) rotate(-180deg); } 60%, 100% { transform: translate(-50%, -50%) rotate(-540deg); } }
+@keyframes loveHeartRight { 0% { transform: translate(-50%, -50%) rotate(180deg); } 60%, 100% { transform: translate(-50%, -50%) rotate(540deg); } }
+.love-stars {
+  position: absolute; top: 56px; left: 50%; width: 936px; height: 260px;
+  overflow: hidden; transform: translateX(-50%); opacity: .6; pointer-events: none;
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 50%, transparent);
+          mask-image: linear-gradient(to bottom, transparent, #000 50%, transparent);
+}
+.love-stars i {
+  position: absolute; inset: 0 0 auto; height: 560px;
+  background-size: 300px 300px; background-repeat: repeat;
+  animation: loveStars var(--duration) linear infinite;
+  animation-delay: calc(var(--delay) - var(--shot-t, 0s)); will-change: transform;
+}
+.love-stars i:nth-child(1) { --duration: 70s; --delay: -17s; background-image: radial-gradient(circle at 8% 23%, #fff .45px, transparent .9px), radial-gradient(circle at 45% 71%, #fff .5px, transparent 1px), radial-gradient(circle at 78% 37%, #fff .45px, transparent .9px), radial-gradient(circle at 89% 89%, #fff .5px, transparent 1px); }
+.love-stars i:nth-child(2) { --duration: 100s; --delay: -42s; opacity: .6; background-image: radial-gradient(circle at 21% 56%, #fff .5px, transparent 1px), radial-gradient(circle at 61% 12%, #fff .5px, transparent 1px), radial-gradient(circle at 83% 74%, #fff .5px, transparent 1px); }
+.love-stars i:nth-child(3) { --duration: 130s; --delay: -76s; opacity: .4; background-image: radial-gradient(circle at 16% 81%, #fff .5px, transparent 1px), radial-gradient(circle at 57% 29%, #fff .5px, transparent 1px), radial-gradient(circle at 91% 53%, #fff .5px, transparent 1px); }
+@keyframes loveStars { to { transform: translate3d(0, -300px, 0); } }
+.love-wall { position: relative; max-width: 1376px; margin: 48px auto 0; }
+.love.is-ready .love-wall::before {
+  content: ""; position: absolute; z-index: 2; inset: 0; pointer-events: none;
+  background: linear-gradient(90deg, var(--love-bg), rgba(3, 0, 20, .5) 16.67%, transparent 33.33%, transparent 66.67%, rgba(3, 0, 20, .5) 83.33%, var(--love-bg));
+}
+.love-row { overflow-x: auto; scrollbar-width: none; scroll-padding-inline: 24px; }
+.love-row::-webkit-scrollbar { display: none; }
+.love-row + .love-row { margin-top: var(--love-gap); }
+.love-row:focus-visible { outline-offset: -2px; }
+.love-track { display: flex; gap: var(--love-gap); width: max-content; padding-inline: 24px; }
+.love-group { display: flex; gap: var(--love-gap); width: max-content; }
+.love.is-ready .love-row { overflow: hidden; }
+.love.is-ready .love-track { padding-inline: 0; animation: loveRow 200s linear infinite; animation-delay: calc(var(--delay) - var(--shot-t, 0s)); will-change: transform; }
+.love-row:nth-child(1) .love-track { --delay: -3s; }
+.love.is-ready .love-row:nth-child(2) .love-track { --delay: -9s; animation-direction: reverse; }
+@keyframes loveRow { to { transform: translate3d(calc(-50% - var(--love-gap) / 2), 0, 0); } }
+.love-card {
+  flex: 0 0 var(--love-card); width: var(--love-card); min-height: 212px;
+  position: relative; padding: 24px 28px; border-radius: 16px;
+  background: radial-gradient(58% 132% at 66% -35%, rgba(120, 123, 255, .06), transparent), linear-gradient(to bottom, transparent 54%, #ffffff0a), #ffffff03;
+  -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+}
+.love-row:nth-child(2) .love-card { min-height: 236px; }
+.love-card::before {
+  content: ""; position: absolute; inset: 0; padding: 1px; border-radius: inherit; pointer-events: none;
+  background: linear-gradient(to bottom, #ffffff14, #ffffff0a);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+          mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude;
+}
+.love-card figure, .love-card blockquote { margin: 0; }
+.love-author { display: flex; align-items: center; gap: 16px; margin-bottom: 24px; }
+.love-avatar {
+  display: grid; place-items: center; flex: 0 0 44px; width: 44px; height: 44px;
+  border: 1px solid #ffffff1f; border-radius: 50%;
+  background: linear-gradient(145deg, #a78bfa40, #65529a14); color: #ddd0ff;
+  font-size: 1rem; font-weight: 500;
+}
+.love-card:nth-child(2) .love-avatar { background: linear-gradient(145deg, #7dc5df40, #426b8714); color: #c5e3ef; }
+.love-card:nth-child(3) .love-avatar { background: linear-gradient(145deg, #d398ae40, #86526d14); color: #efcedd; }
+.love-card:nth-child(4) .love-avatar { background: linear-gradient(145deg, #c9b69340, #80735614); color: #e6ddca; }
+.love-name { font-size: 1rem; font-weight: 500; line-height: 24px; }
+.love-role { margin-top: 1px; color: #aaa4bc; font-size: .8125rem; line-height: 20px; }
+.love-card blockquote { color: #efedfdb3; font-size: 1rem; line-height: 24px; }
+.love-card blockquote p { text-wrap: wrap; }
+.love-card em { color: #a794ff; font-style: normal; }
+.love-controls { display: flex; justify-content: flex-end; width: min(1376px, calc(100% - 48px)); height: 24px; margin-inline: auto; }
+.love-toggle { display: inline-flex; align-items: center; gap: 6px; padding: 2px 6px; border: 0; border-radius: 4px; background: transparent; color: #aaa4bc; font-size: .75rem; line-height: 20px; cursor: pointer; }
+.love-toggle:hover { color: #e0c9ff; }
+.love-toggle[hidden], .love-play-icon { display: none; }
+.love-toggle[aria-pressed="true"] .love-pause-icon { display: none; }
+.love-toggle[aria-pressed="true"] .love-play-icon { display: block; }
+.love.idle .love-track, .love.is-paused .love-track,
+.love.idle .love-heart-trail i, .love.is-paused .love-heart-trail i,
+.love.idle .love-stars i, .love.is-paused .love-stars i,
+.love-wall:focus-within .love-track { animation-play-state: paused; }
+@media (hover: hover) and (pointer: fine) { .love-wall:hover .love-track { animation-play-state: paused; } }
+@media (max-width: 1000px) { .love.is-ready .love-wall::before { display: none; } }
+@media (max-width: 700px), (prefers-reduced-motion: reduce) {
+  .love { --love-card: min(480px, calc(100vw - 48px)); --love-gap: 16px; }
+  .love.is-ready .love-wall::before { display: none; }
+  .love.is-ready .love-row, .love-row { overflow-x: auto; scroll-snap-type: x mandatory; }
+  .love.is-ready .love-track, .love-track { padding-inline: 24px; animation: none; transform: none; will-change: auto; }
+  .love-group[aria-hidden="true"] { display: none; }
+  .love-card, .love-row:nth-child(2) .love-card { min-height: 0; scroll-snap-align: start; }
+  .love-controls, .love-heart-trail { display: none; }
+}
+@media (max-width: 700px) {
+  .love { padding: 96px 0 64px; }
+  .love-heart { top: 64px; width: 520px; height: calc(520px * 557 / 602); }
+  .love-title { margin-top: 12px; }
+  .love-card { padding: 24px; }
+  .love-author { gap: 12px; }
+  .love-name { font-size: .9375rem; }
+  .love-role { font-size: .75rem; }
+  .love-card blockquote { font-size: .9375rem; }
+}
+@media (prefers-reduced-motion: reduce) { .love-stars i { animation: none; } }
 
 /* ---------- О нас: точечный глобус Reflect ---------- */
 .team {

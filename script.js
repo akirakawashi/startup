@@ -398,6 +398,56 @@
     checkOrbVisibility();
   }
 
+  /* Отзывы: две пары одинаковых лент. За кадром, при наведении и
+     с клавиатурным фокусом движение стоит; на телефоне — ручной скролл. */
+  (function initReviews() {
+    var section = $('#reviews');
+    if (!section) return;
+    var toggle = $('.love-toggle', section);
+    var rows = $$('.love-row', section);
+    var mobile = window.matchMedia('(max-width: 700px)');
+    var visible = false;
+    var queued = false;
+
+    $$('.love-track', section).forEach(function (track) {
+      var copy = $('.love-group', track).cloneNode(true);
+      copy.setAttribute('aria-hidden', 'true');
+      copy.setAttribute('inert', '');
+      track.appendChild(copy);
+    });
+    section.classList.add('is-ready');
+    toggle.hidden = false;
+    toggle.addEventListener('click', function () {
+      var paused = section.classList.toggle('is-paused');
+      toggle.setAttribute('aria-pressed', String(paused));
+      $('span', toggle).textContent = paused ? 'Продолжить' : 'Приостановить';
+    });
+    function syncMotion() {
+      section.classList.toggle('idle', !visible || document.hidden || motionQuery.matches);
+    }
+    function checkVisibility() {
+      if (queued) return;
+      queued = true;
+      window.requestAnimationFrame(function () {
+        queued = false;
+        var bounds = section.getBoundingClientRect();
+        visible = bounds.bottom > 0 && bounds.top < window.innerHeight;
+        syncMotion();
+      });
+    }
+    function resetScroll() {
+      rows.forEach(function (row) { row.scrollLeft = 0; });
+      syncMotion();
+    }
+    if ('IntersectionObserver' in window) new IntersectionObserver(checkVisibility).observe(section);
+    window.addEventListener('scroll', checkVisibility, { passive: true });
+    window.addEventListener('resize', checkVisibility, { passive: true });
+    document.addEventListener('visibilitychange', syncMotion);
+    if (motionQuery.addEventListener) motionQuery.addEventListener('change', resetScroll);
+    if (mobile.addEventListener) mobile.addEventListener('change', resetScroll);
+    checkVisibility();
+  })();
+
   /* ============================================================
      Бегущая строка: дублируем содержимое ради бесшовного цикла
      ============================================================ */
