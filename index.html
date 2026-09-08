@@ -89,9 +89,8 @@
     </ul>
   </div>
 
-  <!-- Дыра «восходит» из-за нижнего края: сцена сдвинута вниз на половину
-       собственной высоты, а .hero с overflow:hidden отрезает низ. Яркий луч
-       диска приходится ровно на границу секции и работает горизонтом. -->
+  <!-- Центр диска совпадает с верхом матового стекла. Верхняя дуга открыта,
+       нижняя видна через размытие; разлёт света затухает у краёв панели. -->
   <div class="hero-stage" aria-hidden="true">
     <video
       id="heroVideo"
@@ -109,52 +108,9 @@
     <div class="hero-stage-veil"></div>
   </div>
 
-  <!-- Матовое стекло у ватерлинии. Диск садится центром на его верхнюю грань:
-       луч ложится по кромке, нижняя дуга остаётся под стеклом и читается
-       размытым пятном. Внутри — отдельный слой просочившегося света, разбитый
-       той же точечной сеткой, что и всё свечение на сайте. -->
+  <!-- Матовое стекло начинается в центре диска и размывает его нижнюю
+       половину. Слабый след дуги вынесен в отдельный слой с точечной маской. -->
   <div class="hero-deck" aria-hidden="true">
-    <!-- Окно интерфейса на стекле: ячейки чуть темнее подложки, свет проходит
-         в зазорах между ними. Данные намеренно обезличены полосками — это
-         иллюстрация типа экрана, а не снимок конкретного проекта. -->
-    <div class="deck-ui">
-      <div class="deck-bar">
-        <span class="deck-dot"></span><span class="deck-dot"></span><span class="deck-dot"></span>
-        <span class="deck-path">админка / заявки</span>
-        <span class="deck-search"></span>
-        <span class="deck-key">Ctrl K</span>
-      </div>
-
-      <div class="deck-body">
-        <nav class="deck-side">
-          <span class="deck-nav">Обзор</span>
-          <span class="deck-nav on">Заявки</span>
-          <span class="deck-nav">Клиенты</span>
-          <span class="deck-nav">Отчёты</span>
-          <span class="deck-nav">Настройки</span>
-        </nav>
-
-        <div class="deck-main">
-          <div class="deck-row deck-head"><i></i><b></b><u></u><s></s><em></em></div>
-          <div class="deck-row on"><i class="ok"></i><b></b><u></u><s></s><em></em></div>
-          <div class="deck-row"><i></i><b></b><u></u><s></s><em></em></div>
-          <div class="deck-row"><i class="ok"></i><b></b><u></u><s></s><em></em></div>
-          <div class="deck-row"><i></i><b></b><u></u><s></s><em></em></div>
-          <div class="deck-row"><i></i><b></b><u></u><s></s><em></em></div>
-        </div>
-
-        <div class="deck-aside">
-          <span class="deck-cap">месяц</span>
-          <div class="deck-cal">
-            <i></i><i></i><i></i><i></i><i></i><i></i><i></i>
-            <i></i><i class="on"></i><i></i><i></i><i class="on"></i><i></i><i></i>
-            <i></i><i></i><i></i><i class="on"></i><i></i><i></i><i></i>
-            <i></i><i></i><i></i><i></i><i></i><i></i><i></i>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <span class="hero-deck-glow"></span>
   </div>
 

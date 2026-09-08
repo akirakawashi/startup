@@ -235,7 +235,10 @@ button, input, select, textarea { font: inherit; color: inherit; }
   --line:  rgba(167, 139, 250, .16);
   --line-strong: rgba(167, 139, 250, .34);
   /* видимая высота стеклянной палубы: к ней привязан весь низ первого экрана */
-  --deck-h: clamp(190px, 17vw, 290px);
+  --deck-h: clamp(220px, 22vw, 320px);
+  --deck-w: min(1180px, 88vw);
+  --hole-r: calc(min(1920px, 176vw) * .073);
+  --glass-blur: clamp(10px, 1.6vw, 22px);
   position: relative;
   display: flex; flex-direction: column; justify-content: center;
   /* и min-height, и нижний отступ растут на высоту палубы: полоса, отведённая
@@ -249,17 +252,16 @@ button, input, select, textarea { font: inherit; color: inherit; }
   isolation: isolate;
 }
 
-/* Сцена сдвинута вниз ровно на половину своей высоты: центр диска садится
-   на нижнюю границу секции, overflow отрезает низ — наружу выходит только
-   верхняя дуга, а горизонтальный луч читается линией горизонта. */
+/* Центр сцены совпадает с верхней гранью стекла. Горизонтальный свет
+   ограничен шириной панели: его хвосты растворяются до её боковых краёв. */
 .hero-stage {
   position: absolute; z-index: -2;
   left: 50%; bottom: var(--deck-h);
   width: min(1920px, 176vw);
   aspect-ratio: 16 / 9;
   transform: translate(-50%, 50%);
-  -webkit-mask-image: radial-gradient(ellipse 56% 56% at 50% 50%, #000 42%, transparent 76%);
-          mask-image: radial-gradient(ellipse 56% 56% at 50% 50%, #000 42%, transparent 76%);
+  -webkit-mask-image: radial-gradient(ellipse calc(var(--deck-w) * .64) 56% at 50% 50%, #000 42%, transparent 76%);
+          mask-image: radial-gradient(ellipse calc(var(--deck-w) * .64) 56% at 50% 50%, #000 42%, transparent 76%);
 }
 /* Кадр разбит той же точечной сеткой, что и остальной свет на сайте.
 
@@ -298,6 +300,9 @@ button, input, select, textarea { font: inherit; color: inherit; }
   position: absolute; inset: 0;
   pointer-events: none;
   mix-blend-mode: screen;
+  /* Под стеклом остаётся свет самого диска: широкий декоративный обод
+     давал там отдельные пятна далеко от нижней дуги. */
+  clip-path: inset(0 0 50%);
   -webkit-mask-image: var(--dots); mask-image: var(--dots);
   -webkit-mask-size: var(--dots-size); mask-size: var(--dots-size);
 }
@@ -345,186 +350,69 @@ button, input, select, textarea { font: inherit; color: inherit; }
   background: linear-gradient(to bottom, #06050d 0%, rgba(6,5,13,.62) 26%, transparent 52%);
 }
 
-/* линия горизонта на самой границе секции + свет, уходящий вверх */
+/* Кромка стекла проходит через центр диска. Луч гаснет до краёв панели. */
 .hero-horizon {
-  position: absolute; z-index: -1;
-  left: 0; right: 0; bottom: var(--deck-h); height: 1px;
+  position: absolute; z-index: 1;
+  left: 50%; bottom: var(--deck-h);
+  width: var(--deck-w); height: 1px;
+  transform: translateX(-50%);
   background: linear-gradient(90deg,
-    transparent, var(--accent-line) 18%, #e9deff 50%, var(--accent-line) 82%, transparent);
-  box-shadow: 0 0 30px 3px rgba(124, 77, 255, .45);
-}
-.hero-horizon::before {
-  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 190px;
-  background: radial-gradient(ellipse 46% 100% at 50% 100%, rgba(124, 77, 255, .28), transparent 72%);
+      transparent 5%, rgba(174, 139, 255, .15) 22%,
+      rgba(213, 187, 255, .8) 42%, #f4ebff 50%,
+      rgba(213, 187, 255, .8) 58%, rgba(174, 139, 255, .15) 78%, transparent 95%);
   pointer-events: none;
 }
+.hero-horizon::before {
+  content: ""; position: absolute; left: 18%; right: 18%; bottom: -12px; height: 44px;
+  background: radial-gradient(ellipse 50% 50% at 50% 70%, rgba(142, 88, 255, .3), transparent);
+  filter: blur(10px);
+  -webkit-mask-image: var(--dots); mask-image: var(--dots);
+  -webkit-mask-size: var(--dots-size); mask-size: var(--dots-size);
+}
 
-/* Матовое стекло у ватерлинии: диск уходит за него, свет проходит насквозь.
-
-   Панель поднята к нижнему краю секции, а верхняя её грань — та самая линия,
-   на которую садится центр диска: горизонтальный луч ложится точно по кромке,
-   нижняя дуга остаётся под стеклом и читается размытым пятном. Низ панели
-   растворяется маской, иначе на стыке с бегущей строкой была бы видна
-   поперечная граница.
-
-   Слоёв два, и это обязательно: .hero-deck несёт backdrop-filter и остаётся
-   без точечной сетки, иначе кромка рассыплется вместо того, чтобы гореть;
-   .hero-deck-glow рисует просочившийся свет и уже разбит точками, как всё
-   остальное свечение на сайте. */
+/* Матовое стекло перекрывает нижнюю половину диска. Размытие оставляет
+   мягкую дугу под кромкой; прозрачность постепенно уводит её в тёмный фон.
+   На стекле нет макета интерфейса. Маска сеткой только у отдельного света,
+   сама рамка и backdrop-filter остаются сплошными. */
 .hero-deck {
   position: absolute; z-index: 0;
   left: 50%; bottom: 0;
   transform: translateX(-50%);
-  width: min(1640px, 92vw);
-  height: var(--deck-h);
-  border-radius: 30px 30px 0 0;
+  width: var(--deck-w); height: var(--deck-h);
+  border-radius: 24px 24px 0 0;
   pointer-events: none;
   overflow: hidden;
-  /* к низу стекло плотнее: у кромки свет проходит, глубже — гаснет */
   background: linear-gradient(to bottom,
-      rgba(24, 19, 46, .42) 0%, rgba(11, 8, 23, .72) 58%, rgba(8, 6, 17, .84) 100%);
-  /* brightness глушит настоящую дугу: сквозь стекло должно читаться пятно, а не
-     кольцо. Видимый свет даёт слой поверх — он с точечной сеткой */
-  -webkit-backdrop-filter: blur(48px) saturate(1.3) brightness(.6);
-          backdrop-filter: blur(48px) saturate(1.3) brightness(.6);
+      rgba(13, 8, 29, .14), rgba(9, 6, 22, .45) 48%, rgba(6, 5, 13, .85));
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.12) brightness(.88);
+          backdrop-filter: blur(var(--glass-blur)) saturate(1.12) brightness(.88);
   box-shadow:
-    inset 0 1px 0 rgba(226, 216, 255, .5),
-    inset 0 0 0 1px rgba(167, 139, 250, .16),
-    0 -40px 90px -50px rgba(124, 77, 255, .55);
-  -webkit-mask-image: linear-gradient(to bottom, #000 66%, transparent 100%);
-          mask-image: linear-gradient(to bottom, #000 66%, transparent 100%);
+    inset 0 1px 0 rgba(223, 210, 255, .22),
+    inset 0 0 0 1px rgba(167, 139, 250, .14);
+  -webkit-mask-image: linear-gradient(to bottom, #000 56%, transparent 100%);
+          mask-image: linear-gradient(to bottom, #000 56%, transparent 100%);
 }
-/* Свет, прошедший сквозь стекло. Лежит ПОВЕРХ окна, а не под ним: под окном
-   пятно закрывали плашки строк и от свечения оставались одни зазоры. Режим
-   screen только добавляет яркость, поэтому разметка окна остаётся читаемой,
-   а середина панели горит. Сетка — та же, что у ореола панели проверок. */
+.hero-deck::before {
+  content: ""; position: absolute; inset: 8px 8px 0;
+  border: 1px solid rgba(190, 173, 234, .07);
+  border-bottom: 0;
+  border-radius: 17px 17px 0 0;
+}
+/* Слабый след дуги в стекле. Размер совпадает с кольцом в исходной сцене;
+   фильтр стоит на том же элементе, что и общая точечная маска. */
 .hero-deck-glow {
   position: absolute; inset: 0;
   display: block;
-  background: radial-gradient(ellipse 40% 88% at 50% -6%,
-      rgba(206, 192, 255, .62), rgba(140, 98, 255, .26) 42%, transparent 76%);
+  background: radial-gradient(ellipse var(--hole-r) calc(var(--hole-r) * .94) at 50% 0,
+      transparent 48%, rgba(224, 206, 255, .25) 70%, rgba(146, 94, 255, .13) 88%, transparent 110%);
+  filter: blur(calc(var(--glass-blur) * .82));
   mix-blend-mode: screen;
   -webkit-mask-image: var(--dots); mask-image: var(--dots);
   -webkit-mask-size: var(--dots-size); mask-size: var(--dots-size);
 }
-/* Окно интерфейса на стекле. Лежит поверх слоя света, поэтому свет читается
-   как идущий из-за стекла, а окно — как напечатанное на его лицевой стороне.
-   Ячейки ЧУТЬ ТЕМНЕЕ подложки, а не светлее: над самым ярким местом пятна
-   светлые плашки исчезли бы, а тёмные держат форму и пропускают свет в
-   зазорах между собой. Низ окна срезает та же маска, что растворяет стекло.
-
-   Данные — полоски: это иллюстрация типа экрана, а не снимок проекта. */
-.deck-ui {
-  position: absolute; inset: 0;
-  padding: 16px 20px 0;
-  display: flex; flex-direction: column; gap: 13px;
-  font-family: var(--ff-mono);
-}
-
-.deck-bar {
-  flex: none;
-  display: flex; align-items: center; gap: 7px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid rgba(255, 255, 255, .07);
-}
-.deck-dot {
-  width: 9px; height: 9px; border-radius: 50%;
-  background: rgba(255, 255, 255, .16);
-}
-.deck-path {
-  margin-left: 10px;
-  font-size: .68rem; letter-spacing: .04em;
-  color: rgba(240, 236, 255, .5);
-}
-.deck-search {
-  margin-left: auto;
-  width: clamp(120px, 22%, 300px); height: 22px;
-  border-radius: 999px;
-  background: rgba(8, 6, 18, .38);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .07);
-}
-.deck-key {
-  padding: 3px 7px; border-radius: 6px;
-  font-size: .6rem; color: rgba(240, 236, 255, .42);
-  background: rgba(8, 6, 18, .38);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .07);
-}
-
-.deck-body {
-  flex: 1;
-  display: grid;
-  grid-template-columns: minmax(0, 190px) minmax(0, 1fr) minmax(0, 230px);
-  gap: 14px;
-  min-height: 0;
-}
-
-.deck-side { display: flex; flex-direction: column; gap: 4px; }
-.deck-nav {
-  padding: 8px 11px; border-radius: 9px;
-  font-size: .72rem; color: rgba(240, 236, 255, .46);
-  background: rgba(8, 6, 18, .3);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .04);
-}
-.deck-nav.on {
-  color: rgba(240, 236, 255, .82);
-  background: rgba(124, 77, 255, .22);
-  box-shadow: inset 0 0 0 1px rgba(196, 181, 253, .28);
-}
-
-.deck-main { display: flex; flex-direction: column; gap: 5px; }
-.deck-row {
-  display: flex; align-items: center; gap: 12px;
-  padding: 9px 12px; border-radius: 9px;
-  background: rgba(8, 6, 18, .32);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .04);
-}
-.deck-row i {
-  flex: none; width: 11px; height: 11px; border-radius: 3px;
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .2);
-}
-.deck-row i.ok { background: var(--ok); box-shadow: none; }
-.deck-row b, .deck-row u, .deck-row em {
-  height: 6px; border-radius: 3px;
-  background: rgba(255, 255, 255, .14);
-}
-.deck-row b { flex: 2; max-width: 230px; }
-.deck-row u { flex: 3; max-width: 420px; }
-.deck-row em { flex: none; width: 46px; margin-left: auto; }
-/* пилюля статуса: ряд из одних полосок читался монотонно */
-.deck-row s {
-  flex: none; width: 66px; height: 15px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, .06);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .07);
-}
-.deck-row.on s { background: rgba(196, 181, 253, .3); box-shadow: none; }
-.deck-row i.ok ~ s { background: rgba(94, 234, 212, .22); box-shadow: none; }
-.deck-row.deck-head { background: none; box-shadow: none; opacity: .45; }
-.deck-row.on {
-  background: rgba(124, 77, 255, .18);
-  box-shadow: inset 0 0 0 1px rgba(196, 181, 253, .22);
-}
-
-.deck-aside {
-  padding: 11px 12px; border-radius: 12px;
-  background: rgba(8, 6, 18, .32);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .05);
-}
-.deck-cap {
-  display: block; margin-bottom: 9px;
-  font-size: .6rem; letter-spacing: .1em; text-transform: uppercase;
-  color: rgba(240, 236, 255, .34);
-}
-.deck-cal { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; }
-.deck-cal i {
-  aspect-ratio: 1; border-radius: 4px;
-  background: rgba(255, 255, 255, .07);
-}
-.deck-cal i.on { background: rgba(167, 139, 250, .55); }
-
-/* без backdrop-filter стекло превратилось бы в прозрачную рамку */
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-  .hero-deck { background: linear-gradient(to bottom, rgba(17, 13, 33, .9), #0a0817); }
+  .hero-deck { background: linear-gradient(to bottom, rgba(10, 6, 24, .88), #06050d); }
+  .hero-deck-glow { opacity: .8; }
 }
 
 .hero-inner { position: relative; z-index: 1; text-align: center; }
@@ -3138,15 +3026,13 @@ button, input, select, textarea { font: inherit; color: inherit; }
   .burger { display: inline-flex; }
   .topbar-cta { display: none; }
 
-  .hero { min-height: auto; --deck-h: clamp(120px, 30vw, 176px); }
-  .hero-deck { width: calc(100% - 24px); border-radius: 22px 22px 0 0; }
-  .deck-ui { padding: 12px 14px 0; gap: 10px; }
-  .deck-side, .deck-aside, .deck-key { display: none; }
+  .hero { min-height: auto; --deck-h: clamp(150px, 37vw, 210px); --deck-w: calc(100vw - 32px); }
+  .hero-deck { border-radius: 18px 18px 0 0; }
+  .hero-deck::before { inset: 6px 6px 0; border-radius: 13px 13px 0 0; }
   /* радар вдвое меньше, подписи те же: четыре отметки уходят, чтобы соседние
      не налезали друг на друга */
   .blip-extra { display: none; }
   .blip-wave { width: 54px; height: 54px; }
-  .deck-body { grid-template-columns: minmax(0, 1fr); }
 
   .cards, .value-row, .stack-grid, .formats { grid-template-columns: 1fr; }
   .hero-facts { grid-template-columns: 1fr; gap: 16px; }
