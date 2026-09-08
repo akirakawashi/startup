@@ -816,9 +816,6 @@
       <div class="signal-scene">
         <div class="signal-aura"></div>
         <div class="signal-floor"></div>
-        <svg class="signal-emission" viewBox="0 0 1000 440" fill="none">
-          <use href="#signalCrystalShape" fill="url(#signalEmission)"/>
-        </svg>
         <svg class="signal-fibers" viewBox="0 0 1000 440" fill="none">
           <defs>
             <linearGradient id="signalFiber" x1="0" y1="220" x2="1000" y2="220" gradientUnits="userSpaceOnUse">
@@ -897,12 +894,6 @@
 
         <svg class="signal-prism" viewBox="0 0 1000 440" fill="none">
           <defs>
-            <path id="signalCrystalShape" d="M413.77 293.39 439.31 111.65 523.26 54.52 575.31 124.48 586.23 146.61 560.69 328.35 476.74 385.48 424.69 315.52Z"/>
-            <linearGradient id="signalEmission" x1="480" y1="55" x2="520" y2="385" gradientUnits="userSpaceOnUse">
-              <stop stop-color="#c6adff"/>
-              <stop offset=".48" stop-color="#ae78ff"/>
-              <stop offset="1" stop-color="#91baff"/>
-            </linearGradient>
             <linearGradient id="signalFront" x1="449" y1="133" x2="516" y2="333" gradientUnits="userSpaceOnUse">
               <stop stop-color="#d1c2ff" stop-opacity=".64"/>
               <stop offset=".23" stop-color="#987bce" stop-opacity=".5"/>
@@ -949,7 +940,7 @@
           </defs>
           <!-- Шестигранный объём: три длинные видимые плоскости и две острые
                вершины. Рёбра соединяют вершины огранки, а не сходятся в центре. -->
-          <use href="#signalCrystalShape" fill="#0d081b" fill-opacity=".86"/>
+          <path d="M413.77 293.39 439.31 111.65 523.26 54.52 575.31 124.48 586.23 146.61 560.69 328.35 476.74 385.48 424.69 315.52Z" fill="#0d081b" fill-opacity=".86"/>
           <g fill="url(#signalCrown)" opacity=".38">
             <path d="M523.26 54.52 439.31 111.65 501.85 107Z"/>
             <path d="M523.26 54.52 501.85 107 575.31 124.48Z"/>
@@ -972,7 +963,7 @@
           <!-- Тонкие внутренние преломления остаются внутри длинных граней. -->
           <path d="M464 139 509 206 491 325 478 258Z" fill="#e3d1ff" fill-opacity=".045"/>
           <path d="M550 152 539 244 508 309 524 208Z" fill="#b5c8ff" fill-opacity=".045"/>
-          <use href="#signalCrystalShape" stroke="url(#signalEdge)" stroke-width="1.05" stroke-linejoin="round"/>
+          <path d="M413.77 293.39 439.31 111.65 523.26 54.52 575.31 124.48 586.23 146.61 560.69 328.35 476.74 385.48 424.69 315.52Z" stroke="url(#signalEdge)" stroke-width="1.05" stroke-linejoin="round"/>
           <g stroke="url(#signalEdge)" stroke-width=".65">
             <path d="M586.23 146.61 523.69 151.26 450.23 133.78 439.31 111.65"/>
             <path d="M560.69 328.35 498.15 333 424.69 315.52 413.77 293.39"/>

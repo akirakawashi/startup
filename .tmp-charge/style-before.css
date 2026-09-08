@@ -2995,10 +2995,10 @@ button, input, select, textarea { font: inherit; color: inherit; }
 
 /* ---------- Автоматизация: стеклянная призма ----------
    Геометрия и свет статичны. Двигаются восемь маленьких импульсов
-   через transform; готовые слои свечения меняют только opacity.
+   через transform; две готовые засветки меняют только opacity.
    Координаты импульсов сняты с тех же кривых Безье, что у нитей в SVG.
-   Здесь свет гладкий по выбору пользователя. При входе частиц сила света
-   возрастает в десять раз; фильтры и градиенты при этом не пересчитываются. */
+   Здесь свет гладкий по выбору пользователя; --signal-light компенсирует
+   яркость после снятия сетки. Остальные блоки сохраняют свою фактуру. */
 .signal {
   position: relative; overflow: hidden;
   padding: clamp(72px, 8vw, 112px) 0 clamp(64px, 7vw, 100px);
@@ -3019,26 +3019,26 @@ button, input, select, textarea { font: inherit; color: inherit; }
   position: relative; height: clamp(270px, 42vw, 500px);
   margin-top: 8px; pointer-events: none;
 }
-/* Свечение и импульсы начинают отсчёт вместе после сборки сцены. */
+/* Все десять анимаций начинают отсчёт вместе после сборки сцены. */
 .signal-stage:not(.is-ready) * { animation-play-state: paused; }
 .signal-scene {
   --signal-scale: 1;
+  --signal-light: .56;
   position: absolute; left: 50%; top: 50%; width: 1000px; height: 440px;
   transform: translate(-50%, -50%) scale(var(--signal-scale));
 }
-.signal-fibers, .signal-prism, .signal-emission { position: absolute; inset: 0; display: block; width: 100%; height: 100%; }
+.signal-fibers, .signal-prism { position: absolute; inset: 0; display: block; width: 100%; height: 100%; }
 .signal-aura {
-  position: absolute; left: 292px; top: 6px; width: 416px; height: 428px;
-  background: radial-gradient(ellipse, rgba(152, 97, 255, .95), rgba(107, 59, 215, .6) 38%, transparent 72%);
+  position: absolute; left: 320px; top: 36px; width: 360px; height: 370px;
+  background: radial-gradient(ellipse, rgba(131, 77, 235, .24), rgba(87, 48, 181, .09) 42%, transparent 70%);
   filter: blur(18px);
-}
-.signal-emission {
-  filter: blur(16px);
+  opacity: var(--signal-light);
 }
 .signal-floor {
-  position: absolute; left: 310px; top: 374px; width: 380px; height: 42px;
-  background: radial-gradient(ellipse, rgba(163, 137, 255, .88), transparent 68%);
+  position: absolute; left: 328px; top: 378px; width: 344px; height: 30px;
+  background: radial-gradient(ellipse, rgba(141, 111, 229, .27), transparent 66%);
   filter: blur(8px);
+  opacity: var(--signal-light);
 }
 .signal-packet {
   position: absolute; left: 0; top: 0; width: 34px; height: 1.6px;
@@ -3053,20 +3053,20 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .signal-refraction {
   position: absolute; left: 0; top: 0; width: 100%; height: 100%;
   clip-path: polygon(41.377% 66.68%, 43.931% 25.375%, 52.326% 12.391%, 57.531% 28.291%, 58.623% 33.32%, 56.069% 74.625%, 47.674% 87.609%, 42.469% 71.709%);
-  background:
-    radial-gradient(ellipse 110px 220px at 50% 50%, rgba(240, 223, 255, .86), rgba(184, 132, 255, .52) 40%, rgba(135, 130, 255, .24) 75%, transparent),
-    linear-gradient(112deg, transparent 43%, rgba(196, 158, 255, .15) 47%, rgba(248, 235, 255, .65) 50%, rgba(163, 187, 255, .12) 54%, transparent 57%);
+  background: linear-gradient(112deg, transparent 43%, rgba(196, 158, 255, .1) 47%, rgba(240, 224, 255, .5) 50%, rgba(163, 187, 255, .08) 54%, transparent 57%);
+  opacity: calc(.15 * var(--signal-light));
+  animation: signalRefract 9s linear infinite;
+  animation-delay: calc(-2s - var(--shot-t, 0s));
+  will-change: opacity;
 }
 .signal-bloom {
-  position: absolute; left: 384px; top: 127px; width: 232px; height: 186px;
+  position: absolute; left: 402px; top: 142px; width: 196px; height: 156px;
   background:
     radial-gradient(ellipse 40% 9% at 52% 50%, #f3e6ff, rgba(202, 168, 255, .7) 26%, transparent 80%),
-    radial-gradient(ellipse at 52% 50%, rgba(188, 145, 255, .82), transparent 65%);
+    radial-gradient(ellipse at 52% 50%, rgba(174, 135, 255, .62), transparent 62%);
   filter: blur(7px);
-}
-.signal-aura, .signal-emission, .signal-floor, .signal-refraction, .signal-bloom {
-  opacity: .09;
-  animation: signalCharge 9s linear infinite;
+  opacity: calc(.25 * var(--signal-light));
+  animation: signalBloom 9s linear infinite;
   animation-delay: calc(-2s - var(--shot-t, 0s));
   will-change: opacity;
 }
@@ -3088,16 +3088,17 @@ button, input, select, textarea { font: inherit; color: inherit; }
   content: ""; width: 24px; height: 1px; margin-right: clamp(0px, 1vw, 12px);
   background: linear-gradient(90deg, var(--line-strong), transparent);
 }
-/* Головки частиц пересекают левую грань около 41% цикла.
-   Пик приходится на поглощение в 47–50%, затем свет плавно остывает. */
-@keyframes signalCharge {
-  0%, 38%, 83%, 100% { opacity: .09; }
-  41% { opacity: .22; }
-  44% { opacity: .55; }
-  47%, 50% { opacity: .9; }
-  55% { opacity: .7; }
-  62% { opacity: .38; }
-  72% { opacity: .15; }
+@keyframes signalRefract {
+  0%, 38%, 80%, 100% { opacity: calc(.12 * var(--signal-light)); }
+  46% { opacity: calc(.25 * var(--signal-light)); }
+  53% { opacity: calc(.8 * var(--signal-light)); }
+  65% { opacity: calc(.2 * var(--signal-light)); }
+}
+@keyframes signalBloom {
+  0%, 35%, 82%, 100% { opacity: calc(.22 * var(--signal-light)); }
+  45% { opacity: calc(.45 * var(--signal-light)); }
+  52% { opacity: var(--signal-light); }
+  63% { opacity: calc(.4 * var(--signal-light)); }
 }
 
 .signal-packet-in0 { animation-name: signalin0; }
@@ -3291,7 +3292,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 }
 @media (prefers-reduced-motion: reduce) {
   .signal-packet { display: none; }
-  .signal-aura, .signal-emission, .signal-floor, .signal-refraction, .signal-bloom { animation: none; }
+  .signal-refraction, .signal-bloom { animation: none; }
 }
 
 
