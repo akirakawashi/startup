@@ -622,30 +622,86 @@
   }
 
   /* ============================================================
-     Видео: не крутим вхолостую за пределами экрана
+     Призма автоматизации: один масштаб для стекла, нитей и импульсов
      ============================================================ */
-  var videos = $$('video');
-  if (videos.length) {
-    if (reduceMotion) {
-      videos.forEach(function (v) {
-        v.removeAttribute('autoplay');
-        v.pause();
+  (function initSignalSize() {
+    var stage = $('.signal-stage');
+    var scene = $('.signal-scene');
+    if (!stage || !scene) return;
+    // SVG и импульсы используют одну систему координат 1000 × 440.
+    // На телефоне немного обрезаем дальние концы нитей, сохраняя размер призмы.
+    var fit = function () {
+      scene.style.setProperty('--signal-scale', Math.max(.55, Math.min(1.12, stage.clientWidth / 1000)));
+    };
+    if ('ResizeObserver' in window) new ResizeObserver(fit).observe(stage);
+    else window.addEventListener('resize', fit, { passive: true });
+    fit();
+    stage.classList.add('is-ready');
+  })();
+
+  /* ============================================================
+     Декоративные CSS-анимации: пауза вне экрана и в скрытой вкладке.
+     Наблюдаем неподвижные обёртки, чтобы движущийся потомок не выключал
+     сам себя. Небольшой запас запускает эффект до появления его свечения.
+     play-state сохраняет фазу, в том числе общую фазу луча и отметок радара.
+     ============================================================ */
+  (function initMotionVisibility() {
+    var scopes = $$('.hero-title, .hero-rim, .pulse, .marquee, .case-status.live, .radar-stage, .mk-cv, .signal-stage');
+    var visible = new Set(scopes);
+    var sync = function () {
+      scopes.forEach(function (el) {
+        el.classList.toggle('motion-paused', document.hidden || !visible.has(el));
       });
-    } else if ('IntersectionObserver' in window) {
-      var videoObserver = new IntersectionObserver(function (entries) {
+    };
+    if ('IntersectionObserver' in window) {
+      var observer = new IntersectionObserver(function (entries) {
         entries.forEach(function (entry) {
-          var v = entry.target;
-          if (entry.isIntersecting) {
-            var p = v.play();
-            if (p && p.catch) p.catch(function () { /* автовоспроизведение запрещено — остаётся постер */ });
-          } else {
-            v.pause();
-          }
+          if (entry.isIntersecting) visible.add(entry.target);
+          else visible.delete(entry.target);
         });
-      }, { threshold: 0.05 });
-      videos.forEach(function (v) { videoObserver.observe(v); });
+        sync();
+      }, { rootMargin: '120px' });
+      scopes.forEach(function (el) { observer.observe(el); });
     }
-  }
+    document.addEventListener('visibilitychange', sync);
+    sync();
+  })();
+
+  /* ============================================================
+     Видео: сохраняем кадр и позицию на паузе, продолжаем при возвращении
+     ============================================================ */
+  (function initVideoVisibility() {
+    var videos = $$('video');
+    if (!videos.length) return;
+    var observed = 'IntersectionObserver' in window;
+    var visible = new Set(observed ? [] : videos);
+    var sync = function () {
+      videos.forEach(function (v) {
+        if (!visible.has(v) || document.hidden || motionQuery.matches) {
+          v.pause();
+        } else if (v.paused) {
+          var p = v.play();
+          if (p && p.catch) p.catch(function () { /* запрет автозапуска или пауза до готовности видео */ });
+        }
+      });
+    };
+    // Запуском управляет видимость: autoplay не должен обойти паузу,
+    // если файл догрузился уже после ухода со страницы или из блока.
+    videos.forEach(function (v) { v.removeAttribute('autoplay'); });
+    if (observed) {
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) visible.add(entry.target);
+          else visible.delete(entry.target);
+        });
+        sync();
+      }, { threshold: 0.05 });
+      videos.forEach(function (v) { observer.observe(v); });
+    }
+    document.addEventListener('visibilitychange', sync);
+    if (motionQuery.addEventListener) motionQuery.addEventListener('change', sync);
+    sync();
+  })();
 
   /* ============================================================
      Терминал в блоке процесса
@@ -1068,42 +1124,59 @@
       screenEl.classList.toggle('failing', bad);
     };
 
-    var visible = false, running = false, last = 0, t0 = 0;
-    var tick = function (now) {
-      if (!visible) { running = false; return; }
-      if (now - last >= 1000 / FPS) {
-        last = now;
-        if (!t0) t0 = now;
-        paint(phaseAt(now - t0));
-        setScreen(now - t0);
-      }
-      window.requestAnimationFrame(tick);
+    var visible = false, frame = 0, last = 0, previous = null, elapsed = 0;
+    var stop = function () {
+      if (frame) window.cancelAnimationFrame(frame);
+      frame = 0;
+      last = 0;
+      previous = null;
     };
-    var start = function () {
+    var tick = function (now) {
+      frame = 0;
+      if (!visible || document.hidden || motionQuery.matches) { stop(); return; }
+      if (previous !== null) elapsed += now - previous;
+      previous = now;
+      if (!last || now - last >= 1000 / FPS) {
+        last = now;
+        paint(phaseAt(elapsed));
+        setScreen(elapsed);
+      }
+      frame = window.requestAnimationFrame(tick);
+    };
+    var sync = function () {
+      if (!visible || document.hidden) { stop(); return; }
       if (!build()) return;
       glowCanvas.parentNode.classList.add('has-glow');
-      if (reduceMotion) { paint(0); return; }
-      if (!running) { running = true; window.requestAnimationFrame(tick); }
+      if (motionQuery.matches) { stop(); paint(0); setScreen(0); return; }
+      if (!frame) frame = window.requestAnimationFrame(tick);
     };
 
-    if (reduceMotion || !('IntersectionObserver' in window)) {
+    if (!('IntersectionObserver' in window)) {
       visible = true;
-      start();
+      sync();
     } else {
       new IntersectionObserver(function (entries) {
         visible = entries[0].isIntersecting;
-        if (visible) start();
+        sync();
       }, { rootMargin: '120px' }).observe(glowCanvas.parentNode);
     }
 
-    window.addEventListener('load', function () { if (visible) start(); });
+    document.addEventListener('visibilitychange', sync);
+    if (motionQuery.addEventListener) motionQuery.addEventListener('change', sync);
+    window.addEventListener('load', sync);
     var glowQueued = false;
     window.addEventListener('resize', function () {
       if (glowQueued) return;
       glowQueued = true;
       window.requestAnimationFrame(function () {
         glowQueued = false;
-        if (build() && (reduceMotion || !running)) paint(0);
+        if (!visible || document.hidden) return;
+        if (build()) {
+          var t = motionQuery.matches ? 0 : elapsed;
+          paint(phaseAt(t));
+          setScreen(t);
+          sync();
+        }
       });
     }, { passive: true });
   }
