@@ -847,136 +847,102 @@
 </section>
 
 <!-- ===================== ОДНА СИСТЕМА ===================== -->
-<!-- Шпиль света. У образца (reflect.app) это растровая картинка 806×849, у нас
-     вектор: силуэт — две вогнутые кривые от острия к подолу, залитые радиальным
-     градиентом. Кромка вынесена отдельным слоем: заливка размыта и разбита
-     точечной сеткой, а кромке нужна резкость, иначе острие рассыплется.
-     Позади — колонны света и восходящие звёзды. -->
+<!-- Шпиль: холодный свет вдоль оси, вогнутый силуэт и тихое поле пыли. -->
 <section class="spire" id="system">
 
-  <div class="spire-stage" aria-hidden="true">
-    <svg class="spire-cols" viewBox="0 0 800 900" preserveAspectRatio="xMidYMid meet">
+  <div class="spire-stage idle" aria-hidden="true">
+    <svg class="spire-light" viewBox="0 0 800 800" fill="none">
       <defs>
-        <linearGradient id="spireColBack" x1="0" y1="90" x2="0" y2="470" gradientUnits="userSpaceOnUse">
-          <stop offset="0"   stop-color="#a78bfa" stop-opacity="0"/>
-          <stop offset=".32" stop-color="#a78bfa" stop-opacity=".038"/>
-          <stop offset=".72" stop-color="#8b5cf6" stop-opacity=".032"/>
-          <stop offset="1"   stop-color="#7c4dff" stop-opacity="0"/>
+        <!-- Один силуэт для заливки, ореола и выреза в колоннах. -->
+        <path id="spireShape" d="M400 26 C400 238 362 370 110 470 Q400 674 690 470 C438 370 400 238 400 26Z"/>
+        <linearGradient id="spireBody" x1="400" y1="26" x2="400" y2="590" gradientUnits="userSpaceOnUse">
+          <stop stop-color="#6bcfe9" stop-opacity="0"/>
+          <stop offset=".13" stop-color="#6bcfe9" stop-opacity=".48"/>
+          <stop offset=".32" stop-color="#6ed5ff"/>
+          <stop offset=".52" stop-color="#5aa9ff"/>
+          <stop offset=".7" stop-color="#4546f5" stop-opacity=".95"/>
+          <stop offset=".85" stop-color="#3423d2" stop-opacity=".6"/>
+          <stop offset="1" stop-color="#24146e" stop-opacity="0"/>
         </linearGradient>
-        <!-- концы граней гасим: без этого наверху остаются голые линии там,
-             где тело полосы уже растворилось -->
-        <linearGradient id="spireColFadeG" x1="0" y1="90" x2="0" y2="470" gradientUnits="userSpaceOnUse">
-          <stop offset="0"   stop-color="#000"/>
-          <stop offset=".32" stop-color="#fff"/>
-          <stop offset=".78" stop-color="#fff"/>
-          <stop offset="1"   stop-color="#000"/>
+        <linearGradient id="spireCore" x1="400" y1="132" x2="400" y2="475" gradientUnits="userSpaceOnUse">
+          <stop stop-color="#d2f9ff" stop-opacity="0"/>
+          <stop offset=".23" stop-color="#e5faff"/>
+          <stop offset=".48" stop-color="#faf6ff"/>
+          <stop offset=".7" stop-color="#e9deff" stop-opacity=".95"/>
+          <stop offset="1" stop-color="#b3a4ff" stop-opacity="0"/>
         </linearGradient>
-        <mask id="spireColFade">
-          <rect x="0" y="90" width="800" height="380" fill="url(#spireColFadeG)"/>
-        </mask>
-        <!-- обводка граней: центр градиента там же, где свечение, поэтому
-             ближние к нему полосы обведены ярко, дальние гаснут -->
-        <radialGradient id="spireColEdge" gradientUnits="userSpaceOnUse" cx="400" cy="360" r="430">
-          <stop offset="0"   stop-color="#e6dcff" stop-opacity=".45"/>
-          <stop offset=".4"  stop-color="#b9a4ff" stop-opacity=".34"/>
-          <stop offset=".72" stop-color="#8b5cf6" stop-opacity=".12"/>
-          <stop offset="1"   stop-color="#7c4dff" stop-opacity="0"/>
+        <radialGradient id="spireHalo">
+          <stop stop-color="#6256ff" stop-opacity=".55"/>
+          <stop offset=".45" stop-color="#4734f6" stop-opacity=".28"/>
+          <stop offset="1" stop-color="#3320bb" stop-opacity="0"/>
         </radialGradient>
-        <!-- фигура закрывает полосы: силуэт вырезан из слоя, иначе они
-             просвечивают сквозь полупрозрачную заливку шпиля -->
-        <filter id="spireCut"><feGaussianBlur stdDeviation="5"/></filter>
-        <mask id="spireBehind">
-          <rect x="0" y="0" width="800" height="900" fill="#fff"/>
-          <path d="M400 26 C 396 190 300 424 60 470 Q 400 815 740 470 C 500 424 404 190 400 26 Z" fill="#000" filter="url(#spireCut)"/>
-        </mask>
+        <radialGradient id="spireFalloff" cx="400" cy="270" r="320" gradientUnits="userSpaceOnUse"
+                        gradientTransform="translate(400 270) scale(1 .9) translate(-400 -270)">
+          <stop offset=".42" stop-color="#fff"/>
+          <stop offset=".68" stop-color="#fff" stop-opacity=".7"/>
+          <stop offset=".88" stop-color="#fff" stop-opacity=".18"/>
+          <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+        </radialGradient>
+        <linearGradient id="spireAura" x1="400" y1="100" x2="400" y2="560" gradientUnits="userSpaceOnUse">
+          <stop stop-color="#80d5ff" stop-opacity="0"/>
+          <stop offset=".4" stop-color="#6889ff" stop-opacity=".28"/>
+          <stop offset=".7" stop-color="#6552ff" stop-opacity=".34"/>
+          <stop offset="1" stop-color="#5134ff" stop-opacity="0"/>
+        </linearGradient>
+        <linearGradient id="spireColBack" x1="0" y1="150" x2="0" y2="490" gradientUnits="userSpaceOnUse">
+          <stop stop-color="#7b7aff" stop-opacity="0"/>
+          <stop offset=".35" stop-color="#7b7aff" stop-opacity=".035"/>
+          <stop offset=".7" stop-color="#7b7aff" stop-opacity=".025"/>
+          <stop offset="1" stop-color="#7b7aff" stop-opacity="0"/>
+        </linearGradient>
+        <linearGradient id="spireColEdge" x1="0" y1="150" x2="0" y2="490" gradientUnits="userSpaceOnUse">
+          <stop stop-color="#b7b9ff" stop-opacity="0"/>
+          <stop offset=".22" stop-color="#b7b9ff" stop-opacity=".065"/>
+          <stop offset=".75" stop-color="#b7b9ff" stop-opacity=".17"/>
+          <stop offset="1" stop-color="#b7b9ff" stop-opacity="0"/>
+        </linearGradient>
+        <linearGradient id="spireRayFade" x1="400" y1="235" x2="400" y2="510" gradientUnits="userSpaceOnUse">
+          <stop stop-color="#e1f4ff" stop-opacity="0"/>
+          <stop offset=".4" stop-color="#e1f4ff" stop-opacity=".17"/>
+          <stop offset=".72" stop-color="#ddd8ff" stop-opacity=".11"/>
+          <stop offset="1" stop-color="#ddd8ff" stop-opacity="0"/>
+        </linearGradient>
+        <filter id="spireSoft" x="-60%" y="-30%" width="220%" height="160%" color-interpolation-filters="sRGB"><feGaussianBlur stdDeviation="18"/></filter>
+        <filter id="spireDiffuse" x="-40%" y="-25%" width="180%" height="150%" color-interpolation-filters="sRGB"><feGaussianBlur stdDeviation="34"/></filter>
+        <mask id="spireBehind"><rect width="800" height="800" fill="#fff"/><use href="#spireShape" fill="#000"/></mask>
+        <mask id="spireFade"><rect width="800" height="800" fill="url(#spireFalloff)"/></mask>
+        <clipPath id="spireInside"><use href="#spireShape"/></clipPath>
       </defs>
+
       <g mask="url(#spireBehind)">
         <g fill="url(#spireColBack)">
-          <rect x="128" y="90" width="59" height="380"/>
-          <rect x="226" y="90" width="59" height="380"/>
-          <rect x="314" y="90" width="59" height="380"/>
-          <rect x="428" y="90" width="59" height="380"/>
-          <rect x="514" y="90" width="59" height="380"/>
-          <rect x="612" y="90" width="59" height="380"/>
+          <path d="M128 150h59v340h-59z M226 150h59v340h-59z M314 150h59v340h-59z M426 150h59v340h-59z M514 150h59v340h-59z M612 150h59v340h-59z"/>
         </g>
-        <g fill="none" stroke="url(#spireColEdge)" stroke-width="1"
-           vector-effect="non-scaling-stroke" mask="url(#spireColFade)">
-          <path d="M128 90V470M188 90V470"/>
-          <path d="M226 90V470M286 90V470"/>
-          <path d="M314 90V470M372 90V470"/>
-          <path d="M428 90V470M486 90V470"/>
-          <path d="M514 90V470M574 90V470"/>
-          <path d="M612 90V470M672 90V470"/>
+        <path d="M128 150v340M187 150v340M226 150v340M285 150v340M314 150v340M373 150v340M426 150v340M485 150v340M514 150v340M573 150v340M612 150v340M671 150v340"
+              stroke="url(#spireColEdge)" stroke-width=".8"/>
+      </g>
+      <ellipse cx="400" cy="481" rx="295" ry="132" fill="url(#spireHalo)"/>
+      <use href="#spireShape" fill="url(#spireAura)" filter="url(#spireDiffuse)"/>
+      <g mask="url(#spireFade)">
+        <use href="#spireShape" fill="url(#spireBody)"/>
+
+        <!-- Свет расширяется от оси по форме шпиля, без круглого белого пятна. -->
+        <g clip-path="url(#spireInside)">
+          <path d="M400 132 C390 248 367 330 327 416 Q400 505 473 416 C433 330 410 248 400 132Z"
+                fill="url(#spireCore)" filter="url(#spireSoft)"/>
+          <path d="M400 150 C398 245 388 310 363 381 Q400 448 437 381 C412 310 402 245 400 150Z"
+                fill="url(#spireCore)" opacity=".65" filter="url(#spireSoft)"/>
+          <!-- Тонкие расходящиеся кривые вписаны в свет и гаснут до основания. -->
+          <g stroke="url(#spireRayFade)" stroke-width=".8">
+            <path d="M392 238Q369 392 274 487M394 238Q378 391 312 499M397 238Q387 392 350 507M399 238Q396 392 387 510"/>
+            <path d="M408 238Q431 392 526 487M406 238Q422 391 488 499M403 238Q413 392 450 507M401 238Q404 392 413 510"/>
+          </g>
         </g>
       </g>
     </svg>
     <span class="spire-stars"><i></i><i></i><i></i></span>
-
-
-    <!-- широкий ореол у основания: у образца свет заметно выходит за кромки
-         и стелется под подолом. Лежит под силуэтом, поэтому саму фигуру не мылит -->
-    <!-- ореол по форме фигуры: размытая копия силуэта. Режим screen, поэтому
-         свет ложится и на колонны позади — у образца свечение достаёт до них -->
-    <svg class="spire-aura" viewBox="0 0 800 900" preserveAspectRatio="xMidYMid meet">
-      <defs>
-        <!-- у острия ореола нет: там он превращал тонкий шпиль в дымку -->
-        <linearGradient id="spireAura" x1="0" y1="26" x2="0" y2="470" gradientUnits="userSpaceOnUse">
-          <stop offset="0"   stop-color="#7c4dff" stop-opacity="0"/>
-          <stop offset=".38" stop-color="#7c4dff" stop-opacity=".3"/>
-          <stop offset=".75" stop-color="#7c4dff" stop-opacity=".4"/>
-          <stop offset="1"   stop-color="#8b5cf6" stop-opacity=".42"/>
-        </linearGradient>
-      </defs>
-      <path d="M400 26 C 396 190 300 424 60 470 Q 400 815 740 470 C 500 424 404 190 400 26 Z" fill="url(#spireAura)"/>
-    </svg>
-
-    <span class="spire-halo"></span>
-
-    <svg class="spire-glow" viewBox="0 0 800 900" preserveAspectRatio="xMidYMid meet">
-      <defs>
-        <!-- ядро вытянуто по вертикали вдвое: у образца белое пятно занимает
-             22–48 % высоты силуэта и вдвое уже, чем выше -->
-        <radialGradient id="spireCore" gradientUnits="userSpaceOnUse"
-                        cx="400" cy="292" r="300"
-                        gradientTransform="translate(400 292) scale(.75 1.12) translate(-400 -292)">
-          <stop offset="0"   stop-color="#ffffff"/>
-          <stop offset=".22" stop-color="#ffffff"/>
-          <stop offset=".33" stop-color="#ab90fb"/>
-          <stop offset=".45" stop-color="#7c4dff"/>
-          <stop offset=".57" stop-color="#5a2fc0" stop-opacity=".9"/>
-          <stop offset=".7"  stop-color="#40208a" stop-opacity=".6"/>
-          <stop offset="1"   stop-color="#2a1370" stop-opacity="0"/>
-        </radialGradient>
-        <radialGradient id="spireWash" gradientUnits="userSpaceOnUse" cx="400" cy="372" r="362"
-                        gradientTransform="translate(400 350) scale(1.5 1) translate(-400 -350)">
-          <stop offset="0"   stop-color="#8b5cf6" stop-opacity=".62"/>
-          <stop offset=".3"  stop-color="#7c4dff" stop-opacity=".45"/>
-          <stop offset=".55" stop-color="#6d3ff5" stop-opacity=".22"/>
-          <stop offset=".78" stop-color="#4c1d95" stop-opacity=".05"/>
-          <stop offset="1"   stop-color="#4c1d95" stop-opacity="0"/>
-        </radialGradient>
-      </defs>
-      <!-- две заливки одним силуэтом: широкая холодная наполняет подол,
-           поверх — узкое горячее ядро. Одним градиентом низ оставался тёмным -->
-      <path d="M400 26 C 396 190 300 424 60 470 Q 400 815 740 470 C 500 424 404 190 400 26 Z"
-            fill="url(#spireWash)"/>
-      <path d="M400 26 C 396 190 300 424 60 470 Q 400 815 740 470 C 500 424 404 190 400 26 Z"
-            fill="url(#spireCore)"/>
-    </svg>
-
-    <!-- та же заливка без размытия: сверху её видно, и кромка выходит
-         резкой, к низу слой тает и остаётся только размытый -->
-    <svg class="spire-crisp" viewBox="0 0 800 900" preserveAspectRatio="xMidYMid meet">
-      <!-- две заливки одним силуэтом: широкая холодная наполняет подол,
-           поверх — узкое горячее ядро. Одним градиентом низ оставался тёмным -->
-      <path d="M400 26 C 396 190 300 424 60 470 Q 400 815 740 470 C 500 424 404 190 400 26 Z"
-            fill="url(#spireWash)"/>
-      <path d="M400 26 C 396 190 300 424 60 470 Q 400 815 740 470 C 500 424 404 190 400 26 Z"
-            fill="url(#spireCore)"/>
-    </svg>
-
-    <span class="spire-veil"></span>
   </div>
+
 
   <div class="wrap spire-copy">
     <p class="spire-pill reveal">одна система</p>

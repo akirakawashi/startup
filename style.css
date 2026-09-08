@@ -2266,144 +2266,98 @@ button, input, select, textarea { font: inherit; color: inherit; }
 }
 
 /* ---------- Одна система: шпиль света ----------
-   Образец — reflect.app. У них шпиль растровая картинка 806×849, у нас вектор:
-   силуэт из двух вогнутых кривых, сходящихся в острие, залит радиальным
-   градиентом от белого ядра к фиолетовому подолу.
-
-   Слоя два, и это то же правило, что у сектора радара и у стеклянной палубы:
-   заливка размыта, а кромке резкость нужна — размытие съело бы острие.
-   Поэтому у кромки свой svg, без фильтра.
-
-   Звёзды у образца сделаны сотнями box-shadow в одном элементе; тут три слоя
-   с повторяющимся фоном из точек и разным шагом — рисунок не читается как
-   решётка, а весит несколько строк вместо десяти килобайт. */
+   Статичный SVG: голубая вогнутая оболочка и вытянутый свет вдоль оси.
+   Шпиль остаётся без точечной сетки — исключение из AGENTS.md.
+   Двигаются только три готовых слоя мелкой пыли. */
 .spire {
-  --spire: min(820px, 96vw);
-  --spire-top: clamp(18px, 3vw, 56px);
-  --muted: #b3adcf;
+  --spire: min(700px, 110vw);
+  --spire-top: clamp(40px, 5vw, 64px);
+  --muted: #aaa5be;
   position: relative;
   overflow: hidden;
   padding-bottom: clamp(70px, 8vw, 128px);
-  background: #06050d;
-  color: #f3f0ff;
-  border-block: 1px solid rgba(167, 139, 250, .1);
+  background: #030014;
+  color: #eeecf6;
 }
-
 .spire-stage {
   position: absolute; left: 50%; top: var(--spire-top);
-  width: var(--spire); aspect-ratio: 800 / 900;
+  width: var(--spire); aspect-ratio: 1;
   transform: translateX(-50%);
   pointer-events: none;
 }
+.spire-light { position: absolute; inset: 0; width: 100%; height: 100%; }
 
-/* Колонны света позади фигуры. Неровный шаг: при ровном читаются забором.
-   Внутрь конуса они не продолжаются — там свет расходится лучами, см. ниже. */
-.spire-cols {
-  position: absolute; inset: 0;
-  width: 100%; height: 100%;
-  /* ширина ровно как у сцены: координаты слоя обязаны совпадать с фигурой,
-     иначе маска силуэтом ляжет мимо. Без размытия — грани должны быть резкими */
-}
-
-/* восходящие звёзды: три слоя разного шага и скорости */
+/* Поле шире фигуры; на тексте и у острия пыль плавно исчезает. */
 .spire-stars {
-  position: absolute; inset: 0;
+  position: absolute; left: 50%; top: 14%;
+  width: min(1040px, 100vw); height: 52%;
+  transform: translateX(-50%);
   overflow: hidden;
-  -webkit-mask-image: linear-gradient(to top, transparent, #000 30%, #000 70%, transparent);
-          mask-image: linear-gradient(to top, transparent, #000 30%, #000 70%, transparent);
+  -webkit-mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 35%, transparent 100%);
+          mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 35%, transparent 100%);
 }
 .spire-stars i {
-  position: absolute; left: 0; right: 0; top: -100%;
-  height: 200%;
+  position: absolute; left: 0; right: 0; top: 0;
+  height: calc(100% + var(--star-step));
   display: block;
   background-repeat: repeat;
-  animation: spireRise linear infinite;
+  background-size: var(--star-step) var(--star-step);
+  animation: spireRise var(--star-duration) linear infinite;
+  animation-delay: calc(var(--delay) - var(--shot-t, 0s));
 }
 .spire-stars i:nth-child(1) {
+  --star-step: 300px; --star-duration: 42s; --delay: -13s;
+  opacity: .7;
   background-image:
-    radial-gradient(circle at 20% 30%, rgba(255, 255, 255, .8) .8px, transparent 1.4px),
-    radial-gradient(circle at 72% 66%, rgba(255, 255, 255, .55) .7px, transparent 1.3px);
-  background-size: 317px 219px, 233px 271px;
-  animation-duration: 64s;
+    radial-gradient(circle at 17% 24%, #fff .6px, transparent 1.25px),
+    radial-gradient(circle at 62% 69%, #e6e5ff .6px, transparent 1.2px),
+    radial-gradient(circle at 86% 42%, #fff .5px, transparent 1px),
+    radial-gradient(circle at 39% 91%, #d0ccff .5px, transparent 1px);
 }
 .spire-stars i:nth-child(2) {
+  --star-step: 370px; --star-duration: 68s; --delay: -37s;
+  opacity: .5;
   background-image:
-    radial-gradient(circle at 44% 18%, rgba(233, 226, 255, .65) .9px, transparent 1.5px),
-    radial-gradient(circle at 12% 81%, rgba(255, 255, 255, .45) .7px, transparent 1.2px);
-  background-size: 411px 283px, 197px 331px;
-  animation-duration: 96s;
+    radial-gradient(circle at 28% 17%, #fff .6px, transparent 1.2px),
+    radial-gradient(circle at 77% 51%, #ddd9ff .5px, transparent 1px),
+    radial-gradient(circle at 49% 83%, #fff .5px, transparent 1px),
+    radial-gradient(circle at 8% 60%, #ddd9ff .5px, transparent 1px);
 }
 .spire-stars i:nth-child(3) {
-  background-image: radial-gradient(circle at 58% 42%, rgba(196, 181, 253, .5) 1px, transparent 1.6px);
-  background-size: 259px 379px;
-  animation-duration: 148s;
+  --star-step: 460px; --star-duration: 104s; --delay: -61s;
+  opacity: .35;
+  background-image:
+    radial-gradient(circle at 58% 36%, #e1dbff .6px, transparent 1.2px),
+    radial-gradient(circle at 21% 74%, #ddd9ff .5px, transparent 1px),
+    radial-gradient(circle at 91% 89%, #fff .5px, transparent 1px);
 }
-/* сдвиг ровно на половину высоты слоя: шаг фона делит её нацело, поэтому стык не виден */
-@keyframes spireRise { to { transform: translateY(-50%); } }
-
-/* заливка: размытие плюс общая точечная сетка */
-/* Единственный свет на сайте без точечной сетки — так решено намеренно.
-   Шпиль весь состоит из плавных переходов, и сетка на таком пятне читается
-   москитной сеткой, а не фактурой. Не «чинить». */
-.spire-aura {
-  position: absolute; inset: 0;
-  width: 100%; height: 100%;
-  filter: blur(55px);
-  mix-blend-mode: screen;
-}
-
-.spire-halo {
-  position: absolute; left: 50%; top: 0;
-  width: 128%; height: 100%;
-  transform: translateX(-50%);
-  background: radial-gradient(ellipse 40% 20% at 50% 55%,
-      rgba(133, 88, 255, .48), rgba(109, 63, 245, .18) 44%, transparent 74%);
-}
-
-/* Кромка резкая сверху и растворяется книзу. Один blur на весь слой такого
-   не даёт, поэтому заливка нарисована дважды: резкая копия видна вверху,
-   размытая — внизу, а маски у них взаимно обратные, поэтому сумма яркости
-   не меняется и в месте перехода нет ни провала, ни удвоения. */
-.spire-glow {
-  position: absolute; inset: 0;
-  width: 100%; height: 100%;
-  filter: blur(13px);
-  -webkit-mask-image: linear-gradient(to bottom, transparent 24%, #000 58%);
-          mask-image: linear-gradient(to bottom, transparent 24%, #000 58%);
-}
-.spire-crisp {
-  position: absolute; inset: 0;
-  width: 100%; height: 100%;
-  -webkit-mask-image: linear-gradient(to bottom, #000 24%, transparent 58%);
-          mask-image: linear-gradient(to bottom, #000 24%, transparent 58%);
-}
-/* низ шпиля уводим в фон, чтобы подол не обрывался над текстом */
-.spire-veil {
-  position: absolute; left: -20%; right: -20%; bottom: -12%;
-  height: 40%;
-  background: linear-gradient(to bottom, transparent, rgba(6, 5, 13, .4) 58%, #06050d 94%);
-}
+/* Сдвиг равен плитке каждого слоя: конец цикла совпадает с началом. */
+@keyframes spireRise { to { transform: translate3d(0, calc(0px - var(--star-step)), 0); } }
+.spire-stage.idle .spire-stars i { animation-play-state: paused; }
 
 .spire-copy {
   position: relative;
-  padding-top: calc(var(--spire) * .7);
+  padding-top: calc(var(--spire-top) + var(--spire) * .61);
   text-align: center;
 }
 .spire-pill {
   display: inline-block; margin: 0;
-  padding: 6px 16px; border-radius: 100px;
-  border: 1px solid var(--accent-line);
-  background: rgba(124, 77, 255, .1);
-  font-family: var(--ff-mono); font-size: .74rem; letter-spacing: .06em;
-  color: var(--accent-hi);
+  padding: 5px 14px; border-radius: 100px;
+  border: 1px solid rgba(178, 177, 255, .3);
+  background: rgba(112, 100, 255, .16);
+  font-family: var(--ff-body); font-size: .85rem; line-height: 1.35;
+  color: #e0deff;
 }
 .spire-title {
-  margin: 20px auto 0; max-width: 19ch;
-  font-size: clamp(2rem, 4.6vw, 3.3rem); line-height: 1.02; letter-spacing: -.03em;
+  margin: 14px auto 0; max-width: 24ch;
+  font-size: clamp(1.9rem, 4.2vw, 3rem); font-weight: 500;
+  line-height: 1.12; letter-spacing: -.035em;
+  text-wrap: balance;
 }
 .spire-lede {
-  margin: 18px auto 0; max-width: 62ch;
-  color: var(--muted); line-height: 1.62;
+  margin: 20px auto 0; max-width: 67ch;
+  color: var(--muted); line-height: 1.6;
+  text-wrap: pretty;
 }
 
 /* карточки под шпилем: те же волосяные линии, что у радара */

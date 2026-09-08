@@ -507,6 +507,27 @@
     checkVisibility();
   })();
 
+  /* Пыль у шпиля: готовые слои движутся только пока поле видно. */
+  (function initSpireMotion() {
+    var stage = $('.spire-stage');
+    if (!stage) return;
+    var visible = false;
+    var sync = function () {
+      stage.classList.toggle('idle', !visible || document.hidden || motionQuery.matches);
+    };
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (entries) {
+        visible = entries[0].isIntersecting;
+        sync();
+      }).observe($('.spire-stars', stage));
+    } else {
+      visible = true;
+      sync();
+    }
+    document.addEventListener('visibilitychange', sync);
+    if (motionQuery.addEventListener) motionQuery.addEventListener('change', sync);
+  })();
+
   /* ============================================================
      Световые дорожки и частицы в «Предложении»
      Двигаются готовые слои; маски и фон неподвижны.
