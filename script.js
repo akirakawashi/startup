@@ -45,6 +45,150 @@
   })();
 
   /* ============================================================
+     Пыль на первом экране — по движению частиц Reflect.
+
+     Всё поле поворачивается за 70 секунд; каждая точка равномерно сходится
+     к центру за 7–14 секунд и уменьшается с 2 до 1 CSS px. Радиальная маска
+     плавно убирает её под светом кольца. Размер задан в пикселях страницы,
+     независимо от размера сцены: растягивается поле, а не сами крупинки.
+
+     На canvas остаются только маленькие заливки без ореолов и следов.
+     Небольшое увеличение через pixelated сохраняет фактуру света сайта.
+     ============================================================ */
+  (function initHeroDust() {
+    var canvas = $('.hero-dust');
+    if (!canvas || !canvas.getContext) return;
+
+    var BLOCK   = 1.25;   // сторона пикселя холста на странице, CSS px
+    var FPS     = 60;
+    var COUNT   = 100;
+    var FIELD   = 700 / 1440; // диаметр поля относительно видео в референсе
+    var SPIN    = 70;         // один общий оборот, с
+    var LIFE_MIN = 7, LIFE_MAX = 14;
+    var DOT_SIZE = 2;         // начальный поперечник, CSS px
+
+    var stage = canvas.parentNode;
+    var ctx   = canvas.getContext('2d');
+    if (!ctx) return;
+    var TAU   = 2 * Math.PI;
+    var OMEGA = TAU / SPIN;
+    var parts = [];
+    var W = 0, H = 0, cx = 0, cy = 0, R = 0, key = '', rotation = 0;
+    var visible = false, running = false, last = 0, frame = 0;
+
+    var smooth = function (a, b, v) {
+      var t = clamp((v - a) / (b - a), 0, 1);
+      return t * t * (3 - 2 * t);
+    };
+
+    var seed = function (p) {
+      var x = Math.random() * 2 - 1, y = Math.random() * 2 - 1;
+      p.radius = Math.sqrt(x * x + y * y);
+      p.angle = Math.atan2(y, x);
+      p.life = LIFE_MIN + Math.random() * (LIFE_MAX - LIFE_MIN);
+      p.age = 0;
+    };
+
+    var build = function () {
+      var sw = stage.offsetWidth, sh = stage.offsetHeight;
+      if (!sw || !sh) return false;
+      var k = sw + 'x' + sh;
+      if (k === key) return true;
+      key = k;
+      W = H = Math.round(sw * FIELD / BLOCK);
+      canvas.width = W;
+      canvas.height = H;
+      canvas.style.width  = (W * BLOCK) + 'px';
+      canvas.style.height = (H * BLOCK) + 'px';
+      cx = W / 2;
+      cy = H / 2;
+      R = W / 2;
+      while (parts.length < COUNT) {
+        var p = { lit: parts.length % 3 === 0 ? .5 : 1 };
+        seed(p);
+        // Разные фазы с первого кадра: поле не ждёт заполнения и не пульсирует.
+        p.age = Math.random() * p.life;
+        parts.push(p);
+      }
+      return true;
+    };
+
+    var paint = function (dt) {
+      ctx.clearRect(0, 0, W, H);
+      ctx.fillStyle = '#fff';
+      rotation = (rotation + OMEGA * dt) % TAU;
+      for (var i = 0; i < parts.length; i++) {
+        var p = parts[i];
+        p.age += dt;
+        if (p.age >= p.life) { seed(p); continue; }
+
+        var progress = p.age / p.life;
+        var radius = p.radius * (1 - .9 * progress);
+        // Профиль маски Reflect: пустое ядро, мягкая полоса пыли, тёмный край.
+        var mask = smooth(.2708, .4792, radius) *
+                   (1 - .2 * smooth(.4792, .75, radius)) *
+                   (1 - smooth(.75, 1, radius));
+        var alpha = p.lit * smooth(0, .1, progress) * mask;
+        if (alpha < .006) continue;
+        var angle = p.angle + rotation;
+        var size = DOT_SIZE * (1 - .5 * progress) / BLOCK;
+        var x = cx + R * radius * Math.cos(angle);
+        var y = cy - R * radius * Math.sin(angle);
+        ctx.globalAlpha = alpha;
+        ctx.fillRect(x - size * .5, y - size * .5, size, size);
+      }
+      ctx.globalAlpha = 1;
+    };
+
+    var tick = function (now) {
+      frame = 0;
+      if (!running) return;
+      if (!last) last = now - 1000 / FPS;
+      var dt = (now - last) / 1000;
+      if (dt >= 1 / FPS - .002) {
+        last = now;
+        paint(Math.min(dt, 1 / 30)); // после задержки кадра пыль не прыгает
+      }
+      frame = window.requestAnimationFrame(tick);
+    };
+
+    var sync = function () {
+      var on = visible && !document.hidden && !motionQuery.matches && build();
+      stage.classList.toggle('has-dust', on);
+      if (on === running) return;
+      running = on;
+      if (on) {
+        last = 0;
+        paint(0);
+        frame = window.requestAnimationFrame(tick);
+      } else {
+        window.cancelAnimationFrame(frame);
+        frame = 0;
+      }
+    };
+
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (entries) {
+        visible = entries[0].isIntersecting;
+        sync();
+      }, { rootMargin: '120px' }).observe(stage);
+    } else {
+      visible = true;
+      sync();
+    }
+    document.addEventListener('visibilitychange', sync);
+    if (motionQuery.addEventListener) motionQuery.addEventListener('change', sync);
+    window.addEventListener('load', sync);
+
+    var queued = false;
+    window.addEventListener('resize', function () {
+      if (queued) return;
+      queued = true;
+      window.requestAnimationFrame(function () { queued = false; sync(); });
+    }, { passive: true });
+  })();
+
+  /* ============================================================
      Прокрутка: прогресс, залипающая шапка, активный раздел,
      заполнение линии процесса.
 

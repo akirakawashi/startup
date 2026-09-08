@@ -322,6 +322,23 @@ button, input, select, textarea { font: inherit; color: inherit; }
 }
 @keyframes rimSpin { to { transform: rotate(360deg); } }
 
+/* Мелкая пыль, медленно сходящаяся к диску. Холст увеличен в 1.25 раза
+   через pixelated: крупинки сохраняют пиксельную фактуру, а их поперечник
+   остаётся в пределах 1–2 CSS px. Сетка-маска съедала бы движущиеся точки.
+
+   Лежит под завесой, поэтому к верху кадра гаснет вместе с дугой и не спорит
+   с заголовком. Режим screen — как у обода: частицы добавляют свет, а не
+   закрывают кадр. Размер холста ставит скрипт, здесь только положение. */
+.hero-dust {
+  position: absolute; left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+  image-rendering: pixelated;
+  mix-blend-mode: screen;
+  pointer-events: none;
+  opacity: 0; transition: opacity .9s var(--ease);
+}
+.hero-stage.has-dust .hero-dust { opacity: 1; }
+
 /* верх кадра приглушаем, чтобы дуга не спорила с текстом над ней */
 .hero-stage-veil {
   position: absolute; inset: 0;
