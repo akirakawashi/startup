@@ -850,40 +850,90 @@
 </section>
 
 <!-- ===================== СТЕК ===================== -->
-<section class="section" id="stack">
+<section class="stack" id="stack" aria-labelledby="stack-title">
   <div class="wrap">
-    <header class="section-head reveal">
-      <p class="section-label">04 / технологии</p>
-      <h2 class="underline-grow">Чем работаем</h2>
-      <p class="section-lede">Инструмент подбирается под задачу, а не наоборот. Ниже то, что используем в работе постоянно.</p>
+    <header class="stack-head reveal">
+      <p class="stack-eyebrow">04 / технологии</p>
+      <h2 id="stack-title">Технологии <span>под вашу задачу.</span></h2>
+      <p class="stack-lede">Подбираем стек под продукт, нагрузку и развитие.</p>
     </header>
 
-    <div class="stack-grid">
-      <div class="stack-group spotlight reveal">
-        <h3>Бэкенд</h3>
-        <ul><li>Python</li><li>FastAPI</li><li>SQLAlchemy</li><li>Alembic</li><li>Pydantic</li><li>Очереди задач</li><li>REST</li><li>WebSocket</li><li>JWT / OAuth</li></ul>
-      </div>
-      <div class="stack-group spotlight reveal">
-        <h3>Данные</h3>
-        <ul><li>PostgreSQL</li><li>Redis</li><li>Oracle</li><li>PL/SQL</li><li>S3 / MinIO</li><li>Kafka</li><li>Миграции</li><li>Оптимизация запросов</li></ul>
-      </div>
-      <div class="stack-group spotlight reveal">
-        <h3>Фронтенд</h3>
-        <ul><li>React</li><li>TypeScript</li><li>Vite</li><li>HTML5 / CSS3</li><li>Адаптивная вёрстка</li><li>Графики</li><li>Доступность</li></ul>
-      </div>
-      <div class="stack-group spotlight reveal">
-        <h3>Сайты и CMS</h3>
-        <ul><li>WordPress</li><li>Tilda</li><li>Nginx</li><li>Формы и заявки</li><li>Метрика / Analytics</li><li>Базовое SEO</li><li>Перенос и хостинг</li></ul>
-      </div>
-      <div class="stack-group spotlight reveal">
-        <h3>Инфраструктура</h3>
-        <ul><li>Docker</li><li>Docker Compose</li><li>Kubernetes</li><li>Helm</li><li>CI/CD</li><li>GitHub Actions</li><li>Let's Encrypt</li><li>Linux</li><li>Мониторинг</li></ul>
-      </div>
-      <div class="stack-group spotlight reveal">
-        <h3>ML и зрение</h3>
-        <ul><li>YOLO</li><li>OpenCV</li><li>PyTorch</li><li>TensorFlow / Keras</li><li>scikit-learn</li><li>XGBoost</li><li>pandas</li></ul>
-      </div>
+    <!-- Собственные линейные значки. Названия живут вне SVG и не масштабируются. -->
+    <div class="stack-display reveal">
+      <span class="stack-ambient" aria-hidden="true"></span>
+      <ul class="stack-showcase" aria-label="Основные технологии">
+        <li class="stack-tech">
+          <span class="stack-tech-icon" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round"><path d="M24 5h-6a6 6 0 0 0-6 6v5h17v8H12a7 7 0 0 1-7-7v-1a7 7 0 0 1 7-7M24 5h6a6 6 0 0 1 6 6v12M24 43h6a6 6 0 0 0 6-6v-5H19v-8h17a7 7 0 0 1 7 7v1a7 7 0 0 1-7 7M24 43h-6a6 6 0 0 1-6-6V25"/><circle cx="19" cy="10" r="1" fill="currentColor" stroke="none"/><circle cx="29" cy="38" r="1" fill="currentColor" stroke="none"/></svg></span>
+          <span class="stack-tech-name">Python</span>
+        </li>
+        <li class="stack-tech">
+          <span class="stack-tech-icon" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round"><circle cx="24" cy="24" r="19"/><path d="m27 10-15 17h11l-2 11 15-17H25Z"/></svg></span>
+          <span class="stack-tech-name">FastAPI</span>
+        </li>
+        <li class="stack-tech">
+          <span class="stack-tech-icon" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5"><ellipse cx="24" cy="24" rx="21" ry="8"/><ellipse cx="24" cy="24" rx="21" ry="8" transform="rotate(60 24 24)"/><ellipse cx="24" cy="24" rx="21" ry="8" transform="rotate(120 24 24)"/><circle cx="24" cy="24" r="3" fill="currentColor" stroke="none"/></svg></span>
+          <span class="stack-tech-name">React</span>
+        </li>
+        <li class="stack-tech">
+          <span class="stack-tech-icon" aria-hidden="true"><span class="stack-monogram stack-monogram-ts">TS</span></span>
+          <span class="stack-tech-name">TypeScript</span>
+        </li>
+        <li class="stack-tech">
+          <span class="stack-tech-icon" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="24" cy="11" rx="16" ry="6"/><path d="M8 11v13c0 3.3 7.2 6 16 6s16-2.7 16-6V11M8 24v13c0 3.3 7.2 6 16 6s16-2.7 16-6V24"/><path d="M14 23c2 1 5.5 1.5 8 1.5M14 36c2 1 5.5 1.5 8 1.5" stroke-opacity=".55"/></svg></span>
+          <span class="stack-tech-name">PostgreSQL</span>
+        </li>
+        <li class="stack-tech">
+          <span class="stack-tech-icon" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round"><path d="m24 6 20 9-20 9L4 15ZM4 24l20 9 20-9M4 33l20 9 20-9"/><path d="m24 12 7 3-7 3-7-3Z" stroke-opacity=".55"/></svg></span>
+          <span class="stack-tech-name">Redis</span>
+        </li>
+        <li class="stack-tech">
+          <span class="stack-tech-icon" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round"><path d="M5 26h30c5 0 7-3 9-6 0 8-2 12-8 16-5 4-17 5-24 1-4-2-7-6-7-11Z"/><path d="M9 26v-8h8v8M17 26V10h8v16M25 26v-8h8v8M17 18h8M12 42h19"/><circle cx="13" cy="31" r="1" fill="currentColor" stroke="none"/></svg></span>
+          <span class="stack-tech-name">Docker</span>
+        </li>
+        <li class="stack-tech">
+          <span class="stack-tech-icon" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round"><path d="m24 3 16.4 8 4 17.7L33.1 43H14.9L3.6 28.7l4-17.7Z" stroke-opacity=".45"/><circle cx="24" cy="24" r="5"/><path d="M24 9v10m11.7-4.4-7.8 6.3M38.6 27.3l-9.7-2.2M30.5 37.5l-4.3-9m-8.7 9 4.3-9M9.4 27.3l9.7-2.2M12.3 14.6l7.8 6.3"/><path d="M21 9h6m6.7 3.3 3.8 4.7m1.8 7.4-1.4 5.8M33.2 36.2l-5.4 2.6m-7.6 0-5.4-2.6M7.9 24.4l1.4 5.8m1.2-17.9 3.8 4.7"/></svg></span>
+          <span class="stack-tech-name">Kubernetes</span>
+        </li>
+        <li class="stack-tech">
+          <span class="stack-tech-icon" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m24 5-13 13a17 17 0 1 0 26 0l-4-4"/><circle cx="33" cy="8" r="2.5" fill="currentColor" stroke="none"/></svg></span>
+          <span class="stack-tech-name">PyTorch</span>
+        </li>
+        <li class="stack-tech">
+          <span class="stack-tech-icon" aria-hidden="true"><span class="stack-monogram stack-monogram-wp">W</span></span>
+          <span class="stack-tech-name">WordPress</span>
+        </li>
+      </ul>
     </div>
+
+    <details class="stack-details reveal">
+      <summary><span class="stack-label-closed">Весь стек</span><span class="stack-label-open">Свернуть стек</span><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M5 15 15 5M5 5h10v10" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
+      <div class="stack-grid">
+        <div class="stack-group">
+          <h3>Бэкенд</h3>
+          <ul><li>Python</li><li>FastAPI</li><li>SQLAlchemy</li><li>Alembic</li><li>Pydantic</li><li>Очереди задач</li><li>REST</li><li>WebSocket</li><li>JWT / OAuth</li></ul>
+        </div>
+        <div class="stack-group">
+          <h3>Данные</h3>
+          <ul><li>PostgreSQL</li><li>Redis</li><li>Oracle</li><li>PL/SQL</li><li>S3 / MinIO</li><li>Kafka</li><li>Миграции</li><li>Оптимизация запросов</li></ul>
+        </div>
+        <div class="stack-group">
+          <h3>Фронтенд</h3>
+          <ul><li>React</li><li>TypeScript</li><li>Vite</li><li>HTML5 / CSS3</li><li>Адаптивная вёрстка</li><li>Графики</li><li>Доступность</li></ul>
+        </div>
+        <div class="stack-group">
+          <h3>Сайты и CMS</h3>
+          <ul><li>WordPress</li><li>Tilda</li><li>Nginx</li><li>Формы и заявки</li><li>Метрика / Analytics</li><li>Базовое SEO</li><li>Перенос и хостинг</li></ul>
+        </div>
+        <div class="stack-group">
+          <h3>Инфраструктура</h3>
+          <ul><li>Docker</li><li>Docker Compose</li><li>Kubernetes</li><li>Helm</li><li>CI/CD</li><li>GitHub Actions</li><li>Let's Encrypt</li><li>Linux</li><li>Мониторинг</li></ul>
+        </div>
+        <div class="stack-group">
+          <h3>ML и зрение</h3>
+          <ul><li>YOLO</li><li>OpenCV</li><li>PyTorch</li><li>TensorFlow / Keras</li><li>scikit-learn</li><li>XGBoost</li><li>pandas</li></ul>
+        </div>
+      </div>
+    </details>
   </div>
 </section>
 
