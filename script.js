@@ -200,9 +200,6 @@
   var progress  = $('#pageProgress');
   var navLinks  = $$('.topnav a');
   var sections  = navLinks.map(function (a) { return $(a.getAttribute('href')); }).filter(Boolean);
-  var stepsList = $('#steps');
-  var stepsFill = $('#stepsFill');
-  var stepItems = $$('.step');
 
   var ticking = false;
   function onScroll() {
@@ -227,19 +224,6 @@
       navLinks.forEach(function (a) {
         a.classList.toggle('is-active', a.getAttribute('href') === '#' + current);
       });
-
-      // линия процесса заполняется по мере прокрутки блока
-      if (stepsList && stepsFill) {
-        var box = stepsList.getBoundingClientRect();
-        var done = clamp((vh * 0.72 - box.top) / box.height, 0, 1);
-        stepsFill.style.height = (done * 100) + '%';
-
-        var reached = vh * 0.72;
-        stepItems.forEach(function (step) {
-          var r = step.getBoundingClientRect();
-          step.classList.toggle('lit', r.top < reached);
-        });
-      }
 
       ticking = false;
     });
@@ -646,7 +630,7 @@
      play-state сохраняет фазу, в том числе общую фазу луча и отметок радара.
      ============================================================ */
   (function initMotionVisibility() {
-    var scopes = $$('.hero-title, .hero-rim, .pulse, .marquee, .case-status.live, .radar-stage, .mk-cv, .signal-stage');
+    var scopes = $$('.hero-title, .hero-rim, .pulse, .marquee, .case-status.live, .radar-stage, .mk-cv, .signal-stage, .work');
     var visible = new Set(scopes);
     var sync = function () {
       scopes.forEach(function (el) {
@@ -704,61 +688,46 @@
   })();
 
   /* ============================================================
-     Терминал в блоке процесса
+     Ваша задача: вкладки меняют текст и слои одного приложения.
+     Автопереключения нет: сценарий остаётся выбранным, пока его читают.
      ============================================================ */
-  var terminal = $('#terminalBody');
-  var lines = [
-    { mark: '›', text: 'git push origin <b>main</b>' },
-    { mark: '·', text: 'проверка кода и тестов',           time: '12s',   done: true },
-    { mark: '·', text: 'сборка образа',                    time: '48s',   done: true },
-    { mark: '·', text: 'миграции базы данных',             time: '3s',    done: true },
-    { mark: '·', text: 'выкатка без простоя',              time: '9s',    done: true },
-    { mark: '·', text: 'проверка доступности сервиса',     time: '2s',    done: true },
-    { mark: '✓', text: '<b>релиз в продакшене</b>',        time: '1m14s', done: true },
-    { mark: '›', text: 'сертификат продлится автоматически' }
-  ];
+  (function initWorkScenarios() {
+    var section = $('#work');
+    if (!section) return;
+    var tablist = $('.work-tabs', section);
+    var tabs = $$('.work-tab', section);
+    var panels = $$('.work-panel', section);
+    if (!tablist || !tabs.length) return;
 
-  function renderTerminal() {
-    if (!terminal) return;
-    terminal.textContent = '';
-    lines.forEach(function (item, i) {
-      var row = document.createElement('div');
-      row.className = 'tline';
-
-      var mark = document.createElement('span');
-      mark.className = 't-mark' + (item.done ? ' done' : '');
-      mark.textContent = item.mark;
-      row.appendChild(mark);
-
-      var text = document.createElement('span');
-      text.className = 't-text';
-      text.innerHTML = item.text;
-      row.appendChild(text);
-
-      if (item.time) {
-        var time = document.createElement('span');
-        time.className = 't-time';
-        time.textContent = item.time;
-        row.appendChild(time);
-      }
-
-      terminal.appendChild(row);
-
-      if (reduceMotion) row.classList.add('in');
-      else window.setTimeout(function () { row.classList.add('in'); }, 260 + i * 300);
-    });
-  }
-
-  if (terminal) {
-    if (reduceMotion || !('IntersectionObserver' in window)) {
-      renderTerminal();
-    } else {
-      var termObserver = new IntersectionObserver(function (entries) {
-        if (entries[0].isIntersecting) { renderTerminal(); termObserver.disconnect(); }
-      }, { threshold: 0.35 });
-      termObserver.observe(terminal);
+    function selectTab(index, focus) {
+      var selected = tabs[index];
+      section.dataset.scenario = selected.dataset.scenario;
+      tablist.style.setProperty('--tab-index', index);
+      tabs.forEach(function (tab) {
+        var active = tab === selected;
+        tab.setAttribute('aria-selected', String(active));
+        tab.tabIndex = active ? 0 : -1;
+      });
+      panels.forEach(function (panel) {
+        panel.hidden = panel.id !== selected.getAttribute('aria-controls');
+      });
+      if (focus) selected.focus({ preventScroll: true });
     }
-  }
+
+    tabs.forEach(function (tab, index) {
+      tab.addEventListener('click', function () { selectTab(index, false); });
+      tab.addEventListener('keydown', function (event) {
+        var next;
+        if (event.key === 'ArrowRight') next = (index + 1) % tabs.length;
+        else if (event.key === 'ArrowLeft') next = (index + tabs.length - 1) % tabs.length;
+        else if (event.key === 'Home') next = 0;
+        else if (event.key === 'End') next = tabs.length - 1;
+        else return;
+        event.preventDefault();
+        selectTab(next, true);
+      });
+    });
+  })();
 
   /* ============================================================
      Ключи: расшифровка заголовка

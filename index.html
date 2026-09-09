@@ -299,62 +299,99 @@
   </div>
 </section>
 
-<!-- ===================== ПРОЦЕСС ===================== -->
-<section class="section" id="work">
+<!-- ===================== ВАША ЗАДАЧА ===================== -->
+<section class="work" id="work" data-scenario="ai" aria-labelledby="work-title">
   <div class="wrap">
-    <header class="section-head reveal">
-      <p class="section-label">02 / процесс</p>
-      <h2 class="underline-grow">Как идёт работа</h2>
-      <p class="section-lede">Никаких «пришлите ТЗ и ждите два месяца». Вы видите результат на каждом шаге и в любой момент понимаете, что сделано и что осталось.</p>
+    <header class="work-head reveal">
+      <p class="work-eyebrow"><span></span> Подключаемся там, где нужны</p>
+      <h2 id="work-title">Начнём с <span>вашей задачи.</span></h2>
+      <p class="work-lede">Одна функция или целый сервис. Масштаб выбираете вы.</p>
     </header>
 
-    <div class="work-grid">
-      <ol class="steps" id="steps">
-        <span class="steps-line" aria-hidden="true"><i id="stepsFill"></i></span>
-
-        <li class="step reveal">
-          <span class="step-dot" aria-hidden="true"></span>
-          <span class="step-num">01</span>
-          <div><h3>Разбираем задачу</h3><p>Созвон или переписка: что должно работать, по каким правилам, кто этим пользуется. На выходе — общий язык и список того, что действительно нужно.</p></div>
-        </li>
-        <li class="step reveal">
-          <span class="step-dot" aria-hidden="true"></span>
-          <span class="step-num">02</span>
-          <div><h3>Предложение и смета</h3><p>Состав работ, сроки и фиксированная стоимость пакета. Что входит и что не входит — написано прямо, чтобы «а ещё вот это» не превращалось в спор посреди проекта.</p></div>
-        </li>
-        <li class="step reveal">
-          <span class="step-dot" aria-hidden="true"></span>
-          <span class="step-num">03</span>
-          <div><h3>Проектирование</h3><p>Схема данных, контракты между частями системы, роли и права доступа. Полчаса здесь экономят недели переделок, когда система уже наполнена данными.</p></div>
-        </li>
-        <li class="step reveal">
-          <span class="step-dot" aria-hidden="true"></span>
-          <span class="step-num">04</span>
-          <div><h3>Разработка итерациями</h3><p>Работающие куски вместо обещаний: после каждого этапа есть что открыть и потрогать. Правки вносятся по ходу, а не в последний день перед сдачей.</p></div>
-        </li>
-        <li class="step reveal">
-          <span class="step-dot" aria-hidden="true"></span>
-          <span class="step-num">05</span>
-          <div><h3>Запуск</h3><p>Разворачиваем на сервере: домен, сертификаты, база, резервные копии, автоматическая выкатка, мониторинг. Передаём доступы и инструкцию администратора.</p></div>
-        </li>
-        <li class="step reveal">
-          <span class="step-dot" aria-hidden="true"></span>
-          <span class="step-num">06</span>
-          <div><h3>Сопровождение</h3><p>Обновления, доработки, реакция на инциденты. Проект не бросается после сдачи — он продолжает жить, и это отдельная договорённость, а не одолжение.</p></div>
-        </li>
-      </ol>
-
-      <aside class="work-aside reveal">
-        <div class="terminal">
-          <div class="terminal-bar">
-            <span class="dot"></span><span class="dot"></span><span class="dot"></span>
-            <span class="terminal-title">release · production</span>
-          </div>
-          <div class="terminal-body" id="terminalBody"></div>
-        </div>
-        <p class="work-aside-note">Так выглядит выкатка после запуска: правка попадает в продакшен автоматически, с прогоном тестов и без простоя сервиса.</p>
-      </aside>
+    <div class="work-tabs" role="tablist" aria-label="С какой задачей вы приходите">
+      <button class="work-tab" id="work-tab-ai" type="button" role="tab" aria-selected="true" aria-controls="work-panel-ai" data-scenario="ai">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m12 3 2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5L12 3Z" stroke="currentColor" stroke-width="1.4"/></svg>
+        <span>Внедрить AI</span>
+      </button>
+      <button class="work-tab" id="work-tab-upgrade" type="button" role="tab" aria-selected="false" aria-controls="work-panel-upgrade" tabindex="-1" data-scenario="upgrade">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3.5" y="3.5" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.4"/><rect x="14.5" y="14.5" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.4"/><path d="M17.5 3v7M14 6.5h7M3.5 14.5h6v6h-6z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+        <span>Доработать<span class="work-tab-long"> сервис</span></span>
+      </button>
+      <button class="work-tab" id="work-tab-launch" type="button" role="tab" aria-selected="false" aria-controls="work-panel-launch" tabindex="-1" data-scenario="launch">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m12 3 9 5-9 5-9-5 9-5ZM3 12l9 5 9-5M3 16l9 5 9-5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>Создать с нуля</span>
+      </button>
+      <span class="work-tab-line" aria-hidden="true"></span>
     </div>
+
+    <div class="work-body">
+      <div class="work-copy">
+        <div class="work-panel" id="work-panel-ai" role="tabpanel" aria-labelledby="work-tab-ai" tabindex="0">
+          <p class="work-kicker">Ваш сервис + AI</p>
+          <h3>Меньше рутины.<br>Больше возможностей.</h3>
+          <p class="work-description">Помощник, поиск по документам или обработка заявок — прямо в вашем сервисе.</p>
+          <a class="work-link" href="#contact">Обсудить внедрение <span aria-hidden="true">↗</span></a>
+        </div>
+        <div class="work-panel" id="work-panel-upgrade" role="tabpanel" aria-labelledby="work-tab-upgrade" tabindex="0" hidden>
+          <p class="work-kicker">Новый потенциал вашего сервиса</p>
+          <h3>Уже работает.<br>Будет ещё лучше.</h3>
+          <p class="work-description">Добавим нужную функцию, свяжем системы или ускорим то, что тормозит.</p>
+          <a class="work-link" href="#contact">Рассказать о доработке <span aria-hidden="true">↗</span></a>
+        </div>
+        <div class="work-panel" id="work-panel-launch" role="tabpanel" aria-labelledby="work-tab-launch" tabindex="0" hidden>
+          <p class="work-kicker">От идеи до первой версии</p>
+          <h3>Ваша идея.<br>Можно пользоваться.</h3>
+          <p class="work-description">Выделим главное и соберём первую версию, которую можно дать пользователям.</p>
+          <a class="work-link" href="#contact">Обсудить идею <span aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+
+      <!-- Одна основа приложения; сценарии меняют её слои. Весь дальний свет под общей точечной маской. -->
+      <div class="work-stage reveal" aria-hidden="true">
+        <div class="work-scene">
+          <div class="work-aura"></div>
+          <div class="work-orbit work-orbit-outer"></div>
+          <div class="work-orbit work-orbit-inner"></div>
+          <div class="work-floor"></div>
+          <div class="work-platform work-platform-back"><span>Данные</span></div>
+          <div class="work-platform work-platform-front"><span>Логика</span></div>
+
+          <div class="work-app">
+            <div class="work-app-bar"><span class="work-app-logo">s<span>✦</span></span><span>Ваш сервис</span><i></i><span class="work-app-menu">···</span></div>
+            <div class="work-app-layout">
+              <div class="work-sidebar"><b></b><i></i><i></i><i></i><span></span></div>
+              <div class="work-app-content">
+                <div class="work-app-heading"><span class="work-app-heading-wide">Рабочее пространство</span><span class="work-app-heading-compact">Обзор сервиса</span><i>+</i></div>
+                <div class="work-metrics"><div><span></span><b></b><i></i></div><div><span></span><b></b><i></i></div><div><span></span><b></b><i></i></div></div>
+                <div class="work-chart"><span>Активность</span><div class="work-bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+                <div class="work-app-rows"><i></i><i></i></div>
+              </div>
+            </div>
+            <div class="work-app-scan"></div>
+          </div>
+
+          <div class="work-satellite work-source"><span class="work-source-icon">▤</span><div><b>Ваши знания</b><span>Документы и данные</span></div><i>↗</i></div>
+          <div class="work-satellite work-assistant">
+            <div class="work-assistant-top"><span class="work-spark">✦</span><b>AI-помощник</b><span class="work-live-dot"></span></div>
+            <div class="work-prompt">Найди главное в документе <span>↵</span></div>
+            <div class="work-answer"><span>✦</span><div><i></i><i></i><i></i></div></div>
+            <div class="work-assistant-foot"><span>На основе ваших данных</span><span>✓</span></div>
+          </div>
+
+          <div class="work-satellite work-module"><span class="work-module-icon">↗</span><b>Новая возможность</b><div class="work-module-bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><span class="work-module-foot">Встроена в ваш процесс <i>✓</i></span></div>
+          <div class="work-satellite work-update"><span>✓</span> Обновление установлено</div>
+
+          <div class="work-satellite work-launch"><span class="work-launch-icon">↗</span><div><b>Ваш сервис запущен</b><span>Всё готово к первому входу</span></div><i class="work-live-dot"></i></div>
+          <div class="work-scene-caption"><span></span><span class="work-caption-ai">Знакомый сервис. Новые возможности.</span><span class="work-caption-upgrade">Нужные изменения. На вашей основе.</span><span class="work-caption-launch">Всё складывается в работающий продукт.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <ul class="work-assurances">
+      <li><span aria-hidden="true">✓</span> Объём согласуем заранее</li>
+      <li><span aria-hidden="true">✓</span> Результат виден по ходу</li>
+      <li><span aria-hidden="true">✓</span> Код и доступы — у вас</li>
+    </ul>
   </div>
 </section>
 
