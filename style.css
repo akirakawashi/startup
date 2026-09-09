@@ -43,6 +43,11 @@
   --ff-body:    "Inter", system-ui, -apple-system, sans-serif;
   --ff-mono:    "JetBrains Mono", ui-monospace, monospace;
 
+  /* нижняя граница видимого текста. Мельче не опускается ничто, включая
+     подписи, вкладки и надписи внутри иллюстраций. В уменьшенной сцене
+     размер делится на её масштаб, иначе на экране выйдет меньше 12 px */
+  --fz-min: 12px;
+
   /* точечная маска 3px: ею пикселизуется всё свечение на сайте — ореол
      панели проверок и подсветка карточек. Маска накладывается после filter,
      поэтому режет уже размытое и остаётся резкой */
@@ -122,7 +127,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .section-head { max-width: 680px; margin-bottom: clamp(40px, 5vw, 66px); }
 
 .section-label {
-  font-family: var(--ff-mono); font-size: .74rem; letter-spacing: .18em;
+  font-family: var(--ff-mono); font-size: var(--fz-min); letter-spacing: .18em;
   text-transform: uppercase; color: var(--accent); margin-bottom: 16px;
 }
 
@@ -173,7 +178,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .tags { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 24px; }
 .tags li {
   padding: 5px 12px; border: 1px solid var(--line); border-radius: 100px;
-  font-family: var(--ff-mono); font-size: .72rem; color: var(--muted);
+  font-family: var(--ff-mono); font-size: var(--fz-min); line-height: 1.5; color: var(--muted);
 }
 
 /* ---------- 5. Шапка ---------- */
@@ -518,7 +523,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
   transition: border-color .3s var(--ease), transform .3s var(--ease);
 }
 .value-card:hover { border-color: var(--line-strong); transform: translateY(-4px); }
-.value-num { display: block; font-family: var(--ff-mono); font-size: .74rem; color: var(--accent); margin-bottom: 14px; }
+.value-num { display: block; font-family: var(--ff-mono); font-size: var(--fz-min); color: var(--accent); margin-bottom: 14px; }
 .value-card h3 { margin-bottom: 11px; }
 .value-card p { color: var(--muted); font-size: .94rem; }
 
@@ -559,7 +564,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 }
 
 /* ---------- 9. Ваша задача ---------- */
-.work { --work-small: max(12px, .75rem); --work-art-text: max(16px, 1rem); position: relative; padding: 86px 0 70px; overflow: hidden; isolation: isolate; }
+.work { --work-small: max(var(--fz-min), .75rem); --work-art-text: max(16px, 1rem); position: relative; padding: 86px 0 70px; overflow: hidden; isolation: isolate; }
 .work-head { text-align: center; }
 .work-eyebrow { display: flex; align-items: center; justify-content: center; gap: 9px; color: #b5a8d3; font-size: .76rem; margin-bottom: 22px; }
 .work-eyebrow > span { width: 5px; height: 5px; border: 1px solid #bfa5f1; transform: rotate(45deg); }
@@ -823,7 +828,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 
 .case-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 16px; }
 .case-kicker {
-  font-family: var(--ff-mono); font-size: .73rem; letter-spacing: .1em;
+  font-family: var(--ff-mono); font-size: var(--fz-min); letter-spacing: .1em;
   text-transform: uppercase; color: var(--faint); margin-bottom: 8px;
 }
 .case-lead h3 { font-size: clamp(1.6rem, 2.6vw, 2.1rem); }
@@ -831,7 +836,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .case-status {
   flex: none; display: inline-flex; align-items: center; gap: 8px;
   padding: 6px 14px; border-radius: 100px; border: 1px solid var(--line);
-  font-family: var(--ff-mono); font-size: .72rem; color: var(--muted);
+  font-family: var(--ff-mono); font-size: var(--fz-min); line-height: 1.5; color: var(--muted);
 }
 .case-status.live::before {
   content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--ok);
@@ -893,7 +898,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
   position: absolute; top: -12px; left: 30px; z-index: 2;
   padding: 5px 13px; border-radius: 100px;
   background: linear-gradient(135deg, var(--accent-hi), var(--accent-deep)); color: #fff;
-  font-family: var(--ff-mono); font-size: .68rem; letter-spacing: .04em;
+  font-family: var(--ff-mono); font-size: var(--fz-min); line-height: 1.5; letter-spacing: .04em;
 }
 .format h3 { margin-bottom: 6px; }
 .format-note { font-family: var(--ff-mono); font-size: .76rem; color: var(--accent); margin-bottom: 16px; }
@@ -1697,7 +1702,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .contact-links li { display: flex; align-items: center; gap: 18px; padding: 16px 0; border-bottom: 1px solid var(--line); }
 .contact-label {
   flex: none; width: 92px;
-  font-family: var(--ff-mono); font-size: .74rem; letter-spacing: .1em;
+  font-family: var(--ff-mono); font-size: var(--fz-min); letter-spacing: .1em;
   text-transform: uppercase; color: var(--faint);
 }
 .contact-value {
@@ -1707,7 +1712,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
   transition: color .2s var(--ease);
 }
 .contact-value:hover { color: var(--accent-hi); }
-.copy-hint { font-family: var(--ff-mono); font-size: .68rem; font-weight: 400; color: var(--faint); opacity: 0; transition: opacity .2s var(--ease); }
+.copy-hint { font-family: var(--ff-mono); font-size: var(--fz-min); font-weight: 400; color: var(--faint); opacity: 0; transition: opacity .2s var(--ease); }
 .copy-btn:hover .copy-hint { opacity: 1; }
 
 .contact-form {
@@ -1716,7 +1721,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 }
 .field { display: grid; gap: 7px; }
 .field label {
-  font-family: var(--ff-mono); font-size: .73rem; letter-spacing: .07em;
+  font-family: var(--ff-mono); font-size: var(--fz-min); letter-spacing: .07em;
   text-transform: uppercase; color: var(--faint);
 }
 .field input, .field select, .field textarea {
@@ -1873,7 +1878,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
    до первой задержки текст стоял бы видимым, хотя луч до отметки ещё не дошёл */
 .blip-tag {
   position: absolute; left: 15px; top: -8px;
-  font-family: var(--ff-mono); font-size: .66rem; letter-spacing: .04em;
+  font-family: var(--ff-mono); font-size: var(--fz-min); letter-spacing: .04em;
   color: rgba(233, 228, 255, .78);
   text-shadow: 0 2px 10px #06050d;
   white-space: nowrap;
@@ -1964,7 +1969,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
   padding: 6px 16px; border-radius: 100px;
   border: 1px solid var(--accent-line);
   background: rgba(124, 77, 255, .1);
-  font-family: var(--ff-mono); font-size: .74rem; letter-spacing: .06em;
+  font-family: var(--ff-mono); font-size: var(--fz-min); line-height: 1.5; letter-spacing: .06em;
   color: var(--accent-hi);
 }
 .radar-title {
@@ -2222,7 +2227,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
   padding: 6px 16px; border-radius: 100px;
   border: 1px solid var(--accent-line);
   background: var(--accent-dim);
-  font-family: var(--ff-mono); font-size: .74rem; letter-spacing: .06em;
+  font-family: var(--ff-mono); font-size: var(--fz-min); line-height: 1.5; letter-spacing: .06em;
   color: var(--accent-hi);
 }
 /* вторая строка заголовка гаснет — как у образца */
@@ -2558,7 +2563,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
   padding: 6px 16px; border-radius: 100px;
   border: 1px solid var(--accent-line);
   background: rgba(124, 77, 255, .1);
-  font-family: var(--ff-mono); font-size: .74rem; letter-spacing: .06em;
+  font-family: var(--ff-mono); font-size: var(--fz-min); line-height: 1.5; letter-spacing: .06em;
   color: var(--accent-hi);
 }
 .crypt-title {
@@ -2702,7 +2707,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
   padding: 6px 16px; border-radius: 100px;
   border: 1px solid var(--accent-line);
   background: rgba(124, 77, 255, .1);
-  font-family: var(--ff-mono); font-size: .74rem; letter-spacing: .06em;
+  font-family: var(--ff-mono); font-size: var(--fz-min); line-height: 1.5; letter-spacing: .06em;
   color: var(--accent-hi);
 }
 /* вторая строка заголовка гаснет — как у образца */
@@ -2793,7 +2798,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .arc-cal-grid b {
   padding-bottom: 10px; margin-bottom: 5px;
   border-bottom: 1px solid rgba(255, 255, 255, .07);
-  font-weight: 500; font-size: .71rem; color: var(--faint);
+  font-weight: 500; font-size: var(--fz-min); color: var(--faint);
 }
 .arc-cal-grid i {
   padding: 6px 0; border-radius: 8px;
@@ -2839,7 +2844,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
   -webkit-mask-image: linear-gradient(to bottom, #000 60%, transparent 98%);
           mask-image: linear-gradient(to bottom, #000 60%, transparent 98%);
 }
-.arc-soon-cap { margin: 0 0 9px; padding-left: 4px; font-size: .74rem; color: var(--faint); }
+.arc-soon-cap { margin: 0 0 9px; padding-left: 4px; font-size: var(--fz-min); color: var(--faint); }
 .arc-soon li {
   display: flex; align-items: center; gap: 9px;
   margin-top: 6px; padding: 9px 11px;
@@ -3048,7 +3053,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
   letter-spacing: -.04em; color: #fff;
   text-shadow: 0 0 26px rgba(255, 255, 255, .5);
 }
-.dial-sub { position: relative; font-family: var(--ff-mono); font-size: .72rem; color: rgba(243, 240, 255, .5); }
+.dial-sub { position: relative; font-family: var(--ff-mono); font-size: var(--fz-min); color: rgba(243, 240, 255, .5); }
 .dial-plus {
   position: absolute; right: -8px; bottom: 8px;
   width: 60px; height: 60px; border-radius: 50%;
@@ -3080,8 +3085,8 @@ button, input, select, textarea { font: inherit; color: inherit; }
 }
 .mk-roles { display: flex; gap: 6px; margin-top: 2px; }
 .mk-roles i {
-  font-style: normal; font-family: var(--ff-mono); font-size: .6rem;
-  padding: 3px 8px; border-radius: 999px;
+  font-style: normal; font-family: var(--ff-mono); font-size: var(--fz-min); line-height: 1.35;
+  padding: 2px 7px; border-radius: 999px;
   background: rgba(167, 139, 250, .16); color: var(--accent-hi);
 }
 
@@ -3150,8 +3155,8 @@ button, input, select, textarea { font: inherit; color: inherit; }
   box-shadow: 0 0 14px -2px rgba(94, 234, 212, .6);
 }
 .box i {
-  position: absolute; left: 0; top: -15px;
-  font-style: normal; font-family: var(--ff-mono); font-size: .56rem;
+  position: absolute; left: 0; top: -19px;
+  font-style: normal; font-family: var(--ff-mono); font-size: var(--fz-min); line-height: 1.35;
   padding: 1px 5px; border-radius: 3px 3px 0 0;
   background: var(--ok); color: #06251f;
 }
@@ -3199,7 +3204,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
   display: inline-block; margin-bottom: 24px; padding: 5px 13px;
   border: 1px solid var(--line-strong); border-radius: 100px;
   background: rgba(139, 92, 246, .05);
-  font-family: var(--ff-mono); font-size: .7rem; color: #bdb0e8;
+  font-family: var(--ff-mono); font-size: var(--fz-min); line-height: 1.5; color: #bdb0e8;
 }
 .signal-title { font-size: clamp(2.25rem, 4.4vw, 3.8rem); line-height: 1.08; letter-spacing: -.04em; }
 .signal-title span { color: #bdb0e8; }
@@ -3261,7 +3266,8 @@ button, input, select, textarea { font: inherit; color: inherit; }
 }
 .signal-caption {
   position: absolute; top: 211px;
-  font-family: var(--ff-mono); font-size: 9px; letter-spacing: .2em;
+  font-family: var(--ff-mono); font-size: calc(var(--fz-min) / var(--signal-scale, 1));
+  letter-spacing: .2em; line-height: 1;
   text-transform: uppercase; color: #8a7ca9;
 }
 .signal-caption-in { left: 82px; }
@@ -3272,7 +3278,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
   color: #aca2c8; font-size: .78rem;
 }
 .signal-steps li { display: flex; align-items: center; gap: 10px; }
-.signal-steps span { font-family: var(--ff-mono); font-size: .64rem; color: #67567f; }
+.signal-steps span { font-family: var(--ff-mono); font-size: var(--fz-min); color: #67567f; }
 .signal-steps li + li::before {
   content: ""; width: 24px; height: 1px; margin-right: clamp(0px, 1vw, 12px);
   background: linear-gradient(90deg, var(--line-strong), transparent);
@@ -3474,7 +3480,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
   .signal-lede { font-size: .9rem; }
   .signal-lede br { display: none; }
   .signal-caption { display: none; }
-  .signal-steps { gap: 12px; justify-content: space-between; font-size: .68rem; }
+  .signal-steps { gap: 10px; justify-content: space-between; font-size: var(--fz-min); }
   .signal-steps li { flex: 1; flex-direction: column; gap: 6px; text-align: center; }
   .signal-steps li + li::before { display: none; }
 }
@@ -3538,7 +3544,6 @@ button, input, select, textarea { font: inherit; color: inherit; }
   .radar-cards::before, .radar-cards::after,
   .radar-card + .radar-card::before { display: none; }
   .radar-card { padding-inline: 0; }
-  .blip-tag { font-size: .58rem; }
   .checks-list li { flex-wrap: wrap; row-gap: 2px; padding: 10px 14px; font-size: .85rem; }
   .checks-list span:last-child { width: 100%; padding-left: 27px; }
   .checks-window { padding: 4px; }
