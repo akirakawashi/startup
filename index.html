@@ -156,72 +156,167 @@
       <p class="section-lede">От небольшого сайта до системы, на которой держится работа компании. Берёмся и за новое с нуля, и за то, что уже написано и требует привести в порядок.</p>
     </header>
 
-    <div class="cards">
-      <article class="card spotlight reveal">
-        <div class="card-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="14" rx="2.5"/><path d="M3 9h18M7.5 13h4"/></svg></div>
-        <h3>Веб-приложения с бизнес-логикой</h3>
-        <p>Учётные системы, бронирование и запись, каталоги, личные кабинеты, админ-панели с ролями, правами и журналом действий. Там, где правила сложнее, чем «форма отправила письмо».</p>
-        <ul class="card-list">
-          <li>Роли, права доступа, аудит изменений</li>
-          <li>Онлайн-оплата и работа с балансом</li>
-          <li>Отчёты, выгрузки, графики</li>
-        </ul>
-      </article>
+    <!-- Разрез проекта. Шесть слоёв работы одной стопкой: сверху то, что
+         видят люди, снизу то, на чём это стоит. Вкладка выбирает слой —
+         у него загорается грань, под ним включается готовое пятно света
+         и на него переезжает блик. Абзац на экране один вместо шести. -->
+    <div class="strata" data-active="2" style="--sy: 246">
+      <div class="strata-scene reveal" aria-hidden="true">
+        <p class="strata-cap is-top">что видят люди</p>
 
-      <article class="card spotlight reveal">
-        <div class="card-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h6M14 7h6M4 17h6M14 17h6"/><circle cx="12" cy="7" r="2"/><circle cx="12" cy="17" r="2"/><path d="M12 9v6"/></svg></div>
-        <h3>Интеграции и автоматизация</h3>
-        <p>Связываем то, что уже работает у вас, с тем, что должно работать вместе: CRM, 1С, платёжные системы, почта, мессенджеры, чужие API. Ручную рутину переводим в фоновые процессы.</p>
-        <ul class="card-list">
-          <li>Обмен данными между системами</li>
-          <li>Приём заявок с сайта и форм</li>
-          <li>Очереди, повторы, устойчивость к сбоям</li>
-        </ul>
-      </article>
+        <div class="strata-plane">
+          <span class="strata-aura"></span>
+          <span class="strata-floor"></span>
+          <span class="strata-glow" data-i="5" style="--gy: 468"></span>
+          <span class="strata-glow" data-i="4" style="--gy: 394"></span>
+          <span class="strata-glow" data-i="3" style="--gy: 320"></span>
+          <span class="strata-glow is-on" data-i="2" style="--gy: 246"></span>
+          <span class="strata-glow" data-i="1" style="--gy: 172"></span>
+          <span class="strata-glow" data-i="0" style="--gy: 98"></span>
 
-      <article class="card spotlight reveal card-accent">
-        <div class="card-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M12 12l8-4.5M12 12v9M12 12L4 7.5"/></svg></div>
-        <h3>Инфраструктура и релизы</h3>
-        <p>Сервер, контейнеры, домены, сертификаты, автоматическая выкатка, резервные копии, мониторинг. Сервис, который поднимается одной командой и переживает перезагрузку и падение.</p>
-        <ul class="card-list">
-          <li>Docker и оркестрация</li>
-          <li>CI/CD: коммит → тесты → продакшен</li>
-          <li>Перенос проекта на новый сервер</li>
-        </ul>
-      </article>
+          <svg class="strata-figure" viewBox="0 0 720 580" preserveAspectRatio="xMidYMid meet">
+            <defs>
+              <linearGradient id="strataFace" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#211a44"/>
+                <stop offset=".55" stop-color="#110d23"/>
+                <stop offset="1" stop-color="#0a0814"/>
+              </linearGradient>
+              <linearGradient id="strataFaceOn" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#3c2578"/>
+                <stop offset=".45" stop-color="#20153f"/>
+                <stop offset="1" stop-color="#150e2a"/>
+              </linearGradient>
+              <linearGradient id="strataSide" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#171132"/>
+                <stop offset="1" stop-color="#07060f"/>
+              </linearGradient>
+              <linearGradient id="strataSideOn" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#2c1c5c"/>
+                <stop offset="1" stop-color="#0f0a1f"/>
+              </linearGradient>
+              <linearGradient id="strataSpark" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0" stop-color="#c9b1ff" stop-opacity="0"/>
+                <stop offset=".7" stop-color="#c9b1ff"/>
+                <stop offset="1" stop-color="#f4ecff"/>
+              </linearGradient>
+            </defs>
 
-      <article class="card spotlight reveal">
-        <div class="card-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2.5"/><path d="M3 9h18M7 13h10M7 16.5h6"/></svg></div>
-        <h3>Сайты, лендинги, витрины</h3>
-        <p>Корпоративный сайт, посадочная страница, каталог, блог. Если нужно, чтобы контент правил сам заказчик — ставим и настраиваем CMS: WordPress, Tilda или админку под задачу.</p>
-        <ul class="card-list">
-          <li>Адаптивная вёрстка и скорость загрузки</li>
-          <li>WordPress: установка, темы, плагины, перенос</li>
-          <li>Формы, аналитика, базовое SEO</li>
-        </ul>
-      </article>
+            <g class="strata-plate" data-i="5" data-y="468">
+              <path class="strata-side" d="M74 468L360 560L646 468L646 481L360 573L74 481Z"/>
+              <path class="strata-face" d="M360 376L646 468L360 560L74 468Z"/>
+              <path class="strata-edge" d="M360 376L646 468L360 560L74 468Z"/>
+              <path class="strata-rib" d="M74 468v13 M360 560v13 M646 468v13"/>
+            </g>
+            <g class="strata-plate" data-i="4" data-y="394">
+              <path class="strata-side" d="M74 394L360 486L646 394L646 407L360 499L74 407Z"/>
+              <path class="strata-face" d="M360 302L646 394L360 486L74 394Z"/>
+              <path class="strata-edge" d="M360 302L646 394L360 486L74 394Z"/>
+              <path class="strata-rib" d="M74 394v13 M360 486v13 M646 394v13"/>
+            </g>
+            <g class="strata-plate" data-i="3" data-y="320">
+              <path class="strata-side" d="M74 320L360 412L646 320L646 333L360 425L74 333Z"/>
+              <path class="strata-face" d="M360 228L646 320L360 412L74 320Z"/>
+              <path class="strata-edge" d="M360 228L646 320L360 412L74 320Z"/>
+              <path class="strata-rib" d="M74 320v13 M360 412v13 M646 320v13"/>
+            </g>
+            <g class="strata-plate is-on" data-i="2" data-y="246">
+              <path class="strata-side" d="M74 246L360 338L646 246L646 259L360 351L74 259Z"/>
+              <path class="strata-face" d="M360 154L646 246L360 338L74 246Z"/>
+              <path class="strata-edge" d="M360 154L646 246L360 338L74 246Z"/>
+              <path class="strata-rib" d="M74 246v13 M360 338v13 M646 246v13"/>
+            </g>
+            <g class="strata-plate" data-i="1" data-y="172">
+              <path class="strata-side" d="M74 172L360 264L646 172L646 185L360 277L74 185Z"/>
+              <path class="strata-face" d="M360 80L646 172L360 264L74 172Z"/>
+              <path class="strata-edge" d="M360 80L646 172L360 264L74 172Z"/>
+              <path class="strata-rib" d="M74 172v13 M360 264v13 M646 172v13"/>
+            </g>
+            <g class="strata-plate" data-i="0" data-y="98">
+              <path class="strata-side" d="M74 98L360 190L646 98L646 111L360 203L74 111Z"/>
+              <path class="strata-face" d="M360 6L646 98L360 190L74 98Z"/>
+              <path class="strata-edge" d="M360 6L646 98L360 190L74 98Z"/>
+              <path class="strata-rib" d="M74 98v13 M360 190v13 M646 98v13"/>
+            </g>
 
-      <article class="card spotlight reveal">
-        <div class="card-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5h16v11H13l-4 3.5v-3.5H4z"/><path d="M8.5 10h.01M12 10h.01M15.5 10h.01"/></svg></div>
-        <h3>Боты и уведомления</h3>
-        <p>Telegram и VK: приём заявок, оповещения о событиях, личный кабинет прямо в мессенджере, программы лояльности, начисления и внутренняя валюта.</p>
-        <ul class="card-list">
-          <li>Сценарии диалога и кнопки</li>
-          <li>Админка для операторов и рассылки</li>
-          <li>Связь с сайтом и общей базой</li>
-        </ul>
-      </article>
+            <g class="strata-spark-lift">
+              <g class="strata-spark">
+                <rect class="strata-spark-halo" x="-74" y="-4.5" width="74" height="9" rx="4.5"/>
+                <rect class="strata-spark-core" x="-52" y="-1.5" width="52" height="3" rx="1.5"/>
+              </g>
+            </g>
+          </svg>
+        </div>
 
-      <article class="card spotlight reveal">
-        <div class="card-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6.5h12v11H3z"/><path d="M15 10l6-3.5v11L15 14"/><circle cx="8" cy="12" r="2.2"/></svg></div>
-        <h3>Компьютерное зрение и ML</h3>
-        <p>Видеоаналитика и работа с данными: детекция объектов и людей в кадре, подсчёт и контроль зон, рекомендательные системы, прогнозные модели.</p>
-        <ul class="card-list">
-          <li>Детекция и трекинг на видеопотоке</li>
-          <li>Уведомления по событию в кадре</li>
-          <li>Обучение модели под свою задачу</li>
+        <p class="strata-cap is-bot">на чём это стоит</p>
+      </div>
+
+      <div class="strata-copy reveal">
+        <ul class="strata-legend" role="tablist" aria-orientation="vertical" aria-label="Что мы делаем">
+          <li><button class="strata-tab" type="button" role="tab" id="svc-tab-0"
+                      aria-controls="svc-panel-0" aria-selected="false" data-i="0">Сайты, лендинги, витрины</button></li>
+          <li><button class="strata-tab" type="button" role="tab" id="svc-tab-1"
+                      aria-controls="svc-panel-1" aria-selected="false" data-i="1">Боты и уведомления</button></li>
+          <li><button class="strata-tab" type="button" role="tab" id="svc-tab-2"
+                      aria-controls="svc-panel-2" aria-selected="true" data-i="2">Веб-приложения с бизнес-логикой</button></li>
+          <li><button class="strata-tab" type="button" role="tab" id="svc-tab-3"
+                      aria-controls="svc-panel-3" aria-selected="false" data-i="3">Интеграции и автоматизация</button></li>
+          <li><button class="strata-tab" type="button" role="tab" id="svc-tab-4"
+                      aria-controls="svc-panel-4" aria-selected="false" data-i="4">Компьютерное зрение и ML</button></li>
+          <li><button class="strata-tab" type="button" role="tab" id="svc-tab-5"
+                      aria-controls="svc-panel-5" aria-selected="false" data-i="5">Инфраструктура и релизы</button></li>
         </ul>
-      </article>
+
+        <div class="strata-panels">
+          <div class="strata-panel" role="tabpanel" id="svc-panel-0" aria-labelledby="svc-tab-0">
+            <p>Корпоративный сайт, посадочная страница, каталог, блог. Нужно, чтобы контент правил сам заказчик — ставим и настраиваем CMS.</p>
+            <ul class="strata-points">
+              <li>Адаптивная вёрстка и скорость загрузки</li>
+              <li>WordPress, Tilda или админка под задачу</li>
+              <li>Формы, аналитика, базовое SEO</li>
+            </ul>
+          </div>
+          <div class="strata-panel" role="tabpanel" id="svc-panel-1" aria-labelledby="svc-tab-1">
+            <p>Telegram и VK: приём заявок, оповещения о событиях, личный кабинет прямо в мессенджере.</p>
+            <ul class="strata-points">
+              <li>Сценарии диалога и кнопки</li>
+              <li>Админка для операторов и рассылки</li>
+              <li>Лояльность, начисления, внутренняя валюта</li>
+            </ul>
+          </div>
+          <div class="strata-panel is-on" role="tabpanel" id="svc-panel-2" aria-labelledby="svc-tab-2">
+            <p>Учётные системы, бронирование и запись, каталоги, личные кабинеты, админ-панели. Там, где правила сложнее, чем «форма отправила письмо».</p>
+            <ul class="strata-points">
+              <li>Роли, права доступа, аудит изменений</li>
+              <li>Онлайн-оплата и работа с балансом</li>
+              <li>Отчёты, выгрузки, графики</li>
+            </ul>
+          </div>
+          <div class="strata-panel" role="tabpanel" id="svc-panel-3" aria-labelledby="svc-tab-3">
+            <p>Связываем то, что уже работает у вас: CRM, 1С, платёжные системы, почта, мессенджеры, чужие API.</p>
+            <ul class="strata-points">
+              <li>Обмен данными между системами</li>
+              <li>Приём заявок с сайта и форм</li>
+              <li>Очереди, повторы, устойчивость к сбоям</li>
+            </ul>
+          </div>
+          <div class="strata-panel" role="tabpanel" id="svc-panel-4" aria-labelledby="svc-tab-4">
+            <p>Видеоаналитика и работа с данными: детекция объектов в кадре, подсчёт и контроль зон, прогнозные модели.</p>
+            <ul class="strata-points">
+              <li>Детекция и трекинг на видеопотоке</li>
+              <li>Уведомления по событию в кадре</li>
+              <li>Обучение модели под свою задачу</li>
+            </ul>
+          </div>
+          <div class="strata-panel" role="tabpanel" id="svc-panel-5" aria-labelledby="svc-tab-5">
+            <p>Сервер, контейнеры, домены, сертификаты, автоматическая выкатка, резервные копии, мониторинг. Поднимается одной командой.</p>
+            <ul class="strata-points">
+              <li>Docker и оркестрация</li>
+              <li>CI/CD: коммит → тесты → продакшен</li>
+              <li>Перенос проекта на новый сервер</li>
+            </ul>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -1266,7 +1361,7 @@
       <g mask="url(#spireBehind)">
         <g fill="url(#spireColBack)">
           <path d="M128 150h59v340h-59z M226 150h59v340h-59z M314 150h59v340h-59z M426 150h59v340h-59z M514 150h59v340h-59z M612 150h59v340h-59z"/>
-        </g>
+            </g>
         <path d="M128 150v340M187 150v340M226 150v340M285 150v340M314 150v340M373 150v340M426 150v340M485 150v340M514 150v340M573 150v340M612 150v340M671 150v340"
               stroke="url(#spireColEdge)" stroke-width=".8"/>
       </g>
@@ -1286,7 +1381,7 @@
             <path d="M392 238Q369 392 274 487M394 238Q378 391 312 499M397 238Q387 392 350 507M399 238Q396 392 387 510"/>
             <path d="M408 238Q431 392 526 487M406 238Q422 391 488 499M403 238Q413 392 450 507M401 238Q404 392 413 510"/>
           </g>
-        </g>
+            </g>
       </g>
     </svg>
     <span class="spire-stars"><i></i><i></i><i></i></span>
@@ -1455,7 +1550,7 @@
           <rect x="404" y="0" width="62" height="360"/>
           <rect x="512" y="0" width="62" height="360"/>
           <rect x="620" y="0" width="62" height="360"/>
-        </g>
+            </g>
         <g fill="none" stroke="url(#arcColEdge)" stroke-width="1"
            vector-effect="non-scaling-stroke" mask="url(#arcColFade)">
           <path d="M196 0V360M258 0V360"/>
@@ -1463,7 +1558,7 @@
           <path d="M404 0V360M466 0V360"/>
           <path d="M512 0V360M574 0V360"/>
           <path d="M620 0V360M682 0V360"/>
-        </g>
+            </g>
       </g>
     </svg>
 

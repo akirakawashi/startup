@@ -630,7 +630,7 @@
      play-state сохраняет фазу, в том числе общую фазу луча и отметок радара.
      ============================================================ */
   (function initMotionVisibility() {
-    var scopes = $$('.hero-title, .hero-rim, .pulse, .marquee, .case-status.live, .radar-stage, .mk-cv, .signal-stage, .work');
+    var scopes = $$('.hero-title, .hero-rim, .pulse, .marquee, .case-status.live, .radar-stage, .mk-cv, .signal-stage, .work, .strata-plane');
     var visible = new Set(scopes);
     var sync = function () {
       scopes.forEach(function (el) {
@@ -727,6 +727,62 @@
         selectTab(next, true);
       });
     });
+  })();
+
+  /* ============================================================
+     Услуги: разрез проекта. Вкладка выбирает слой стопки — у него меняются
+     заливки граней, под ним включается уже готовое пятно света, и на его
+     высоту переезжает блик. Пересчётов нет: два класса и одна переменная.
+     Автоперебора нет намеренно, как и у вкладок «Ваша задача»: выбранный
+     слой стоит, пока его читают.
+     ============================================================ */
+  (function initServiceStrata() {
+    var strata = $('.strata');
+    if (!strata) return;
+    var tabs = $$('.strata-tab', strata);
+    var panels = $$('.strata-panel', strata);
+    var plates = $$('.strata-plate', strata);
+    var glows = $$('.strata-glow', strata);
+    if (!tabs.length) return;
+
+    function select(index, focus) {
+      strata.dataset.active = index;
+      /* высота плиты живёт в разметке рядом с её путями, а не в скрипте:
+         одно место правки, если геометрия сдвинется */
+      var plate = plates.filter(function (p) { return +p.dataset.i === index; })[0];
+      if (plate) strata.style.setProperty('--sy', plate.dataset.y);
+
+      tabs.forEach(function (tab, i) {
+        tab.setAttribute('aria-selected', String(i === index));
+        tab.tabIndex = i === index ? 0 : -1;
+      });
+      panels.forEach(function (panel, i) { panel.classList.toggle('is-on', i === index); });
+      plates.forEach(function (p) { p.classList.toggle('is-on', +p.dataset.i === index); });
+      glows.forEach(function (g) { g.classList.toggle('is-on', +g.dataset.i === index); });
+      if (focus) tabs[index].focus({ preventScroll: true });
+    }
+
+    tabs.forEach(function (tab, index) {
+      tab.addEventListener('click', function () { select(index, false); });
+      tab.addEventListener('keydown', function (event) {
+        var next;
+        if (event.key === 'ArrowDown') next = (index + 1) % tabs.length;
+        else if (event.key === 'ArrowUp') next = (index + tabs.length - 1) % tabs.length;
+        else if (event.key === 'Home') next = 0;
+        else if (event.key === 'End') next = tabs.length - 1;
+        else return;
+        event.preventDefault();
+        select(next, true);
+      });
+    });
+
+    /* по самой стопке тоже кликается: плиты перекрывают друг друга сверху
+       вниз, поэтому событие ловит именно та, чей край видно под курсором */
+    plates.forEach(function (plate) {
+      plate.addEventListener('click', function () { select(+plate.dataset.i, false); });
+    });
+
+    select(+strata.dataset.active || 0, false);
   })();
 
   /* ============================================================
