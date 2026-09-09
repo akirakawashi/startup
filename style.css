@@ -591,11 +591,34 @@ button, input, select, textarea { font: inherit; color: inherit; }
    оставляют запас для перспективы; на остальных слоях минимум 12px. */
 .work-stage { min-width: 0; position: relative; height: 500px; pointer-events: none; }
 .work-scene { position: absolute; width: 660px; height: 500px; left: 50%; top: 0; transform: translateX(-50%); perspective: 1100px; }
-.work-aura { position: absolute; left: 24px; top: 50px; width: 610px; height: 380px; background: radial-gradient(ellipse, rgba(156, 73, 245, .58), rgba(115, 47, 207, .23) 40%, transparent 70%); filter: blur(22px); -webkit-mask-image: var(--dots); mask-image: var(--dots); -webkit-mask-size: var(--dots-size); mask-size: var(--dots-size); animation: workBreathe 7s ease-in-out infinite; }
+.work-aura { position: absolute; left: 24px; top: 50px; width: 610px; height: 380px; background: radial-gradient(ellipse, rgba(163, 75, 255, .72), rgba(122, 50, 223, .32) 40%, transparent 70%); filter: blur(22px); -webkit-mask-image: var(--dots); mask-image: var(--dots); -webkit-mask-size: var(--dots-size); mask-size: var(--dots-size); animation: workBreathe 8s ease-in-out infinite; animation-delay: calc(-2s - var(--shot-t, 0s)); }
 .work-floor { position: absolute; width: 490px; height: 240px; left: 100px; top: 220px; background-image: linear-gradient(rgba(192, 160, 231, .075) 1px, transparent 1px), linear-gradient(90deg, rgba(192, 160, 231, .075) 1px, transparent 1px); background-size: 40px 40px; transform: rotateX(65deg) rotateZ(-20deg); -webkit-mask-image: radial-gradient(ellipse, #000, transparent 70%); mask-image: radial-gradient(ellipse, #000, transparent 70%); }
 .work-orbit { position: absolute; left: 34px; top: 87px; width: 600px; height: 300px; border: 1px solid rgba(189, 142, 239, .09); border-radius: 50%; transform: rotate(-22deg); }
 .work-orbit-inner { inset: 107px auto auto 71px; width: 528px; height: 259px; border-color: rgba(189, 142, 239, .055); }
-.work-orbit-outer::after { content: ""; position: absolute; top: 20px; left: 139px; width: 4px; height: 4px; background: #b196d4; border-radius: 50%; }
+/* Маска кольца неподвижна. Компоновщик вращает готовый градиент под ней;
+   тонкая кромка сплошная, дальний свет остаётся на отдельном точечном слое. */
+.work-orbit-trail, .work-edge {
+  position: absolute; inset: -1px; border-radius: inherit; padding: 1px;
+  overflow: hidden; pointer-events: none;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude;
+}
+.work-orbit-trail::before, .work-edge::before {
+  content: ""; position: absolute; top: 50%; left: 50%; width: 150%; aspect-ratio: 1;
+  background: conic-gradient(transparent 290deg, rgba(160, 102, 239, .12) 310deg, #b68ae8 345deg, #f4e4ff 357deg, transparent 360deg);
+  transform: translate(-50%, -50%) rotate(0deg);
+  animation: workLightOrbit 14s linear infinite;
+  animation-delay: calc(-3s - var(--shot-t, 0s));
+  will-change: transform;
+}
+.work-orbit-trail { opacity: .8; }
+.work-orbit-inner .work-orbit-trail { opacity: .5; }
+.work-orbit-inner .work-orbit-trail::before { animation-duration: 19s; animation-direction: reverse; animation-delay: calc(-11s - var(--shot-t, 0s)); }
+.work-edge { z-index: 2; opacity: .85; }
+.work-edge::before { animation-duration: 9s; animation-delay: calc(-1s - var(--shot-t, 0s)); }
+.work-edge-app { inset: 0; opacity: .55; }
+.work-edge-app::before { animation-duration: 16s; animation-delay: calc(-7s - var(--shot-t, 0s)); }
 .work-app, .work-platform { position: absolute; width: 420px; height: 280px; left: 106px; top: 90px; border-radius: 13px; transform: rotateX(10deg) rotateY(-15deg) rotateZ(4deg); transition: transform .85s var(--ease-out), opacity .7s var(--ease-out); }
 .work-platform { border: 1px solid rgba(190, 154, 244, .2); background: linear-gradient(135deg, rgba(62, 31, 89, .16), rgba(18, 12, 31, .5)); opacity: 0; }
 .work-platform span { position: absolute; bottom: 8px; left: 18px; font-family: var(--ff-mono); font-size: var(--work-art-text); letter-spacing: .06em; color: #b3a1cb; }
@@ -634,6 +657,23 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .work-app-rows > i + i { width: 19%; }
 .work-app-scan { position: absolute; inset: 0; background: linear-gradient(115deg, transparent 25%, rgba(213, 180, 255, .07) 45%, rgba(237, 214, 255, .17) 50%, transparent 70%); -webkit-mask-image: var(--dots); mask-image: var(--dots); -webkit-mask-size: var(--dots-size); mask-size: var(--dots-size); transform: translateX(-100%); opacity: 0; }
 .work-satellite { position: absolute; border: 1px solid rgba(193, 153, 242, .3); border-radius: 12px; background: linear-gradient(120deg, #211331, #130d20 70%); box-shadow: 0 20px 45px -22px #000, inset 0 1px 0 rgba(226, 196, 255, .09); opacity: 0; visibility: hidden; transition: transform .75s var(--ease-out), opacity .45s, visibility .75s; }
+.work-assistant::before, .work-module::before, .work-launch::before {
+  content: ""; position: absolute; inset: -42px -35px auto; height: 92px; z-index: -1;
+  background: radial-gradient(ellipse, rgba(172, 90, 255, .48), rgba(134, 62, 231, .12) 42%, transparent 70%);
+  filter: blur(16px);
+  -webkit-mask-image: var(--dots); mask-image: var(--dots);
+  -webkit-mask-size: var(--dots-size); mask-size: var(--dots-size);
+  opacity: .6; animation: workCardGlow 7s ease-in-out infinite;
+  animation-delay: calc(-1s - var(--shot-t, 0s));
+}
+/* Невидимые сценарии не гоняют блики. Общую паузу секции задаёт наблюдатель. */
+.work-satellite::before, .work-satellite .work-edge::before { animation-play-state: paused; }
+.work[data-scenario="ai"] .work-assistant::before,
+.work[data-scenario="ai"] .work-assistant .work-edge::before,
+.work[data-scenario="upgrade"] .work-module::before,
+.work[data-scenario="upgrade"] .work-module .work-edge::before,
+.work[data-scenario="launch"] .work-launch::before,
+.work[data-scenario="launch"] .work-launch .work-edge::before { animation-play-state: running; }
 .work-source { left: 44px; top: 25px; display: flex; align-items: center; gap: 11px; width: 255px; padding: 14px; transform: translate(12px, 24px) rotate(-5deg); }
 .work-source-icon { display: grid; place-items: center; flex: none; width: 31px; height: 35px; border: 1px solid #694280; border-radius: 5px; color: #d7b1fa; font-size: 23px; }
 .work-source b, .work-launch b { display: block; color: #decbee; font-size: var(--work-art-text); font-weight: 500; }
@@ -690,6 +730,8 @@ button, input, select, textarea { font: inherit; color: inherit; }
 @keyframes workBarsIn { from { opacity: 0; transform: scaleY(.35); transform-origin: bottom; } to { opacity: 1; transform: scaleY(1); transform-origin: bottom; } }
 @keyframes workScan { 0% { opacity: 0; transform: translateX(-100%); } 25% { opacity: 1; } 100% { opacity: 0; transform: translateX(100%); } }
 @keyframes workBreathe { 0%, 100% { opacity: .65; } 50% { opacity: 1; } }
+@keyframes workLightOrbit { to { transform: translate(-50%, -50%) rotate(360deg); } }
+@keyframes workCardGlow { 0%, 100% { opacity: .45; } 50% { opacity: .9; } }
 @media (max-width: 1100px) and (min-width: 761px) {
   .work-body { grid-template-columns: .9fr 1.1fr; padding-inline: 0; }
   .work-panel h3 { font-size: 1.85rem; }
@@ -751,7 +793,8 @@ button, input, select, textarea { font: inherit; color: inherit; }
   .work-app-bar > i { width: 35px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .work *, .work *::after { animation: none !important; transition: none !important; }
+  .work *, .work *::before, .work *::after { animation: none !important; transition: none !important; }
+  .work-orbit-trail, .work-edge { display: none; }
 }
 @media print {
   .work { padding-block: 24px; }
