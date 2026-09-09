@@ -295,19 +295,70 @@
   }
 
   /* ============================================================
-     Магнитные кнопки
+     Кнопки: насыщенная заливка с точечным бликом и вспышка кромки.
+     Один набор слоёв на кнопку; в кадре меняются только transform/opacity.
+     Действия ссылок, submit и клавиатуры остаются нативными.
      ============================================================ */
-  if (finePointer && !reduceMotion) {
-    $$('.magnetic').forEach(function (el) {
-      el.addEventListener('pointermove', function (e) {
-        var box = el.getBoundingClientRect();
-        var dx = (e.clientX - (box.left + box.width / 2)) * 0.22;
-        var dy = (e.clientY - (box.top + box.height / 2)) * 0.32;
-        el.style.transform = 'translate(' + dx + 'px,' + dy + 'px)';
+  (function initButtonLight() {
+    var pointerQuery = window.matchMedia('(hover: hover) and (pointer: fine)');
+    var resets = [];
+    $$('.btn, .orb-cta').forEach(function (el) {
+      var label = document.createElement('span');
+      label.className = 'button-label';
+      while (el.firstChild) label.appendChild(el.firstChild);
+      el.appendChild(label);
+      el.classList.add('button-lit');
+      // Задержка появления не должна задерживать подсветку при наведении.
+      el.style.removeProperty('transition-delay');
+
+      function layer(name, parent) {
+        var node = document.createElement('span');
+        node.className = name;
+        node.setAttribute('aria-hidden', 'true');
+        (parent || el).appendChild(node);
+        return node;
+      }
+      layer('button-aura');
+      layer('button-sweep', layer('button-fill'));
+      layer('button-rim');
+      var flash = layer('button-flash');
+      var enabled = function () { return !el.matches(':disabled, [aria-disabled="true"]'); };
+
+      function reset() {
+        el.classList.remove('is-hovered');
+        flash.classList.remove('is-running');
+      }
+      resets.push(reset);
+      function hover(e) {
+        if (!enabled() || !pointerQuery.matches || e.pointerType === 'touch') return;
+        el.classList.add('is-hovered');
+      }
+      function pulse() {
+        if (!enabled() || motionQuery.matches) return;
+        flash.classList.remove('is-running');
+        // Перезапускаем один слой, не задерживая переход по ссылке или submit.
+        void flash.offsetWidth;
+        flash.classList.add('is-running');
+      }
+      el.addEventListener('pointerenter', hover);
+      el.addEventListener('pointermove', hover);
+      el.addEventListener('pointerleave', function () {
+        el.classList.remove('is-hovered');
       });
-      el.addEventListener('pointerleave', function () { el.style.transform = ''; });
+      el.addEventListener('pointerdown', function (e) { if (e.button === 0) pulse(); });
+      el.addEventListener('pointercancel', reset);
+      el.addEventListener('keydown', function (e) {
+        if (!e.repeat && (e.key === 'Enter' || (e.key === ' ' && el.tagName === 'BUTTON'))) pulse();
+      });
+      el.addEventListener('blur', reset);
+      flash.addEventListener('animationend', function () { flash.classList.remove('is-running'); });
     });
-  }
+    function resetAll() { resets.forEach(function (reset) { reset(); }); }
+    if (motionQuery.addEventListener) motionQuery.addEventListener('change', resetAll);
+    if (pointerQuery.addEventListener) pointerQuery.addEventListener('change', resetAll);
+    window.addEventListener('blur', resetAll);
+    document.addEventListener('visibilitychange', function () { if (document.hidden) resetAll(); });
+  })();
 
   /* Локальный пример AI: один таймер на всю последовательность.
      Вне экрана и в скрытой вкладке сохраняем остаток задержки. */
@@ -592,7 +643,7 @@
      play-state сохраняет фазу, в том числе общую фазу луча и отметок радара.
      ============================================================ */
   (function initMotionVisibility() {
-    var scopes = $$('.hero-title, .hero-rim, .pulse, .marquee, .portfolio-card, .stack-display, .radar-stage, .mk-cv, .signal-stage, .work, .strata-plane');
+    var scopes = $$('.hero-title, .hero-rim, .pulse, .marquee, .portfolio-card, .stack-display, .button-lit, .radar-stage, .mk-cv, .signal-stage, .work, .strata-plane');
     var visible = new Set(scopes);
     var sync = function () {
       scopes.forEach(function (el) {

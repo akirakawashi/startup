@@ -49,7 +49,7 @@
     </nav>
 
     <div class="topbar-actions">
-      <a class="btn btn-primary btn-sm topbar-cta magnetic" href="#contact">Обсудить задачу</a>
+      <a class="btn btn-primary btn-sm topbar-cta" href="#contact">Обсудить задачу</a>
       <button class="icon-btn burger" id="burger" type="button" aria-label="Меню" aria-expanded="false" aria-controls="topnav">
         <span></span><span></span>
       </button>
@@ -78,8 +78,8 @@
     </p>
 
     <div class="hero-cta reveal">
-      <a class="btn btn-primary magnetic" href="#contact">Обсудить задачу</a>
-      <a class="btn btn-ghost magnetic" href="#cases">Смотреть проекты</a>
+      <a class="btn btn-primary" href="#contact">Обсудить задачу</a>
+      <a class="btn btn-ghost" href="#cases">Смотреть проекты</a>
     </div>
 
     <ul class="hero-facts reveal">
@@ -199,6 +199,10 @@
                 <stop offset=".7" stop-color="#c9b1ff"/>
                 <stop offset="1" stop-color="#f4ecff"/>
               </linearGradient>
+              <!-- Длина ребра: hypot(286, 92). Каждый след обрезан своим ребром. -->
+              <clipPath id="strataSparkBounds" clipPathUnits="userSpaceOnUse">
+                <rect x="0" y="-5" width="300.433021" height="10"/>
+              </clipPath>
             </defs>
 
             <g class="strata-plate" data-i="5" data-y="468">
@@ -239,9 +243,19 @@
             </g>
 
             <g class="strata-spark-lift">
-              <g class="strata-spark">
-                <rect class="strata-spark-halo" x="-74" y="-4.5" width="74" height="9" rx="4.5"/>
-                <rect class="strata-spark-core" x="-52" y="-1.5" width="52" height="3" rx="1.5"/>
+              <g transform="translate(74 0) rotate(17.831858)" clip-path="url(#strataSparkBounds)">
+                <g class="strata-spark">
+                  <rect class="strata-spark-halo" x="-74" y="-4.5" width="74" height="9" rx="4.5"/>
+                  <rect class="strata-spark-core" x="-52" y="-1.5" width="52" height="3" rx="1.5"/>
+                </g>
+              </g>
+              <g transform="translate(360 92) rotate(-17.831858)" clip-path="url(#strataSparkBounds)">
+                <g class="strata-spark">
+                  <g transform="translate(-300.433021 0)">
+                    <rect class="strata-spark-halo" x="-74" y="-4.5" width="74" height="9" rx="4.5"/>
+                    <rect class="strata-spark-core" x="-52" y="-1.5" width="52" height="3" rx="1.5"/>
+                  </g>
+                </g>
               </g>
             </g>
           </svg>
@@ -1986,7 +2000,7 @@
       <li><span class="orb-tick" aria-hidden="true"></span>Сопровождение после запуска</li>
     </ul>
 
-    <a class="orb-cta reveal magnetic" href="#contact">Обсудить задачу</a>
+    <a class="orb-cta reveal" href="#contact">Обсудить задачу</a>
   </div>
 </section>
 
@@ -2128,7 +2142,7 @@
           <label for="message">Коротко о задаче</label>
           <textarea id="message" name="message" rows="5" placeholder="Что должно работать, для кого, есть ли сроки" required></textarea>
         </div>
-        <button class="btn btn-primary btn-block magnetic" type="submit">Отправить</button>
+        <button class="btn btn-primary btn-block" type="submit">Отправить</button>
         <p class="form-note" id="formNote">Кнопка откроет письмо в вашем почтовом клиенте с уже заполненным текстом.</p>
       </form>
     </div>
