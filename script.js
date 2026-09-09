@@ -274,44 +274,6 @@
   }
 
   /* ============================================================
-     Счётчики в метриках проекта
-     ============================================================ */
-  var counters = $$('[data-count]');
-  function runCounter(el) {
-    var target = parseFloat(el.getAttribute('data-count')) || 0;
-    var prefix = el.getAttribute('data-prefix') || '';
-    var suffix = el.getAttribute('data-suffix') || '';
-
-    if (reduceMotion) { el.textContent = prefix + target + suffix; return; }
-
-    var started = null;
-    var duration = 1200;
-    function tick(now) {
-      if (started === null) started = now;
-      var p = clamp((now - started) / duration, 0, 1);
-      var eased = 1 - Math.pow(1 - p, 3);
-      el.textContent = prefix + Math.round(target * eased) + suffix;
-      if (p < 1) window.requestAnimationFrame(tick);
-    }
-    window.requestAnimationFrame(tick);
-  }
-
-  if (counters.length) {
-    if (reduceMotion || !('IntersectionObserver' in window)) {
-      counters.forEach(runCounter);
-    } else {
-      var countObserver = new IntersectionObserver(function (entries) {
-        entries.forEach(function (entry) {
-          if (!entry.isIntersecting) return;
-          runCounter(entry.target);
-          countObserver.unobserve(entry.target);
-        });
-      }, { threshold: 0.6 });
-      counters.forEach(function (el) { countObserver.observe(el); });
-    }
-  }
-
-  /* ============================================================
      Подсветка под курсором внутри карточек
      ============================================================ */
   if (finePointer && !reduceMotion) {
@@ -630,7 +592,7 @@
      play-state сохраняет фазу, в том числе общую фазу луча и отметок радара.
      ============================================================ */
   (function initMotionVisibility() {
-    var scopes = $$('.hero-title, .hero-rim, .pulse, .marquee, .case-status.live, .radar-stage, .mk-cv, .signal-stage, .work, .strata-plane');
+    var scopes = $$('.hero-title, .hero-rim, .pulse, .marquee, .portfolio-card, .radar-stage, .mk-cv, .signal-stage, .work, .strata-plane');
     var visible = new Set(scopes);
     var sync = function () {
       scopes.forEach(function (el) {

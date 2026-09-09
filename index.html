@@ -752,74 +752,98 @@
 </section>
 
 <!-- ===================== ПРОЕКТЫ ===================== -->
-<section class="section" id="cases">
+<section class="portfolio" id="cases" aria-labelledby="portfolio-title">
   <div class="wrap">
-    <header class="section-head reveal">
-      <p class="section-label">03 / проекты</p>
-      <h2 class="underline-grow">Что уже сделано</h2>
-      <p class="section-lede">Часть работ под NDA и показать их нельзя. Ниже то, о чём можно рассказать: собственные продукты и проекты, доведённые до продакшена целиком.</p>
+    <header class="portfolio-head reveal">
+      <p class="portfolio-eyebrow">03 / избранные проекты</p>
+      <h2 id="portfolio-title">Проекты,<br><span>которые работают.</span></h2>
     </header>
 
-    <div class="cases">
-      <article class="case case-lead spotlight reveal">
-        <div class="case-head">
-          <div>
-            <p class="case-kicker">Собственный продукт · платформа</p>
-            <h3>AiNoCraft</h3>
+    <div class="portfolio-grid">
+      <article class="portfolio-card portfolio-ainocraft reveal" data-project="ainocraft" aria-labelledby="portfolio-ainocraft-title">
+        <span class="portfolio-rim" aria-hidden="true"></span>
+        <div class="portfolio-visual" role="img" aria-label="Визуализация игровой платформы AiNoCraft: лаунчер, личный кабинет и игровой мир. Это схема, а не снимок интерфейса.">
+          <span class="portfolio-glow"></span>
+          <span class="portfolio-gridlines"></span>
+          <span class="portfolio-badge portfolio-badge-live"><i></i> В продакшене</span>
+
+          <div class="portfolio-launcher">
+            <div class="portfolio-launcher-bar"><span class="portfolio-mark">A<span>✦</span></span><span>AiNoCraft</span><i></i><i></i></div>
+            <div class="portfolio-launcher-body">
+              <div class="portfolio-launcher-copy"><span>Игровая платформа</span><b>Целый мир.<br>В одной системе.</b></div>
+              <svg class="portfolio-world" viewBox="0 0 320 250" fill="none" aria-hidden="true">
+                <defs>
+                  <linearGradient id="portfolioCubeTop" x1="0" y1="0" x2="56" y2="32" gradientUnits="userSpaceOnUse"><stop stop-color="#e9d8ff"/><stop offset="1" stop-color="#9460d7"/></linearGradient>
+                  <linearGradient id="portfolioCubeLeft" x1="0" y1="16" x2="28" y2="64" gradientUnits="userSpaceOnUse"><stop stop-color="#9d72ca"/><stop offset="1" stop-color="#342044"/></linearGradient>
+                  <linearGradient id="portfolioCubeRight" x1="28" y1="32" x2="56" y2="64" gradientUnits="userSpaceOnUse"><stop stop-color="#634080"/><stop offset="1" stop-color="#20102e"/></linearGradient>
+                  <g id="portfolioCube"><path d="m0 16 28-16 28 16-28 16Z" fill="url(#portfolioCubeTop)"/><path d="m0 16 28 16v32L0 48Z" fill="url(#portfolioCubeLeft)"/><path d="m28 32 28-16v32L28 64Z" fill="url(#portfolioCubeRight)"/><path d="m0 16 28 16 28-16M28 32v32" stroke="#dcbdff" stroke-opacity=".35" stroke-width=".75"/></g>
+                </defs>
+                <path d="m160 57 142 82-142 82-142-82Z" stroke="#b990ec" stroke-opacity=".18"/>
+                <path d="m160 79 105 60-105 60-105-60Z" stroke="#b990ec" stroke-opacity=".1"/>
+                <g opacity=".45"><use href="#portfolioCube" x="132" y="60"/><use href="#portfolioCube" x="188" y="92"/><use href="#portfolioCube" x="76" y="92"/></g>
+                <use href="#portfolioCube" x="160" y="108"/><use href="#portfolioCube" x="104" y="108"/>
+                <use href="#portfolioCube" x="132" y="124"/>
+                <use href="#portfolioCube" x="132" y="92"/><use href="#portfolioCube" x="132" y="60"/>
+                <use href="#portfolioCube" x="188" y="60"/><use href="#portfolioCube" x="76" y="60"/>
+                <g class="portfolio-world-spark"><path d="M160 21v15M153 28.5h14M226 106v10M221 111h10" stroke="#e7cbff" stroke-linecap="round"/></g>
+              </svg>
+              <span class="portfolio-launcher-label">Лаунчер <span>Windows</span></span>
+            </div>
           </div>
-          <span class="case-status live">В продакшене</span>
+
+          <div class="portfolio-account"><span class="portfolio-account-icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="8" r="3" stroke="currentColor" stroke-width="1.3"/><path d="M5.5 20v-2a6.5 6.5 0 0 1 13 0v2" stroke="currentColor" stroke-width="1.3"/></svg></span><div><b>Личный кабинет</b><span>Единый аккаунт</span></div><span class="portfolio-account-check">✓</span></div>
+          <span class="portfolio-visual-caption">Визуализация платформы</span>
         </div>
-        <p class="case-text">
-          Игровая платформа целиком: публичный сайт, личный кабинет, магазин привилегий
-          с внутренним балансом, админ-панель с ролями и журналом действий, собственная
-          система авторизации, десктопный клиент под Windows и игровые серверы. Десять
-          репозиториев, четыре языка, кластер и автоматическая выкатка на каждый коммит.
-        </p>
-        <div class="case-metrics">
-          <div><strong data-count="10" data-suffix=" репозиториев"></strong><span>в одной связанной экосистеме — от бэкенда до игровых модов</span></div>
-          <div><strong data-count="46" data-prefix="−" data-suffix="%"></strong><span>занятого места в хранилище после пересмотра формата артефактов</span></div>
-          <div><strong data-count="8" data-suffix=" проверок"></strong><span>автоматических барьеров в CI, не пропускающих поломку в продакшен</span></div>
+        <div class="portfolio-info">
+          <div class="portfolio-name-row"><h3 id="portfolio-ainocraft-title">AiNoCraft</h3><span class="portfolio-kind">Игровая платформа</span></div>
+          <p>Сайт, личный кабинет и лаунчер — в одной системе.</p>
+          <ul class="portfolio-tech" aria-label="Основные технологии"><li>Python</li><li>React</li><li>Kubernetes</li></ul>
         </div>
-        <ul class="tags">
-          <li>Python</li><li>FastAPI</li><li>PostgreSQL</li><li>Redis</li><li>S3</li>
-          <li>React</li><li>Docker</li><li>Kubernetes</li><li>CI/CD</li><li>C# / WPF</li>
-        </ul>
       </article>
 
-      <article class="case spotlight reveal">
-        <div class="case-head">
-          <div><p class="case-kicker">Сервис бронирования</p><h3>Продажа мест на рейсы</h3></div>
+      <article class="portfolio-card portfolio-placeholder portfolio-placeholder-stack reveal" aria-labelledby="portfolio-project-02">
+        <div class="portfolio-visual" aria-hidden="true">
+          <span class="portfolio-glow"></span><span class="portfolio-gridlines"></span>
+          <span class="portfolio-badge">Кейс готовится</span>
+          <div class="portfolio-outline"><i></i><i></i><i></i></div>
+          <span class="portfolio-number">02</span>
+          <span class="portfolio-placeholder-cross portfolio-cross-a">+</span><span class="portfolio-placeholder-cross portfolio-cross-b">+</span>
         </div>
-        <p class="case-text">Система бронирования междугородних перевозок: маршруты с несколькими остановками, отдельная цена на каждый участок, посегментный подсчёт свободных мест, подтверждение по СМС, личный кабинет пассажира и диспетчерская панель с расписанием и продажами.</p>
-        <div class="case-metrics compact">
-          <div><strong>Без двойных продаж</strong><span>одно место не уходит двум покупателям при одновременной покупке</span></div>
-          <div><strong>Место работает дважды</strong><span>освободившийся участок сразу доступен следующему пассажиру</span></div>
+        <div class="portfolio-info">
+          <h3 id="portfolio-project-02">Проект 02</h3>
+          <p>Скоро расскажем подробнее.</p>
+          <span class="portfolio-pending"><i aria-hidden="true"></i> Описание и технологии — скоро</span>
         </div>
-        <ul class="tags"><li>Python</li><li>FastAPI</li><li>PostgreSQL</li><li>Redis</li><li>React</li><li>TypeScript</li></ul>
       </article>
 
-      <article class="case spotlight reveal">
-        <div class="case-head">
-          <div><p class="case-kicker">Бот и админ-панель</p><h3>Программа лояльности во ВКонтакте</h3></div>
+      <article class="portfolio-card portfolio-placeholder portfolio-placeholder-orbit reveal" aria-labelledby="portfolio-project-03">
+        <div class="portfolio-visual" aria-hidden="true">
+          <span class="portfolio-glow"></span><span class="portfolio-gridlines"></span>
+          <span class="portfolio-badge">Кейс готовится</span>
+          <div class="portfolio-outline"><i></i><i></i><i></i></div>
+          <span class="portfolio-number">03</span>
+          <span class="portfolio-placeholder-cross portfolio-cross-a">+</span><span class="portfolio-placeholder-cross portfolio-cross-b">+</span>
         </div>
-        <p class="case-text">Геймифицированный бот для сообщества: задания, баллы и уровни, приглашение друзей, викторины, магазин призов с промокодами и выдачей. Отдельная панель для организаторов: заявки, рассылки, статистика по дням и редактирование всех текстов бота без программиста.</p>
-        <ul class="tags"><li>Python</li><li>FastAPI</li><li>PostgreSQL</li><li>VK API</li><li>React</li><li>Docker</li></ul>
+        <div class="portfolio-info">
+          <h3 id="portfolio-project-03">Проект 03</h3>
+          <p>Скоро расскажем подробнее.</p>
+          <span class="portfolio-pending"><i aria-hidden="true"></i> Описание и технологии — скоро</span>
+        </div>
       </article>
 
-      <article class="case spotlight reveal">
-        <div class="case-head">
-          <div><p class="case-kicker">Компьютерное зрение</p><h3>Контроль очереди у кассы</h3></div>
+      <article class="portfolio-card portfolio-placeholder portfolio-placeholder-grid reveal" aria-labelledby="portfolio-project-04">
+        <div class="portfolio-visual" aria-hidden="true">
+          <span class="portfolio-glow"></span><span class="portfolio-gridlines"></span>
+          <span class="portfolio-badge">Кейс готовится</span>
+          <div class="portfolio-outline"><i></i><i></i><i></i></div>
+          <span class="portfolio-number">04</span>
+          <span class="portfolio-placeholder-cross portfolio-cross-a">+</span><span class="portfolio-placeholder-cross portfolio-cross-b">+</span>
         </div>
-        <p class="case-text">Приложение реального времени: распознаёт людей в заданной зоне зала и, если очередь держится дольше заданного времени, отправляет в Telegram сообщение «откройте вторую кассу» вместе со снимком. Ложные срабатывания на случайных прохожих отсечены.</p>
-        <ul class="tags"><li>Python</li><li>YOLO</li><li>OpenCV</li><li>Telegram Bot API</li></ul>
-      </article>
-
-      <article class="case spotlight reveal">
-        <div class="case-head">
-          <div><p class="case-kicker">Интеграция</p><h3>Формы сайта → облачное хранилище</h3></div>
+        <div class="portfolio-info">
+          <h3 id="portfolio-project-04">Проект 04</h3>
+          <p>Скоро расскажем подробнее.</p>
+          <span class="portfolio-pending"><i aria-hidden="true"></i> Описание и технологии — скоро</span>
         </div>
-        <p class="case-text">Заявки с форм Tilda принимаются, ставятся в очередь и обрабатываются в фоне: файл скачивается, проверяется и раскладывается в корпоративное хранилище. Сайт при этом отвечает мгновенно, а повторная доставка заявки не создаёт дубль.</p>
-        <ul class="tags"><li>Python</li><li>FastAPI</li><li>PostgreSQL</li><li>Nextcloud</li><li>WebDAV</li></ul>
       </article>
     </div>
   </div>
