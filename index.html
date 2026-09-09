@@ -898,47 +898,142 @@
         <svg class="signal-prism" viewBox="0 0 1000 440" fill="none">
           <defs>
             <path id="signalCrystalShape" d="M413.77 293.39 439.31 111.65 523.26 54.52 575.31 124.48 586.23 146.61 560.69 328.35 476.74 385.48 424.69 315.52Z"/>
+            <!-- Четырёхлучевая искра: блик на углу огранки. -->
+            <path id="signalGlint" d="M0-15C1-4.2 4.2-1 15 0 4.2 1 1 4.2 0 15-1 4.2-4.2 1-15 0-4.2-1-1-4.2 0-15Z"/>
             <linearGradient id="signalEmission" x1="480" y1="55" x2="520" y2="385" gradientUnits="userSpaceOnUse">
               <stop stop-color="#c6adff"/>
               <stop offset=".48" stop-color="#ae78ff"/>
               <stop offset="1" stop-color="#91baff"/>
             </linearGradient>
+            <!-- Тело: в середине стекло почти чёрное, у вершин набирает свет. -->
+            <linearGradient id="signalBody" x1="500" y1="55" x2="500" y2="385" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#1a1030"/>
+              <stop offset=".28" stop-color="#0a0518"/>
+              <stop offset=".7" stop-color="#090419"/>
+              <stop offset="1" stop-color="#131b34"/>
+            </linearGradient>
+            <!-- Дальние плоскости и рёбра: их видно сквозь тело. -->
+            <linearGradient id="signalBackFace" x1="466" y1="108" x2="556" y2="312" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#7059ab" stop-opacity=".22"/>
+              <stop offset=".5" stop-color="#291b45" stop-opacity=".14"/>
+              <stop offset="1" stop-color="#5b6da0" stop-opacity=".24"/>
+            </linearGradient>
+            <linearGradient id="signalThrough" x1="500" y1="95" x2="500" y2="335" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#cdbaff" stop-opacity=".85"/>
+              <stop offset=".46" stop-color="#9c8ad2" stop-opacity=".4"/>
+              <stop offset="1" stop-color="#b3c8f5" stop-opacity=".78"/>
+            </linearGradient>
+            <!-- Продольные градиенты только притемняют плоскость к середине.
+                 Светлые стопы здесь давали ровную дымку по всему телу. -->
             <linearGradient id="signalFront" x1="449" y1="133" x2="516" y2="333" gradientUnits="userSpaceOnUse">
-              <stop stop-color="#d1c2ff" stop-opacity=".64"/>
-              <stop offset=".23" stop-color="#987bce" stop-opacity=".5"/>
-              <stop offset=".44" stop-color="#38244d" stop-opacity=".74"/>
-              <stop offset=".63" stop-color="#b8a2e5" stop-opacity=".38"/>
-              <stop offset=".83" stop-color="#514079" stop-opacity=".68"/>
-              <stop offset="1" stop-color="#9aabdb" stop-opacity=".5"/>
+              <stop stop-color="#2e2450" stop-opacity=".34"/>
+              <stop offset=".28" stop-color="#0b0620" stop-opacity=".6"/>
+              <stop offset=".58" stop-color="#090418" stop-opacity=".66"/>
+              <stop offset=".84" stop-color="#100b26" stop-opacity=".56"/>
+              <stop offset="1" stop-color="#1a2340" stop-opacity=".5"/>
             </linearGradient>
             <linearGradient id="signalSide" x1="530" y1="150" x2="563" y2="324" gradientUnits="userSpaceOnUse">
-              <stop stop-color="#ad95df" stop-opacity=".46"/>
-              <stop offset=".34" stop-color="#231333" stop-opacity=".84"/>
-              <stop offset=".72" stop-color="#6e549a" stop-opacity=".4"/>
-              <stop offset="1" stop-color="#293650" stop-opacity=".8"/>
+              <stop stop-color="#241a42" stop-opacity=".4"/>
+              <stop offset=".34" stop-color="#09040f" stop-opacity=".72"/>
+              <stop offset=".72" stop-color="#0d0720" stop-opacity=".62"/>
+              <stop offset="1" stop-color="#141c2e" stop-opacity=".7"/>
             </linearGradient>
             <linearGradient id="signalBevel" x1="446" y1="125" x2="422" y2="304" gradientUnits="userSpaceOnUse">
-              <stop stop-color="#ddceff" stop-opacity=".8"/>
-              <stop offset=".4" stop-color="#8160b8" stop-opacity=".56"/>
-              <stop offset=".7" stop-color="#b49dde" stop-opacity=".66"/>
-              <stop offset="1" stop-color="#617ba6" stop-opacity=".65"/>
+              <stop stop-color="#4b3a75" stop-opacity=".3"/>
+              <stop offset=".4" stop-color="#170f2e" stop-opacity=".46"/>
+              <stop offset=".7" stop-color="#31255a" stop-opacity=".34"/>
+              <stop offset="1" stop-color="#1d2842" stop-opacity=".5"/>
             </linearGradient>
-            <linearGradient id="signalCrown" x1="518" y1="55" x2="486" y2="159" gradientUnits="userSpaceOnUse">
-              <stop stop-color="#f2eaff" stop-opacity=".88"/>
-              <stop offset=".38" stop-color="#c7b2f1" stop-opacity=".56"/>
-              <stop offset="1" stop-color="#695482" stop-opacity=".22"/>
+            <!-- Луч, который идёт сквозь стекло: единственная горизонталь
+                 в теле, иначе рёбра и отражения читаются гофрой. -->
+            <linearGradient id="signalBeam" x1="500" y1="150" x2="500" y2="300" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#a98cf0" stop-opacity="0"/>
+              <stop offset=".35" stop-color="#c9aeff" stop-opacity=".1"/>
+              <stop offset=".47" stop-color="#e8d8ff" stop-opacity=".17"/>
+              <stop offset=".6" stop-color="#a9bdf0" stop-opacity=".09"/>
+              <stop offset="1" stop-color="#8fb0f0" stop-opacity="0"/>
             </linearGradient>
-            <linearGradient id="signalTip" x1="446" y1="304" x2="485" y2="387" gradientUnits="userSpaceOnUse">
-              <stop stop-color="#baa0e6" stop-opacity=".5"/>
-              <stop offset=".5" stop-color="#5b4c83" stop-opacity=".38"/>
-              <stop offset="1" stop-color="#bdccfa" stop-opacity=".76"/>
+            <!-- ...поперечные — стеклянный профиль: горящая кромка, провал
+                 в глубину, полоса внутреннего отражения, снова кромка. -->
+            <linearGradient id="signalGlassFront" x1="450.23" y1="133.78" x2="524.7" y2="144.25" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#fffbff" stop-opacity=".88"/>
+              <stop offset=".015" stop-color="#d6c6ff" stop-opacity=".3"/>
+              <stop offset=".05" stop-color="#b49ce8" stop-opacity=".16"/>
+              <stop offset=".13" stop-color="#6b56a8" stop-opacity=".07"/>
+              <stop offset=".26" stop-color="#0a0518" stop-opacity=".4"/>
+              <stop offset=".5" stop-color="#08040f" stop-opacity=".6"/>
+              <stop offset=".82" stop-color="#08040f" stop-opacity=".52"/>
+              <stop offset=".96" stop-color="#b9a3ea" stop-opacity=".12"/>
+              <stop offset="1" stop-color="#fbf5ff" stop-opacity=".82"/>
+            </linearGradient>
+            <linearGradient id="signalGlassSide" x1="523.69" y1="151.26" x2="584.39" y2="159.79" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#f2e9ff" stop-opacity=".62"/>
+              <stop offset=".03" stop-color="#7a68ad" stop-opacity=".06"/>
+              <stop offset=".16" stop-color="#08040f" stop-opacity=".58"/>
+              <stop offset=".55" stop-color="#07030e" stop-opacity=".7"/>
+              <stop offset=".78" stop-color="#08040f" stop-opacity=".55"/>
+              <stop offset=".9" stop-color="#4c5f8c" stop-opacity=".1"/>
+              <stop offset=".97" stop-color="#9fb8e6" stop-opacity=".2"/>
+              <stop offset="1" stop-color="#f0f7ff" stop-opacity=".82"/>
+            </linearGradient>
+            <linearGradient id="signalGlassBevel" x1="439.31" y1="111.65" x2="453.07" y2="113.58" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#fdfaff" stop-opacity=".8"/>
+              <stop offset=".3" stop-color="#7c66b4" stop-opacity=".12"/>
+              <stop offset=".55" stop-color="#0d0820" stop-opacity=".5"/>
+              <stop offset=".82" stop-color="#b9a3ea" stop-opacity=".16"/>
+              <stop offset="1" stop-color="#f7f2ff" stop-opacity=".72"/>
+            </linearGradient>
+            <!-- Каждая фасетка вершины со своим градиентом: горит кромка,
+                 тело фасетки уходит в темноту. Один общий градиент на всю
+                 огранку даёт ровную заливку — она читается пластиком. -->
+            <linearGradient id="signalCrownA" x1="481.3" y1="83.1" x2="495" y2="103.3" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#fbf6ff" stop-opacity=".72"/>
+              <stop offset=".12" stop-color="#c4aef0" stop-opacity=".18"/>
+              <stop offset=".46" stop-color="#1d1236" stop-opacity=".56"/>
+              <stop offset="1" stop-color="#4c3f7a" stop-opacity=".34"/>
+            </linearGradient>
+            <linearGradient id="signalCrownB" x1="486.96" y1="142.52" x2="523.26" y2="54.52" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#efe4ff" stop-opacity=".38"/>
+              <stop offset=".12" stop-color="#9077cb" stop-opacity=".14"/>
+              <stop offset=".38" stop-color="#0b0620" stop-opacity=".76"/>
+              <stop offset=".76" stop-color="#120c2b" stop-opacity=".64"/>
+              <stop offset="1" stop-color="#c8b5ff" stop-opacity=".4"/>
+            </linearGradient>
+            <linearGradient id="signalCrownC" x1="554.96" y1="148.94" x2="523.26" y2="54.52" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#dfeaff" stop-opacity=".34"/>
+              <stop offset=".15" stop-color="#66779f" stop-opacity=".12"/>
+              <stop offset=".48" stop-color="#08040f" stop-opacity=".8"/>
+              <stop offset="1" stop-color="#a9bbe8" stop-opacity=".28"/>
+            </linearGradient>
+            <linearGradient id="signalTipA" x1="419" y1="300" x2="470" y2="372" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#a893d6" stop-opacity=".34"/>
+              <stop offset=".5" stop-color="#5f4e8c" stop-opacity=".22"/>
+              <stop offset="1" stop-color="#dcebff" stop-opacity=".6"/>
+            </linearGradient>
+            <linearGradient id="signalTipB" x1="461.42" y1="324.26" x2="476.74" y2="385.48" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#c8b4f0" stop-opacity=".3"/>
+              <stop offset=".2" stop-color="#4b3d72" stop-opacity=".12"/>
+              <stop offset=".54" stop-color="#08040f" stop-opacity=".8"/>
+              <stop offset=".86" stop-color="#5c6a9c" stop-opacity=".26"/>
+              <stop offset="1" stop-color="#eaf2ff" stop-opacity=".78"/>
+            </linearGradient>
+            <linearGradient id="signalTipC" x1="529.42" y1="330.68" x2="476.74" y2="385.48" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#b6c8f0" stop-opacity=".26"/>
+              <stop offset=".2" stop-color="#39425f" stop-opacity=".12"/>
+              <stop offset=".58" stop-color="#08040f" stop-opacity=".78"/>
+              <stop offset="1" stop-color="#cfe0ff" stop-opacity=".56"/>
+            </linearGradient>
+            <linearGradient id="signalCapBack" x1="500" y1="60" x2="500" y2="380" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#a794e0" stop-opacity=".5"/>
+              <stop offset=".5" stop-color="#5a4a86" stop-opacity=".3"/>
+              <stop offset="1" stop-color="#9fb4e6" stop-opacity=".5"/>
             </linearGradient>
             <linearGradient id="signalEdge" x1="470" y1="55" x2="527" y2="385" gradientUnits="userSpaceOnUse">
-              <stop stop-color="#f3eaff" stop-opacity=".94"/>
-              <stop offset=".25" stop-color="#d0b5ff" stop-opacity=".42"/>
-              <stop offset=".49" stop-color="#e7deff" stop-opacity=".72"/>
-              <stop offset=".7" stop-color="#a7a4e0" stop-opacity=".22"/>
-              <stop offset="1" stop-color="#d1e1ff" stop-opacity=".84"/>
+              <stop stop-color="#f9f3ff" stop-opacity=".96"/>
+              <stop offset=".25" stop-color="#d0b5ff" stop-opacity=".5"/>
+              <stop offset=".49" stop-color="#f0eaff" stop-opacity=".8"/>
+              <stop offset=".7" stop-color="#a7a4e0" stop-opacity=".28"/>
+              <stop offset="1" stop-color="#dceaff" stop-opacity=".9"/>
             </linearGradient>
             <linearGradient id="signalRidge" x1="524" y1="147" x2="497" y2="335" gradientUnits="userSpaceOnUse">
               <stop stop-color="#f1e7ff" stop-opacity=".86"/>
@@ -946,33 +1041,79 @@
               <stop offset=".65" stop-color="#fff3ff" stop-opacity=".7"/>
               <stop offset="1" stop-color="#c4dcff" stop-opacity=".45"/>
             </linearGradient>
+            <!-- Дисперсия: тёплая кромка слева, холодная справа. -->
+            <linearGradient id="signalFireWarm" x1="440" y1="112" x2="414" y2="293" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#ff9ad9" stop-opacity="0"/>
+              <stop offset=".3" stop-color="#ff9ad9" stop-opacity=".5"/>
+              <stop offset=".62" stop-color="#ffc98a" stop-opacity=".3"/>
+              <stop offset="1" stop-color="#ff9ad9" stop-opacity="0"/>
+            </linearGradient>
+            <linearGradient id="signalFireCold" x1="586" y1="147" x2="561" y2="328" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#8ff3ff" stop-opacity="0"/>
+              <stop offset=".35" stop-color="#8ff3ff" stop-opacity=".46"/>
+              <stop offset=".7" stop-color="#9fd0ff" stop-opacity=".3"/>
+              <stop offset="1" stop-color="#8ff3ff" stop-opacity="0"/>
+            </linearGradient>
+            <radialGradient id="signalGlintFill">
+              <stop stop-color="#fff" stop-opacity=".9"/>
+              <stop offset=".35" stop-color="#e9dcff" stop-opacity=".42"/>
+              <stop offset="1" stop-color="#bda4ff" stop-opacity="0"/>
+            </radialGradient>
           </defs>
           <!-- Шестигранный объём: три длинные видимые плоскости и две острые
-               вершины. Рёбра соединяют вершины огранки, а не сходятся в центре. -->
-          <use href="#signalCrystalShape" fill="#0d081b" fill-opacity=".86"/>
-          <g fill="url(#signalCrown)" opacity=".38">
-            <path d="M523.26 54.52 439.31 111.65 501.85 107Z"/>
-            <path d="M523.26 54.52 501.85 107 575.31 124.48Z"/>
-            <path d="M523.26 54.52 575.31 124.48 586.23 146.61Z"/>
+               вершины. Рёбра соединяют вершины огранки, а не сходятся в центре.
+               Порядок слоёв — как у стекла: сначала то, что видно насквозь,
+               поверх него ближние грани, кромки и блики. -->
+          <use href="#signalCrystalShape" fill="url(#signalBody)" fill-opacity=".9"/>
+
+          <!-- Дальняя половина сквозь тело: три плоскости и их рёбра. -->
+          <g fill="url(#signalBackFace)">
+            <path d="M439.31 111.65 501.85 107 476.31 288.74 413.77 293.39Z" opacity=".7"/>
+            <path d="M501.85 107 575.31 124.48 549.77 306.22 476.31 288.74Z" opacity=".45"/>
+            <path d="M575.31 124.48 586.23 146.61 560.69 328.35 549.77 306.22Z" opacity=".8"/>
           </g>
-          <g fill="url(#signalTip)" opacity=".25">
-            <path d="M476.74 385.48 476.31 288.74 413.77 293.39Z"/>
-            <path d="M476.74 385.48 549.77 306.22 476.31 288.74Z"/>
-            <path d="M476.74 385.48 560.69 328.35 549.77 306.22Z"/>
+          <g fill="url(#signalCapBack)">
+            <path d="M523.26 54.52 439.31 111.65 501.85 107Z" opacity=".3"/>
+            <path d="M523.26 54.52 501.85 107 575.31 124.48Z" opacity=".16"/>
+            <path d="M523.26 54.52 575.31 124.48 586.23 146.61Z" opacity=".26"/>
+            <path d="M476.74 385.48 476.31 288.74 413.77 293.39Z" opacity=".26"/>
+            <path d="M476.74 385.48 549.77 306.22 476.31 288.74Z" opacity=".14"/>
+            <path d="M476.74 385.48 560.69 328.35 549.77 306.22Z" opacity=".24"/>
           </g>
+          <g stroke="url(#signalThrough)" stroke-width=".7" stroke-linejoin="round" opacity=".85">
+            <path d="M439.31 111.65 501.85 107 575.31 124.48 586.23 146.61"/>
+            <path d="M413.77 293.39 476.31 288.74 549.77 306.22 560.69 328.35"/>
+            <path d="M501.85 107 476.31 288.74"/>
+            <path d="M575.31 124.48 549.77 306.22"/>
+            <path d="M523.26 54.52 501.85 107"/>
+            <path d="M476.74 385.48 476.31 288.74"/>
+            <path d="M476.74 385.48 549.77 306.22"/>
+          </g>
+
+          <!-- Ближние длинные плоскости: продольный тон, поверх — стеклянный
+               поперечный профиль с провалом в глубину. -->
           <path d="M450.23 133.78 439.31 111.65 413.77 293.39 424.69 315.52Z" fill="url(#signalBevel)"/>
           <path d="M586.23 146.61 523.69 151.26 498.15 333 560.69 328.35Z" fill="url(#signalSide)"/>
           <path d="M523.69 151.26 450.23 133.78 424.69 315.52 498.15 333Z" fill="url(#signalFront)"/>
-          <path d="M523.26 54.52 439.31 111.65 450.23 133.78Z" fill="url(#signalCrown)" opacity=".9"/>
-          <path d="M523.26 54.52 450.23 133.78 523.69 151.26Z" fill="url(#signalCrown)"/>
-          <path d="M523.26 54.52 523.69 151.26 586.23 146.61Z" fill="url(#signalCrown)" opacity=".5"/>
-          <path d="M476.74 385.48 424.69 315.52 413.77 293.39Z" fill="url(#signalTip)" opacity=".8"/>
-          <path d="M476.74 385.48 498.15 333 424.69 315.52Z" fill="url(#signalTip)" opacity=".58"/>
-          <path d="M476.74 385.48 560.69 328.35 498.15 333Z" fill="url(#signalTip)"/>
-          <!-- Тонкие внутренние преломления остаются внутри длинных граней. -->
-          <path d="M464 139 509 206 491 325 478 258Z" fill="#e3d1ff" fill-opacity=".045"/>
-          <path d="M550 152 539 244 508 309 524 208Z" fill="#b5c8ff" fill-opacity=".045"/>
+          <path d="M450.23 133.78 439.31 111.65 413.77 293.39 424.69 315.52Z" fill="url(#signalGlassBevel)"/>
+          <path d="M586.23 146.61 523.69 151.26 498.15 333 560.69 328.35Z" fill="url(#signalGlassSide)"/>
+          <path d="M523.69 151.26 450.23 133.78 424.69 315.52 498.15 333Z" fill="url(#signalGlassFront)"/>
+          <!-- Луч по всей ширине тела: гасит вертикальную полосатость граней. -->
+          <use href="#signalCrystalShape" fill="url(#signalBeam)"/>
+
+          <!-- Ближние вершины. Соседние фасетки разведены по светлоте: без
+               этого огранка читается сплошной заливкой, а не стеклом. -->
+          <path d="M523.26 54.52 439.31 111.65 450.23 133.78Z" fill="url(#signalCrownA)"/>
+          <path d="M523.26 54.52 450.23 133.78 523.69 151.26Z" fill="url(#signalCrownB)"/>
+          <path d="M523.26 54.52 523.69 151.26 586.23 146.61Z" fill="url(#signalCrownC)"/>
+          <path d="M476.74 385.48 424.69 315.52 413.77 293.39Z" fill="url(#signalTipA)"/>
+          <path d="M476.74 385.48 498.15 333 424.69 315.52Z" fill="url(#signalTipB)"/>
+          <path d="M476.74 385.48 560.69 328.35 498.15 333Z" fill="url(#signalTipC)"/>
+
+          <!-- Кромки. Дисперсия идёт отдельной нитью внутрь от силуэта. -->
           <use href="#signalCrystalShape" stroke="url(#signalEdge)" stroke-width="1.05" stroke-linejoin="round"/>
+          <path d="M440.89 111.87 415.35 293.61" stroke="url(#signalFireWarm)" stroke-width=".9"/>
+          <path d="M584.65 146.39 559.11 328.13" stroke="url(#signalFireCold)" stroke-width=".9"/>
           <g stroke="url(#signalEdge)" stroke-width=".65">
             <path d="M586.23 146.61 523.69 151.26 450.23 133.78 439.31 111.65"/>
             <path d="M560.69 328.35 498.15 333 424.69 315.52 413.77 293.39"/>
@@ -988,6 +1129,14 @@
           <path d="M450.23 133.78 424.69 315.52" stroke="url(#signalEdge)" stroke-width=".8"/>
           <path d="M523.69 151.26 498.15 333" stroke="url(#signalRidge)" stroke-width="1.2"/>
           <path d="M523.69 151.26 525.3 153.1 499.8 331.2 498.15 333Z" fill="url(#signalRidge)" opacity=".55"/>
+
+          <!-- Искры на углах огранки. -->
+          <g fill="url(#signalGlintFill)">
+            <use href="#signalGlint" transform="translate(523.69 151.26) scale(1.15)"/>
+            <use href="#signalGlint" transform="translate(523.26 54.52) scale(.72)"/>
+            <use href="#signalGlint" transform="translate(450.23 133.78) scale(.6)"/>
+            <use href="#signalGlint" transform="translate(476.74 385.48) scale(.58)"/>
+          </g>
           <path d="M523.26 54.52 522.1 67.2 516.2 61Z" fill="#eee2ff" fill-opacity=".7"/>
           <path d="M476.74 385.48 475.4 374.3 483.1 380.6Z" fill="#d2e7ff" fill-opacity=".5"/>
         </svg>
