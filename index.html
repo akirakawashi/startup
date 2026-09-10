@@ -23,6 +23,20 @@
 </head>
 <body>
 
+<!-- У статичных сцен исходный фон #030014. Убираем его, сохраняя белые
+     блики, затем смешиваем свет с общей подложкой сайта. Видео не фильтруются. -->
+<svg class="palette-filters" width="0" height="0" aria-hidden="true" focusable="false">
+  <defs>
+    <filter id="palette-scene" color-interpolation-filters="sRGB">
+      <feComponentTransfer>
+        <feFuncR type="linear" slope="1.011905" intercept="-.011905"/>
+        <feFuncG type="identity"/>
+        <feFuncB type="linear" slope="1.085106" intercept="-.085106"/>
+      </feComponentTransfer>
+    </filter>
+  </defs>
+</svg>
+
 <a class="skip-link" href="#main">К содержанию</a>
 
 <div class="page-progress" id="pageProgress" aria-hidden="true"></div>
@@ -1379,7 +1393,7 @@
 
 
 <!-- ===================== ОДНА СИСТЕМА ===================== -->
-<!-- Шпиль: холодный свет вдоль оси, вогнутый силуэт и тихое поле пыли. -->
+<!-- Шпиль: фиолетовый свет вдоль оси, вогнутый силуэт и тихое поле пыли. -->
 <section class="spire" id="system">
 
   <div class="spire-stage idle" aria-hidden="true">
@@ -1388,25 +1402,25 @@
         <!-- Один силуэт для заливки, ореола и выреза в колоннах. -->
         <path id="spireShape" d="M400 26 C400 238 362 370 110 470 Q400 674 690 470 C438 370 400 238 400 26Z"/>
         <linearGradient id="spireBody" x1="400" y1="26" x2="400" y2="590" gradientUnits="userSpaceOnUse">
-          <stop stop-color="#6bcfe9" stop-opacity="0"/>
-          <stop offset=".13" stop-color="#6bcfe9" stop-opacity=".48"/>
-          <stop offset=".32" stop-color="#6ed5ff"/>
-          <stop offset=".52" stop-color="#5aa9ff"/>
-          <stop offset=".7" stop-color="#4546f5" stop-opacity=".95"/>
-          <stop offset=".85" stop-color="#3423d2" stop-opacity=".6"/>
-          <stop offset="1" stop-color="#24146e" stop-opacity="0"/>
+          <stop stop-color="var(--accent-hi)" stop-opacity="0"/>
+          <stop offset=".13" stop-color="var(--accent-hi)" stop-opacity=".48"/>
+          <stop offset=".32" stop-color="var(--accent-hi)"/>
+          <stop offset=".52" stop-color="var(--accent)"/>
+          <stop offset=".7" stop-color="var(--accent-deep)" stop-opacity=".95"/>
+          <stop offset=".85" stop-color="var(--accent-deep)" stop-opacity=".6"/>
+          <stop offset="1" stop-color="var(--surface-2)" stop-opacity="0"/>
         </linearGradient>
         <linearGradient id="spireCore" x1="400" y1="132" x2="400" y2="475" gradientUnits="userSpaceOnUse">
-          <stop stop-color="#d2f9ff" stop-opacity="0"/>
-          <stop offset=".23" stop-color="#e5faff"/>
-          <stop offset=".48" stop-color="#faf6ff"/>
-          <stop offset=".7" stop-color="#e9deff" stop-opacity=".95"/>
-          <stop offset="1" stop-color="#b3a4ff" stop-opacity="0"/>
+          <stop stop-color="var(--text)" stop-opacity="0"/>
+          <stop offset=".23" stop-color="var(--text)"/>
+          <stop offset=".48" stop-color="var(--text)"/>
+          <stop offset=".7" stop-color="var(--text)" stop-opacity=".95"/>
+          <stop offset="1" stop-color="var(--accent-hi)" stop-opacity="0"/>
         </linearGradient>
         <radialGradient id="spireHalo">
-          <stop stop-color="#6256ff" stop-opacity=".55"/>
-          <stop offset=".45" stop-color="#4734f6" stop-opacity=".28"/>
-          <stop offset="1" stop-color="#3320bb" stop-opacity="0"/>
+          <stop stop-color="var(--accent-deep)" stop-opacity=".55"/>
+          <stop offset=".45" stop-color="var(--accent-deep)" stop-opacity=".28"/>
+          <stop offset="1" stop-color="var(--accent-deep)" stop-opacity="0"/>
         </radialGradient>
         <radialGradient id="spireFalloff" cx="400" cy="270" r="320" gradientUnits="userSpaceOnUse"
                         gradientTransform="translate(400 270) scale(1 .9) translate(-400 -270)">
@@ -1416,28 +1430,28 @@
           <stop offset="1" stop-color="#fff" stop-opacity="0"/>
         </radialGradient>
         <linearGradient id="spireAura" x1="400" y1="100" x2="400" y2="560" gradientUnits="userSpaceOnUse">
-          <stop stop-color="#80d5ff" stop-opacity="0"/>
-          <stop offset=".4" stop-color="#6889ff" stop-opacity=".28"/>
-          <stop offset=".7" stop-color="#6552ff" stop-opacity=".34"/>
-          <stop offset="1" stop-color="#5134ff" stop-opacity="0"/>
+          <stop stop-color="var(--accent)" stop-opacity="0"/>
+          <stop offset=".4" stop-color="var(--accent)" stop-opacity=".28"/>
+          <stop offset=".7" stop-color="var(--accent-deep)" stop-opacity=".34"/>
+          <stop offset="1" stop-color="var(--accent-deep)" stop-opacity="0"/>
         </linearGradient>
         <linearGradient id="spireColBack" x1="0" y1="150" x2="0" y2="490" gradientUnits="userSpaceOnUse">
-          <stop stop-color="#7b7aff" stop-opacity="0"/>
-          <stop offset=".35" stop-color="#7b7aff" stop-opacity=".035"/>
-          <stop offset=".7" stop-color="#7b7aff" stop-opacity=".025"/>
-          <stop offset="1" stop-color="#7b7aff" stop-opacity="0"/>
+          <stop stop-color="var(--accent)" stop-opacity="0"/>
+          <stop offset=".35" stop-color="var(--accent)" stop-opacity=".035"/>
+          <stop offset=".7" stop-color="var(--accent)" stop-opacity=".025"/>
+          <stop offset="1" stop-color="var(--accent)" stop-opacity="0"/>
         </linearGradient>
         <linearGradient id="spireColEdge" x1="0" y1="150" x2="0" y2="490" gradientUnits="userSpaceOnUse">
-          <stop stop-color="#b7b9ff" stop-opacity="0"/>
-          <stop offset=".22" stop-color="#b7b9ff" stop-opacity=".065"/>
-          <stop offset=".75" stop-color="#b7b9ff" stop-opacity=".17"/>
-          <stop offset="1" stop-color="#b7b9ff" stop-opacity="0"/>
+          <stop stop-color="var(--accent-hi)" stop-opacity="0"/>
+          <stop offset=".22" stop-color="var(--accent-hi)" stop-opacity=".065"/>
+          <stop offset=".75" stop-color="var(--accent-hi)" stop-opacity=".17"/>
+          <stop offset="1" stop-color="var(--accent-hi)" stop-opacity="0"/>
         </linearGradient>
         <linearGradient id="spireRayFade" x1="400" y1="235" x2="400" y2="510" gradientUnits="userSpaceOnUse">
-          <stop stop-color="#e1f4ff" stop-opacity="0"/>
-          <stop offset=".4" stop-color="#e1f4ff" stop-opacity=".17"/>
-          <stop offset=".72" stop-color="#ddd8ff" stop-opacity=".11"/>
-          <stop offset="1" stop-color="#ddd8ff" stop-opacity="0"/>
+          <stop stop-color="var(--text)" stop-opacity="0"/>
+          <stop offset=".4" stop-color="var(--text)" stop-opacity=".17"/>
+          <stop offset=".72" stop-color="var(--accent-hi)" stop-opacity=".11"/>
+          <stop offset="1" stop-color="var(--accent-hi)" stop-opacity="0"/>
         </linearGradient>
         <filter id="spireSoft" x="-60%" y="-30%" width="220%" height="160%" color-interpolation-filters="sRGB"><feGaussianBlur stdDeviation="18"/></filter>
         <filter id="spireDiffuse" x="-40%" y="-25%" width="180%" height="150%" color-interpolation-filters="sRGB"><feGaussianBlur stdDeviation="34"/></filter>

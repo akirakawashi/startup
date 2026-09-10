@@ -979,7 +979,7 @@
      противоположных концах периметра. Видео сюда не годится: высота нашей
      панели зависит от текста, а кадр требует фиксированных пропорций.
      Поэтому та же картина считается здесь в реальном времени, в цветах
-     сайта: фиолетовый и бирюзовый вместо оранжевого и синего.
+     сайта: насыщенный фиолетовый и светлая лаванда.
 
      Движение не равномерное: по прямой свет ползёт, углы проходит быстро.
      Опорные точки — середины сторон, три секунды на переход с ease-in-out,
@@ -1012,9 +1012,13 @@
     var FPS    = 30;
     var FADE   = 500;    // длительность наплыва между экранами, мс (см. style.css)
 
-    // палитра сайта: фиолетовый акцент и бирюзовый из бейджа «8 / 8»
-    var WARM = { hot: [242, 234, 255], mid: [167, 139, 250], deep: [104, 52, 226] };
-    var COOL = { hot: [226, 255, 250], mid: [ 94, 234, 212], deep: [ 16, 150, 160] };
+    // Палитру читаем один раз: вычисление стилей не попадает в кадр.
+    var paletteStyle = getComputedStyle(document.documentElement);
+    var paletteRgb = function (name) {
+      return paletteStyle.getPropertyValue(name).trim().split(',').map(Number);
+    };
+    var VIOLET = { hot: paletteRgb('--text-rgb'), mid: paletteRgb('--accent-rgb'), deep: paletteRgb('--accent-deep-rgb') };
+    var LAVENDER = { hot: paletteRgb('--text-rgb'), mid: paletteRgb('--accent-hi-rgb'), deep: paletteRgb('--accent-rgb') };
 
     var ctx  = glowCanvas.getContext('2d');
     var rctx = rimCanvas.getContext('2d');
@@ -1111,7 +1115,7 @@
         var wl = w1 > w2 ? w1 : w2;
         if (wl < .004) continue;
 
-        var pal = w1 > w2 ? WARM : COOL;
+        var pal = w1 > w2 ? VIOLET : LAVENDER;
         var rim = fRim[k], band = fBand[k], haze = fHaze[k];
         o = k * 4;
 
