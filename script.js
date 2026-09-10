@@ -16,7 +16,7 @@
 
   /* ============================================================
      Заголовок первого экрана: разбор на слова
-     Слова после тире получают акцентный градиент.
+     Слова после тире получают акцентный цвет.
      ============================================================ */
   (function splitTitle() {
     var title = $('[data-split]');
@@ -302,7 +302,7 @@
   (function initButtonLight() {
     var pointerQuery = window.matchMedia('(hover: hover) and (pointer: fine)');
     var resets = [];
-    $$('.btn, .orb-cta').forEach(function (el) {
+    $$('.btn').forEach(function (el) {
       var label = document.createElement('span');
       label.className = 'button-label';
       while (el.firstChild) label.appendChild(el.firstChild);
@@ -643,7 +643,7 @@
      play-state сохраняет фазу, в том числе общую фазу луча и отметок радара.
      ============================================================ */
   (function initMotionVisibility() {
-    var scopes = $$('.hero-title, .hero-rim, .pulse, .marquee, .portfolio-card, .stack-display, .button-lit, .radar-stage, .mk-cv, .signal-stage, .work, .strata-plane');
+    var scopes = $$('.hero-rim, .pulse, .marquee, .portfolio-card, .stack-display, .button-lit, .radar-stage, .mk-cv, .signal-stage, .work, .strata-plane');
     var visible = new Set(scopes);
     var sync = function () {
       scopes.forEach(function (el) {
