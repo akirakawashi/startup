@@ -21,6 +21,12 @@
   --ai-bg:         var(--bg);
   --love-bg:       var(--bg);
   --bg-soft:       #0b0913;
+  /* Секция с иной подложкой не встаёт прямоугольником: тон поднимается
+     внутри неё и возвращается к общему фону на краях, поэтому стыка не
+     видно ни сверху, ни снизу. Разделительных нитей между секциями нет —
+     на одинаковом фоне светлая линия читается как разрыв. */
+  --surface-fade:  linear-gradient(180deg,
+      var(--bg) 0, var(--bg-soft) 13%, var(--bg-soft) 87%, var(--bg) 100%);
   --surface:       #100d1b;
   --surface-2:     #191425;
   --text-rgb:      243, 240, 255;
@@ -563,8 +569,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 
 /* ---------- бегущая строка ---------- */
 .marquee {
-  border-bottom: 1px solid var(--line);
-  background: var(--bg-soft);
+  background: none;
   overflow: hidden;
   padding-block: 15px;
   -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
@@ -2144,9 +2149,15 @@ button, input, select, textarea { font: inherit; color: inherit; }
 }
 
 /* ---------- 11. Контакт и подвал ---------- */
+/* Свечение над формой начинается выше секции и через границу проходит уже
+   набранным. Если держать его в `inset: 0`, центр эллипса попадает ровно на
+   верхнюю кромку: свет вспыхивает на полную яркость в одну строку пикселей
+   и режет страницу поперёк. Подъём коробки на 420 px при вертикальном
+   радиусе 400 и обрыве на 70 % даёт 140 px запаса — к своему верхнему краю
+   градиент уже полностью прозрачен, и обрезать нечего. */
 .section-contact::before {
-  content: ""; position: absolute; inset: 0; pointer-events: none;
-  background: radial-gradient(900px 400px at 50% 0%, rgba(var(--accent-deep-rgb), .13), transparent 70%);
+  content: ""; position: absolute; inset: -420px 0 0; pointer-events: none;
+  background: radial-gradient(900px 400px at 50% 420px, rgba(var(--accent-deep-rgb), .13), transparent 70%);
 }
 .contact-grid {
   position: relative;
@@ -2199,7 +2210,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .form-note { font-size: .8rem; color: var(--faint); text-align: center; line-height: 1.5; }
 .form-note.ok { color: var(--ok); }
 
-.footer { border-top: 1px solid var(--line); padding-block: 36px; background: var(--bg-soft); }
+.footer { padding-block: 36px; background: linear-gradient(180deg, var(--bg), var(--bg-soft) 55%); }
 .footer-inner { display: flex; align-items: center; gap: 24px; flex-wrap: wrap; }
 .footer-brand { display: inline-flex; align-items: center; gap: 10px; font-family: var(--ff-display); font-weight: 700; letter-spacing: .06em; }
 .footer-brand .wordmark-mark { color: var(--accent); }
@@ -2244,7 +2255,6 @@ button, input, select, textarea { font: inherit; color: inherit; }
   padding-bottom: clamp(70px, 8vw, 128px);
   background: var(--bg);
   color: var(--text);
-  border-block: 1px solid rgba(var(--accent-rgb), .1);
 }
 
 /* короткие вертикальные рейки от горизонта вниз — деталь образца: они
@@ -2470,9 +2480,8 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .checks {
   position: relative;
   padding-block: clamp(88px, 11vw, 150px);
-  background: var(--bg-soft);
+  background: var(--surface-fade);
   color: var(--text);
-  border-block: 1px solid rgba(var(--accent-rgb), .12);
   overflow: hidden;
 }
 
@@ -2557,7 +2566,16 @@ button, input, select, textarea { font: inherit; color: inherit; }
   background: var(--bg-soft);
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .05);
   overflow: hidden;
+  display: flex; flex-direction: column;
   transition: opacity .5s var(--ease), visibility 0s .5s;
+}
+/* Экран держит 16:9 — в него встаёт снимок экрана без обрезки и полей.
+   Пропорция включается только на широком экране: у́же 900 px её высота
+   становится меньше содержимого, и строки пришлось бы резать. min-height
+   страхует тот же случай там, где ширина близка к границе. */
+@media (min-width: 900px) {
+  .checks-screen { aspect-ratio: 16 / 9; min-height: fit-content; }
+  .checks-list li { align-items: center; }
 }
 .checks-screen-alt {
   position: absolute; inset: 0;
@@ -2585,7 +2603,13 @@ button, input, select, textarea { font: inherit; color: inherit; }
 }
 .checks-badge.bad { background: rgba(248, 113, 113, .14); color: #f87171; }
 
-.checks-list { list-style: none; margin: 0; padding: 6px 0; }
+.checks-list {
+  list-style: none; margin: 0; padding: 6px 0;
+  /* строки делят между собой всю высоту экрана: при 16:9 её больше,
+     чем нужно восьми строкам, и остаток уходит в них, а не в пустоту снизу */
+  flex: 1; display: flex; flex-direction: column;
+}
+.checks-list li { flex: 1; }
 .checks-list li {
   display: flex; align-items: baseline; gap: 12px;
   padding: 11px 18px;
@@ -2958,7 +2982,6 @@ button, input, select, textarea { font: inherit; color: inherit; }
   padding: var(--pad-t) 0 clamp(70px, 8vw, 128px);
   background: var(--bg);
   color: var(--text);
-  border-block: 1px solid rgba(var(--accent-rgb), .1);
 }
 
 /* центр кадра совпадает с центром замка: волна идёт из него */
@@ -3088,7 +3111,6 @@ button, input, select, textarea { font: inherit; color: inherit; }
   padding: 0 0 clamp(80px, 9vw, 140px);
   background: var(--bg);
   color: var(--text);
-  border-block: 1px solid rgba(var(--accent-rgb), .1);
 }
 
 .arc-stage {
@@ -3334,9 +3356,8 @@ button, input, select, textarea { font: inherit; color: inherit; }
   --fillet: 50px;
   position: relative;
   padding-block: clamp(96px, 10vw, 156px);
-  background: var(--bg-soft);
+  background: var(--surface-fade);
   color: var(--ink);
-  border-block: 1px solid var(--line);
 }
 
 /* Плитка — главный объект блока, поэтому её контейнер шире общего.
@@ -3641,7 +3662,6 @@ button, input, select, textarea { font: inherit; color: inherit; }
   position: relative; overflow: hidden;
   padding: clamp(72px, 8vw, 112px) 0 clamp(64px, 7vw, 100px);
   background: var(--bg);
-  border-block: 1px solid rgba(var(--accent-rgb), .06);
 }
 .signal-copy { position: relative; z-index: 1; text-align: center; }
 .signal-pill {
