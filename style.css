@@ -138,7 +138,6 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .wrap-narrow { max-width: 840px; }
 
 .section { padding-block: clamp(78px, 9vw, 138px); position: relative; }
-.section-tight { padding-block: clamp(44px, 5vw, 70px); }
 
 .section-head { max-width: 680px; margin-bottom: clamp(40px, 5vw, 66px); }
 
@@ -331,7 +330,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .hero {
   --line-strong: rgba(var(--accent-rgb), .34);
   /* видимая высота стеклянной палубы: к ней привязан весь низ первого экрана */
-  --deck-h: clamp(220px, 22vw, 320px);
+  --deck-h: clamp(340px, 25vw, 380px);
   --deck-w: min(1180px, 88vw);
   --hole-r: calc(min(1920px, 176vw) * .073);
   --glass-blur: clamp(10px, 1.6vw, 22px);
@@ -519,24 +518,20 @@ button, input, select, textarea { font: inherit; color: inherit; }
   pointer-events: none;
 }
 
-/* Путь работы: пять колонок на стекле, сверху общая линия с бегущим огоньком.
-   Колонка — номер, шаг и три слова о нём: тонкая строка из одних названий
-   висела в пустой панели отдельным виджетом, а колонки с разделителями
-   читаются как приборная доска под диском и заполняют её по ширине.
-
-   Держится в нижней половине: верхние 80 px занимает свет диска, там подпись
-   не прочесть. Узлы стоят в равных колонках, поэтому их центры приходятся
-   на 10 % и 90 % ширины — к этим долям привязана линия. */
-.hero-flow {
+/* Этапы и три результата стоят в одном потоке под светом диска.
+   Высота стекла растёт вместе с нижним отступом hero: диск остаётся на месте. */
+.hero-summary {
   position: absolute; z-index: 1;
-  /* По центру стекла: прежние 52 px снизу при 171 px сверху сажали полосу на
-     дно панели. Отсчёт идёт от низа секции, а не от панели — та лежит на нём
-     же высотой --deck-h, поэтому центр панели это ровно --deck-h / 2, а свою
-     половину высоты полоса добирает translateY. Так центровка держится при
-     любой высоте панели и любом числе строк в подписях. */
-  left: 50%; bottom: calc(var(--deck-h) / 2);
-  transform: translate(-50%, 50%);
+  left: 50%; bottom: 28px;
+  transform: translateX(-50%);
   width: min(calc(var(--deck-w) - clamp(40px, 5vw, 76px)), 1040px);
+  display: flex; flex-direction: column; gap: 36px;
+}
+
+/* Узлы приходятся на 10 % и 90 % ширины — к ним привязана линия. */
+.hero-flow {
+  position: relative;
+  width: 100%;
   display: grid; grid-auto-flow: column; grid-auto-columns: 1fr;
   margin: 0; padding: 0; list-style: none;
 }
@@ -587,9 +582,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
   font-weight: 600; font-size: max(15px, .95rem); line-height: 1.2;
   color: var(--text);
 }
-/* Подпись цветом --muted, а не --faint: полоса стоит по центру стекла, и
-   средняя колонка приходится на самое яркое место отражения — на --faint
-   контраст там падал до 4.69 при пороге 4.5. */
+/* Подписи на отражении используют --muted, чтобы сохранить контраст. */
 .hero-flow-note {
   font-size: max(13px, .82rem); line-height: 1.35; color: var(--muted);
 }
@@ -672,17 +665,31 @@ button, input, select, textarea { font: inherit; color: inherit; }
 }
 .spotlight:hover::before { opacity: 1; }
 
-/* ---------- 7. Ценность ---------- */
-.value-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
-.value-card {
-  padding: 30px 28px; border: 1px solid var(--line); border-radius: var(--radius);
-  background: color-mix(in srgb, var(--surface) 62%, transparent);
-  transition: border-color .3s var(--ease), transform .3s var(--ease);
+/* ---------- 7. Результат под этапами ---------- */
+.hero-benefits {
+  position: relative;
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px;
+  margin: 0; padding: 28px 0 0; list-style: none;
+  scroll-margin-top: 110px;
 }
-.value-card:hover { border-color: var(--line-strong); transform: translateY(-4px); }
-.value-num { display: block; font-family: var(--ff-mono); font-size: var(--fz-min); color: var(--accent); margin-bottom: 14px; }
-.value-card h3 { margin-bottom: 11px; }
-.value-card p { color: var(--muted); font-size: .94rem; }
+.hero-benefits::before {
+  content: ""; position: absolute; inset: 0 0 auto; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--line-strong) 20%, var(--line-strong) 80%, transparent);
+}
+.hero-benefits li { display: flex; align-items: center; gap: 14px; min-width: 0; }
+.hero-benefits li > div { min-width: 0; }
+.hero-benefit-icon {
+  display: grid; place-items: center; flex: 0 0 42px;
+  width: 42px; height: 42px; color: var(--accent);
+  background: radial-gradient(ellipse, rgba(var(--accent-deep-rgb), .16), transparent 72%);
+}
+.hero-benefit-icon svg { width: 32px; height: 32px; }
+.hero-benefit-accent { stroke: var(--accent-hi); }
+.hero-benefits h2 {
+  margin: 0; font: 600 clamp(16px, 1.2vw, 18px)/1.3 var(--ff-body);
+  letter-spacing: -.025em; color: var(--text);
+}
+.hero-benefits p { margin: 6px 0 0; color: var(--muted); font-size: 13px; line-height: 1.5; }
 
 /* ---------- 8. Услуги: разрез проекта ----------
    Шесть слоёв работы одной изометрической стопкой. Верхняя плита ближе к
@@ -4040,7 +4047,10 @@ button, input, select, textarea { font: inherit; color: inherit; }
 
 /* ---------- адаптив ---------- */
 @media (max-width: 1040px) {
-  .value-row, .stack-grid, .formats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .hero { --deck-h: 380px; }
+  .hero-benefits { gap: 20px; }
+  .hero-benefits li { flex-direction: column; gap: 10px; text-align: center; }
+  .stack-grid, .formats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .checks-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .radar-core { width: 62px; height: 62px; }
   .radar-core svg { width: 28px; height: 28px; }
@@ -4065,7 +4075,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
   .burger { display: inline-flex; }
   .topbar-cta { display: none; }
 
-  .hero { min-height: auto; --deck-h: clamp(150px, 37vw, 210px); --deck-w: calc(100vw - 32px); }
+  .hero { min-height: auto; --deck-h: 390px; --deck-w: calc(100vw - 32px); }
   .hero-deck { border-radius: 18px 18px 0 0; }
   .hero-deck::before { inset: 6px 6px 0; border-radius: 13px 13px 0 0; }
   /* радар вдвое меньше, подписи те же: четыре отметки уходят, чтобы соседние
@@ -4073,13 +4083,16 @@ button, input, select, textarea { font: inherit; color: inherit; }
   .blip-extra { display: none; }
   .blip-wave { width: 54px; height: 54px; }
 
-  .value-row, .stack-grid, .formats { grid-template-columns: 1fr; }
+  .stack-grid, .formats { grid-template-columns: 1fr; }
   .hero-facts { grid-template-columns: 1fr; gap: 16px; }
+  .hero-summary { bottom: 24px; gap: 28px; max-width: 430px; }
+  .hero-benefits { grid-template-columns: 1fr; gap: 20px; padding-top: 24px; }
+  .hero-benefits li { flex-direction: row; gap: 14px; text-align: left; }
   /* на узком экране пять узлов в строку не встают: линия убирается,
      подписи переносятся строчными парами «точка + слово» */
   .hero-flow {
     display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 16px;
-    width: min(86vw, 430px);
+    width: 100%;
   }
   .hero-flow::before, .hero-flow::after { display: none; }
   .hero-flow li { flex-direction: row; gap: 8px; padding: 0; }
