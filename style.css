@@ -356,8 +356,20 @@ button, input, select, textarea { font: inherit; color: inherit; }
   width: min(1920px, 176vw);
   aspect-ratio: 16 / 9;
   transform: translate(-50%, 50%);
-  -webkit-mask-image: radial-gradient(ellipse calc(var(--deck-w) * .64) 56% at 50% 50%, #000 42%, transparent 76%);
-          mask-image: radial-gradient(ellipse calc(var(--deck-w) * .64) 56% at 50% 50%, #000 42%, transparent 76%);
+  /* Две маски через пересечение. Эллипс растворяет свет по бокам, как и
+     раньше. Вторая, линейная, гасит низ: нижняя половина диска светит сквозь
+     стекло и упиралась в нижнюю границу секции, где её срезало по прямой
+     (замер на кромке: 12,4,35 -> 7,6,14 за строку). Центр сцены совпадает с
+     верхом стекла, до низа секции остаётся --deck-h, то есть около четверти
+     высоты кадра — поэтому гашение уложено между 55 % и 78 %. */
+  -webkit-mask-image:
+      radial-gradient(ellipse calc(var(--deck-w) * .64) 56% at 50% 50%, #000 42%, transparent 76%),
+      linear-gradient(to bottom, #000 55%, transparent 78%);
+          mask-image:
+      radial-gradient(ellipse calc(var(--deck-w) * .64) 56% at 50% 50%, #000 42%, transparent 76%),
+      linear-gradient(to bottom, #000 55%, transparent 78%);
+  -webkit-mask-composite: source-in;
+          mask-composite: intersect;
 }
 /* Кадр идёт без точечной сетки: на диске чёрной дыры она читалась квадратами,
    и снята по решению владельца — не возвращать. Края кадра растворяет виньетка
@@ -487,6 +499,108 @@ button, input, select, textarea { font: inherit; color: inherit; }
   filter: blur(calc(var(--glass-blur) * .82));
   mix-blend-mode: screen;
 }
+/* Отражение диска на стекле. Снимок, а не второе видео: под размытием и
+   screen движение неразличимо, а декодировать второй поток ради этого дорого.
+
+   Геометрия повторяет .hero-stage: центр кадра совпадает с верхней гранью
+   стекла, поэтому копия ставится центром в top: 0 и переворачивается. После
+   scaleY(-1) система координат элемента тоже перевёрнута — маска пишется в
+   его собственных осях: прозрачно у края кадра, плотно к центру. Верхняя
+   половина уходит за грань и срезается overflow панели. */
+.hero-deck-mirror {
+  position: absolute; left: 50%; top: 0;
+  width: min(1920px, 176vw); height: auto;
+  transform: translate(-50%, -50%) scaleY(-1);
+  mix-blend-mode: screen;
+  opacity: .5;
+  filter: blur(9px);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 21%, rgba(0, 0, 0, .45) 38%, #000 50%);
+          mask-image: linear-gradient(to bottom, transparent 21%, rgba(0, 0, 0, .45) 38%, #000 50%);
+  pointer-events: none;
+}
+
+/* Путь работы: пять колонок на стекле, сверху общая линия с бегущим огоньком.
+   Колонка — номер, шаг и три слова о нём: тонкая строка из одних названий
+   висела в пустой панели отдельным виджетом, а колонки с разделителями
+   читаются как приборная доска под диском и заполняют её по ширине.
+
+   Держится в нижней половине: верхние 80 px занимает свет диска, там подпись
+   не прочесть. Узлы стоят в равных колонках, поэтому их центры приходятся
+   на 10 % и 90 % ширины — к этим долям привязана линия. */
+.hero-flow {
+  position: absolute; z-index: 1;
+  /* По центру стекла: прежние 52 px снизу при 171 px сверху сажали полосу на
+     дно панели. Отсчёт идёт от низа секции, а не от панели — та лежит на нём
+     же высотой --deck-h, поэтому центр панели это ровно --deck-h / 2, а свою
+     половину высоты полоса добирает translateY. Так центровка держится при
+     любой высоте панели и любом числе строк в подписях. */
+  left: 50%; bottom: calc(var(--deck-h) / 2);
+  transform: translate(-50%, 50%);
+  width: min(calc(var(--deck-w) - clamp(40px, 5vw, 76px)), 1040px);
+  display: grid; grid-auto-flow: column; grid-auto-columns: 1fr;
+  margin: 0; padding: 0; list-style: none;
+}
+.hero-flow::before, .hero-flow::after {
+  content: ""; position: absolute; left: 10%; right: 10%; top: 4px; height: 1px;
+}
+.hero-flow::before {
+  background: linear-gradient(90deg,
+      rgba(var(--accent-rgb), .10), rgba(var(--accent-rgb), .32), rgba(var(--accent-rgb), .10));
+}
+.hero-flow::after {
+  background: linear-gradient(90deg, transparent, rgba(var(--accent-hi-rgb), .95), transparent);
+  background-size: 24% 100%; background-repeat: no-repeat;
+  animation: heroFlow 7s linear infinite;
+  animation-delay: calc(0s - var(--shot-t, 0s));
+}
+@keyframes heroFlow { from { background-position: -35% 0; } to { background-position: 135% 0; } }
+
+.hero-flow li {
+  position: relative;
+  display: flex; flex-direction: column; align-items: center;
+  gap: 7px; padding: 0 clamp(8px, 1.4vw, 20px);
+  text-align: center;
+}
+/* разделители между колонками: гаснут к обоим концам, поэтому не режут
+   панель поперёк, а лишь размечают её */
+.hero-flow li + li::before {
+  content: ""; position: absolute; left: 0; top: 22px; bottom: 4px; width: 1px;
+  background: linear-gradient(to bottom,
+      transparent, rgba(var(--accent-rgb), .16) 40%, transparent);
+}
+/* Узел светлый, а не тёмный с ободком: середина линии приходится на самое
+   яркое место отражения, и тёмная точка читалась там дырой. Тонкая тёмная
+   обводка отделяет его от свечения, не делая тяжёлым. */
+.hero-flow-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: rgba(var(--accent-hi-rgb), .92);
+  box-shadow:
+    0 0 0 2.5px rgba(var(--bg-rgb), .55),
+    0 0 10px rgba(var(--accent-hi-rgb), .45);
+}
+.hero-flow-num {
+  margin-top: 9px;
+  font-family: var(--ff-mono); font-size: var(--fz-min); letter-spacing: .18em;
+  color: rgba(var(--accent-rgb), .75);
+}
+.hero-flow b {
+  font-weight: 600; font-size: max(15px, .95rem); line-height: 1.2;
+  color: var(--text);
+}
+/* Подпись цветом --muted, а не --faint: полоса стоит по центру стекла, и
+   средняя колонка приходится на самое яркое место отражения — на --faint
+   контраст там падал до 4.69 при пороге 4.5. */
+.hero-flow-note {
+  font-size: max(13px, .82rem); line-height: 1.35; color: var(--muted);
+}
+.hero-flow li:last-child .hero-flow-dot {
+  width: 11px; height: 11px;
+  background: #fff;
+  box-shadow:
+    0 0 0 3px rgba(var(--bg-rgb), .5),
+    0 0 16px rgba(var(--accent-hi-rgb), .85);
+}
+
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
   .hero-deck { background: linear-gradient(to bottom, rgba(10, 6, 24, .88), var(--bg)); }
   .hero-deck-glow { opacity: .8; }
@@ -3961,6 +4075,18 @@ button, input, select, textarea { font: inherit; color: inherit; }
 
   .value-row, .stack-grid, .formats { grid-template-columns: 1fr; }
   .hero-facts { grid-template-columns: 1fr; gap: 16px; }
+  /* на узком экране пять узлов в строку не встают: линия убирается,
+     подписи переносятся строчными парами «точка + слово» */
+  .hero-flow {
+    display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 16px;
+    width: min(86vw, 430px);
+  }
+  .hero-flow::before, .hero-flow::after { display: none; }
+  .hero-flow li { flex-direction: row; gap: 8px; padding: 0; }
+  .hero-flow li + li::before { display: none; }
+  .hero-flow-num, .hero-flow-note { display: none; }
+  .hero-flow b { font-weight: 500; font-size: 14px; color: var(--muted); }
+  .hero-flow li:last-child b { color: var(--text); }
   .contact-form, .format { padding: 28px 22px; }
   .footer-inner { flex-direction: column; align-items: flex-start; gap: 16px; }
   .footer-note { margin-right: 0; }
@@ -4001,6 +4127,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
   .underline-grow::after { transform: scaleX(1); }
   .hero-stage { display: none; }
   .hero-rim i { animation: none; }
+  .hero-flow::after { animation: none; opacity: .5; }
   .radar-sweep i, .radar-edge i { animation: none; }
   .blip-dot, .blip-tag { opacity: 1; }
   .blip-wave { display: none; }

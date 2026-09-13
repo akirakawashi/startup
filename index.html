@@ -124,10 +124,50 @@
   </div>
 
   <!-- Матовое стекло начинается в центре диска и размывает его нижнюю
-       половину. Слабый след дуги вынесен в отдельный слой с точечной маской. -->
+       половину. Слабый след дуги вынесен в отдельный слой.
+       Отражение — тот же кадр диска, перевёрнутый и сложенный по screen:
+       чёрный фон снимка при этом ничего не добавляет, наружу выходит
+       только свет, поэтому прямоугольника не видно. -->
   <div class="hero-deck" aria-hidden="true">
     <span class="hero-deck-glow"></span>
+    <img class="hero-deck-mirror" src="assets/blackhole-poster.jpg" alt=""
+         width="1600" height="900" loading="lazy" decoding="async">
   </div>
+
+  <!-- Путь работы по стеклу: от задачи до сопровождения. Вынесен из .hero-deck,
+       потому что панель помечена aria-hidden, а это содержательный список. -->
+  <ol class="hero-flow">
+    <li>
+      <span class="hero-flow-dot" aria-hidden="true"></span>
+      <span class="hero-flow-num" aria-hidden="true">01</span>
+      <b>Задача</b>
+      <span class="hero-flow-note">разбираем и оцениваем</span>
+    </li>
+    <li>
+      <span class="hero-flow-dot" aria-hidden="true"></span>
+      <span class="hero-flow-num" aria-hidden="true">02</span>
+      <b>Код</b>
+      <span class="hero-flow-note">бэкенд, интерфейс, база</span>
+    </li>
+    <li>
+      <span class="hero-flow-dot" aria-hidden="true"></span>
+      <span class="hero-flow-num" aria-hidden="true">03</span>
+      <b>Проверки</b>
+      <span class="hero-flow-note">линтер, типы, тесты</span>
+    </li>
+    <li>
+      <span class="hero-flow-dot" aria-hidden="true"></span>
+      <span class="hero-flow-num" aria-hidden="true">04</span>
+      <b>Выкатка</b>
+      <span class="hero-flow-note">Docker, CI/CD, TLS</span>
+    </li>
+    <li>
+      <span class="hero-flow-dot" aria-hidden="true"></span>
+      <span class="hero-flow-num" aria-hidden="true">05</span>
+      <b>Сопровождение</b>
+      <span class="hero-flow-note">логи, метрики, правки</span>
+    </li>
+  </ol>
 
   <div class="hero-horizon" aria-hidden="true"></div>
 </section>
