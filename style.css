@@ -62,9 +62,10 @@
      размер делится на её масштаб, иначе на экране выйдет меньше 12 px */
   --fz-min: 12px;
 
-  /* точечная маска 3px: ею пикселизуется всё свечение на сайте — ореол
-     панели проверок и подсветка карточек. Маска накладывается после filter,
-     поэтому режет уже размытое и остаётся резкой */
+  /* точечная маска 3px: приём отдельных блоков, а не общее правило — ореол
+     панели проверок, подсветка карточек, сцена «Как работаем». Первый экран
+     идёт без неё. Маска накладывается после filter, поэтому режет уже
+     размытое и остаётся резкой */
   --dots:      radial-gradient(circle, #000 .9px, rgba(0, 0, 0, .28) 1.35px);
   --dots-size: 3px 3px;
 
@@ -358,28 +359,15 @@ button, input, select, textarea { font: inherit; color: inherit; }
   -webkit-mask-image: radial-gradient(ellipse calc(var(--deck-w) * .64) 56% at 50% 50%, #000 42%, transparent 76%);
           mask-image: radial-gradient(ellipse calc(var(--deck-w) * .64) 56% at 50% 50%, #000 42%, transparent 76%);
 }
-/* Кадр разбит той же точечной сеткой, что и остальной свет на сайте.
+/* Кадр идёт без точечной сетки: на диске чёрной дыры она читалась квадратами,
+   и снята по решению владельца — не возвращать. Края кадра растворяет виньетка
+   на .hero-stage, своей маски здесь нет.
 
-   Две маски, сложенные объединением: ядро диска остаётся сплошным, сетка
-   работает только по разлёту. Одна сетка на весь кадр съедала блики — замер
-   показал падение ярких пикселей с 0.45 % до 0.03 %, дыра теряла сердцевину.
-   Это тот же запрет, что и у панели проверок: сплошной свет там, где он
-   ярче всего, сетка — по краям.
-
-   Виньетка живёт на родителе, чтобы здесь обошлось двумя слоями: у старого
-   Safari своя семантика mask-composite, и чем меньше слоёв, тем безопаснее.
-   Яркость поднимаем тут же, до маски: между точками остаётся 28 %. */
+   Яркость пересчитана под снятие сетки: маска съедала часть света, и
+   brightness под неё был завышен (1.12). */
 .hero-video {
   width: 100%; height: 100%; object-fit: cover; display: block;
-  filter: brightness(1.12) contrast(1.03);
-  -webkit-mask-image: radial-gradient(ellipse 24% 30% at 50% 50%, #000 40%, transparent 100%), var(--dots);
-          mask-image: radial-gradient(ellipse 24% 30% at 50% 50%, #000 40%, transparent 100%), var(--dots);
-  -webkit-mask-size: 100% 100%, var(--dots-size);
-          mask-size: 100% 100%, var(--dots-size);
-  -webkit-mask-repeat: no-repeat, repeat;
-          mask-repeat: no-repeat, repeat;
-  -webkit-mask-composite: source-over;
-          mask-composite: add;
+  filter: brightness(1) contrast(1.03);
 }
 
 /* Светящийся обод диска: точки здесь ДОБАВЛЯЮТ свет, а не вычитают его.
@@ -398,8 +386,6 @@ button, input, select, textarea { font: inherit; color: inherit; }
   /* Под стеклом остаётся свет самого диска: широкий декоративный обод
      давал там отдельные пятна далеко от нижней дуги. */
   clip-path: inset(0 0 50%);
-  -webkit-mask-image: var(--dots); mask-image: var(--dots);
-  -webkit-mask-size: var(--dots-size); mask-size: var(--dots-size);
 }
 .hero-rim i {
   position: absolute; inset: 0;
@@ -461,8 +447,6 @@ button, input, select, textarea { font: inherit; color: inherit; }
   content: ""; position: absolute; left: 18%; right: 18%; bottom: -12px; height: 44px;
   background: radial-gradient(ellipse 50% 50% at 50% 70%, rgba(var(--accent-rgb), .3), transparent);
   filter: blur(10px);
-  -webkit-mask-image: var(--dots); mask-image: var(--dots);
-  -webkit-mask-size: var(--dots-size); mask-size: var(--dots-size);
 }
 
 /* Матовое стекло перекрывает нижнюю половину диска. Размытие оставляет
@@ -502,8 +486,6 @@ button, input, select, textarea { font: inherit; color: inherit; }
       transparent 48%, rgba(var(--accent-hi-rgb), .25) 70%, rgba(var(--accent-rgb), .13) 88%, transparent 110%);
   filter: blur(calc(var(--glass-blur) * .82));
   mix-blend-mode: screen;
-  -webkit-mask-image: var(--dots); mask-image: var(--dots);
-  -webkit-mask-size: var(--dots-size); mask-size: var(--dots-size);
 }
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
   .hero-deck { background: linear-gradient(to bottom, rgba(10, 6, 24, .88), var(--bg)); }
@@ -566,26 +548,6 @@ button, input, select, textarea { font: inherit; color: inherit; }
   display: block; font-family: var(--ff-display); font-size: 1.05rem; font-weight: 600; margin-bottom: 4px;
 }
 .hero-facts span { font-size: .85rem; color: var(--faint); line-height: 1.45; }
-
-/* ---------- бегущая строка ---------- */
-.marquee {
-  background: none;
-  overflow: hidden;
-  padding-block: 15px;
-  -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
-          mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
-}
-.marquee-track {
-  display: flex; align-items: center; gap: 22px; width: max-content;
-  animation: slide 42s linear infinite;
-}
-.marquee:hover .marquee-track { animation-play-state: paused; }
-.marquee-track span {
-  font-family: var(--ff-display); font-weight: 600; font-size: 1.02rem;
-  color: var(--muted); white-space: nowrap;
-}
-.marquee-track i { color: var(--accent); font-style: normal; opacity: .6; }
-@keyframes slide { to { transform: translateX(-50%); } }
 
 /* ---------- «подсветка под курсором» для карточек ---------- */
 .spotlight { position: relative; }
@@ -4037,7 +3999,6 @@ button, input, select, textarea { font: inherit; color: inherit; }
   .reveal { opacity: 1; transform: none; }
   .hero-title .w > span { transform: none; }
   .underline-grow::after { transform: scaleX(1); }
-  .marquee-track { animation: none; }
   .hero-stage { display: none; }
   .hero-rim i { animation: none; }
   .radar-sweep i, .radar-edge i { animation: none; }
@@ -4053,7 +4014,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 
 @media print {
   .topbar, .hero-stage, .hero-deck, .hero-horizon, .checks-halo, .checks-glow, .checks-rim, .page-progress, .toast, .grain,
-  .marquee, .contact-form, .tile-art, .dial, .radar-stage, .spire-stage, .crypt-stage, .crypt-lock,
+  .contact-form, .tile-art, .dial, .radar-stage, .spire-stage, .crypt-stage, .crypt-lock,
   .arc-stage, .arc-chip, .arc-soon, .signal-stage,
   .hub-paper, .hub-ring, .hub-core, .orb-stage { display: none; }
   body, .hero, .checks, .tiles, .radar, .spire, .crypt, .arc, .orb, .signal { background: #fff; color: #000; }

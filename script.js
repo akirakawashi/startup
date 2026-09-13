@@ -611,14 +611,6 @@
   })();
 
   /* ============================================================
-     Бегущая строка: дублируем содержимое ради бесшовного цикла
-     ============================================================ */
-  var marquee = $('#marqueeTrack');
-  if (marquee && !reduceMotion) {
-    marquee.innerHTML = marquee.innerHTML + marquee.innerHTML;
-  }
-
-  /* ============================================================
      Призма автоматизации: один масштаб для стекла, нитей и импульсов
      ============================================================ */
   (function initSignalSize() {
@@ -643,7 +635,7 @@
      play-state сохраняет фазу, в том числе общую фазу луча и отметок радара.
      ============================================================ */
   (function initMotionVisibility() {
-    var scopes = $$('.hero-rim, .pulse, .marquee, .portfolio-card, .stack-display, .button-lit, .radar-stage, .mk-cv, .signal-stage, .work, .strata-plane');
+    var scopes = $$('.hero-rim, .pulse, .portfolio-card, .stack-display, .button-lit, .radar-stage, .mk-cv, .signal-stage, .work, .strata-plane');
     var visible = new Set(scopes);
     var sync = function () {
       scopes.forEach(function (el) {
