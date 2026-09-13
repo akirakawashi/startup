@@ -635,7 +635,7 @@
      play-state сохраняет фазу, в том числе общую фазу луча и отметок радара.
      ============================================================ */
   (function initMotionVisibility() {
-    var scopes = $$('.hero-rim, .hero-flow, .pulse, .portfolio-card, .stack-display, .button-lit, .radar-stage, .mk-cv, .signal-stage, .work, .strata-plane');
+    var scopes = $$('.hero-rim, .hero-flow, .pulse, .portfolio-card, .stack-display, .button-lit, .radar-stage, .mk-cv, .signal-stage, .work, .strata-projector');
     var visible = new Set(scopes);
     var sync = function () {
       scopes.forEach(function (el) {
@@ -735,11 +735,8 @@
   })();
 
   /* ============================================================
-     Услуги: разрез проекта. Вкладка выбирает слой стопки — у него меняются
-     заливки граней, под ним включается уже готовое пятно света, и на его
-     высоту переезжает блик. Пересчётов нет: два класса и одна переменная.
-     Автоперебора нет намеренно, как и у вкладок «Ваша задача»: выбранный
-     слой стоит, пока его читают.
+     Услуги: слой стопки питает выбранную SVG-голограмму. При переключении
+     импульс идёт от его переднего угла к проектору. Автоперебора нет.
      ============================================================ */
   (function initServiceStrata() {
     var strata = $('.strata');
@@ -748,9 +745,38 @@
     var panels = $$('.strata-panel', strata);
     var plates = $$('.strata-plate', strata);
     var glows = $$('.strata-glow', strata);
+    var holograms = $$('.strata-hologram', strata);
+    var legend = $('.strata-legend', strata);
+    var compactQuery = window.matchMedia('(max-width: 980px)');
+    var projectionFrame = 0;
+    var projectionTimer = 0;
+    var selected = +strata.dataset.active || 0;
     if (!tabs.length) return;
 
+    function syncOrientation() {
+      legend.setAttribute('aria-orientation', compactQuery.matches ? 'horizontal' : 'vertical');
+    }
+    syncOrientation();
+    compactQuery.addEventListener('change', syncOrientation);
+
+    function project() {
+      window.cancelAnimationFrame(projectionFrame);
+      window.clearTimeout(projectionTimer);
+      strata.classList.remove('is-projecting');
+      if (motionQuery.matches) return;
+      /* Два кадра сбрасывают однократную анимацию без принудительного layout.
+         Быстрое переключение отменяет предыдущий запуск. */
+      projectionFrame = window.requestAnimationFrame(function () {
+        projectionFrame = window.requestAnimationFrame(function () {
+          strata.classList.add('is-projecting');
+          projectionTimer = window.setTimeout(function () { strata.classList.remove('is-projecting'); }, 1050);
+        });
+      });
+    }
+
     function select(index, focus) {
+      var changed = selected !== index;
+      selected = index;
       strata.dataset.active = index;
       /* высота плиты живёт в разметке рядом с её путями, а не в скрипте:
          одно место правки, если геометрия сдвинется */
@@ -764,6 +790,8 @@
       panels.forEach(function (panel, i) { panel.classList.toggle('is-on', i === index); });
       plates.forEach(function (p) { p.classList.toggle('is-on', +p.dataset.i === index); });
       glows.forEach(function (g) { g.classList.toggle('is-on', +g.dataset.i === index); });
+      holograms.forEach(function (h) { h.classList.toggle('is-on', +h.dataset.i === index); });
+      if (changed) project();
       if (focus) tabs[index].focus({ preventScroll: true });
     }
 
@@ -771,8 +799,20 @@
       tab.addEventListener('click', function () { select(index, false); });
       tab.addEventListener('keydown', function (event) {
         var next;
-        if (event.key === 'ArrowDown') next = (index + 1) % tabs.length;
+        if (compactQuery.matches && (event.key === 'ArrowDown' || event.key === 'ArrowUp')) {
+          /* В нечётной сетке последняя строка неполная: вертикальные
+             стрелки сохраняют колонку при переходе через край. */
+          var column = index % 2;
+          var lastInColumn = tabs.length - 1;
+          if (lastInColumn % 2 !== column) lastInColumn--;
+          next = event.key === 'ArrowDown'
+            ? (index + 2 < tabs.length ? index + 2 : column)
+            : (index >= 2 ? index - 2 : lastInColumn);
+        }
+        else if (event.key === 'ArrowDown') next = (index + 1) % tabs.length;
         else if (event.key === 'ArrowUp') next = (index + tabs.length - 1) % tabs.length;
+        else if (compactQuery.matches && event.key === 'ArrowRight') next = (index + 1) % tabs.length;
+        else if (compactQuery.matches && event.key === 'ArrowLeft') next = (index + tabs.length - 1) % tabs.length;
         else if (event.key === 'Home') next = 0;
         else if (event.key === 'End') next = tabs.length - 1;
         else return;
