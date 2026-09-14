@@ -748,17 +748,10 @@
     var glows = $$('.strata-glow', strata);
     var holograms = $$('.strata-hologram', strata);
     var legend = $('.strata-legend', strata);
-    var compactQuery = window.matchMedia('(max-width: 980px)');
     var projectionFrame = 0;
     var projectionTimer = 0;
     var selected = +strata.dataset.active || 0;
     if (!tabs.length) return;
-
-    function syncOrientation() {
-      legend.setAttribute('aria-orientation', compactQuery.matches ? 'horizontal' : 'vertical');
-    }
-    syncOrientation();
-    compactQuery.addEventListener('change', syncOrientation);
 
     function project() {
       window.cancelAnimationFrame(projectionFrame);
@@ -799,20 +792,20 @@
       tab.addEventListener('click', function () { select(index, false); });
       tab.addEventListener('keydown', function (event) {
         var next;
-        if (compactQuery.matches && (event.key === 'ArrowDown' || event.key === 'ArrowUp')) {
-          /* В нечётной сетке последняя строка неполная: вертикальные
-             стрелки сохраняют колонку при переходе через край. */
-          var column = index % 2;
+        if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+          /* Число колонок берётся из CSS: стрелки сохраняют колонку
+             и после переноса переключателя в несколько рядов. */
+          var columns = parseInt(window.getComputedStyle(legend).getPropertyValue('--strata-columns'), 10) || tabs.length;
+          if (columns >= tabs.length) return;
+          var column = index % columns;
           var lastInColumn = tabs.length - 1;
-          if (lastInColumn % 2 !== column) lastInColumn--;
+          while (lastInColumn % columns !== column) lastInColumn--;
           next = event.key === 'ArrowDown'
-            ? (index + 2 < tabs.length ? index + 2 : column)
-            : (index >= 2 ? index - 2 : lastInColumn);
+            ? (index + columns < tabs.length ? index + columns : column)
+            : (index >= columns ? index - columns : lastInColumn);
         }
-        else if (event.key === 'ArrowDown') next = (index + 1) % tabs.length;
-        else if (event.key === 'ArrowUp') next = (index + tabs.length - 1) % tabs.length;
-        else if (compactQuery.matches && event.key === 'ArrowRight') next = (index + 1) % tabs.length;
-        else if (compactQuery.matches && event.key === 'ArrowLeft') next = (index + tabs.length - 1) % tabs.length;
+        else if (event.key === 'ArrowRight') next = (index + 1) % tabs.length;
+        else if (event.key === 'ArrowLeft') next = (index + tabs.length - 1) % tabs.length;
         else if (event.key === 'Home') next = 0;
         else if (event.key === 'End') next = tabs.length - 1;
         else return;
