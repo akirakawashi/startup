@@ -748,10 +748,53 @@
     var glows = $$('.strata-glow', strata);
     var holograms = $$('.strata-hologram', strata);
     var legend = $('.strata-legend', strata);
+    var projector = $('.strata-projector', strata);
+    var finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
     var projectionFrame = 0;
     var projectionTimer = 0;
+    var lookFrame = 0;
+    var lookX = 0;
+    var lookY = 0;
     var selected = +strata.dataset.active || 0;
-    if (!tabs.length) return;
+    if (!tabs.length || !projector) return;
+
+    /* Параллакс затрагивает только рисунок голограммы. Луч, плита и кнопки
+       сохраняют координаты; без движения указателя нет покадровой работы. */
+    function canLook() {
+      return finePointer.matches && !motionQuery.matches && !document.hidden
+        && !projector.classList.contains('motion-paused');
+    }
+    function resetLook() {
+      window.cancelAnimationFrame(lookFrame);
+      lookFrame = 0;
+      lookX = lookY = 0;
+      projector.style.removeProperty('--look-x');
+      projector.style.removeProperty('--look-y');
+    }
+    projector.addEventListener('pointermove', function (event) {
+      if (event.pointerType === 'touch' || !canLook()) return;
+      var rect = projector.getBoundingClientRect();
+      lookX = Math.max(-1, Math.min(1, (event.clientX - rect.left) / rect.width * 2 - 1));
+      lookY = Math.max(-1, Math.min(1, (event.clientY - rect.top) / rect.height * 2 - 1));
+      if (lookFrame) return;
+      lookFrame = window.requestAnimationFrame(function () {
+        lookFrame = 0;
+        if (!canLook()) { resetLook(); return; }
+        projector.style.setProperty('--look-x', lookX.toFixed(3));
+        projector.style.setProperty('--look-y', lookY.toFixed(3));
+      });
+    }, { passive: true });
+    projector.addEventListener('pointerleave', resetLook);
+    projector.addEventListener('pointercancel', resetLook);
+    finePointer.addEventListener('change', resetLook);
+    motionQuery.addEventListener('change', resetLook);
+    document.addEventListener('visibilitychange', function () { if (document.hidden) resetLook(); });
+    if ('IntersectionObserver' in window) {
+      var lookObserver = new IntersectionObserver(function (entries) {
+        if (!entries[0].isIntersecting) resetLook();
+      });
+      lookObserver.observe(projector);
+    }
 
     function project() {
       window.cancelAnimationFrame(projectionFrame);
@@ -763,7 +806,7 @@
       projectionFrame = window.requestAnimationFrame(function () {
         projectionFrame = window.requestAnimationFrame(function () {
           strata.classList.add('is-projecting');
-          projectionTimer = window.setTimeout(function () { strata.classList.remove('is-projecting'); }, 1500);
+          projectionTimer = window.setTimeout(function () { strata.classList.remove('is-projecting'); }, 1750);
         });
       });
     }
@@ -780,7 +823,10 @@
       function setLayerState(layer) {
         layer.classList.toggle('is-on', +layer.dataset.i === index);
       }
-      layers.forEach(setLayerState);
+      layers.forEach(function (layer) {
+        setLayerState(layer);
+        layer.classList.toggle('is-near', Math.abs(+layer.dataset.i - index) === 1);
+      });
       plates.forEach(setLayerState);
       glows.forEach(setLayerState);
       holograms.forEach(function (h) { h.classList.toggle('is-on', +h.dataset.i === index); });

@@ -736,6 +736,48 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .holo-tint { fill: rgba(var(--accent-rgb), .17); stroke: rgba(var(--accent-rgb), .35); stroke-width: 1; }
 .holo-dot, .holo-status, .holo-packet { fill: var(--accent-hi); }
 .holo-ray { stroke: rgba(var(--accent-rgb), .13); stroke-width: 1; }
+.holo-glass.holo-shell, .holo-tint.holo-shell { fill: none; }
+.holo-surface { stroke: none; }
+
+/* Контуры открываются световым срезом, стекло и детали набирают плотность следом.
+   Двигается прямоугольник clipPath; покадрового изменения SVG-путей нет. */
+.holo-reveal-window, .holo-build-scan, .holo-dust {
+  transform-box: view-box; transform-origin: 0 0;
+}
+.holo-build-scan, .holo-dust { opacity: 0; pointer-events: none; }
+.strata-layer.is-on .holo-reveal-window { animation: holoAssemble .95s cubic-bezier(.4, 0, .2, 1) .48s both; }
+.strata-layer.is-on .holo-build-scan { animation: holoBuildScan .95s cubic-bezier(.4, 0, .2, 1) .48s both; }
+.strata-layer.is-on .holo-surface-ink { animation: holoInk .55s var(--ease) 1.05s both; }
+.strata-layer.is-on .holo-detail-ink { animation: holoInk .45s var(--ease) 1.12s both; }
+@keyframes holoAssemble {
+  from { transform: translateY(350px); }
+  to { transform: translateY(0); }
+}
+@keyframes holoBuildScan {
+  0% { opacity: 0; transform: translateY(350px); }
+  12%, 75% { opacity: .9; }
+  100% { opacity: 0; transform: translateY(0); }
+}
+@keyframes holoInk { from { opacity: 0; } to { opacity: 1; } }
+
+/* Только выбранный проектор несёт двенадцать редких частиц. Мягкий край —
+   готовый радиальный градиент, без размытия в каждом кадре. */
+.strata-layer.is-on .holo-dust {
+  animation: holoDust var(--dust-duration) linear infinite;
+  animation-delay: var(--dust-delay);
+}
+@keyframes holoDust {
+  0% { opacity: 0; transform: translate(0, 0) scale(.6); }
+  18% { opacity: .65; }
+  68% { opacity: .5; }
+  100% { opacity: 0; transform: translate(var(--dust-x), var(--dust-y)) scale(.95); }
+}
+.holo-parallax, .holo-parallax-near {
+  transform-box: view-box; transform-origin: 0 0;
+  transition: transform .35s var(--ease-out);
+}
+.holo-parallax { transform: translate(calc(var(--look-x, 0) * 6px), calc(var(--look-y, 0) * 4px)); }
+.holo-parallax-near { transform: translate(calc(var(--look-x, 0) * 3px), calc(var(--look-y, 0) * 2px)); }
 .strata-hologram {
   opacity: 0; visibility: hidden;
   transform-box: view-box; transform-origin: 360px 312px;
@@ -807,6 +849,18 @@ button, input, select, textarea { font: inherit; color: inherit; }
   opacity: 0; transition: opacity .45s var(--ease);
 }
 .strata-glow.is-on { opacity: var(--strata-light-strength); }
+
+/* Отражение использует ту же голограмму: рисунок и сборка совпадают.
+   Маска гасит его по поверхности плиты, clipPath удерживает внутри граней. */
+.strata-reflection { opacity: 0; pointer-events: none; transition: opacity .18s var(--ease); }
+.strata-layer.is-on .strata-reflection { opacity: .22; transition: opacity .65s var(--ease) .7s; }
+.strata-bounce, .strata-bounce-wash { opacity: 0; pointer-events: none; transition: opacity .5s var(--ease); }
+.strata-layer.is-near .strata-bounce { opacity: .32; }
+.strata-layer.is-near .strata-bounce-wash { opacity: .22; }
+.strata.is-projecting .strata-layer.is-near .strata-bounce { animation: strataBounce 1s var(--ease-out) .55s both; }
+.strata.is-projecting .strata-layer.is-near .strata-bounce-wash { animation: strataBounceWash 1s var(--ease-out) .55s both; }
+@keyframes strataBounce { 0% { opacity: 0; } 32% { opacity: .85; } 100% { opacity: .32; } }
+@keyframes strataBounceWash { 0% { opacity: 0; } 32% { opacity: .5; } 100% { opacity: .22; } }
 
 .strata-plate { cursor: pointer; }
 .strata-side { fill: url(#strataSide); }
@@ -909,7 +963,14 @@ button, input, select, textarea { font: inherit; color: inherit; }
   .strata-panels { margin-top: 17px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .strata-spark, .strata-signal, .strata-emitter-flash, .holo-scan { display: none; }
+  .strata-spark, .strata-signal, .strata-emitter-flash, .holo-scan,
+  .holo-build-scan, .holo-dust-cloud { display: none; }
+  .strata-layer.is-on .holo-reveal-window,
+  .strata-layer.is-on .holo-surface-ink,
+  .strata-layer.is-on .holo-detail-ink,
+  .strata.is-projecting .strata-layer.is-near .strata-bounce,
+  .strata.is-projecting .strata-layer.is-near .strata-bounce-wash { animation: none; }
+  .holo-parallax, .holo-parallax-near { transform: none; transition: none; }
   .strata-layer-motion, .strata-projection, .strata-layer.is-on .strata-projection { transition: none; }
   .strata-hologram, .strata-hologram.is-on { transition: none; }
   .strata-hologram.is-on .strata-hologram-float,
