@@ -224,13 +224,13 @@
         <div class="strata-plane">
           <span class="strata-aura"></span>
           <span class="strata-floor"></span>
-          <span class="strata-glow" data-i="6" style="--gy: 470"></span>
-          <span class="strata-glow" data-i="5" style="--gy: 408"></span>
-          <span class="strata-glow" data-i="4" style="--gy: 346"></span>
-          <span class="strata-glow" data-i="3" style="--gy: 284"></span>
+          <span class="strata-glow is-below" data-i="6" style="--gy: 470"></span>
+          <span class="strata-glow is-below" data-i="5" style="--gy: 408"></span>
+          <span class="strata-glow is-below" data-i="4" style="--gy: 346"></span>
+          <span class="strata-glow is-below" data-i="3" style="--gy: 284"></span>
           <span class="strata-glow is-on" data-i="2" style="--gy: 222"></span>
-          <span class="strata-glow" data-i="1" style="--gy: 160"></span>
-          <span class="strata-glow" data-i="0" style="--gy: 98"></span>
+          <span class="strata-glow is-above" data-i="1" style="--gy: 160"></span>
+          <span class="strata-glow is-above" data-i="0" style="--gy: 98"></span>
 
           <svg class="strata-figure" viewBox="0 0 720 580" preserveAspectRatio="xMidYMid meet">
             <defs>
@@ -263,25 +263,25 @@
               </clipPath>
             </defs>
 
-            <g class="strata-plate" data-i="6" data-y="470">
+            <g class="strata-plate is-below" data-i="6" data-y="470">
               <path class="strata-side" d="M74 470L360 562L646 470L646 483L360 575L74 483Z"/>
               <path class="strata-face" d="M360 378L646 470L360 562L74 470Z"/>
               <path class="strata-edge" d="M360 378L646 470L360 562L74 470Z"/>
               <path class="strata-rib" d="M74 470v13 M360 562v13 M646 470v13"/>
             </g>
-            <g class="strata-plate" data-i="5" data-y="408">
+            <g class="strata-plate is-below" data-i="5" data-y="408">
               <path class="strata-side" d="M74 408L360 500L646 408L646 421L360 513L74 421Z"/>
               <path class="strata-face" d="M360 316L646 408L360 500L74 408Z"/>
               <path class="strata-edge" d="M360 316L646 408L360 500L74 408Z"/>
               <path class="strata-rib" d="M74 408v13 M360 500v13 M646 408v13"/>
             </g>
-            <g class="strata-plate" data-i="4" data-y="346">
+            <g class="strata-plate is-below" data-i="4" data-y="346">
               <path class="strata-side" d="M74 346L360 438L646 346L646 359L360 451L74 359Z"/>
               <path class="strata-face" d="M360 254L646 346L360 438L74 346Z"/>
               <path class="strata-edge" d="M360 254L646 346L360 438L74 346Z"/>
               <path class="strata-rib" d="M74 346v13 M360 438v13 M646 346v13"/>
             </g>
-            <g class="strata-plate" data-i="3" data-y="284">
+            <g class="strata-plate is-below" data-i="3" data-y="284">
               <path class="strata-side" d="M74 284L360 376L646 284L646 297L360 389L74 297Z"/>
               <path class="strata-face" d="M360 192L646 284L360 376L74 284Z"/>
               <path class="strata-edge" d="M360 192L646 284L360 376L74 284Z"/>
@@ -293,13 +293,13 @@
               <path class="strata-edge" d="M360 130L646 222L360 314L74 222Z"/>
               <path class="strata-rib" d="M74 222v13 M360 314v13 M646 222v13"/>
             </g>
-            <g class="strata-plate" data-i="1" data-y="160">
+            <g class="strata-plate is-above" data-i="1" data-y="160">
               <path class="strata-side" d="M74 160L360 252L646 160L646 173L360 265L74 173Z"/>
               <path class="strata-face" d="M360 68L646 160L360 252L74 160Z"/>
               <path class="strata-edge" d="M360 68L646 160L360 252L74 160Z"/>
               <path class="strata-rib" d="M74 160v13 M360 252v13 M646 160v13"/>
             </g>
-            <g class="strata-plate" data-i="0" data-y="98">
+            <g class="strata-plate is-above" data-i="0" data-y="98">
               <path class="strata-side" d="M74 98L360 190L646 98L646 111L360 203L74 111Z"/>
               <path class="strata-face" d="M360 6L646 98L360 190L74 98Z"/>
               <path class="strata-edge" d="M360 6L646 98L360 190L74 98Z"/>
@@ -364,6 +364,7 @@
             </g>
           </defs>
 
+          <g class="strata-projection-lift">
           <g class="strata-optics">
             <path fill="url(#holoBeam)" d="M344 394 159 160h402L376 394Z"/>
             <path class="holo-ray" d="m360 394-161-208M360 394l153-203M360 394l-60-149M360 394l67-127"/>
@@ -372,7 +373,6 @@
             <ellipse cx="360" cy="394" rx="33" ry="8" fill="url(#holoGlass)" stroke="url(#holoEdge)"/>
             <path class="holo-shine" d="M349 394h22"/>
           </g>
-          <g class="strata-signal"><rect x="357" y="0" width="6" height="40" rx="3" fill="url(#holoSignal)"/></g>
           <ellipse class="strata-emitter-flash" cx="360" cy="394" rx="84" ry="21" fill="url(#holoGlass)" stroke="url(#holoEdge)"/>
 
           <!-- Сайты: витрина и её мобильная версия. -->
@@ -526,6 +526,8 @@
               <circle class="holo-dot" cx="475" cy="279" r="3"/>
             </g>
           </g>
+          </g>
+          <g class="strata-signal"><rect x="357" y="0" width="6" height="40" rx="3" fill="url(#holoSignal)"/></g>
         </svg>
         </div>
 

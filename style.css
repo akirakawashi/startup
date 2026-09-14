@@ -714,13 +714,14 @@ button, input, select, textarea { font: inherit; color: inherit; }
   --stack-scale: .94;
   --stack-flatten: .56;
   --strata-light-strength: .657;
-  --slide-x: -36;
-  --slide-y: 18;
+  --layer-gap: 20;
+  --top-offset: calc(-1 * var(--layer-gap));
+  --projection-shift: calc(var(--top-offset) * var(--stack-scale) * var(--stack-flatten));
   /* Передний угол выбранной плиты в координатах общей проекции 720 × 650. */
-  --feed-x: calc(var(--slide-x) * var(--stack-scale));
-  --feed-y: calc(650 - (488 - var(--sy, 222) - var(--slide-y)) * var(--stack-scale) * var(--stack-flatten));
+  --feed-y: calc(650 - (488 - var(--sy, 222)) * var(--stack-scale) * var(--stack-flatten));
   position: relative; aspect-ratio: 720 / 650; isolation: isolate;
 }
+.strata[data-active="0"] .strata-projector { --top-offset: 0; }
 .strata-plane {
   position: absolute; bottom: 0; left: 50%;
   width: calc(var(--stack-scale) * 100%); aspect-ratio: 720 / 580;
@@ -736,8 +737,16 @@ button, input, select, textarea { font: inherit; color: inherit; }
   left: 17%; top: 0; width: 66%; height: 58%;
   background: radial-gradient(ellipse, rgba(var(--accent-deep-rgb), .18), transparent 68%);
   filter: blur(20px);
+  /* Высота пятна — 58% от 650 единиц общей проекции. */
+  transform: translateY(calc(var(--projection-shift) / 377 * 100%));
+  transition: transform .6s var(--ease-out);
 }
 .strata-projection { position: absolute; inset: 0; z-index: 2; width: 100%; height: 100%; pointer-events: none; }
+.strata-projection-lift {
+  transform-box: view-box; transform-origin: 0 0;
+  transform: translateY(calc(var(--projection-shift) * 1px));
+  transition: transform .6s var(--ease-out);
+}
 .holo-glass { fill: url(#holoGlass); stroke: url(#holoEdge); stroke-width: 1.5; }
 .holo-wire { stroke: rgba(var(--accent-rgb), .6); stroke-width: 1.3; }
 .holo-shine { stroke: var(--accent-hi); stroke-width: 1.8; }
@@ -764,10 +773,10 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .strata.is-projecting .strata-signal { animation: strataSignal .75s var(--ease-out) both; }
 .strata.is-projecting .strata-emitter-flash { animation: strataEmitter .8s var(--ease-out) .2s both; }
 @keyframes strataSignal {
-  0% { opacity: 0; transform: translate(calc(var(--feed-x) * 1px), calc(var(--feed-y) * 1px)); }
+  0% { opacity: 0; transform: translateY(calc(var(--feed-y) * 1px)); }
   12% { opacity: 1; }
-  70% { opacity: 1; transform: translateY(370px); }
-  100% { opacity: 0; transform: translateY(356px); }
+  70% { opacity: 1; transform: translateY(calc((370 + var(--projection-shift)) * 1px)); }
+  100% { opacity: 0; transform: translateY(calc((356 + var(--projection-shift)) * 1px)); }
 }
 @keyframes strataEmitter {
   0% { opacity: 0; transform: scale(.45); }
@@ -824,7 +833,13 @@ button, input, select, textarea { font: inherit; color: inherit; }
   left: 22%; width: 56%; height: 13%; bottom: -2%;
   background: radial-gradient(ellipse at 50% 50%, rgba(var(--accent-rgb), .5), transparent 70%);
   filter: blur(12px);
+  transform: translateY(calc(var(--layer-gap) / 75.4 * 100%));
+  transition: transform .6s var(--ease-out);
 }
+.strata[data-active="6"] .strata-floor { transform: none; }
+.strata-plate, .strata-glow { --layer-offset: 0; }
+.strata-plate.is-above, .strata-glow.is-above { --layer-offset: calc(-1 * var(--layer-gap)); }
+.strata-plate.is-below, .strata-glow.is-below { --layer-offset: var(--layer-gap); }
 /* пятно шире плиты (та занимает 79.4% сцены): будь оно вровень, свет целиком
    ушёл бы под непрозрачную грань и ореола не осталось. Шире плоскости растить
    нельзя — размытие за край выходит само и полосы прокрутки не даёт,
@@ -832,7 +847,8 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .strata-glow {
   left: 0; width: 100%; height: 46%;
   top: calc(var(--gy) / 580 * 100%);
-  transform: translateY(-50%);
+  /* Смещение в единицах плит, высота пятна — 46% от 580. */
+  transform: translateY(calc(-50% + var(--layer-offset) / 266.8 * 100%));
   background: radial-gradient(ellipse at 50% 50%,
       rgba(var(--accent-hi-rgb), 1), rgba(var(--accent-rgb), .6) 34%, transparent 70%);
   filter: blur(19px);
@@ -840,15 +856,13 @@ button, input, select, textarea { font: inherit; color: inherit; }
 }
 .strata-glow.is-on {
   opacity: var(--strata-light-strength);
-  /* Проценты X считаются от ширины плоскости, Y — от высоты пятна (46%). */
-  transform: translate(calc(var(--slide-x) / 720 * 100%), calc(-50% + var(--slide-y) / 266.8 * 100%));
 }
 
 .strata-plate {
   cursor: pointer; transform-box: view-box; transform-origin: 0 0;
-  transform: translate(0, 0); transition: transform .6s var(--ease-out);
+  transform: translateY(calc(var(--layer-offset) * 1px));
+  transition: transform .6s var(--ease-out);
 }
-.strata-plate.is-on { transform: translate(calc(var(--slide-x) * 1px), calc(var(--slide-y) * 1px)); }
 .strata-side { fill: url(#strataSide); }
 .strata-face { fill: url(#strataFace); }
 .strata-side, .strata-face { transition: fill .35s var(--ease); }
@@ -872,7 +886,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .strata-spark-lift,
 .strata-spark { transform-box: view-box; transform-origin: 0 0; }
 .strata-spark-lift {
-  transform: translate(calc(var(--slide-x) * 1px), calc((var(--sy, 222) + var(--slide-y)) * 1px));
+  transform: translateY(calc(var(--sy, 222) * 1px));
   transition: transform .6s var(--ease-out);
   pointer-events: none;
 }

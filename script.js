@@ -788,8 +788,16 @@
         tab.tabIndex = i === index ? 0 : -1;
       });
       panels.forEach(function (panel, i) { panel.classList.toggle('is-on', i === index); });
-      plates.forEach(function (p) { p.classList.toggle('is-on', +p.dataset.i === index); });
-      glows.forEach(function (g) { g.classList.toggle('is-on', +g.dataset.i === index); });
+      /* Соседние слои открывают зазор вокруг выбранного. Плита и её свет
+         получают один сдвиг; верхняя площадка несёт всю проекцию. */
+      function setLayerState(layer) {
+        var i = +layer.dataset.i;
+        layer.classList.toggle('is-on', i === index);
+        layer.classList.toggle('is-above', i < index);
+        layer.classList.toggle('is-below', i > index);
+      }
+      plates.forEach(setLayerState);
+      glows.forEach(setLayerState);
       holograms.forEach(function (h) { h.classList.toggle('is-on', +h.dataset.i === index); });
       if (changed) project();
       if (focus) tabs[index].focus({ preventScroll: true });
