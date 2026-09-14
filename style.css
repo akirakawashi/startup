@@ -711,42 +711,31 @@ button, input, select, textarea { font: inherit; color: inherit; }
    с фигурой и на телефоне ушли бы ниже 12 px */
 .strata-scene { position: relative; padding-block: 26px 38px; }
 .strata-projector {
-  --stack-scale: .94;
-  --stack-flatten: .56;
   --strata-light-strength: .657;
-  --layer-gap: 20;
-  --top-offset: calc(-1 * var(--layer-gap));
-  --projection-shift: calc(var(--top-offset) * var(--stack-scale) * var(--stack-flatten));
-  /* Передний угол выбранной плиты в координатах общей проекции 720 × 650. */
-  --feed-y: calc(650 - (488 - var(--sy, 222)) * var(--stack-scale) * var(--stack-flatten));
-  position: relative; aspect-ratio: 720 / 650; isolation: isolate;
+  --slide-x: -445px;
+  /* Выезд вдоль левого ребра плиты с учётом её перспективы. */
+  --slide-y: calc(445px * 92 / 286 * .56);
+  position: relative; aspect-ratio: 1000 / 660; isolation: isolate;
 }
-.strata[data-active="0"] .strata-projector { --top-offset: 0; }
-.strata-plane {
-  position: absolute; bottom: 0; left: 50%;
-  width: calc(var(--stack-scale) * 100%); aspect-ratio: 720 / 580;
-  transform: translateX(-50%) scaleY(var(--stack-flatten));
-  transform-origin: center bottom;
-}
-.strata-figure { position: absolute; inset: 0; display: block; width: 100%; height: 100%; overflow: visible; }
-
-/* Голограммы — готовые прозрачные SVG-сцены. В движении меняются только
-   transform и opacity; свечение отдельным статичным слоем за объектом. */
-.strata-projection-aura {
-  position: absolute; pointer-events: none; z-index: 1;
-  left: 17%; top: 0; width: 66%; height: 58%;
-  background: radial-gradient(ellipse, rgba(var(--accent-deep-rgb), .18), transparent 68%);
-  filter: blur(20px);
-  /* Высота пятна — 58% от 650 единиц общей проекции. */
-  transform: translateY(calc(var(--projection-shift) / 377 * 100%));
-  transition: transform .6s var(--ease-out);
-}
-.strata-projection { position: absolute; inset: 0; z-index: 2; width: 100%; height: 100%; pointer-events: none; }
-.strata-projection-lift {
+.strata-figure { display: block; width: 100%; height: 100%; overflow: visible; }
+.strata-layer-motion {
   transform-box: view-box; transform-origin: 0 0;
-  transform: translateY(calc(var(--projection-shift) * 1px));
-  transition: transform .6s var(--ease-out);
+  transform: translate(0, 0);
+  transition: transform .85s var(--ease-out);
 }
+.strata-layer.is-on .strata-layer-motion { transform: translate(var(--slide-x), var(--slide-y)); }
+
+/* Плита, блик и проектор лежат в одном движущемся контейнере.
+   Проекция проявляется после начала выезда, её основание всегда на плите. */
+.strata-projection {
+  pointer-events: none; opacity: 0; visibility: hidden;
+  transition: opacity .18s var(--ease), visibility .18s;
+}
+.strata-layer.is-on .strata-projection {
+  opacity: 1; visibility: visible;
+  transition: opacity .5s var(--ease) .3s, visibility 0s;
+}
+.strata-projection-aura { opacity: .1; }
 .holo-glass { fill: url(#holoGlass); stroke: url(#holoEdge); stroke-width: 1.5; }
 .holo-wire { stroke: rgba(var(--accent-rgb), .6); stroke-width: 1.3; }
 .holo-shine { stroke: var(--accent-hi); stroke-width: 1.8; }
@@ -756,7 +745,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .holo-ray { stroke: rgba(var(--accent-rgb), .13); stroke-width: 1; }
 .strata-hologram {
   opacity: 0; visibility: hidden;
-  transform-box: view-box; transform-origin: 50% 48%;
+  transform-box: view-box; transform-origin: 360px 312px;
   transform: translateY(16px) scale(.97);
   transition: opacity .22s var(--ease), transform .35s var(--ease), visibility .22s;
 }
@@ -770,13 +759,13 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .strata-signal, .strata-emitter-flash { opacity: 0; transform-box: view-box; }
 .strata-signal { transform-origin: 0 0; }
 .strata-emitter-flash { transform-origin: 360px 394px; }
-.strata.is-projecting .strata-signal { animation: strataSignal .75s var(--ease-out) both; }
-.strata.is-projecting .strata-emitter-flash { animation: strataEmitter .8s var(--ease-out) .2s both; }
+.strata.is-projecting .strata-layer.is-on .strata-signal { animation: strataSignal .75s var(--ease-out) .3s both; }
+.strata.is-projecting .strata-layer.is-on .strata-emitter-flash { animation: strataEmitter .8s var(--ease-out) .45s both; }
 @keyframes strataSignal {
-  0% { opacity: 0; transform: translateY(calc(var(--feed-y) * 1px)); }
+  0% { opacity: 0; transform: translateY(441px); }
   12% { opacity: 1; }
-  70% { opacity: 1; transform: translateY(calc((370 + var(--projection-shift)) * 1px)); }
-  100% { opacity: 0; transform: translateY(calc((356 + var(--projection-shift)) * 1px)); }
+  70% { opacity: 1; transform: translateY(370px); }
+  100% { opacity: 0; transform: translateY(356px); }
 }
 @keyframes strataEmitter {
   0% { opacity: 0; transform: scale(.45); }
@@ -815,54 +804,18 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .strata-cap.is-top { top: 0; }
 .strata-cap.is-bot { bottom: 0; }
 
-/* По выбору пользователя весь свет услуг гладкий. После снятия маски
-   сила свечения пересчитана по снимкам, чтобы сохранить прежнюю яркость. */
+/* Гладкий свет без маски: градиенты двигаются вместе с плитами. */
 .strata-aura,
 .strata-floor,
+.strata-glow { pointer-events: none; }
+.strata-aura { opacity: .06; }
+.strata-floor { opacity: .24; }
 .strata-glow {
-  position: absolute; pointer-events: none;
-  opacity: var(--strata-light-strength);
+  opacity: 0; transition: opacity .45s var(--ease);
 }
-.strata-aura {
-  left: 2%; top: 2%; width: 96%; height: 96%;
-  background: radial-gradient(ellipse at 50% 50%, rgba(var(--accent-deep-rgb), .42), transparent 66%);
-  filter: blur(30px);
-}
-/* стопка стоит не в пустоте: пятно под нижней плитой задаёт ей опору */
-.strata-floor {
-  left: 22%; width: 56%; height: 13%; bottom: -2%;
-  background: radial-gradient(ellipse at 50% 50%, rgba(var(--accent-rgb), .5), transparent 70%);
-  filter: blur(12px);
-  transform: translateY(calc(var(--layer-gap) / 75.4 * 100%));
-  transition: transform .6s var(--ease-out);
-}
-.strata[data-active="6"] .strata-floor { transform: none; }
-.strata-plate, .strata-glow { --layer-offset: 0; }
-.strata-plate.is-above, .strata-glow.is-above { --layer-offset: calc(-1 * var(--layer-gap)); }
-.strata-plate.is-below, .strata-glow.is-below { --layer-offset: var(--layer-gap); }
-/* пятно шире плиты (та занимает 79.4% сцены): будь оно вровень, свет целиком
-   ушёл бы под непрозрачную грань и ореола не осталось. Шире плоскости растить
-   нельзя — размытие за край выходит само и полосы прокрутки не даёт,
-   а лишняя ширина самого блока её даёт */
-.strata-glow {
-  left: 0; width: 100%; height: 46%;
-  top: calc(var(--gy) / 580 * 100%);
-  /* Смещение в единицах плит, высота пятна — 46% от 580. */
-  transform: translateY(calc(-50% + var(--layer-offset) / 266.8 * 100%));
-  background: radial-gradient(ellipse at 50% 50%,
-      rgba(var(--accent-hi-rgb), 1), rgba(var(--accent-rgb), .6) 34%, transparent 70%);
-  filter: blur(19px);
-  opacity: 0; transition: opacity .45s var(--ease), transform .6s var(--ease-out);
-}
-.strata-glow.is-on {
-  opacity: var(--strata-light-strength);
-}
+.strata-glow.is-on { opacity: var(--strata-light-strength); }
 
-.strata-plate {
-  cursor: pointer; transform-box: view-box; transform-origin: 0 0;
-  transform: translateY(calc(var(--layer-offset) * 1px));
-  transition: transform .6s var(--ease-out);
-}
+.strata-plate { cursor: pointer; }
 .strata-side { fill: url(#strataSide); }
 .strata-face { fill: url(#strataFace); }
 .strata-side, .strata-face { transition: fill .35s var(--ease); }
@@ -879,18 +832,13 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .strata-plate.is-on .strata-edge { stroke: #dccdff; stroke-width: 1.5; }
 .strata-plate.is-on .strata-rib  { stroke: #b79cf5; }
 
-/* Подъём на выбранную плиту отделён от пробега. У каждого ребра неподвижный
-   поворот и clipPath по его длине: в углу хвост остаётся на первом ребре,
-   пока голова выходит на второе. Сами световые полосы только скользят.
-   view-box сохраняет единицы SVG при любом размере сцены. */
-.strata-spark-lift,
-.strata-spark { transform-box: view-box; transform-origin: 0 0; }
+/* Блик вложен в ту же плиту. ClipPath удерживает хвост на рёбрах в углу. */
 .strata-spark-lift {
-  transform: translateY(calc(var(--sy, 222) * 1px));
-  transition: transform .6s var(--ease-out);
-  pointer-events: none;
+  pointer-events: none; opacity: 0; transition: opacity .18s var(--ease);
 }
-.strata-spark {
+.strata-layer.is-on .strata-spark-lift { opacity: 1; }
+.strata-spark { transform-box: view-box; transform-origin: 0 0; }
+.strata-layer.is-on .strata-spark {
   animation: strataSpark 4.6s linear infinite;
   animation-delay: calc(0s - var(--shot-t, 0s));
   will-change: transform;
@@ -963,6 +911,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 }
 @media (prefers-reduced-motion: reduce) {
   .strata-spark, .strata-signal, .strata-emitter-flash, .holo-scan { display: none; }
+  .strata-layer-motion, .strata-projection, .strata-layer.is-on .strata-projection { transition: none; }
   .strata-hologram, .strata-hologram.is-on { transition: none; }
   .strata-hologram.is-on .strata-hologram-float,
   .strata-hologram.is-on .holo-packet,

@@ -214,321 +214,567 @@
       <p class="section-lede">Сайты, сервисы и автоматизация — от интерфейса до запуска.</p>
     </header>
 
-    <!-- Выбранный слой питает общую проекцию над стопкой. Плиты сохраняют
-         порядок; семь сцен заранее собраны в SVG, без мелких надписей. -->
-    <div class="strata" data-active="2" style="--sy: 222">
+    <!-- Плита выезжает вместе со своей проекцией: один SVG-контейнер
+         сохраняет их привязку при любом переключении и размере экрана. -->
+    <div class="strata" data-active="2">
       <div class="strata-scene reveal" aria-hidden="true">
         <p class="strata-cap is-top">что видят люди</p>
 
         <div class="strata-projector">
-        <div class="strata-plane">
-          <span class="strata-aura"></span>
-          <span class="strata-floor"></span>
-          <span class="strata-glow is-below" data-i="6" style="--gy: 470"></span>
-          <span class="strata-glow is-below" data-i="5" style="--gy: 408"></span>
-          <span class="strata-glow is-below" data-i="4" style="--gy: 346"></span>
-          <span class="strata-glow is-below" data-i="3" style="--gy: 284"></span>
-          <span class="strata-glow is-on" data-i="2" style="--gy: 222"></span>
-          <span class="strata-glow is-above" data-i="1" style="--gy: 160"></span>
-          <span class="strata-glow is-above" data-i="0" style="--gy: 98"></span>
-
-          <svg class="strata-figure" viewBox="0 0 720 580" preserveAspectRatio="xMidYMid meet">
+          <svg class="strata-figure" viewBox="0 0 1000 660" fill="none" stroke-linecap="round" stroke-linejoin="round" focusable="false">
             <defs>
               <linearGradient id="strataFace" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0" stop-color="#211a44"/>
-                <stop offset=".55" stop-color="#110d23"/>
-                <stop offset="1" stop-color="#0a0814"/>
+                <stop offset="0" stop-color="#211a44" />
+                <stop offset=".55" stop-color="#110d23" />
+                <stop offset="1" stop-color="#0a0814" />
               </linearGradient>
               <linearGradient id="strataFaceOn" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0" stop-color="#3c2578"/>
-                <stop offset=".45" stop-color="#20153f"/>
-                <stop offset="1" stop-color="#150e2a"/>
+                <stop offset="0" stop-color="#3c2578" />
+                <stop offset=".45" stop-color="#20153f" />
+                <stop offset="1" stop-color="#150e2a" />
               </linearGradient>
               <linearGradient id="strataSide" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0" stop-color="#171132"/>
-                <stop offset="1" stop-color="#07060f"/>
+                <stop offset="0" stop-color="#171132" />
+                <stop offset="1" stop-color="#07060f" />
               </linearGradient>
               <linearGradient id="strataSideOn" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0" stop-color="#2c1c5c"/>
-                <stop offset="1" stop-color="#0f0a1f"/>
+                <stop offset="0" stop-color="#2c1c5c" />
+                <stop offset="1" stop-color="#0f0a1f" />
               </linearGradient>
               <linearGradient id="strataSpark" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0" stop-color="#c9b1ff" stop-opacity="0"/>
-                <stop offset=".7" stop-color="#c9b1ff"/>
-                <stop offset="1" stop-color="#f4ecff"/>
+                <stop offset="0" stop-color="#c9b1ff" stop-opacity="0" />
+                <stop offset=".7" stop-color="#c9b1ff" />
+                <stop offset="1" stop-color="#f4ecff" />
               </linearGradient>
               <!-- Длина ребра: hypot(286, 92). Каждый след обрезан своим ребром. -->
               <clipPath id="strataSparkBounds" clipPathUnits="userSpaceOnUse">
-                <rect x="0" y="-5" width="300.433021" height="10"/>
+                <rect x="0" y="-5" width="300.433021" height="10" />
               </clipPath>
-            </defs>
-
-            <g class="strata-plate is-below" data-i="6" data-y="470">
-              <path class="strata-side" d="M74 470L360 562L646 470L646 483L360 575L74 483Z"/>
-              <path class="strata-face" d="M360 378L646 470L360 562L74 470Z"/>
-              <path class="strata-edge" d="M360 378L646 470L360 562L74 470Z"/>
-              <path class="strata-rib" d="M74 470v13 M360 562v13 M646 470v13"/>
-            </g>
-            <g class="strata-plate is-below" data-i="5" data-y="408">
-              <path class="strata-side" d="M74 408L360 500L646 408L646 421L360 513L74 421Z"/>
-              <path class="strata-face" d="M360 316L646 408L360 500L74 408Z"/>
-              <path class="strata-edge" d="M360 316L646 408L360 500L74 408Z"/>
-              <path class="strata-rib" d="M74 408v13 M360 500v13 M646 408v13"/>
-            </g>
-            <g class="strata-plate is-below" data-i="4" data-y="346">
-              <path class="strata-side" d="M74 346L360 438L646 346L646 359L360 451L74 359Z"/>
-              <path class="strata-face" d="M360 254L646 346L360 438L74 346Z"/>
-              <path class="strata-edge" d="M360 254L646 346L360 438L74 346Z"/>
-              <path class="strata-rib" d="M74 346v13 M360 438v13 M646 346v13"/>
-            </g>
-            <g class="strata-plate is-below" data-i="3" data-y="284">
-              <path class="strata-side" d="M74 284L360 376L646 284L646 297L360 389L74 297Z"/>
-              <path class="strata-face" d="M360 192L646 284L360 376L74 284Z"/>
-              <path class="strata-edge" d="M360 192L646 284L360 376L74 284Z"/>
-              <path class="strata-rib" d="M74 284v13 M360 376v13 M646 284v13"/>
-            </g>
-            <g class="strata-plate is-on" data-i="2" data-y="222">
-              <path class="strata-side" d="M74 222L360 314L646 222L646 235L360 327L74 235Z"/>
-              <path class="strata-face" d="M360 130L646 222L360 314L74 222Z"/>
-              <path class="strata-edge" d="M360 130L646 222L360 314L74 222Z"/>
-              <path class="strata-rib" d="M74 222v13 M360 314v13 M646 222v13"/>
-            </g>
-            <g class="strata-plate is-above" data-i="1" data-y="160">
-              <path class="strata-side" d="M74 160L360 252L646 160L646 173L360 265L74 173Z"/>
-              <path class="strata-face" d="M360 68L646 160L360 252L74 160Z"/>
-              <path class="strata-edge" d="M360 68L646 160L360 252L74 160Z"/>
-              <path class="strata-rib" d="M74 160v13 M360 252v13 M646 160v13"/>
-            </g>
-            <g class="strata-plate is-above" data-i="0" data-y="98">
-              <path class="strata-side" d="M74 98L360 190L646 98L646 111L360 203L74 111Z"/>
-              <path class="strata-face" d="M360 6L646 98L360 190L74 98Z"/>
-              <path class="strata-edge" d="M360 6L646 98L360 190L74 98Z"/>
-              <path class="strata-rib" d="M74 98v13 M360 190v13 M646 98v13"/>
-            </g>
-
-            <g class="strata-spark-lift">
-              <g transform="translate(74 0) rotate(17.831858)" clip-path="url(#strataSparkBounds)">
-                <g class="strata-spark">
-                  <rect class="strata-spark-halo" x="-74" y="-4.5" width="74" height="9" rx="4.5"/>
-                  <rect class="strata-spark-core" x="-52" y="-1.5" width="52" height="3" rx="1.5"/>
+              <linearGradient id="holoGlass" x1="0" y1="0" x2="1" y2="1">
+                <stop stop-color="#ba92ff" stop-opacity=".2" />
+                <stop offset=".5" stop-color="#673bbd" stop-opacity=".1" />
+                <stop offset="1" stop-color="#a78bfa" stop-opacity=".04" />
+              </linearGradient>
+              <linearGradient id="holoEdge" x1="0" y1="0" x2="1" y2="1">
+                <stop stop-color="#f5ecff" />
+                <stop offset=".45" stop-color="#c5a5ff" stop-opacity=".8" />
+                <stop offset="1" stop-color="#9161df" stop-opacity=".3" />
+              </linearGradient>
+              <linearGradient id="holoBeam" x1="0" y1="1" x2="0" y2="0">
+                <stop stop-color="#ddc5ff" stop-opacity=".3" />
+                <stop offset=".35" stop-color="#a375ff" stop-opacity=".07" />
+                <stop offset="1" stop-color="#a375ff" stop-opacity="0" />
+              </linearGradient>
+              <linearGradient id="holoSignal" x1="0" y1="0" x2="0" y2="1">
+                <stop stop-color="#f8f0ff" />
+                <stop offset="1" stop-color="#b284ff" stop-opacity="0" />
+              </linearGradient>
+              <clipPath id="holoVisionClip">
+                <rect x="231" y="74" width="268" height="198" rx="12" />
+              </clipPath>
+              <g id="holoWindow">
+                <rect class="holo-wire" x="9" y="-8" width="300" height="202" rx="12" opacity=".35" />
+                <rect class="holo-glass" width="300" height="202" rx="12" />
+                <path class="holo-wire" d="M0 32h300M12 12h.01M23 12h.01M34 12h.01" />
+                <path class="holo-shine" d="M0 72V12A12 12 0 0 1 12 0h123" />
+              </g>
+              <g id="holoServer">
+                <path class="holo-glass" d="m0 12 25-14 69 14-25 15Z" />
+                <path class="holo-glass" d="m69 27 25-15v145l-25 15Z" />
+                <path class="holo-glass" d="m0 12 69 15v145L0 157Z" />
+                <path class="holo-wire" d="m0 59 69 15M0 106l69 15M12 34l27 6M12 81l27 6M12 128l27 6" />
+                <path class="holo-shine" d="M0 73V12l25-14 36 7" />
+                <g class="holo-status">
+                  <circle cx="54" cy="45" r="3" />
+                  <circle cx="54" cy="92" r="3" />
+                  <circle cx="54" cy="139" r="3" />
                 </g>
               </g>
-              <g transform="translate(360 92) rotate(-17.831858)" clip-path="url(#strataSparkBounds)">
-                <g class="strata-spark">
-                  <g transform="translate(-300.433021 0)">
-                    <rect class="strata-spark-halo" x="-74" y="-4.5" width="74" height="9" rx="4.5"/>
-                    <rect class="strata-spark-core" x="-52" y="-1.5" width="52" height="3" rx="1.5"/>
+              <radialGradient id="strataSoftLight">
+                <stop stop-color="#d9c5ff" stop-opacity=".85" />
+                <stop offset=".34" stop-color="#a78bfa" stop-opacity=".45" />
+                <stop offset="1" stop-color="#7c3aed" stop-opacity="0" />
+              </radialGradient>
+            </defs>
+            <ellipse class="strata-aura" cx="700" cy="375" rx="290" ry="175" fill="url(#strataSoftLight)" />
+            <ellipse class="strata-floor" cx="700" cy="512" rx="258" ry="38" fill="url(#strataSoftLight)" />
+            <g class="strata-layer" data-i="6" data-y="470" transform="translate(700 456.656)">
+              <g class="strata-layer-motion">
+                <ellipse class="strata-glow" data-i="6" cx="0" cy="13" rx="282" ry="76" fill="url(#strataSoftLight)" />
+                <g class="strata-plate" data-i="6" data-y="470" transform="matrix(.8 0 0 .448 -288 0)">
+                  <path class="strata-side" d="M74 0L360 92L646 0L646 13L360 105L74 13Z" />
+                  <path class="strata-face" d="M360 -92L646 0L360 92L74 0Z" />
+                  <path class="strata-edge" d="M360 -92L646 0L360 92L74 0Z" />
+                  <path class="strata-rib" d="M74 0v13 M360 92v13 M646 0v13" />
+                </g>
+                <g class="strata-spark-lift" transform="matrix(.8 0 0 .448 -288 0)">
+                  <g transform="translate(74 0) rotate(17.831858)" clip-path="url(#strataSparkBounds)">
+                    <g class="strata-spark">
+                      <rect class="strata-spark-halo" x="-74" y="-4.5" width="74" height="9" rx="4.5" />
+                      <rect class="strata-spark-core" x="-52" y="-1.5" width="52" height="3" rx="1.5" />
+                    </g>
+                  </g>
+                  <g transform="translate(360 92) rotate(-17.831858)" clip-path="url(#strataSparkBounds)">
+                    <g class="strata-spark">
+                      <g transform="translate(-300.433021 0)">
+                        <rect class="strata-spark-halo" x="-74" y="-4.5" width="74" height="9" rx="4.5" />
+                        <rect class="strata-spark-core" x="-52" y="-1.5" width="52" height="3" rx="1.5" />
+                      </g>
+                    </g>
+                  </g>
+                </g>
+                <g class="strata-projection" transform="matrix(.88 0 0 .88 -316.8 -346.72)">
+                  <ellipse class="strata-projection-aura" cx="360" cy="205" rx="235" ry="200" fill="url(#strataSoftLight)" />
+                  <g class="strata-optics">
+                    <path fill="url(#holoBeam)" d="M344 394 159 160h402L376 394Z" />
+                    <path class="holo-ray" d="m360 394-161-208M360 394l153-203M360 394l-60-149M360 394l67-127" />
+                    <ellipse class="holo-wire" cx="360" cy="394" rx="91" ry="23" opacity=".4" />
+                    <ellipse class="holo-wire" cx="360" cy="394" rx="62" ry="15" opacity=".65" />
+                    <ellipse cx="360" cy="394" rx="33" ry="8" fill="url(#holoGlass)" stroke="url(#holoEdge)" />
+                    <path class="holo-shine" d="M349 394h22" />
+                  </g>
+                  <ellipse class="strata-emitter-flash" cx="360" cy="394" rx="84" ry="21" fill="url(#holoGlass)" stroke="url(#holoEdge)" />
+                  <g class="strata-signal">
+                    <rect x="357" y="0" width="6" height="40" rx="3" fill="url(#holoSignal)" />
+                  </g>
+                  <g class="strata-hologram" data-i="6">
+                    <g class="strata-hologram-float">
+                      <path class="holo-wire" d="m200 279 157 33 188-52M274 244v51M379 259v45M475 238v41" />
+                      <use href="#holoServer" x="216" y="78" />
+                      <use href="#holoServer" x="324" y="99" />
+                      <use href="#holoServer" x="432" y="67" />
+                      <path class="holo-wire" d="M237 60v-9h103M454 44h56v8" opacity=".5" />
+                      <circle class="holo-dot" cx="357" cy="312" r="4" />
+                      <circle class="holo-dot" cx="274" cy="295" r="3" />
+                      <circle class="holo-dot" cx="475" cy="279" r="3" />
+                    </g>
+                  </g>
+                </g>
+              </g>
+            </g>
+            <g class="strata-layer" data-i="5" data-y="408" transform="translate(700 428.880)">
+              <g class="strata-layer-motion">
+                <ellipse class="strata-glow" data-i="5" cx="0" cy="13" rx="282" ry="76" fill="url(#strataSoftLight)" />
+                <g class="strata-plate" data-i="5" data-y="408" transform="matrix(.8 0 0 .448 -288 0)">
+                  <path class="strata-side" d="M74 0L360 92L646 0L646 13L360 105L74 13Z" />
+                  <path class="strata-face" d="M360 -92L646 0L360 92L74 0Z" />
+                  <path class="strata-edge" d="M360 -92L646 0L360 92L74 0Z" />
+                  <path class="strata-rib" d="M74 0v13 M360 92v13 M646 0v13" />
+                </g>
+                <g class="strata-spark-lift" transform="matrix(.8 0 0 .448 -288 0)">
+                  <g transform="translate(74 0) rotate(17.831858)" clip-path="url(#strataSparkBounds)">
+                    <g class="strata-spark">
+                      <rect class="strata-spark-halo" x="-74" y="-4.5" width="74" height="9" rx="4.5" />
+                      <rect class="strata-spark-core" x="-52" y="-1.5" width="52" height="3" rx="1.5" />
+                    </g>
+                  </g>
+                  <g transform="translate(360 92) rotate(-17.831858)" clip-path="url(#strataSparkBounds)">
+                    <g class="strata-spark">
+                      <g transform="translate(-300.433021 0)">
+                        <rect class="strata-spark-halo" x="-74" y="-4.5" width="74" height="9" rx="4.5" />
+                        <rect class="strata-spark-core" x="-52" y="-1.5" width="52" height="3" rx="1.5" />
+                      </g>
+                    </g>
+                  </g>
+                </g>
+                <g class="strata-projection" transform="matrix(.88 0 0 .88 -316.8 -346.72)">
+                  <ellipse class="strata-projection-aura" cx="360" cy="205" rx="235" ry="200" fill="url(#strataSoftLight)" />
+                  <g class="strata-optics">
+                    <path fill="url(#holoBeam)" d="M344 394 159 160h402L376 394Z" />
+                    <path class="holo-ray" d="m360 394-161-208M360 394l153-203M360 394l-60-149M360 394l67-127" />
+                    <ellipse class="holo-wire" cx="360" cy="394" rx="91" ry="23" opacity=".4" />
+                    <ellipse class="holo-wire" cx="360" cy="394" rx="62" ry="15" opacity=".65" />
+                    <ellipse cx="360" cy="394" rx="33" ry="8" fill="url(#holoGlass)" stroke="url(#holoEdge)" />
+                    <path class="holo-shine" d="M349 394h22" />
+                  </g>
+                  <ellipse class="strata-emitter-flash" cx="360" cy="394" rx="84" ry="21" fill="url(#holoGlass)" stroke="url(#holoEdge)" />
+                  <g class="strata-signal">
+                    <rect x="357" y="0" width="6" height="40" rx="3" fill="url(#holoSignal)" />
+                  </g>
+                  <g class="strata-hologram" data-i="5">
+                    <g class="strata-hologram-float">
+                      <g transform="matrix(1 .05 -.13 1 28 -3)">
+                        <rect class="holo-glass" x="217" y="58" width="296" height="228" rx="14" />
+                        <path class="holo-wire" d="M233 105V75h33M464 75h33v30M233 238v31h33M464 269h33v-31" />
+                        <path class="holo-glass" d="m365 101 68 39v77l-68 39-68-39v-77Z" />
+                        <path class="holo-shine" d="m297 140 68 39 68-39m-68 39v77m-68-116 68-39 68 39" />
+                        <path class="holo-wire" d="M365 101v77l-68 39m68-39 68 39" stroke-dasharray="3 6" />
+                        <path class="holo-shine" d="M284 122v-21h23M423 101h23v21M284 233v23h23M423 256h23v-23" />
+                        <g class="holo-status">
+                          <circle cx="297" cy="140" r="3" />
+                          <circle cx="433" cy="140" r="3" />
+                          <circle cx="365" cy="179" r="3" />
+                          <circle cx="365" cy="256" r="3" />
+                        </g>
+                        <g clip-path="url(#holoVisionClip)">
+                          <g class="holo-scan">
+                            <rect x="231" y="80" width="268" height="32" fill="url(#holoBeam)" />
+                            <path class="holo-shine" d="M231 111h268" />
+                          </g>
+                        </g>
+                      </g>
+                    </g>
+                  </g>
+                </g>
+              </g>
+            </g>
+            <g class="strata-layer" data-i="4" data-y="346" transform="translate(700 401.104)">
+              <g class="strata-layer-motion">
+                <ellipse class="strata-glow" data-i="4" cx="0" cy="13" rx="282" ry="76" fill="url(#strataSoftLight)" />
+                <g class="strata-plate" data-i="4" data-y="346" transform="matrix(.8 0 0 .448 -288 0)">
+                  <path class="strata-side" d="M74 0L360 92L646 0L646 13L360 105L74 13Z" />
+                  <path class="strata-face" d="M360 -92L646 0L360 92L74 0Z" />
+                  <path class="strata-edge" d="M360 -92L646 0L360 92L74 0Z" />
+                  <path class="strata-rib" d="M74 0v13 M360 92v13 M646 0v13" />
+                </g>
+                <g class="strata-spark-lift" transform="matrix(.8 0 0 .448 -288 0)">
+                  <g transform="translate(74 0) rotate(17.831858)" clip-path="url(#strataSparkBounds)">
+                    <g class="strata-spark">
+                      <rect class="strata-spark-halo" x="-74" y="-4.5" width="74" height="9" rx="4.5" />
+                      <rect class="strata-spark-core" x="-52" y="-1.5" width="52" height="3" rx="1.5" />
+                    </g>
+                  </g>
+                  <g transform="translate(360 92) rotate(-17.831858)" clip-path="url(#strataSparkBounds)">
+                    <g class="strata-spark">
+                      <g transform="translate(-300.433021 0)">
+                        <rect class="strata-spark-halo" x="-74" y="-4.5" width="74" height="9" rx="4.5" />
+                        <rect class="strata-spark-core" x="-52" y="-1.5" width="52" height="3" rx="1.5" />
+                      </g>
+                    </g>
+                  </g>
+                </g>
+                <g class="strata-projection" transform="matrix(.88 0 0 .88 -316.8 -346.72)">
+                  <ellipse class="strata-projection-aura" cx="360" cy="205" rx="235" ry="200" fill="url(#strataSoftLight)" />
+                  <g class="strata-optics">
+                    <path fill="url(#holoBeam)" d="M344 394 159 160h402L376 394Z" />
+                    <path class="holo-ray" d="m360 394-161-208M360 394l153-203M360 394l-60-149M360 394l67-127" />
+                    <ellipse class="holo-wire" cx="360" cy="394" rx="91" ry="23" opacity=".4" />
+                    <ellipse class="holo-wire" cx="360" cy="394" rx="62" ry="15" opacity=".65" />
+                    <ellipse cx="360" cy="394" rx="33" ry="8" fill="url(#holoGlass)" stroke="url(#holoEdge)" />
+                    <path class="holo-shine" d="M349 394h22" />
+                  </g>
+                  <ellipse class="strata-emitter-flash" cx="360" cy="394" rx="84" ry="21" fill="url(#holoGlass)" stroke="url(#holoEdge)" />
+                  <g class="strata-signal">
+                    <rect x="357" y="0" width="6" height="40" rx="3" fill="url(#holoSignal)" />
+                  </g>
+                  <g class="strata-hologram" data-i="4">
+                    <g class="strata-hologram-float">
+                      <path class="holo-wire" d="M218 171h94M408 171h100M360 125V94M360 217v49" />
+                      <path class="holo-wire" d="M196 140v-44h124M533 204v49H406" opacity=".35" />
+                      <g transform="translate(163 136)">
+                        <rect class="holo-glass" width="64" height="64" rx="12" />
+                        <path class="holo-shine" d="m25 22-10 10 10 10m15-20 10 10-10 10" />
+                      </g>
+                      <g transform="translate(502 136)">
+                        <rect class="holo-glass" width="64" height="64" rx="12" />
+                        <ellipse class="holo-wire" cx="32" cy="23" rx="17" ry="7" />
+                        <path class="holo-wire" d="M15 23v19c0 10 34 10 34 0V23M15 32c0 10 34 10 34 0" />
+                      </g>
+                      <g transform="translate(328 31)">
+                        <rect class="holo-glass" width="64" height="64" rx="12" />
+                        <path class="holo-shine" d="M17 43V24h30v19H17Zm0-19 15 12 15-12" />
+                      </g>
+                      <g transform="translate(328 254)">
+                        <rect class="holo-glass" width="64" height="64" rx="12" />
+                        <path class="holo-shine" d="m18 34 10 10 18-24" />
+                      </g>
+                      <path class="holo-glass" d="m360 115 48 28v55l-48 28-48-28v-55Z" />
+                      <path class="holo-shine" d="m336 157 24-14 24 14v28l-24 14-24-14v-28Zm0 0 24 14 24-14m-24 14v28" />
+                      <g transform="translate(228 171)">
+                        <circle class="holo-packet" r="3" />
+                      </g>
+                      <g transform="translate(410 171)">
+                        <circle class="holo-packet" style="--packet-delay: -.9s" r="3" />
+                      </g>
+                      <g transform="translate(360 218) rotate(90)">
+                        <circle class="holo-packet is-short" style="--packet-delay: -.5s" r="3" />
+                      </g>
+                    </g>
+                  </g>
+                </g>
+              </g>
+            </g>
+            <g class="strata-layer" data-i="3" data-y="284" transform="translate(700 373.328)">
+              <g class="strata-layer-motion">
+                <ellipse class="strata-glow" data-i="3" cx="0" cy="13" rx="282" ry="76" fill="url(#strataSoftLight)" />
+                <g class="strata-plate" data-i="3" data-y="284" transform="matrix(.8 0 0 .448 -288 0)">
+                  <path class="strata-side" d="M74 0L360 92L646 0L646 13L360 105L74 13Z" />
+                  <path class="strata-face" d="M360 -92L646 0L360 92L74 0Z" />
+                  <path class="strata-edge" d="M360 -92L646 0L360 92L74 0Z" />
+                  <path class="strata-rib" d="M74 0v13 M360 92v13 M646 0v13" />
+                </g>
+                <g class="strata-spark-lift" transform="matrix(.8 0 0 .448 -288 0)">
+                  <g transform="translate(74 0) rotate(17.831858)" clip-path="url(#strataSparkBounds)">
+                    <g class="strata-spark">
+                      <rect class="strata-spark-halo" x="-74" y="-4.5" width="74" height="9" rx="4.5" />
+                      <rect class="strata-spark-core" x="-52" y="-1.5" width="52" height="3" rx="1.5" />
+                    </g>
+                  </g>
+                  <g transform="translate(360 92) rotate(-17.831858)" clip-path="url(#strataSparkBounds)">
+                    <g class="strata-spark">
+                      <g transform="translate(-300.433021 0)">
+                        <rect class="strata-spark-halo" x="-74" y="-4.5" width="74" height="9" rx="4.5" />
+                        <rect class="strata-spark-core" x="-52" y="-1.5" width="52" height="3" rx="1.5" />
+                      </g>
+                    </g>
+                  </g>
+                </g>
+                <g class="strata-projection" transform="matrix(.88 0 0 .88 -316.8 -346.72)">
+                  <ellipse class="strata-projection-aura" cx="360" cy="205" rx="235" ry="200" fill="url(#strataSoftLight)" />
+                  <g class="strata-optics">
+                    <path fill="url(#holoBeam)" d="M344 394 159 160h402L376 394Z" />
+                    <path class="holo-ray" d="m360 394-161-208M360 394l153-203M360 394l-60-149M360 394l67-127" />
+                    <ellipse class="holo-wire" cx="360" cy="394" rx="91" ry="23" opacity=".4" />
+                    <ellipse class="holo-wire" cx="360" cy="394" rx="62" ry="15" opacity=".65" />
+                    <ellipse cx="360" cy="394" rx="33" ry="8" fill="url(#holoGlass)" stroke="url(#holoEdge)" />
+                    <path class="holo-shine" d="M349 394h22" />
+                  </g>
+                  <ellipse class="strata-emitter-flash" cx="360" cy="394" rx="84" ry="21" fill="url(#holoGlass)" stroke="url(#holoEdge)" />
+                  <g class="strata-signal">
+                    <rect x="357" y="0" width="6" height="40" rx="3" fill="url(#holoSignal)" />
+                  </g>
+                  <g class="strata-hologram" data-i="3">
+                    <g class="strata-hologram-float">
+                      <path class="holo-wire" d="M228 161h46M447 194h41" stroke-dasharray="3 5" />
+                      <circle class="holo-glass" cx="360" cy="172" r="83" />
+                      <g class="holo-ai-orbit">
+                        <ellipse class="holo-wire" cx="360" cy="172" rx="106" ry="39" transform="rotate(-28 360 172)" />
+                        <ellipse class="holo-wire" cx="360" cy="172" rx="43" ry="96" transform="rotate(-28 360 172)" opacity=".6" />
+                        <circle class="holo-dot" cx="267" cy="223" r="3.5" />
+                        <circle class="holo-dot" cx="411" cy="93" r="3" />
+                      </g>
+                      <path class="holo-wire" d="m309 128 49-23 49 33-21 57-59 31-18-98Zm49-23 28 90m-79-67 100 10m-80 88 80-88" opacity=".6" />
+                      <g class="holo-status">
+                        <circle cx="309" cy="128" r="3" />
+                        <circle cx="358" cy="105" r="3" />
+                        <circle cx="407" cy="138" r="3" />
+                        <circle cx="386" cy="195" r="3" />
+                        <circle cx="327" cy="226" r="3" />
+                      </g>
+                      <path class="holo-ai-core" d="M360 140c5 20 11 27 32 32-21 5-27 12-32 32-5-20-11-27-32-32 21-5 27-12 32-32Z" />
+                      <g transform="matrix(1 .08 -.13 1 168 112)">
+                        <path class="holo-glass" d="M9 0h39l20 20v70a9 9 0 0 1-9 9H9a9 9 0 0 1-9-9V9a9 9 0 0 1 9-9Z" />
+                        <path class="holo-shine" d="M48 0v20h20" />
+                        <path class="holo-wire" d="M14 38h38M14 51h38M14 64h29M14 77h20" />
+                      </g>
+                      <g transform="matrix(1 .08 -.13 1 486 171)">
+                        <path class="holo-glass" d="M11 0h87a11 11 0 0 1 11 11v61a11 11 0 0 1-11 11H32L14 98V83h-3A11 11 0 0 1 0 72V11A11 11 0 0 1 11 0Z" />
+                        <path class="holo-shine" d="m15 24 4 4 8-10M38 23h49m-72 21 4 4 8-10M38 43h39" />
+                        <path class="holo-wire" d="M16 64h70" />
+                      </g>
+                      <g transform="translate(229 161)">
+                        <circle class="holo-packet is-short" r="3" />
+                      </g>
+                      <g transform="translate(448 194)">
+                        <circle class="holo-packet is-short" style="--packet-delay: -1.2s" r="3" />
+                      </g>
+                    </g>
+                  </g>
+                </g>
+              </g>
+            </g>
+            <g class="strata-layer is-on" data-i="2" data-y="222" transform="translate(700 345.552)">
+              <g class="strata-layer-motion">
+                <ellipse class="strata-glow is-on" data-i="2" cx="0" cy="13" rx="282" ry="76" fill="url(#strataSoftLight)" />
+                <g class="strata-plate is-on" data-i="2" data-y="222" transform="matrix(.8 0 0 .448 -288 0)">
+                  <path class="strata-side" d="M74 0L360 92L646 0L646 13L360 105L74 13Z" />
+                  <path class="strata-face" d="M360 -92L646 0L360 92L74 0Z" />
+                  <path class="strata-edge" d="M360 -92L646 0L360 92L74 0Z" />
+                  <path class="strata-rib" d="M74 0v13 M360 92v13 M646 0v13" />
+                </g>
+                <g class="strata-spark-lift" transform="matrix(.8 0 0 .448 -288 0)">
+                  <g transform="translate(74 0) rotate(17.831858)" clip-path="url(#strataSparkBounds)">
+                    <g class="strata-spark">
+                      <rect class="strata-spark-halo" x="-74" y="-4.5" width="74" height="9" rx="4.5" />
+                      <rect class="strata-spark-core" x="-52" y="-1.5" width="52" height="3" rx="1.5" />
+                    </g>
+                  </g>
+                  <g transform="translate(360 92) rotate(-17.831858)" clip-path="url(#strataSparkBounds)">
+                    <g class="strata-spark">
+                      <g transform="translate(-300.433021 0)">
+                        <rect class="strata-spark-halo" x="-74" y="-4.5" width="74" height="9" rx="4.5" />
+                        <rect class="strata-spark-core" x="-52" y="-1.5" width="52" height="3" rx="1.5" />
+                      </g>
+                    </g>
+                  </g>
+                </g>
+                <g class="strata-projection" transform="matrix(.88 0 0 .88 -316.8 -346.72)">
+                  <ellipse class="strata-projection-aura" cx="360" cy="205" rx="235" ry="200" fill="url(#strataSoftLight)" />
+                  <g class="strata-optics">
+                    <path fill="url(#holoBeam)" d="M344 394 159 160h402L376 394Z" />
+                    <path class="holo-ray" d="m360 394-161-208M360 394l153-203M360 394l-60-149M360 394l67-127" />
+                    <ellipse class="holo-wire" cx="360" cy="394" rx="91" ry="23" opacity=".4" />
+                    <ellipse class="holo-wire" cx="360" cy="394" rx="62" ry="15" opacity=".65" />
+                    <ellipse cx="360" cy="394" rx="33" ry="8" fill="url(#holoGlass)" stroke="url(#holoEdge)" />
+                    <path class="holo-shine" d="M349 394h22" />
+                  </g>
+                  <ellipse class="strata-emitter-flash" cx="360" cy="394" rx="84" ry="21" fill="url(#holoGlass)" stroke="url(#holoEdge)" />
+                  <g class="strata-signal">
+                    <rect x="357" y="0" width="6" height="40" rx="3" fill="url(#holoSignal)" />
+                  </g>
+                  <g class="strata-hologram is-on" data-i="2">
+                    <g class="strata-hologram-float">
+                      <g transform="matrix(1 .09 -.16 1 214 73)">
+                        <use href="#holoWindow" />
+                        <path class="holo-wire" d="M43 32v170M16 54h11M16 75h11M16 96h11M16 117h11M16 181h11" />
+                        <rect class="holo-tint" x="10" y="66" width="23" height="19" rx="4" />
+                        <rect class="holo-wire" x="60" y="50" width="65" height="40" rx="6" />
+                        <rect class="holo-wire" x="139" y="50" width="65" height="40" rx="6" />
+                        <rect class="holo-wire" x="218" y="50" width="65" height="40" rx="6" />
+                        <path class="holo-bold" d="M73 67h25M152 67h24M231 67h27" />
+                        <path class="holo-wire" d="M73 79h37M152 79h37M231 79h37M61 111h222M61 141h222M61 172h222" opacity=".5" />
+                        <path class="holo-tint" d="m61 169 29-17 28 8 29-29 28 13 31-28 29 9 24-21 24 7v62H61Z" />
+                        <path class="holo-shine" d="m61 169 29-17 28 8 29-29 28 13 31-28 29 9 24-21 24 7" />
+                        <circle class="holo-dot" cx="206" cy="116" r="3" />
+                      </g>
+                      <g transform="matrix(1 .09 -.16 1 470 53)">
+                        <rect class="holo-glass" width="89" height="63" rx="8" />
+                        <path class="holo-wire" d="M14 17h42" />
+                        <path class="holo-bold" d="M17 46v-9M31 46V30M45 46V34M59 46V22M73 46V15" />
+                      </g>
+                      <g transform="matrix(1 .09 -.16 1 160 238)">
+                        <rect class="holo-glass" width="115" height="51" rx="8" />
+                        <circle class="holo-wire" cx="25" cy="25" r="12" />
+                        <path class="holo-shine" d="m19 25 4 4 8-9" />
+                        <path class="holo-wire" d="M47 20h48M47 31h31" />
+                      </g>
+                    </g>
+                  </g>
+                </g>
+              </g>
+            </g>
+            <g class="strata-layer" data-i="1" data-y="160" transform="translate(700 317.776)">
+              <g class="strata-layer-motion">
+                <ellipse class="strata-glow" data-i="1" cx="0" cy="13" rx="282" ry="76" fill="url(#strataSoftLight)" />
+                <g class="strata-plate" data-i="1" data-y="160" transform="matrix(.8 0 0 .448 -288 0)">
+                  <path class="strata-side" d="M74 0L360 92L646 0L646 13L360 105L74 13Z" />
+                  <path class="strata-face" d="M360 -92L646 0L360 92L74 0Z" />
+                  <path class="strata-edge" d="M360 -92L646 0L360 92L74 0Z" />
+                  <path class="strata-rib" d="M74 0v13 M360 92v13 M646 0v13" />
+                </g>
+                <g class="strata-spark-lift" transform="matrix(.8 0 0 .448 -288 0)">
+                  <g transform="translate(74 0) rotate(17.831858)" clip-path="url(#strataSparkBounds)">
+                    <g class="strata-spark">
+                      <rect class="strata-spark-halo" x="-74" y="-4.5" width="74" height="9" rx="4.5" />
+                      <rect class="strata-spark-core" x="-52" y="-1.5" width="52" height="3" rx="1.5" />
+                    </g>
+                  </g>
+                  <g transform="translate(360 92) rotate(-17.831858)" clip-path="url(#strataSparkBounds)">
+                    <g class="strata-spark">
+                      <g transform="translate(-300.433021 0)">
+                        <rect class="strata-spark-halo" x="-74" y="-4.5" width="74" height="9" rx="4.5" />
+                        <rect class="strata-spark-core" x="-52" y="-1.5" width="52" height="3" rx="1.5" />
+                      </g>
+                    </g>
+                  </g>
+                </g>
+                <g class="strata-projection" transform="matrix(.88 0 0 .88 -316.8 -346.72)">
+                  <ellipse class="strata-projection-aura" cx="360" cy="205" rx="235" ry="200" fill="url(#strataSoftLight)" />
+                  <g class="strata-optics">
+                    <path fill="url(#holoBeam)" d="M344 394 159 160h402L376 394Z" />
+                    <path class="holo-ray" d="m360 394-161-208M360 394l153-203M360 394l-60-149M360 394l67-127" />
+                    <ellipse class="holo-wire" cx="360" cy="394" rx="91" ry="23" opacity=".4" />
+                    <ellipse class="holo-wire" cx="360" cy="394" rx="62" ry="15" opacity=".65" />
+                    <ellipse cx="360" cy="394" rx="33" ry="8" fill="url(#holoGlass)" stroke="url(#holoEdge)" />
+                    <path class="holo-shine" d="M349 394h22" />
+                  </g>
+                  <ellipse class="strata-emitter-flash" cx="360" cy="394" rx="84" ry="21" fill="url(#holoGlass)" stroke="url(#holoEdge)" />
+                  <g class="strata-signal">
+                    <rect x="357" y="0" width="6" height="40" rx="3" fill="url(#holoSignal)" />
+                  </g>
+                  <g class="strata-hologram" data-i="1">
+                    <g class="strata-hologram-float">
+                      <g transform="matrix(1 .08 -.15 1 229 70)">
+                        <path class="holo-glass" d="M14 0h190a14 14 0 0 1 14 14v61a14 14 0 0 1-14 14H45l-24 20V89h-7A14 14 0 0 1 0 75V14A14 14 0 0 1 14 0Z" />
+                        <circle class="holo-wire" cx="29" cy="28" r="12" />
+                        <path class="holo-bold" d="M56 26h110" />
+                        <path class="holo-wire" d="M56 41h77M22 64h166" />
+                        <path class="holo-shine" d="M0 46V14A14 14 0 0 1 14 0h90" />
+                      </g>
+                      <g transform="matrix(1 .08 -.15 1 293 189)">
+                        <path class="holo-glass" d="M14 0h204a14 14 0 0 1 14 14v59a14 14 0 0 1-14 14h-9v19l-24-19H14A14 14 0 0 1 0 73V14A14 14 0 0 1 14 0Z" />
+                        <path class="holo-wire" d="M22 24h141M22 37h100" />
+                        <rect class="holo-tint" x="21" y="54" width="83" height="18" rx="5" />
+                        <rect class="holo-wire" x="115" y="54" width="94" height="18" rx="5" />
+                        <path class="holo-shine" d="m182 25 5 5 10-11m-2 11 10-11" />
+                      </g>
+                      <g transform="translate(200 224)" class="holo-status">
+                        <circle r="24" fill="url(#holoGlass)" stroke="url(#holoEdge)" />
+                        <circle cx="-8" r="3" />
+                        <circle r="3" />
+                        <circle cx="8" r="3" />
+                      </g>
+                    </g>
+                  </g>
+                </g>
+              </g>
+            </g>
+            <g class="strata-layer" data-i="0" data-y="98" transform="translate(700 290.000)">
+              <g class="strata-layer-motion">
+                <ellipse class="strata-glow" data-i="0" cx="0" cy="13" rx="282" ry="76" fill="url(#strataSoftLight)" />
+                <g class="strata-plate" data-i="0" data-y="98" transform="matrix(.8 0 0 .448 -288 0)">
+                  <path class="strata-side" d="M74 0L360 92L646 0L646 13L360 105L74 13Z" />
+                  <path class="strata-face" d="M360 -92L646 0L360 92L74 0Z" />
+                  <path class="strata-edge" d="M360 -92L646 0L360 92L74 0Z" />
+                  <path class="strata-rib" d="M74 0v13 M360 92v13 M646 0v13" />
+                </g>
+                <g class="strata-spark-lift" transform="matrix(.8 0 0 .448 -288 0)">
+                  <g transform="translate(74 0) rotate(17.831858)" clip-path="url(#strataSparkBounds)">
+                    <g class="strata-spark">
+                      <rect class="strata-spark-halo" x="-74" y="-4.5" width="74" height="9" rx="4.5" />
+                      <rect class="strata-spark-core" x="-52" y="-1.5" width="52" height="3" rx="1.5" />
+                    </g>
+                  </g>
+                  <g transform="translate(360 92) rotate(-17.831858)" clip-path="url(#strataSparkBounds)">
+                    <g class="strata-spark">
+                      <g transform="translate(-300.433021 0)">
+                        <rect class="strata-spark-halo" x="-74" y="-4.5" width="74" height="9" rx="4.5" />
+                        <rect class="strata-spark-core" x="-52" y="-1.5" width="52" height="3" rx="1.5" />
+                      </g>
+                    </g>
+                  </g>
+                </g>
+                <g class="strata-projection" transform="matrix(.88 0 0 .88 -316.8 -346.72)">
+                  <ellipse class="strata-projection-aura" cx="360" cy="205" rx="235" ry="200" fill="url(#strataSoftLight)" />
+                  <g class="strata-optics">
+                    <path fill="url(#holoBeam)" d="M344 394 159 160h402L376 394Z" />
+                    <path class="holo-ray" d="m360 394-161-208M360 394l153-203M360 394l-60-149M360 394l67-127" />
+                    <ellipse class="holo-wire" cx="360" cy="394" rx="91" ry="23" opacity=".4" />
+                    <ellipse class="holo-wire" cx="360" cy="394" rx="62" ry="15" opacity=".65" />
+                    <ellipse cx="360" cy="394" rx="33" ry="8" fill="url(#holoGlass)" stroke="url(#holoEdge)" />
+                    <path class="holo-shine" d="M349 394h22" />
+                  </g>
+                  <ellipse class="strata-emitter-flash" cx="360" cy="394" rx="84" ry="21" fill="url(#holoGlass)" stroke="url(#holoEdge)" />
+                  <g class="strata-signal">
+                    <rect x="357" y="0" width="6" height="40" rx="3" fill="url(#holoSignal)" />
+                  </g>
+                  <g class="strata-hologram" data-i="0">
+                    <g class="strata-hologram-float">
+                      <g transform="matrix(1 .09 -.16 1 219 58)">
+                        <use href="#holoWindow" />
+                        <path class="holo-bold" d="M23 63h61M23 78h91" />
+                        <path class="holo-wire" d="M23 99h77M23 108h60" />
+                        <rect class="holo-tint" x="23" y="124" width="58" height="17" rx="5" />
+                        <path class="holo-shine" d="M36 132h28m-4-3 4 3-4 3" />
+                        <rect class="holo-wire" x="151" y="53" width="126" height="91" rx="7" />
+                        <path class="holo-tint" d="m158 137 37-45 27 30 16-21 32 36Z" />
+                        <circle class="holo-wire" cx="251" cy="74" r="9" />
+                        <rect class="holo-wire" x="23" y="160" width="77" height="24" rx="5" />
+                        <rect class="holo-wire" x="112" y="160" width="77" height="24" rx="5" />
+                        <rect class="holo-wire" x="201" y="160" width="77" height="24" rx="5" />
+                      </g>
+                      <g transform="matrix(1 .09 -.16 1 171 179)">
+                        <rect class="holo-glass" width="63" height="110" rx="10" />
+                        <path class="holo-shine" d="M22 8h19M22 101h19" />
+                        <rect class="holo-wire" x="9" y="25" width="45" height="37" rx="4" />
+                        <path class="holo-wire" d="M11 76h37M11 84h26" />
+                      </g>
+                    </g>
                   </g>
                 </g>
               </g>
             </g>
           </svg>
-        </div>
-
-        <span class="strata-projection-aura"></span>
-        <svg class="strata-projection" viewBox="0 0 720 650" fill="none" stroke-linecap="round" stroke-linejoin="round" focusable="false">
-          <defs>
-            <linearGradient id="holoGlass" x1="0" y1="0" x2="1" y2="1">
-              <stop stop-color="#ba92ff" stop-opacity=".2"/>
-              <stop offset=".5" stop-color="#673bbd" stop-opacity=".1"/>
-              <stop offset="1" stop-color="#a78bfa" stop-opacity=".04"/>
-            </linearGradient>
-            <linearGradient id="holoEdge" x1="0" y1="0" x2="1" y2="1">
-              <stop stop-color="#f5ecff"/>
-              <stop offset=".45" stop-color="#c5a5ff" stop-opacity=".8"/>
-              <stop offset="1" stop-color="#9161df" stop-opacity=".3"/>
-            </linearGradient>
-            <linearGradient id="holoBeam" x1="0" y1="1" x2="0" y2="0">
-              <stop stop-color="#ddc5ff" stop-opacity=".3"/>
-              <stop offset=".35" stop-color="#a375ff" stop-opacity=".07"/>
-              <stop offset="1" stop-color="#a375ff" stop-opacity="0"/>
-            </linearGradient>
-            <linearGradient id="holoSignal" x1="0" y1="0" x2="0" y2="1">
-              <stop stop-color="#f8f0ff"/>
-              <stop offset="1" stop-color="#b284ff" stop-opacity="0"/>
-            </linearGradient>
-            <clipPath id="holoVisionClip"><rect x="231" y="74" width="268" height="198" rx="12"/></clipPath>
-            <g id="holoWindow">
-              <rect class="holo-wire" x="9" y="-8" width="300" height="202" rx="12" opacity=".35"/>
-              <rect class="holo-glass" width="300" height="202" rx="12"/>
-              <path class="holo-wire" d="M0 32h300M12 12h.01M23 12h.01M34 12h.01"/>
-              <path class="holo-shine" d="M0 72V12A12 12 0 0 1 12 0h123"/>
-            </g>
-            <g id="holoServer">
-              <path class="holo-glass" d="m0 12 25-14 69 14-25 15Z"/>
-              <path class="holo-glass" d="m69 27 25-15v145l-25 15Z"/>
-              <path class="holo-glass" d="m0 12 69 15v145L0 157Z"/>
-              <path class="holo-wire" d="m0 59 69 15M0 106l69 15M12 34l27 6M12 81l27 6M12 128l27 6"/>
-              <path class="holo-shine" d="M0 73V12l25-14 36 7"/>
-              <g class="holo-status"><circle cx="54" cy="45" r="3"/><circle cx="54" cy="92" r="3"/><circle cx="54" cy="139" r="3"/></g>
-            </g>
-          </defs>
-
-          <g class="strata-projection-lift">
-          <g class="strata-optics">
-            <path fill="url(#holoBeam)" d="M344 394 159 160h402L376 394Z"/>
-            <path class="holo-ray" d="m360 394-161-208M360 394l153-203M360 394l-60-149M360 394l67-127"/>
-            <ellipse class="holo-wire" cx="360" cy="394" rx="91" ry="23" opacity=".4"/>
-            <ellipse class="holo-wire" cx="360" cy="394" rx="62" ry="15" opacity=".65"/>
-            <ellipse cx="360" cy="394" rx="33" ry="8" fill="url(#holoGlass)" stroke="url(#holoEdge)"/>
-            <path class="holo-shine" d="M349 394h22"/>
-          </g>
-          <ellipse class="strata-emitter-flash" cx="360" cy="394" rx="84" ry="21" fill="url(#holoGlass)" stroke="url(#holoEdge)"/>
-
-          <!-- Сайты: витрина и её мобильная версия. -->
-          <g class="strata-hologram" data-i="0">
-            <g class="strata-hologram-float">
-              <g transform="matrix(1 .09 -.16 1 219 58)">
-                <use href="#holoWindow"/>
-                <path class="holo-bold" d="M23 63h61M23 78h91"/>
-                <path class="holo-wire" d="M23 99h77M23 108h60"/>
-                <rect class="holo-tint" x="23" y="124" width="58" height="17" rx="5"/>
-                <path class="holo-shine" d="M36 132h28m-4-3 4 3-4 3"/>
-                <rect class="holo-wire" x="151" y="53" width="126" height="91" rx="7"/>
-                <path class="holo-tint" d="m158 137 37-45 27 30 16-21 32 36Z"/>
-                <circle class="holo-wire" cx="251" cy="74" r="9"/>
-                <rect class="holo-wire" x="23" y="160" width="77" height="24" rx="5"/>
-                <rect class="holo-wire" x="112" y="160" width="77" height="24" rx="5"/>
-                <rect class="holo-wire" x="201" y="160" width="77" height="24" rx="5"/>
-              </g>
-              <g transform="matrix(1 .09 -.16 1 171 179)">
-                <rect class="holo-glass" width="63" height="110" rx="10"/>
-                <path class="holo-shine" d="M22 8h19M22 101h19"/>
-                <rect class="holo-wire" x="9" y="25" width="45" height="37" rx="4"/>
-                <path class="holo-wire" d="M11 76h37M11 84h26"/>
-              </g>
-            </g>
-          </g>
-
-          <!-- Боты: входящее сообщение и ответ с действиями. -->
-          <g class="strata-hologram" data-i="1">
-            <g class="strata-hologram-float">
-              <g transform="matrix(1 .08 -.15 1 229 70)">
-                <path class="holo-glass" d="M14 0h190a14 14 0 0 1 14 14v61a14 14 0 0 1-14 14H45l-24 20V89h-7A14 14 0 0 1 0 75V14A14 14 0 0 1 14 0Z"/>
-                <circle class="holo-wire" cx="29" cy="28" r="12"/>
-                <path class="holo-bold" d="M56 26h110"/>
-                <path class="holo-wire" d="M56 41h77M22 64h166"/>
-                <path class="holo-shine" d="M0 46V14A14 14 0 0 1 14 0h90"/>
-              </g>
-              <g transform="matrix(1 .08 -.15 1 293 189)">
-                <path class="holo-glass" d="M14 0h204a14 14 0 0 1 14 14v59a14 14 0 0 1-14 14h-9v19l-24-19H14A14 14 0 0 1 0 73V14A14 14 0 0 1 14 0Z"/>
-                <path class="holo-wire" d="M22 24h141M22 37h100"/>
-                <rect class="holo-tint" x="21" y="54" width="83" height="18" rx="5"/>
-                <rect class="holo-wire" x="115" y="54" width="94" height="18" rx="5"/>
-                <path class="holo-shine" d="m182 25 5 5 10-11m-2 11 10-11"/>
-              </g>
-              <g transform="translate(200 224)" class="holo-status"><circle r="24" fill="url(#holoGlass)" stroke="url(#holoEdge)"/><circle cx="-8" r="3"/><circle r="3"/><circle cx="8" r="3"/></g>
-            </g>
-          </g>
-
-          <!-- Веб-приложения: панель управления с отдельными модулями. -->
-          <g class="strata-hologram is-on" data-i="2">
-            <g class="strata-hologram-float">
-              <g transform="matrix(1 .09 -.16 1 214 73)">
-                <use href="#holoWindow"/>
-                <path class="holo-wire" d="M43 32v170M16 54h11M16 75h11M16 96h11M16 117h11M16 181h11"/>
-                <rect class="holo-tint" x="10" y="66" width="23" height="19" rx="4"/>
-                <rect class="holo-wire" x="60" y="50" width="65" height="40" rx="6"/>
-                <rect class="holo-wire" x="139" y="50" width="65" height="40" rx="6"/>
-                <rect class="holo-wire" x="218" y="50" width="65" height="40" rx="6"/>
-                <path class="holo-bold" d="M73 67h25M152 67h24M231 67h27"/>
-                <path class="holo-wire" d="M73 79h37M152 79h37M231 79h37M61 111h222M61 141h222M61 172h222" opacity=".5"/>
-                <path class="holo-tint" d="m61 169 29-17 28 8 29-29 28 13 31-28 29 9 24-21 24 7v62H61Z"/>
-                <path class="holo-shine" d="m61 169 29-17 28 8 29-29 28 13 31-28 29 9 24-21 24 7"/>
-                <circle class="holo-dot" cx="206" cy="116" r="3"/>
-              </g>
-              <g transform="matrix(1 .09 -.16 1 470 53)">
-                <rect class="holo-glass" width="89" height="63" rx="8"/>
-                <path class="holo-wire" d="M14 17h42"/>
-                <path class="holo-bold" d="M17 46v-9M31 46V30M45 46V34M59 46V22M73 46V15"/>
-              </g>
-              <g transform="matrix(1 .09 -.16 1 160 238)">
-                <rect class="holo-glass" width="115" height="51" rx="8"/>
-                <circle class="holo-wire" cx="25" cy="25" r="12"/>
-                <path class="holo-shine" d="m19 25 4 4 8-9"/>
-                <path class="holo-wire" d="M47 20h48M47 31h31"/>
-              </g>
-            </g>
-          </g>
-
-          <!-- AI: документ проходит через нейронное ядро и становится ответом. -->
-          <g class="strata-hologram" data-i="3">
-            <g class="strata-hologram-float">
-              <path class="holo-wire" d="M228 161h46M447 194h41" stroke-dasharray="3 5"/>
-              <circle class="holo-glass" cx="360" cy="172" r="83"/>
-              <g class="holo-ai-orbit">
-                <ellipse class="holo-wire" cx="360" cy="172" rx="106" ry="39" transform="rotate(-28 360 172)"/>
-                <ellipse class="holo-wire" cx="360" cy="172" rx="43" ry="96" transform="rotate(-28 360 172)" opacity=".6"/>
-                <circle class="holo-dot" cx="267" cy="223" r="3.5"/>
-                <circle class="holo-dot" cx="411" cy="93" r="3"/>
-              </g>
-              <path class="holo-wire" d="m309 128 49-23 49 33-21 57-59 31-18-98Zm49-23 28 90m-79-67 100 10m-80 88 80-88" opacity=".6"/>
-              <g class="holo-status"><circle cx="309" cy="128" r="3"/><circle cx="358" cy="105" r="3"/><circle cx="407" cy="138" r="3"/><circle cx="386" cy="195" r="3"/><circle cx="327" cy="226" r="3"/></g>
-              <path class="holo-ai-core" d="M360 140c5 20 11 27 32 32-21 5-27 12-32 32-5-20-11-27-32-32 21-5 27-12 32-32Z"/>
-              <g transform="matrix(1 .08 -.13 1 168 112)">
-                <path class="holo-glass" d="M9 0h39l20 20v70a9 9 0 0 1-9 9H9a9 9 0 0 1-9-9V9a9 9 0 0 1 9-9Z"/>
-                <path class="holo-shine" d="M48 0v20h20"/>
-                <path class="holo-wire" d="M14 38h38M14 51h38M14 64h29M14 77h20"/>
-              </g>
-              <g transform="matrix(1 .08 -.13 1 486 171)">
-                <path class="holo-glass" d="M11 0h87a11 11 0 0 1 11 11v61a11 11 0 0 1-11 11H32L14 98V83h-3A11 11 0 0 1 0 72V11A11 11 0 0 1 11 0Z"/>
-                <path class="holo-shine" d="m15 24 4 4 8-10M38 23h49m-72 21 4 4 8-10M38 43h39"/>
-                <path class="holo-wire" d="M16 64h70"/>
-              </g>
-              <g transform="translate(229 161)"><circle class="holo-packet is-short" r="3"/></g>
-              <g transform="translate(448 194)"><circle class="holo-packet is-short" style="--packet-delay: -1.2s" r="3"/></g>
-            </g>
-          </g>
-
-          <!-- Интеграции: движение данных между узлами. -->
-          <g class="strata-hologram" data-i="4">
-            <g class="strata-hologram-float">
-              <path class="holo-wire" d="M218 171h94M408 171h100M360 125V94M360 217v49"/>
-              <path class="holo-wire" d="M196 140v-44h124M533 204v49H406" opacity=".35"/>
-              <g transform="translate(163 136)"><rect class="holo-glass" width="64" height="64" rx="12"/><path class="holo-shine" d="m25 22-10 10 10 10m15-20 10 10-10 10"/></g>
-              <g transform="translate(502 136)"><rect class="holo-glass" width="64" height="64" rx="12"/><ellipse class="holo-wire" cx="32" cy="23" rx="17" ry="7"/><path class="holo-wire" d="M15 23v19c0 10 34 10 34 0V23M15 32c0 10 34 10 34 0"/></g>
-              <g transform="translate(328 31)"><rect class="holo-glass" width="64" height="64" rx="12"/><path class="holo-shine" d="M17 43V24h30v19H17Zm0-19 15 12 15-12"/></g>
-              <g transform="translate(328 254)"><rect class="holo-glass" width="64" height="64" rx="12"/><path class="holo-shine" d="m18 34 10 10 18-24"/></g>
-              <path class="holo-glass" d="m360 115 48 28v55l-48 28-48-28v-55Z"/>
-              <path class="holo-shine" d="m336 157 24-14 24 14v28l-24 14-24-14v-28Zm0 0 24 14 24-14m-24 14v28"/>
-              <g transform="translate(228 171)"><circle class="holo-packet" r="3"/></g>
-              <g transform="translate(410 171)"><circle class="holo-packet" style="--packet-delay: -.9s" r="3"/></g>
-              <g transform="translate(360 218) rotate(90)"><circle class="holo-packet is-short" style="--packet-delay: -.5s" r="3"/></g>
-            </g>
-          </g>
-
-          <!-- Зрение: объёмный объект, рамка и проход сканера. -->
-          <g class="strata-hologram" data-i="5">
-            <g class="strata-hologram-float">
-              <g transform="matrix(1 .05 -.13 1 28 -3)">
-                <rect class="holo-glass" x="217" y="58" width="296" height="228" rx="14"/>
-                <path class="holo-wire" d="M233 105V75h33M464 75h33v30M233 238v31h33M464 269h33v-31"/>
-                <path class="holo-glass" d="m365 101 68 39v77l-68 39-68-39v-77Z"/>
-                <path class="holo-shine" d="m297 140 68 39 68-39m-68 39v77m-68-116 68-39 68 39"/>
-                <path class="holo-wire" d="M365 101v77l-68 39m68-39 68 39" stroke-dasharray="3 6"/>
-                <path class="holo-shine" d="M284 122v-21h23M423 101h23v21M284 233v23h23M423 256h23v-23"/>
-                <g class="holo-status"><circle cx="297" cy="140" r="3"/><circle cx="433" cy="140" r="3"/><circle cx="365" cy="179" r="3"/><circle cx="365" cy="256" r="3"/></g>
-                <g clip-path="url(#holoVisionClip)"><g class="holo-scan"><rect x="231" y="80" width="268" height="32" fill="url(#holoBeam)"/><path class="holo-shine" d="M231 111h268"/></g></g>
-              </g>
-            </g>
-          </g>
-
-          <!-- Инфраструктура: три серверных модуля и соединения. -->
-          <g class="strata-hologram" data-i="6">
-            <g class="strata-hologram-float">
-              <path class="holo-wire" d="m200 279 157 33 188-52M274 244v51M379 259v45M475 238v41"/>
-              <use href="#holoServer" x="216" y="78"/>
-              <use href="#holoServer" x="324" y="99"/>
-              <use href="#holoServer" x="432" y="67"/>
-              <path class="holo-wire" d="M237 60v-9h103M454 44h56v8" opacity=".5"/>
-              <circle class="holo-dot" cx="357" cy="312" r="4"/>
-              <circle class="holo-dot" cx="274" cy="295" r="3"/>
-              <circle class="holo-dot" cx="475" cy="279" r="3"/>
-            </g>
-          </g>
-          </g>
-          <g class="strata-signal"><rect x="357" y="0" width="6" height="40" rx="3" fill="url(#holoSignal)"/></g>
-        </svg>
         </div>
 
         <p class="strata-cap is-bot">на чём это стоит</p>

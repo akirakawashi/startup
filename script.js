@@ -735,8 +735,8 @@
   })();
 
   /* ============================================================
-     Услуги: слой стопки питает выбранную SVG-голограмму. При переключении
-     импульс идёт от его переднего угла к проектору. Автоперебора нет.
+     Услуги: выбранный слой выезжает со своей SVG-голограммой.
+     Плита и проекция двигаются одним контейнером. Автоперебора нет.
      ============================================================ */
   (function initServiceStrata() {
     var strata = $('.strata');
@@ -744,6 +744,7 @@
     var tabs = $$('.strata-tab', strata);
     var panels = $$('.strata-panel', strata);
     var plates = $$('.strata-plate', strata);
+    var layers = $$('.strata-layer', strata);
     var glows = $$('.strata-glow', strata);
     var holograms = $$('.strata-hologram', strata);
     var legend = $('.strata-legend', strata);
@@ -769,7 +770,7 @@
       projectionFrame = window.requestAnimationFrame(function () {
         projectionFrame = window.requestAnimationFrame(function () {
           strata.classList.add('is-projecting');
-          projectionTimer = window.setTimeout(function () { strata.classList.remove('is-projecting'); }, 1050);
+          projectionTimer = window.setTimeout(function () { strata.classList.remove('is-projecting'); }, 1500);
         });
       });
     }
@@ -778,24 +779,15 @@
       var changed = selected !== index;
       selected = index;
       strata.dataset.active = index;
-      /* высота плиты живёт в разметке рядом с её путями, а не в скрипте:
-         одно место правки, если геометрия сдвинется */
-      var plate = plates.filter(function (p) { return +p.dataset.i === index; })[0];
-      if (plate) strata.style.setProperty('--sy', plate.dataset.y);
-
       tabs.forEach(function (tab, i) {
         tab.setAttribute('aria-selected', String(i === index));
         tab.tabIndex = i === index ? 0 : -1;
       });
       panels.forEach(function (panel, i) { panel.classList.toggle('is-on', i === index); });
-      /* Соседние слои открывают зазор вокруг выбранного. Плита и её свет
-         получают один сдвиг; верхняя площадка несёт всю проекцию. */
       function setLayerState(layer) {
-        var i = +layer.dataset.i;
-        layer.classList.toggle('is-on', i === index);
-        layer.classList.toggle('is-above', i < index);
-        layer.classList.toggle('is-below', i > index);
+        layer.classList.toggle('is-on', +layer.dataset.i === index);
       }
+      layers.forEach(setLayerState);
       plates.forEach(setLayerState);
       glows.forEach(setLayerState);
       holograms.forEach(function (h) { h.classList.toggle('is-on', +h.dataset.i === index); });
