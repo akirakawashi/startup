@@ -1485,44 +1485,75 @@
       </div>
 
       <div class="strata-copy reveal">
-        <ul class="strata-legend" role="tablist" aria-orientation="horizontal" aria-label="Что мы делаем">
-          <li><button class="strata-tab" type="button" role="tab" id="svc-tab-0"
-                      aria-controls="svc-panel-0" aria-selected="false" data-i="0">Сайты и витрины</button></li>
-          <li><button class="strata-tab" type="button" role="tab" id="svc-tab-1"
-                      aria-controls="svc-panel-1" aria-selected="false" data-i="1">Боты и уведомления</button></li>
-          <li><button class="strata-tab" type="button" role="tab" id="svc-tab-2"
-                      aria-controls="svc-panel-2" aria-selected="true" data-i="2">Веб-приложения</button></li>
-          <li><button class="strata-tab" type="button" role="tab" id="svc-tab-3"
-                      aria-controls="svc-panel-3" aria-selected="false" data-i="3">AI-помощники</button></li>
-          <li><button class="strata-tab" type="button" role="tab" id="svc-tab-4"
-                      aria-controls="svc-panel-4" aria-selected="false" data-i="4">Интеграции</button></li>
-          <li><button class="strata-tab" type="button" role="tab" id="svc-tab-5"
-                      aria-controls="svc-panel-5" aria-selected="false" data-i="5">Компьютерное зрение</button></li>
-          <li><button class="strata-tab" type="button" role="tab" id="svc-tab-6"
-                      aria-controls="svc-panel-6" aria-selected="false" data-i="6">Инфраструктура</button></li>
-        </ul>
+        <div class="strata-selector">
+          <ul class="strata-legend" role="tablist" aria-orientation="horizontal" aria-label="Что мы делаем">
+            <li role="presentation"><button class="strata-tab" type="button" role="tab" id="svc-tab-0"
+                        aria-controls="svc-panel-0" aria-selected="false" aria-label="Сайты и витрины" data-i="0">
+              <svg class="strata-tab-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <rect x="3" y="4" width="18" height="16" rx="3"/><path d="M3 9h18M7 6.5h.01M10 6.5h.01M7 13h6M7 16h10"/>
+              </svg><span>Сайты</span>
+            </button></li>
+            <li role="presentation"><button class="strata-tab" type="button" role="tab" id="svc-tab-1"
+                        aria-controls="svc-panel-1" aria-selected="false" aria-label="Боты и уведомления" data-i="1">
+              <svg class="strata-tab-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M8 19l-4 3V7a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3v9a3 3 0 0 1-3 3Z"/><path d="M8 10h8M8 14h5"/>
+              </svg><span>Боты</span>
+            </button></li>
+            <li role="presentation"><button class="strata-tab" type="button" role="tab" id="svc-tab-2"
+                        aria-controls="svc-panel-2" aria-selected="true" aria-label="Веб-приложения" data-i="2">
+              <svg class="strata-tab-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 9h18M9 9v12M13 17l2-3 2 1 2-3"/>
+              </svg><span>Приложения</span>
+            </button></li>
+            <li role="presentation"><button class="strata-tab" type="button" role="tab" id="svc-tab-3"
+                        aria-controls="svc-panel-3" aria-selected="false" aria-label="AI-помощники" data-i="3">
+              <svg class="strata-tab-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="m12 3 2.4 6.6L21 12l-6.6 2.4L12 21l-2.4-6.6L3 12l6.6-2.4ZM20 2v4M18 4h4"/>
+              </svg><span>AI</span>
+            </button></li>
+            <li role="presentation"><button class="strata-tab" type="button" role="tab" id="svc-tab-4"
+                        aria-controls="svc-panel-4" aria-selected="false" data-i="4">
+              <svg class="strata-tab-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <rect x="9" y="9" width="6" height="6" rx="1.5"/><path d="M12 9V6M15 12h3M12 15v3M9 12H6"/><circle cx="12" cy="4" r="2"/><circle cx="20" cy="12" r="2"/><circle cx="12" cy="20" r="2"/><circle cx="4" cy="12" r="2"/>
+              </svg><span>Интеграции</span>
+            </button></li>
+            <li role="presentation"><button class="strata-tab" type="button" role="tab" id="svc-tab-5"
+                        aria-controls="svc-panel-5" aria-selected="false" aria-label="Компьютерное зрение" data-i="5">
+              <svg class="strata-tab-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M7 3H3v4M17 3h4v4M21 17v4h-4M7 21H3v-4M5 12s2.5-4 7-4 7 4 7 4-2.5 4-7 4-7-4-7-4Z"/><circle cx="12" cy="12" r="2"/>
+              </svg><span>Зрение</span>
+            </button></li>
+            <li role="presentation"><button class="strata-tab" type="button" role="tab" id="svc-tab-6"
+                        aria-controls="svc-panel-6" aria-selected="false" data-i="6">
+              <svg class="strata-tab-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <rect x="3" y="3" width="18" height="7" rx="2"/><rect x="3" y="14" width="18" height="7" rx="2"/><path d="M7 6.5h.01M7 17.5h.01M12 6.5h5M12 17.5h5M12 10v4"/>
+              </svg><span>Инфраструктура</span>
+            </button></li>
+          </ul>
+          <span class="strata-cursor" aria-hidden="true"></span>
+        </div>
 
         <div class="strata-panels">
           <div class="strata-panel" role="tabpanel" id="svc-panel-0" aria-labelledby="svc-tab-0">
-            <p>Сайты, витрины и лендинги с админкой и сбором заявок.</p>
+            <p class="strata-examples"><span>Лендинги</span> <span>Витрины</span> <span>Админка</span></p>
           </div>
           <div class="strata-panel" role="tabpanel" id="svc-panel-1" aria-labelledby="svc-tab-1">
-            <p>Telegram и VK: диалоги, рассылки и уведомления о событиях.</p>
+            <p class="strata-examples"><span>Telegram и VK</span> <span>Рассылки</span> <span>Уведомления</span></p>
           </div>
           <div class="strata-panel is-on" role="tabpanel" id="svc-panel-2" aria-labelledby="svc-tab-2">
-            <p>Бронирование, личные кабинеты и панели управления с вашей бизнес-логикой.</p>
+            <p class="strata-examples"><span>Кабинеты</span> <span>Бронирование</span> <span>Учёт</span></p>
           </div>
           <div class="strata-panel" role="tabpanel" id="svc-panel-3" aria-labelledby="svc-tab-3">
-            <p>AI внутри сервиса: ответы на вопросы, работа с документами и черновики.</p>
+            <p class="strata-examples"><span>Ответы на вопросы</span> <span>Документы</span> <span>Черновики</span></p>
           </div>
           <div class="strata-panel" role="tabpanel" id="svc-panel-4" aria-labelledby="svc-tab-4">
-            <p>Связываем ваши сервисы: заявки, данные и события передаются автоматически.</p>
+            <p class="strata-examples"><span>Сервисы</span> <span>Обмен данными</span> <span>Автоматизация</span></p>
           </div>
           <div class="strata-panel" role="tabpanel" id="svc-panel-5" aria-labelledby="svc-tab-5">
-            <p>Находим объекты на видео и обучаем модели под вашу задачу.</p>
+            <p class="strata-examples"><span>Поиск объектов</span> <span>Анализ видео</span> <span>Обучение моделей</span></p>
           </div>
           <div class="strata-panel" role="tabpanel" id="svc-panel-6" aria-labelledby="svc-tab-6">
-            <p>Настраиваем серверы, автоматическую выкладку, резервные копии и мониторинг.</p>
+            <p class="strata-examples"><span>Серверы</span> <span>Автоматические релизы</span> <span>Мониторинг</span></p>
           </div>
         </div>
       </div>
@@ -2769,18 +2800,22 @@
   </div>
 
   <div class="wrap crypt-copy">
+    <!-- Цвет замка снят с кадров ролика: оттенок 235–240°, гребень волны #6973ea.
+         Точки градиента чуть насыщеннее гребня: белый блик съедает цвет, и с
+         точным #6973ea корпус выходил бледно-лиловым (на снимке 35 % против 42 %
+         у поля, сейчас 39 %). Светлота точек прежняя, поэтому объём тот же. -->
     <div class="crypt-lock" aria-hidden="true">
       <span class="crypt-halo"></span>
       <svg viewBox="0 0 96 96">
         <defs>
           <linearGradient id="cryptShackleG" x1="48" y1="16" x2="48" y2="50" gradientUnits="userSpaceOnUse">
-            <stop offset="0" stop-color="#f1ecff"/>
-            <stop offset="1" stop-color="#9a7cf6"/>
+            <stop offset="0" stop-color="#e5e8ff"/>
+            <stop offset="1" stop-color="#828cf7"/>
           </linearGradient>
           <linearGradient id="cryptBodyG" x1="48" y1="46" x2="48" y2="86" gradientUnits="userSpaceOnUse">
-            <stop offset="0"   stop-color="#c9b8ff"/>
-            <stop offset=".42" stop-color="#8b5cf6"/>
-            <stop offset="1"   stop-color="#4c1d95"/>
+            <stop offset="0"   stop-color="#c0c6fc"/>
+            <stop offset=".42" stop-color="#5764f4"/>
+            <stop offset="1"   stop-color="#202588"/>
           </linearGradient>
           <radialGradient id="cryptGlossG" gradientUnits="userSpaceOnUse" cx="48" cy="50" r="30">
             <stop offset="0" stop-color="#ffffff" stop-opacity=".5"/>
@@ -2791,38 +2826,15 @@
               fill="none" stroke="url(#cryptShackleG)" stroke-width="7" stroke-linecap="round"/>
         <rect x="20" y="46" width="56" height="40" rx="12" fill="url(#cryptBodyG)"/>
         <rect x="20" y="46" width="56" height="40" rx="12" fill="url(#cryptGlossG)"/>
-        <rect x="20.5" y="46.5" width="55" height="39" rx="11.5" fill="none" stroke="rgba(238, 232, 255, .45)"/>
-        <circle cx="48" cy="62" r="5.4" fill="#2c1266"/>
-        <path d="M45.7 66h4.6l1.7 10h-8z" fill="#2c1266"/>
+        <rect x="20.5" y="46.5" width="55" height="39" rx="11.5" fill="none" stroke="rgba(229, 233, 255, .45)"/>
+        <circle cx="48" cy="62" r="5.4" fill="#141443"/>
+        <path d="M45.7 66h4.6l1.7 10h-8z" fill="#141443"/>
       </svg>
     </div>
 
     <p class="crypt-pill reveal" data-decode>ключи</p>
     <h2 class="crypt-title reveal" data-decode>Ключи от системы остаются у вас</h2>
-    <p class="crypt-lede reveal" data-decode>
-      Секреты не лежат там, где их можно прочитать: ни в репозитории, ни
-      в браузере, ни в логах. Доступ выдаётся конкретному человеку
-      и отзывается, когда перестаёт быть нужен.
-    </p>
-
-    <div class="crypt-cards">
-      <article class="crypt-card reveal">
-        <h3>Токен не живёт в браузере</h3>
-        <p>В AI Ad код входа меняется на токен на сервере, браузер получает только HttpOnly-куку, а сам токен не хранится вовсе.</p>
-      </article>
-      <article class="crypt-card reveal">
-        <h3>Код из СМС — не строка в базе</h3>
-        <p>В Ridebook код лежит HMAC-дайджестом, секрет — вне хранилища, а номер входит в подпись: код не подойдёт к чужому телефону.</p>
-      </article>
-      <article class="crypt-card reveal">
-        <h3>Сборка не слушает окружение</h3>
-        <p>Упакованные лаунчер и бутстраппер AiNoCraft игнорируют переменные окружения: подмена не уведёт игрока на чужой сервер.</p>
-      </article>
-      <article class="crypt-card reveal">
-        <h3>Домен и сервер оформлены на вас</h3>
-        <p>Регистратор, хостинг, репозиторий и почта заводятся на ваши учётные записи. Забрать проект целиком можно в любой день.</p>
-      </article>
-    </div>
+    <p class="crypt-lede reveal" data-decode>И больше нигде: ни в коде, ни в браузере, ни в логах.</p>
   </div>
 </section>
 

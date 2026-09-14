@@ -329,8 +329,12 @@ button, input, select, textarea { font: inherit; color: inherit; }
 /* Рамка на видео чуть насыщеннее общей; текст использует единую палитру. */
 .hero {
   --line-strong: rgba(var(--accent-rgb), .34);
-  /* видимая высота стеклянной палубы: к ней привязан весь низ первого экрана */
-  --deck-h: clamp(340px, 25vw, 380px);
+  /* видимая высота стеклянной палубы: к ней привязан весь низ первого экрана.
+     Этапы прижаты к низу панели, поэтому высота задаёт их отступ от кромки:
+     при 320 px — около 82 px на любой ширине. Прежние 25vw до 380 px давали
+     144 px пустого стекла. Ниже 310 px нельзя: гашение сцены (78 % кадра,
+     302 px под кромкой) не успевает до низа секции и срезается по прямой */
+  --deck-h: 320px;
   --deck-w: min(1180px, 88vw);
   --hole-r: calc(min(1920px, 176vw) * .073);
   --glass-blur: clamp(10px, 1.6vw, 22px);
@@ -576,7 +580,13 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .hero-flow-num {
   margin-top: 9px;
   font-family: var(--ff-mono); font-size: var(--fz-min); letter-spacing: .18em;
-  color: rgba(var(--accent-rgb), .75);
+  color: rgba(var(--accent-hi-rgb), .8);
+}
+/* Этапы стоят на светлом кольце отражения: без тёмной подложки «03» в средней
+   колонке пропадало целиком. Тени не перерисовываются — бегущий свет линии
+   идёт выше их размытия */
+.hero-flow-num, .hero-flow b, .hero-flow-note {
+  text-shadow: 0 0 10px rgba(var(--bg-rgb), .85), 0 0 3px rgba(var(--bg-rgb), .5);
 }
 .hero-flow b {
   font-weight: 600; font-size: max(15px, .95rem); line-height: 1.2;
@@ -904,34 +914,79 @@ button, input, select, textarea { font: inherit; color: inherit; }
   58%, 100%   { transform: translateX(600.866042px); opacity: 0; }
 }
 
-.strata-legend {
+.strata-selector {
   --strata-columns: 7;
+  --strata-tab-height: 88px;
+  --strata-row-gap: 14px;
+  --strata-column: 2;
+  --strata-row: 0;
+  position: relative; isolation: isolate;
+  overflow: clip; overflow-clip-margin: 12px;
+}
+.strata-legend {
   display: grid; grid-template-columns: repeat(var(--strata-columns), minmax(0, 1fr));
-  gap: 6px; padding: 6px;
-  border: 1px solid rgba(var(--accent-rgb), .12); border-radius: 16px;
-  background: rgba(var(--accent-rgb), .025);
+  grid-auto-rows: var(--strata-tab-height); gap: var(--strata-row-gap) 0;
 }
 .strata-tab {
-  position: relative; display: flex; align-items: center; justify-content: center;
-  width: 100%; height: 100%; min-height: 54px;
-  padding: 10px 8px; border: 1px solid transparent; border-radius: 10px;
+  position: relative; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 10px;
+  width: 100%; height: 100%; padding: 6px 6px 18px; border: 0; border-radius: 5px;
   background: transparent; color: var(--muted); text-align: center;
   font-family: var(--ff-display); font-weight: 500; font-size: 14px; line-height: 1.4;
   letter-spacing: -.012em; cursor: pointer;
-  transition: color .25s var(--ease), background-color .25s var(--ease), border-color .25s var(--ease);
+  transition: color .25s var(--ease);
+}
+.strata-tab::before {
+  content: ""; position: absolute; inset: auto 0 0; height: 1px;
+  background: rgba(var(--accent-rgb), .16); pointer-events: none;
 }
 .strata-tab::after {
-  content: ""; position: absolute; left: 18%; right: 18%; bottom: -1px;
-  height: 1px; opacity: 0; pointer-events: none;
-  background: linear-gradient(90deg, transparent, var(--accent-hi), transparent);
-  transition: opacity .25s var(--ease);
+  content: ""; position: absolute; inset: 0 4% 1px; z-index: -1;
+  opacity: 0; pointer-events: none;
+  background: radial-gradient(ellipse at 50% 100%, rgba(var(--accent-rgb), .13), transparent 72%);
+  transition: opacity .35s var(--ease);
 }
-.strata-tab:hover { color: var(--text); background: rgba(var(--accent-rgb), .06); }
-.strata-tab[aria-selected="true"] {
-  color: var(--text); background: rgba(var(--accent-rgb), .1);
-  border-color: rgba(var(--accent-rgb), .18);
-}
+.strata-tab:hover, .strata-tab[aria-selected="true"] { color: var(--text); }
+.strata-tab:hover::after { opacity: .55; }
 .strata-tab[aria-selected="true"]::after { opacity: 1; }
+.strata-tab-icon {
+  flex: none; width: 24px; height: 24px;
+  fill: none; stroke: currentColor; stroke-width: 1.5;
+  stroke-linecap: round; stroke-linejoin: round;
+  color: var(--accent); opacity: .62;
+  transition: color .3s var(--ease), opacity .3s var(--ease);
+}
+.strata-tab:hover .strata-tab-icon { opacity: .9; }
+.strata-tab[aria-selected="true"] .strata-tab-icon {
+  color: var(--accent-hi); opacity: 1;
+  filter: drop-shadow(0 0 7px rgba(var(--accent-rgb), .55));
+}
+/* Одна световая кромка перемещается под выбранным пунктом. Размеры берутся
+   из той же сетки; текст и иконки не двигаются при выборе и наведении. */
+.strata-cursor {
+  position: absolute; top: 0; left: 0; pointer-events: none;
+  width: calc(100% / var(--strata-columns)); height: var(--strata-tab-height);
+  transform: translate(calc(var(--strata-column) * 100%), calc(var(--strata-row) * (100% + var(--strata-row-gap))));
+}
+.strata-selector.is-ready .strata-cursor { transition: transform .55s var(--ease-out); }
+.strata-cursor::before, .strata-cursor::after {
+  content: ""; position: absolute; left: 8%; right: 8%; bottom: 0;
+}
+.strata-cursor::before {
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent) 24%, #eee2ff 50%, var(--accent) 76%, transparent);
+  box-shadow: 0 4px 15px -3px rgba(var(--accent-rgb), .8);
+}
+.strata-cursor::after {
+  bottom: -12px; height: 26px; filter: blur(7px);
+  background: radial-gradient(ellipse, rgba(var(--accent-rgb), .46), transparent 72%);
+  opacity: .75;
+}
+.strata.is-projecting .strata-cursor::after { animation: strataTabPulse 1.1s .45s ease-out both; }
+@keyframes strataTabPulse {
+  0%, 100% { opacity: .75; }
+  25% { opacity: 1; }
+}
 
 /* Панели лежат в одной ячейке сетки: высота блока берётся по самой длинной,
    и при переключении ничего не прыгает. Скрытая панель гасится visibility —
@@ -947,10 +1002,16 @@ button, input, select, textarea { font: inherit; color: inherit; }
   padding-inline: 14px;
 }
 .strata-panel.is-on { visibility: visible; opacity: 1; transform: none; }
-.strata-panel > p { color: var(--muted); font-size: .93rem; }
+.strata-panel > p { color: var(--muted); font-size: .9rem; }
+.strata-examples { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 22px; }
+.strata-examples > span { position: relative; white-space: nowrap; }
+.strata-examples > span + span::before {
+  content: ""; position: absolute; left: -12px; top: calc(50% - 1.5px);
+  width: 3px; height: 3px; border-radius: 50%; background: var(--accent); opacity: .6;
+}
 
 @media (max-width: 900px) {
-  .strata-legend { --strata-columns: 4; }
+  .strata-selector { --strata-columns: 4; }
 }
 @media (max-width: 620px) {
   /* На телефоне графика использует и боковые поля, текст сохраняет отступы. */
@@ -958,19 +1019,27 @@ button, input, select, textarea { font: inherit; color: inherit; }
   .strata-cap.is-top { left: 24px; }
   .strata-cap.is-bot { right: 24px; }
   .strata-cap { letter-spacing: .1em; }
-  .strata-legend { --strata-columns: 2; gap: 4px; padding: 4px; }
-  .strata-tab { min-height: 48px; }
+  .strata-selector { --strata-columns: 2; --strata-tab-height: 74px; --strata-row-gap: 10px; }
+  .strata-tab { gap: 7px; padding-bottom: 13px; }
+  .strata-tab-icon { width: 22px; height: 22px; }
   .strata-panels { margin-top: 17px; }
+  .strata-examples { gap: 5px 18px; }
+  .strata-examples > span + span::before { left: -10px; }
 }
 @media (prefers-reduced-motion: reduce) {
+  .strata-selector.is-ready .strata-cursor, .strata-tab, .strata-tab-icon,
+  .strata-tab::after, .strata-panel { transition: none; }
+  .strata.is-projecting .strata-cursor::after { animation: none; }
   .strata-spark, .strata-signal, .strata-emitter-flash, .holo-scan,
   .holo-build-scan, .holo-dust-cloud { display: none; }
   .strata-layer.is-on .holo-reveal-window,
+  .strata-layer.is-on .holo-dust,
   .strata-layer.is-on .holo-surface-ink,
   .strata-layer.is-on .holo-detail-ink,
   .strata.is-projecting .strata-layer.is-near .strata-bounce,
   .strata.is-projecting .strata-layer.is-near .strata-bounce-wash { animation: none; }
   .holo-parallax, .holo-parallax-near { transform: none; transition: none; }
+  .strata-reflection, .strata-layer.is-on .strata-reflection { transition: none; }
   .strata-layer-motion, .strata-projection, .strata-layer.is-on .strata-projection { transition: none; }
   .strata-hologram, .strata-hologram.is-on { transition: none; }
   .strata-hologram.is-on .strata-hologram-float,
@@ -3220,7 +3289,9 @@ button, input, select, textarea { font: inherit; color: inherit; }
   position: absolute; left: 50%; top: 50%;
   width: 300px; height: 300px;
   transform: translate(-50%, -50%);
-  background: radial-gradient(circle, rgba(var(--accent-rgb), .55), transparent 62%);
+  /* не акцент сайта, а цвет гребня волны в ролике — иначе ореол
+     фиолетовый посреди синего поля */
+  background: radial-gradient(circle, rgba(105, 115, 234, .55), transparent 62%);
   -webkit-mask-image: var(--dots); mask-image: var(--dots);
   -webkit-mask-size: var(--dots-size); mask-size: var(--dots-size);
   transition: transform .45s var(--ease), filter .45s var(--ease);
@@ -3245,10 +3316,14 @@ button, input, select, textarea { font: inherit; color: inherit; }
   margin: 20px auto 0; max-width: 20ch;
   font-size: clamp(2rem, 4.6vw, 3.3rem); line-height: 1.02; letter-spacing: -.03em;
 }
+/* одна строка; на телефоне balance делит её по запятой, а не оставляет
+   «ни» в конце строки — неразрывные пробелы не помогут, расшифровка
+   пересобирает текст с обычными */
 .crypt-lede {
   margin: 18px auto 0; max-width: 64ch;
   color: var(--muted); line-height: 1.62;
   text-shadow: 0 2px 14px var(--bg);
+  text-wrap: balance;
 }
 /* настоящий текст остаётся в разметке для чтения с экрана: перебор знаков
    идёт в соседнем слое с aria-hidden */
@@ -3258,40 +3333,8 @@ button, input, select, textarea { font: inherit; color: inherit; }
   clip-path: inset(50%); white-space: nowrap; border: 0;
 }
 
-/* четыре в ряд, а не два на два: над этим блоком точно такая же сетка
-   карточек «Одной системы», и два одинаковых квадрата подряд читались бы
-   как повтор одного блока */
-.crypt-cards {
-  position: relative;
-  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: clamp(20px, 3vw, 36px);
-  margin-top: clamp(48px, 6vw, 86px);
-  padding-top: 28px;
-  text-align: left;
-}
-.crypt-cards::before {
-  content: ""; position: absolute; left: 0; right: 0; top: 0; height: 1px;
-  background: linear-gradient(90deg,
-      transparent, rgba(var(--text-rgb), .13) 18%, rgba(var(--text-rgb), .13) 82%, transparent);
-}
-.crypt-card { position: relative; }
-.crypt-card + .crypt-card::before {
-  content: ""; position: absolute; left: calc(clamp(20px, 3vw, 36px) / -2); top: -28px;
-  width: 1px; height: 148px;
-  background: linear-gradient(to bottom, rgba(var(--text-rgb), .13), transparent);
-}
-.crypt-card h3 { margin: 0 0 10px; font-size: 1rem; line-height: 1.25; min-height: 2.5em; }
-.crypt-card p  { margin: 0; color: var(--muted); line-height: 1.6; font-size: .9rem; }
-
-@media (max-width: 1040px) {
-  .crypt-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 30px 36px; }
-  .crypt-card:nth-child(odd)::before { display: none; }
-}
 @media (max-width: 760px) {
   .crypt { --lock: 72px; }
-  .crypt-cards { grid-template-columns: 1fr; gap: 26px; }
-  .crypt-card::before { display: none; }
-  .crypt-card h3 { min-height: 0; }
 }
 
 /* ---------- Ход работы: дуга света и снимок журнала ----------
@@ -4166,6 +4209,11 @@ button, input, select, textarea { font: inherit; color: inherit; }
 }
 
 /* ---------- адаптив ---------- */
+/* подписи преимуществ переносятся на вторую строку, этапы с ними вырастают
+   на 34 px — палуба добирает их, чтобы отступ от кромки остался около 80 px */
+@media (max-width: 1150px) {
+  .hero { --deck-h: 350px; }
+}
 @media (max-width: 1040px) {
   .hero { --deck-h: 380px; }
   .hero-benefits { gap: 20px; }

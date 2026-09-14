@@ -635,7 +635,7 @@
      play-state сохраняет фазу, в том числе общую фазу луча и отметок радара.
      ============================================================ */
   (function initMotionVisibility() {
-    var scopes = $$('.hero-rim, .hero-flow, .pulse, .portfolio-card, .stack-display, .button-lit, .radar-stage, .mk-cv, .signal-stage, .work, .strata-projector');
+    var scopes = $$('.hero-rim, .hero-flow, .pulse, .portfolio-card, .stack-display, .button-lit, .radar-stage, .mk-cv, .signal-stage, .work, .strata-projector, .strata-selector');
     var visible = new Set(scopes);
     var sync = function () {
       scopes.forEach(function (el) {
@@ -748,6 +748,7 @@
     var glows = $$('.strata-glow', strata);
     var holograms = $$('.strata-hologram', strata);
     var legend = $('.strata-legend', strata);
+    var selector = $('.strata-selector', strata);
     var projector = $('.strata-projector', strata);
     var finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
     var projectionFrame = 0;
@@ -757,6 +758,21 @@
     var lookY = 0;
     var selected = +strata.dataset.active || 0;
     if (!tabs.length || !projector) return;
+
+    /* Кромка использует размеры сетки, включая её переносы. Пересчёт нужен
+       только при выборе или изменении ширины, без покадровых замеров. */
+    function syncCursor() {
+      if (!selector) return;
+      var columns = parseInt(window.getComputedStyle(legend).getPropertyValue('--strata-columns'), 10) || tabs.length;
+      selector.style.setProperty('--strata-column', selected % columns);
+      selector.style.setProperty('--strata-row', Math.floor(selected / columns));
+    }
+    if (selector && 'ResizeObserver' in window) {
+      var selectorObserver = new ResizeObserver(syncCursor);
+      selectorObserver.observe(legend);
+    } else {
+      window.addEventListener('resize', syncCursor, { passive: true });
+    }
 
     /* Параллакс затрагивает только рисунок голограммы. Луч, плита и кнопки
        сохраняют координаты; без движения указателя нет покадровой работы. */
@@ -830,6 +846,7 @@
       plates.forEach(setLayerState);
       glows.forEach(setLayerState);
       holograms.forEach(function (h) { h.classList.toggle('is-on', +h.dataset.i === index); });
+      syncCursor();
       if (changed) project();
       if (focus) tabs[index].focus({ preventScroll: true });
     }
@@ -867,6 +884,7 @@
     });
 
     select(+strata.dataset.active || 0, false);
+    window.requestAnimationFrame(function () { if (selector) selector.classList.add('is-ready'); });
   })();
 
   /* ============================================================
