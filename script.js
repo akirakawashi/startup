@@ -610,22 +610,321 @@
     checkVisibility();
   })();
 
-  /* ============================================================
-     Призма автоматизации: один масштаб для стекла, нитей и импульсов
-     ============================================================ */
-  (function initSignalSize() {
+  /* Автоматизация: свет задерживается в стекле и собирает уведомление.
+     Геометрия считается при resize; в кадре меняются только transform/opacity. */
+  (function initSignalDemo() {
     var stage = $('.signal-stage');
     var scene = $('.signal-scene');
     if (!stage || !scene) return;
-    // SVG и импульсы используют одну систему координат 1000 × 440.
-    // На телефоне немного обрезаем дальние концы нитей, сохраняя размер призмы.
-    var fit = function () {
-      scene.style.setProperty('--signal-scale', Math.max(.55, Math.min(1.12, stage.clientWidth / 1000)));
-    };
+    var section = $('#automation');
+    var routes = $('.signal-routes', stage);
+    var energy = $('.signal-energy', stage);
+    var animations = [];
+    var duration = 12000;
+    var elapsed = 0;
+    var startedAt = 0;
+    var running = false;
+    var visible = false;
+    var queued = false;
+    var previousSize = '';
+    var ns = 'http://www.w3.org/2000/svg';
+
+    function svg(parent, tag, attrs) {
+      var node = document.createElementNS(ns, tag);
+      Object.keys(attrs).forEach(function (key) { node.setAttribute(key, attrs[key]); });
+      parent.appendChild(node);
+      return node;
+    }
+    function animate(node, frames) {
+      var animation = node.animate(frames.map(function (frame) {
+        return Object.assign({ offset: frame[0] / duration }, frame[1]);
+      }), { duration: duration, iterations: Infinity, fill: 'both' });
+      animation.pause();
+      animation.currentTime = elapsed;
+      animations.push(animation);
+    }
+    function fade(node, frames) {
+      animate(node, frames.map(function (frame) { return [frame[0], { opacity: frame[1] }]; }));
+    }
+    function light(node, start, peak, end, strength) {
+      fade(node, [[0, 0], [start, 0], [peak, strength], [end, 0], [duration, 0]]);
+    }
+    function path(points) {
+      return points.map(function (p, i) { return (i ? 'L' : 'M') + p[0] + ' ' + p[1]; }).join(' ');
+    }
+    function flare(parent, point, start, peak, end, radius) {
+      var fixed = svg(parent, 'g', { transform: 'translate(' + point.join(' ') + ')' });
+      var glow = svg(fixed, 'g', { 'class': 'signal-flare' });
+      svg(glow, 'circle', { r: radius, fill: 'url(#signalPulseFill)' });
+      svg(glow, 'use', { href: '#signalGlint', fill: 'url(#signalGlintFill)' });
+      light(glow, start, peak, end, .95);
+      animate(glow, [[0, { transform: 'scale(.55)' }], [start, { transform: 'scale(.55)' }],
+        [peak, { transform: 'scale(1)' }], [end, { transform: 'scale(1.6)' }], [duration, { transform: 'scale(1.6)' }]]);
+    }
+    function travel(parent, points, start, end, strength, size) {
+      var traveler = svg(parent, 'g', { 'class': 'signal-traveler' });
+      svg(traveler, 'ellipse', { cx: -size * .3, rx: size * .8, ry: 7, fill: 'url(#signalPulseFill)' });
+      svg(traveler, 'path', { d: 'M-' + size + ' 0H0', stroke: 'url(#signalPulseTrail)', 'stroke-width': 1.8, 'stroke-linecap': 'round' });
+      svg(traveler, 'circle', { r: 2.1, fill: '#fff3ff' });
+      var frames = points.map(function (p, i) {
+        var next = points[Math.min(i + 1, points.length - 1)];
+        var prev = points[Math.max(0, i - 1)];
+        var angle = Math.atan2(next[1] - prev[1], next[0] - prev[0]) * 180 / Math.PI;
+        return [start + (end - start) * i / (points.length - 1), {
+          transform: 'translate(' + p[0] + 'px,' + p[1] + 'px) rotate(' + angle + 'deg)'
+        }];
+      });
+      animate(traveler, [[0, frames[0][1]]].concat(frames, [[duration, frames[frames.length - 1][1]]]));
+      fade(traveler, [[0, 0], [start, 0], [start + 90, strength], [end - 60, strength], [end + 60, 0], [duration, 0]]);
+    }
+    function line(parent, points, start, end, strength, width, tail) {
+      var ray = svg(parent, 'path', { d: path(points), fill: 'none', stroke: '#d1b6ff', 'stroke-width': width, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' });
+      light(ray, start, end, end + (tail == null ? 1100 : tail), strength);
+    }
+    function curve(a, b, mobile) {
+      var points = [];
+      for (var i = 0; i <= 14; i++) {
+        var t = i / 14, u = 1 - t;
+        var c1 = mobile ? [a[0], a[1] + (b[1] - a[1]) * .6] : [a[0] + (b[0] - a[0]) * .6, a[1]];
+        var c2 = mobile ? [b[0], a[1] + (b[1] - a[1]) * .7] : [a[0] + (b[0] - a[0]) * .7, b[1]];
+        points.push([u*u*u*a[0] + 3*u*u*t*c1[0] + 3*u*t*t*c2[0] + t*t*t*b[0], u*u*u*a[1] + 3*u*u*t*c1[1] + 3*u*t*t*c2[1] + t*t*t*b[1]]);
+      }
+      return points;
+    }
+    function pause() {
+      if (!running) return;
+      elapsed = (elapsed + performance.now() - startedAt) % duration;
+      running = false;
+      animations.forEach(function (animation) { animation.pause(); animation.currentTime = elapsed; });
+    }
+    function sync() {
+      var active = visible && !document.hidden && !motionQuery.matches;
+      stage.classList.toggle('motion-paused', !active);
+      if (!active) pause();
+      if (motionQuery.matches) {
+        elapsed = 9600;
+        animations.forEach(function (animation) { animation.currentTime = elapsed; });
+      } else if (active && !running && animations.length) {
+        startedAt = performance.now();
+        running = true;
+        var origin = document.timeline.currentTime - elapsed;
+        animations.forEach(function (animation) { animation.play(); animation.startTime = origin; });
+      }
+    }
+    function checkVisibility() {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(function () {
+        queued = false;
+        var rect = stage.getBoundingClientRect();
+        visible = rect.bottom > 0 && rect.top < innerHeight;
+        sync();
+      });
+    }
+    function fit() {
+      var width = stage.clientWidth;
+      var mobile = innerWidth <= 700;
+      var size = width + ':' + mobile;
+      if (size === previousSize) return;
+      previousSize = size;
+      pause();
+      animations.forEach(function (animation) { animation.cancel(); });
+      animations = [];
+      routes.replaceChildren(); energy.replaceChildren();
+      var scale = mobile ? Math.max(.68, Math.min(.82, width / 550)) : Math.min(1.12, width / 1000);
+      scene.style.setProperty('--signal-scale', scale);
+      if (!stage.animate) return;
+      var bounds = scene.getBoundingClientRect();
+      function port(selector) {
+        var r = $(selector, stage).getBoundingClientRect();
+        return [(r.left - bounds.left) / scale, (r.top - bounds.top) / scale];
+      }
+      var source = port('.signal-source-port');
+      var result = port('.signal-result-port');
+      var entry = mobile ? [523.26, 57] : [425, 220];
+      var merge = mobile ? [entry[0], entry[1] - 28] : [entry[0] - 40, entry[1]];
+      var exit = mobile ? [476.74, 382] : [576, 220];
+      [-1, 0, 1].forEach(function (lane, i) {
+        var from = mobile ? [source[0] + lane * 38, source[1]] : [source[0], source[1] + lane * 33];
+        var points = curve(from, merge, mobile);
+        svg(routes, 'path', { d: path(points), stroke: '#af92e4', 'stroke-width': .6, opacity: .16 });
+        travel(routes, points, 1250 + i * 300, 2500 + i * 160, .65, 18);
+      });
+      flare(routes, merge, 2250, 2820, 3450, 22);
+      line(routes, [merge, entry], 2800, 3290, .6, 1.2);
+      travel(routes, [merge, entry], 2920, 3500, 1, 32);
+
+      // Внутри — серия быстрых отражений; сборка в центре и выход
+      // возвращаются к спокойному темпу, сохраняя общий 12-секундный цикл.
+      var bounces = [entry,
+        [580, 182], [419, 258], [563, 302], [450.23, 133.78],
+        [560, 327], [439, 118], [575, 211], [425, 309],
+        [574, 132], [430, 202], [551, 333], [523.69, 151.26], [508, 220]];
+      var times = [3500, 3880, 4200, 4480, 4740, 4980, 5200, 5420, 5640, 5860, 6080, 6320, 6700, 7250];
+      for (var i = 0; i < bounces.length - 1; i++) {
+        var segment = [bounces[i], bounces[i + 1]];
+        line(energy, segment, times[i], times[i + 1], .48, 1, 380);
+        travel(energy, segment, times[i], times[i + 1], 1, 26);
+        flare(energy, bounces[i + 1], times[i + 1] - 70, times[i + 1] + 35, times[i + 1] + 320, 20);
+      }
+      var edges = [
+        [[523.26,54.52],[586.23,146.61],[560.69,328.35]],
+        [[439.31,111.65],[413.77,293.39],[476.74,385.48]],
+        [[476.74,385.48],[560.69,328.35],[498.15,333]],
+        [[523.26,54.52],[523.69,151.26],[498.15,333]]
+      ];
+      edges.forEach(function (points, i) {
+        var hit = times[2 + i * 3];
+        line(energy, points, hit - 120, hit + 100, .8, 2.3, 650);
+      });
+      flare(energy, [508, 220], 6900, 7400, 8250, 50);
+      line(energy, [[508,220],exit], 7310, 7700, .85, 1.5);
+      travel(energy, [[508,220],exit], 7340, 7770, 1, 34);
+      var outgoing = curve(exit, result, mobile);
+      svg(routes, 'path', { d: path(outgoing), stroke: '#ae9bd4', 'stroke-width': .7, opacity: .1 });
+      line(routes, outgoing, 7640, 8190, .75, 1.4);
+      travel(routes, outgoing, 7720, 8400, 1, 42);
+      flare(routes, result, 8170, 8500, 9090, 26);
+
+      fade($('.signal-aura', stage), [[0,.075],[2800,.075],[4200,.16],[6800,.2],[7450,.34],[8500,.13],[11000,.075],[duration,.075]]);
+      fade($('.signal-emission', stage), [[0,.065],[3300,.065],[4900,.22],[6800,.25],[7480,.44],[8500,.1],[11000,.065],[duration,.065]]);
+      fade($('.signal-floor', stage), [[0,.1],[3000,.1],[7000,.4],[8100,.3],[10000,.1],[duration,.1]]);
+      fade($('.signal-refraction', stage), [[0,.015],[3500,.015],[7000,.07],[7480,.17],[8400,.025],[duration,.015]]);
+      fade($('.signal-bloom', stage), [[0,.015],[6900,.015],[7460,.55],[8300,.06],[10000,.015],[duration,.015]]);
+      fade($('.signal-source', stage), [[0,0],[120,0],[700,1],[10900,1],[11600,0],[duration,0]]);
+      fade($('.signal-person-first', stage), [[0,.25],[600,.9],[10400,.9],[11600,.25],[duration,.25]]);
+      fade($('.signal-person-second', stage), [[0,.12],[450,.12],[1200,.95],[10400,.95],[11600,.12],[duration,.12]]);
+      animate($('.signal-person-second', stage), [[0,{transform:'translateX(-8px)'}],[450,{transform:'translateX(-8px)'}],[1200,{transform:'translateX(0)'}],[10400,{transform:'translateX(0)'}],[11600,{transform:'translateX(-8px)'}],[duration,{transform:'translateX(-8px)'}]]);
+      fade($('.signal-detection', stage), [[0,.1],[800,.1],[1550,.85],[3400,.85],[4400,.3],[10500,.3],[11600,.1],[duration,.1]]);
+      var scan = $('.signal-camera-scan', stage);
+      var cameraWidth = $('.signal-camera', stage).clientWidth + 30;
+      light(scan, 500, 1100, 1750, 1);
+      animate(scan, [[0,{transform:'translateX(0)'}],[500,{transform:'translateX(0)'}],[1750,{transform:'translateX('+cameraWidth+'px)'}],[duration,{transform:'translateX('+cameraWidth+'px)'}]]);
+      fade($('.signal-source-rule', stage), [[0,.45],[1100,.45],[1750,1],[3300,1],[4500,.6],[11000,.6],[duration,.45]]);
+
+      var messageWidth = $('.signal-message', stage).clientWidth + 30;
+      var messageScan = $('.signal-message-scan', stage);
+      fade($('.signal-message', stage), [[0,.18],[8170,.18],[8600,1],[10900,1],[11600,.18],[duration,.18]]);
+      light(messageScan, 8280, 8570, 9010, .9);
+      animate(messageScan, [[0,{transform:'translateX(0)'}],[8280,{transform:'translateX(0)'}],[9010,{transform:'translateX('+messageWidth+'px)'}],[duration,{transform:'translateX('+messageWidth+'px)'}]]);
+      fade($('.signal-message-border', stage), [[0,.06],[8230,.06],[8620,.85],[10600,.6],[11500,.06],[duration,.06]]);
+      fade($('.signal-message-glow', stage), [[0,0],[8170,0],[8520,.65],[9250,.16],[10800,.16],[11500,0],[duration,0]]);
+      fade($('.signal-message-header', stage), [[0,0],[8470,0],[8880,1],[10900,1],[11600,0],[duration,0]]);
+      fade($('.signal-message-text', stage), [[0,0],[8590,0],[9130,1],[10900,1],[11600,0],[duration,0]]);
+      fade($('.signal-result .signal-node-label', stage), [[0,.55],[8280,.55],[9030,1],[10800,1],[11600,.55],[duration,.55]]);
+      $$('.signal-steps li', section).forEach(function (step, i) {
+        var on = [500,3500,8250][i], off = [3350,7850,10900][i];
+        fade(step, [[0,.4],[on,.4],[on+450,1],[off,1],[off+700,.4],[duration,.4]]);
+      });
+      stage.classList.add('is-ready');
+      sync(); checkVisibility();
+    }
     if ('ResizeObserver' in window) new ResizeObserver(fit).observe(stage);
-    else window.addEventListener('resize', fit, { passive: true });
-    fit();
-    stage.classList.add('is-ready');
+    window.addEventListener('resize', function () { fit(); checkVisibility(); }, { passive: true });
+    window.addEventListener('scroll', checkVisibility, { passive: true });
+    document.addEventListener('visibilitychange', function () { sync(); checkVisibility(); });
+    motionQuery.addEventListener('change', function () { sync(); checkVisibility(); });
+    if ('IntersectionObserver' in window) new IntersectionObserver(checkVisibility).observe(stage);
+    fit(); checkVisibility();
+  })();
+
+
+  /* Релизы: спокойный цикл с паузой на готовом результате.
+     Один таймер сохраняет фазу и остаток задержки вне экрана. */
+  (function initReleaseDemo() {
+    var demo = $('.release-demo');
+    if (!demo) return;
+    var steps = $$('.release-step', demo);
+    var notes = $$('.release-step-note', demo);
+    var status = $('.release-status', demo);
+    var phase = 'ready';
+    var started = false;
+    var visible = false;
+    var queued = false;
+    var timer = 0;
+    var remaining = 0;
+    var armedAt = 0;
+    var phases = {
+      ready:    [['pending', 'pending', 'idle'], ['Ожидание', 'Ожидание', 'Текущая версия'], 'Проверки → запуск → рабочая версия'],
+      checks:   [['active', 'pending', 'idle'], ['Проверяем', 'Ожидание', 'Текущая версия'], 'Проверяем новую версию'],
+      transfer: [['done', 'pending', 'idle'], ['Пройдено', 'Доставка', 'Текущая версия'], 'Доставляем на сервер'],
+      launch:   [['done', 'active', 'idle'], ['Пройдено', 'Запускаем', 'Текущая версия'], 'Запускаем новую версию'],
+      deliver:  [['done', 'done', 'active'], ['Пройдено', 'Запущено', 'Новая версия'], 'Новая версия отвечает'],
+      live:     [['done', 'done', 'done'], ['Пройдено', 'Запущено', 'Новая версия'], 'Новая версия в работе']
+    };
+    var sequence = ['ready', 'checks', 'transfer', 'launch', 'deliver', 'live'];
+    var timing = { ready: 1000, checks: 2600, transfer: 1500, launch: 2300, deliver: 1600, live: 1000 };
+    function show(next) {
+      phase = next;
+      demo.dataset.phase = next;
+      var view = phases[next];
+      steps.forEach(function (step, i) {
+        step.dataset.state = view[0][i];
+        if (view[0][i] === 'active') step.setAttribute('aria-current', 'step');
+        else step.removeAttribute('aria-current');
+        notes[i].textContent = view[1][i];
+      });
+      status.textContent = view[2];
+    }
+    function pause() {
+      if (!timer) return;
+      window.clearTimeout(timer);
+      timer = 0;
+      remaining = Math.max(0, remaining - (performance.now() - armedAt));
+    }
+    function arm() {
+      if (timer || !started || !visible || document.hidden || motionQuery.matches) return;
+      armedAt = performance.now();
+      timer = window.setTimeout(function () {
+        timer = 0;
+        advance();
+      }, remaining);
+    }
+    function advance() {
+      if (phase === 'live') {
+        /* Выпущенная версия становится текущей для следующего круга.
+           Она остаётся видимой; следующая рисуется поверх неё. */
+        var previous = $('.release-version-old', demo);
+        var next = $('.release-version-new', demo);
+        next.classList.replace('release-version-new', 'release-version-old');
+        previous.classList.replace('release-version-old', 'release-version-new');
+        next.parentNode.insertBefore(next, previous);
+      }
+      show(sequence[(sequence.indexOf(phase) + 1) % sequence.length]);
+      remaining = timing[phase];
+      arm();
+    }
+    function syncMotion() {
+      var active = visible && !document.hidden;
+      demo.classList.toggle('motion-paused', !active || motionQuery.matches);
+      if (motionQuery.matches) {
+        pause();
+        if (phase !== 'live') show('live');
+        remaining = timing.live;
+        return;
+      }
+      if (active) arm();
+      else pause();
+    }
+    function checkVisibility() {
+      if (queued) return;
+      queued = true;
+      window.requestAnimationFrame(function () {
+        queued = false;
+        var rect = demo.getBoundingClientRect();
+        visible = rect.bottom > 0 && rect.top < window.innerHeight;
+        if (!started && !document.hidden && visible && rect.top < window.innerHeight - Math.min(160, rect.height * .3)) started = true;
+        syncMotion();
+      });
+    }
+    show(motionQuery.matches ? 'live' : 'ready');
+    remaining = timing[phase];
+    if ('IntersectionObserver' in window) new IntersectionObserver(checkVisibility, { threshold: [0, .25, .5] }).observe(demo);
+    window.addEventListener('scroll', checkVisibility, { passive: true });
+    window.addEventListener('resize', checkVisibility, { passive: true });
+    document.addEventListener('visibilitychange', function () { syncMotion(); checkVisibility(); });
+    motionQuery.addEventListener('change', function () { syncMotion(); checkVisibility(); });
+    checkVisibility();
   })();
 
   /* ============================================================
@@ -635,7 +934,7 @@
      play-state сохраняет фазу, в том числе общую фазу луча и отметок радара.
      ============================================================ */
   (function initMotionVisibility() {
-    var scopes = $$('.hero-rim, .hero-flow, .pulse, .portfolio-card, .stack-display, .button-lit, .radar-stage, .mk-cv, .signal-stage, .work, .strata-projector, .strata-selector');
+    var scopes = $$('.hero-rim, .hero-flow, .pulse, .portfolio-card, .stack-display, .button-lit, .radar-stage, .mk-cv, .work, .strata-projector, .strata-selector');
     var visible = new Set(scopes);
     var sync = function () {
       scopes.forEach(function (el) {

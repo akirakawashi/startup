@@ -1737,7 +1737,7 @@
      ведущей линией, а отметки вспыхивают ровно в тот момент, когда луч до них
      доходит — задержка у каждой посчитана из её угла. Свет сектора и ореол
      ядра разбиты общей точечной сеткой, как всё свечение на сайте. -->
-<section class="radar" id="release">
+<section class="radar" id="release" aria-labelledby="release-title">
 
   <div class="radar-stage" aria-hidden="true">
     <svg class="radar-net" viewBox="0 0 900 900" aria-hidden="true">
@@ -1863,45 +1863,77 @@
 
   <div class="wrap radar-copy">
     <p class="radar-pill reveal">релизы</p>
-    <h2 class="radar-title reveal">Каждая правка проходит один и тот же круг</h2>
-    <p class="radar-lede reveal">
-      Ничего не выкладывается вручную по FTP «пока никто не видит». Правка идёт
-      через линтер, типы и тесты, собирается в образ, применяет миграции и только
-      потом заменяет работающий контейнер — так выкатывается Ridebook.
-    </p>
-
-    <div class="radar-cards">
-      <article class="radar-card reveal">
-        <span class="radar-ico" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
-               stroke-linecap="round" stroke-linejoin="round">
-            <path d="M9 3h6"/><path d="M10 3v6.2L5.2 18a2 2 0 0 0 1.7 3h10.2a2 2 0 0 0 1.7-3L14 9.2V3"/>
-            <path d="M7.4 14h9.2"/>
-          </svg>
-        </span>
-        <h3>Тесты гоняет CI, а не человек перед сдачей</h3>
-        <p>
-          Каждый пуш проходит ruff, pyrefly и тесты на настоящих PostgreSQL и MinIO
-          в контейнерах. Красный тест останавливает выкатку — сломанное просто
-          не доезжает до продакшена.
-        </p>
-      </article>
-
-      <article class="radar-card reveal">
-        <span class="radar-ico" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
-               stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 16V4"/><path d="M8.5 7.5 12 4l3.5 3.5"/>
-            <path d="M4 14v4.5A1.5 1.5 0 0 0 5.5 20h13a1.5 1.5 0 0 0 1.5-1.5V14"/>
-          </svg>
-        </span>
-        <h3>Выкатка сама, откат — тоже</h3>
-        <p>
-          Образ уходит в реестр, на сервере сначала применяются миграции, потом
-          стартует новый контейнер. Не ответил за минуту — на место возвращается
-          предыдущий образ, а не восстановление из копии по ночам.
-        </p>
-      </article>
+    <h2 class="radar-title reveal" id="release-title">Релиз под контролем</h2>
+    <div class="release-demo reveal" data-phase="live" role="group" aria-label="Демонстрация выпуска новой версии">
+      <ol class="release-flow" aria-label="Этапы релиза">
+        <li class="release-step" data-step="checks" data-state="done">
+          <h3><span>01</span> Проверки</h3>
+          <div class="release-art" aria-hidden="true">
+            <span class="release-aura"></span>
+            <svg viewBox="0 0 220 164" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <defs><linearGradient id="releaseGlass" x1="35" y1="20" x2="175" y2="150" gradientUnits="userSpaceOnUse"><stop stop-color="#b398ed" stop-opacity=".17"/><stop offset="1" stop-color="#8564ce" stop-opacity=".025"/></linearGradient></defs>
+              <rect class="release-glass" x="36" y="24" width="148" height="116" rx="12"/>
+              <path class="release-line-dim" d="M36 47h148M49 35h3m6 0h3m6 0h3"/>
+              <g class="release-check" style="--check-delay: 0s">
+                <circle class="release-check-ring" cx="58" cy="66" r="8"/><path class="release-check-tick" d="m54 66 3 3 5-6"/>
+                <path class="release-line" d="M80 66h60"/><path class="release-line-dim" d="M151 66h10"/>
+              </g>
+              <g class="release-check" style="--check-delay: .8s">
+                <circle class="release-check-ring" cx="58" cy="94" r="8"/><path class="release-check-tick" d="m54 94 3 3 5-6"/>
+                <path class="release-line" d="M80 94h45"/><path class="release-line-dim" d="M140 94h21"/>
+              </g>
+              <g class="release-check" style="--check-delay: 1.6s">
+                <circle class="release-check-ring" cx="58" cy="122" r="8"/><path class="release-check-tick" d="m54 122 3 3 5-6"/>
+                <path class="release-line" d="M80 122h54"/><path class="release-line-dim" d="M149 122h12"/>
+              </g>
+            </svg>
+          </div>
+          <p class="release-step-note">Пройдено</p>
+          <span class="release-bridge" aria-hidden="true"><i></i></span>
+        </li>
+        <li class="release-step" data-step="launch" data-state="done">
+          <h3><span>02</span> Запуск</h3>
+          <div class="release-art" aria-hidden="true">
+            <span class="release-aura"></span>
+            <svg viewBox="0 0 220 164" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <path class="release-server-top" d="m40 62 70-23 70 23-70 23Z"/>
+              <path class="release-server-face" d="m40 62 70 23v62l-70-23Zm70 23 70-23v62l-70 23Z"/>
+              <path class="release-line-dim" d="m40 83 70 23 70-23M40 104l70 23 70-23"/>
+              <path class="release-line" d="m123 101 34-11m-34 31 34-11"/>
+              <g class="release-server-lights"><path d="m53 87 8 3m-8 17 8 3"/></g>
+              <g class="release-package">
+                <path class="release-package-top" d="m86 24 24-9 24 9-24 9Z"/>
+                <path class="release-package-face" d="m86 24 24 9v25l-24-9Zm24 9 24-9v25l-24 9Z"/>
+                <path class="release-line" d="m96 39 7 3m14 0 7-3"/>
+              </g>
+            </svg>
+          </div>
+          <p class="release-step-note">Запущено</p>
+          <span class="release-bridge" aria-hidden="true"><i></i></span>
+        </li>
+        <li class="release-step" data-step="live" data-state="done">
+          <h3><span>03</span> В работе</h3>
+          <div class="release-art" aria-hidden="true">
+            <span class="release-aura"></span>
+            <svg viewBox="0 0 220 164" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <g class="release-version release-version-old">
+                <rect class="release-window" x="38" y="29" width="144" height="108" rx="11"/>
+                <path class="release-line-dim" d="M38 52h144M50 41h3m6 0h3M89 52v85M51 66h22m-22 14h16m-16 14h20"/>
+                <rect class="release-widget" x="102" y="65" width="64" height="23" rx="4"/>
+                <path class="release-line" d="M103 101h47m-47 12h33"/>
+              </g>
+              <g class="release-version release-version-new">
+                <rect class="release-window" x="38" y="29" width="144" height="108" rx="11"/>
+                <path class="release-line-dim" d="M38 52h144M50 41h3m6 0h3M52 118h116"/>
+                <rect class="release-widget" x="52" y="65" width="33" height="25" rx="4"/><rect class="release-widget" x="94" y="65" width="33" height="25" rx="4"/><rect class="release-widget" x="136" y="65" width="32" height="25" rx="4"/>
+                <path class="release-line" d="m54 111 24-8 22 5 27-12 18 7 20-8"/>
+              </g>
+            </svg>
+          </div>
+          <p class="release-step-note">Новая версия</p>
+        </li>
+      </ol>
+      <div class="release-outcome"><span class="release-outcome-dot" aria-hidden="true"></span><p class="release-status">Новая версия в работе</p></div>
     </div>
   </div>
 </section>
@@ -2071,6 +2103,10 @@
           <div class="portfolio-name-row"><h3 id="portfolio-ridebook-title">Ridebook</h3><span class="portfolio-kind">Бронирование рейсов</span></div>
           <p>Бронирование междугородних рейсов: места по участкам маршрута, вход по коду из СМС, диспетчерская. Бэкенд, фронтенд и выкатка&nbsp;— наши.</p>
           <ul class="portfolio-tech" aria-label="Основные технологии"><li>React</li><li>FastAPI</li><li>PostgreSQL</li><li>Redis</li></ul>
+          <details class="portfolio-release-details">
+            <summary>Как устроен релиз</summary>
+            <p>CI запускает Ruff, Pyrefly и тесты с PostgreSQL, Redis и MinIO в контейнерах. Затем собирается образ, применяются миграции и проверяется запуск. При неуспешном старте возвращается предыдущий образ.</p>
+          </details>
         </div>
       </article>
 
@@ -2224,91 +2260,42 @@
   </div>
 </section>
 
-<!-- ===================== ИНТЕГРАЦИИ ===================== -->
-<!-- Образец — блок «Integrations» на reflect.app: четыре карточки вокруг
-     эмблемы в центре, по осям между ними идут волосяные линии, позади —
-     миллиметровка, гаснущая от центра к краям. У образца в плитках лежат
-     логотипы чужих продуктов; у нас свои знаки — логотипов на сайте нет
-     нигде, и вставлять их ради одного блока значило бы заводить второй
-     язык иллюстраций. В центре эмблемы наш собственный знак: к нему
-     сходятся системы заказчика. -->
-<section class="section" id="integrations">
-  <div class="wrap hub-copy">
-    <p class="hub-pill reveal">интеграции</p>
-    <h2 class="hub-title reveal">Встраиваемся в то,<br>что уже работает</h2>
-
-    <div class="hub-grid">
-      <span class="hub-paper" aria-hidden="true"></span>
-      <span class="hub-ring" aria-hidden="true"></span>
-      <span class="hub-core" aria-hidden="true">
-        <i class="hub-core-halo"></i>
-        <svg viewBox="0 0 100 100">
-          <ellipse cx="50" cy="50" rx="26" ry="26" fill="none" stroke="currentColor" stroke-width="9"/>
-          <path d="M8 50h84" stroke="currentColor" stroke-width="6" stroke-linecap="round" opacity=".75"/>
-        </svg>
-      </span>
-
-      <article class="hub-card reveal">
-        <span class="hub-icos" aria-hidden="true">
-          <span class="hub-ico ico-violet">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="6" rx="7.5" ry="3"/><path d="M4.5 6v6c0 1.7 3.4 3 7.5 3s7.5-1.3 7.5-3V6"/><path d="M4.5 12v6c0 1.7 3.4 3 7.5 3s7.5-1.3 7.5-3v-6"/></svg>
-          </span>
-        </span>
-        <h3>Tilda и Nextcloud</h3>
-        <p>Файлы из форм уезжают в Nextcloud по WebDAV. Повторный вебхук не создаёт дубль, а неготовый файл уходит в повтор.</p>
-      </article>
-
-      <article class="hub-card reveal">
-        <span class="hub-icos" aria-hidden="true">
-          <span class="hub-ico ico-teal">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3.5h12v17l-3-1.6-3 1.6-3-1.6-3 1.6z"/><path d="M9.5 8.5h5M9.5 12h5"/></svg>
-          </span>
-        </span>
-        <h3>Выгрузки из Excel</h3>
-        <p>Каталог грузится из xlsx, xls или csv, а неудачная ревизия откатывается одной кнопкой.</p>
-      </article>
-
-      <article class="hub-card reveal">
-        <span class="hub-icos" aria-hidden="true">
-          <span class="hub-ico ico-blue">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 5h17l-6.6 7.6V20l-3.8-2.1v-5.3z"/></svg>
-          </span>
-          <span class="hub-ico ico-violet">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5.6 4h3l1.6 4-2 1.4a11.5 11.5 0 0 0 6.4 6.4l1.4-2 4 1.6v3a1.5 1.5 0 0 1-1.6 1.5C10.4 19.4 4.6 13.6 4.1 5.6A1.5 1.5 0 0 1 5.6 4z"/></svg>
-          </span>
-        </span>
-        <h3>СМС и вход по телефону</h3>
-        <p>Код из СМС через шлюз и без повторной отправки: повтор — это второе списание и два разных кода.</p>
-      </article>
-
-      <article class="hub-card reveal">
-        <span class="hub-icos" aria-hidden="true">
-          <span class="hub-ico ico-blue">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5h16v11h-7l-4 3.5v-3.5H4z"/><path d="M8.5 11h.01M12 11h.01M15.5 11h.01"/></svg>
-          </span>
-          <span class="hub-ico ico-teal">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m4 7.4 7 5a2 2 0 0 0 2 0l7-5"/></svg>
-          </span>
-        </span>
-        <h3>VK и Telegram</h3>
-        <p>Бот на callback-API ВКонтакте с кнопками и рассылками, уведомления в Telegram — через очередь, не тормозя основную работу.</p>
-      </article>
-    </div>
-  </div>
-</section>
-
 <!-- ===================== АВТОМАТИЗАЦИЯ ===================== -->
 <section class="signal" id="automation" aria-labelledby="signal-title">
   <div class="wrap">
     <div class="signal-copy">
       <p class="signal-pill reveal">автоматизация</p>
       <h2 class="signal-title reveal" id="signal-title">Одно действие.<br><span>Целая цепочка.</span></h2>
-      <p class="signal-lede reveal">Кадр с камеры, вебхук формы или пост в группе запускают нужные шаги.<br>
-        Двое у кассы дольше 20 секунд — в Telegram: «Откройте вторую кассу».</p>
+      <p class="signal-lede reveal">Камера замечает очередь — сотрудник получает уведомление.</p>
     </div>
 
-    <div class="signal-stage" aria-hidden="true">
-      <div class="signal-scene">
+    <div class="signal-stage" role="img" aria-label="Пример автоматизации: два человека ждут у кассы дольше 20 секунд. Система проверяет условие и отправляет в Telegram сообщение «Откройте вторую кассу».">
+      <div class="signal-source" aria-hidden="true">
+        <p class="signal-node-label">Очередь у кассы</p>
+        <div class="signal-camera">
+          <svg viewBox="0 0 232 118" fill="none">
+            <path d="M12 30V13h18M202 13h18v17M220 88v17h-18M30 105H12V88" stroke="currentColor" opacity=".35"/>
+            <path d="M36 91h158M163 75V43h26v32M158 75h36v16" stroke="currentColor" opacity=".3"/>
+            <path d="M173 38v-8h22v16h-6" stroke="currentColor" opacity=".55"/>
+            <g class="signal-person signal-person-first" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+              <circle cx="117" cy="43" r="8"/>
+              <path d="M105 75V65a12 12 0 0 1 24 0v10M111 87V72m12 15V72"/>
+            </g>
+            <g class="signal-person signal-person-second" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+              <circle cx="68" cy="43" r="8"/>
+              <path d="M56 75V65a12 12 0 0 1 24 0v10M62 87V72m12 15V72"/>
+            </g>
+            <g class="signal-detection" stroke="#bba0ff" stroke-width="1" opacity=".7">
+              <path d="M96 44V27h12m18 0h12v17m0 32v17h-12m-18 0H96V76"/>
+              <path d="M47 44V27h12m18 0h12v17m0 32v17H77m-18 0H47V76"/>
+            </g>
+          </svg>
+          <i class="signal-camera-scan"></i>
+        </div>
+        <p class="signal-source-rule"><i></i>2 человека · 20+ секунд</p>
+        <span class="signal-source-port"></span>
+      </div>
+      <div class="signal-scene" aria-hidden="true">
         <div class="signal-aura"></div>
         <div class="signal-floor"></div>
         <svg class="signal-emission" viewBox="0 0 1000 440" fill="none">
@@ -2363,16 +2350,6 @@
             <path d="M0 339 C215 339 345 220 488 220"/>
             <path d="M512 220 C653 220 765 339 1000 339"/>
           </g>
-          <g stroke="url(#signalFiber)" stroke-width="1">
-            <path d="M32 119.5 C242 119.5 345 220 484 220"/>
-            <path d="M516 220 C655 220 703 119.5 968 119.5"/>
-            <path d="M32 186.5 C242 186.5 345 220 484 220"/>
-            <path d="M516 220 C655 220 703 186.5 968 186.5"/>
-            <path d="M32 253.5 C242 253.5 345 220 484 220"/>
-            <path d="M516 220 C655 220 703 253.5 968 253.5"/>
-            <path d="M32 320.5 C242 320.5 345 220 484 220"/>
-            <path d="M516 220 C655 220 703 320.5 968 320.5"/>
-          </g>
           <g fill="#c4b5fd" opacity=".45">
             <circle cx="357" cy="96" r="1"/><circle cx="621" cy="108" r=".9"/>
             <circle cx="688" cy="299" r="1"/><circle cx="326" cy="313" r=".8"/>
@@ -2381,18 +2358,25 @@
           </g>
         </svg>
 
-        <i class="signal-packet signal-packet-in0"></i>
-        <i class="signal-packet signal-packet-out0 signal-packet-out"></i>
-        <i class="signal-packet signal-packet-in1"></i>
-        <i class="signal-packet signal-packet-out1 signal-packet-out"></i>
-        <i class="signal-packet signal-packet-in2"></i>
-        <i class="signal-packet signal-packet-out2 signal-packet-out"></i>
-        <i class="signal-packet signal-packet-in3"></i>
-        <i class="signal-packet signal-packet-out3 signal-packet-out"></i>
+        <svg class="signal-flow" viewBox="0 0 1000 440" fill="none">
+          <defs>
+            <radialGradient id="signalPulseFill">
+              <stop stop-color="#fff4ff" stop-opacity=".85"/>
+              <stop offset=".2" stop-color="#c7a0ff" stop-opacity=".5"/>
+              <stop offset="1" stop-color="#a078ff" stop-opacity="0"/>
+            </radialGradient>
+            <linearGradient id="signalPulseTrail">
+              <stop stop-color="#9e76f8" stop-opacity="0"/>
+              <stop offset="1" stop-color="#f4eaff"/>
+            </linearGradient>
+          </defs>
+          <g class="signal-routes"></g>
+        </svg>
 
         <svg class="signal-prism" viewBox="0 0 1000 440" fill="none">
           <defs>
             <path id="signalCrystalShape" d="M413.77 293.39 439.31 111.65 523.26 54.52 575.31 124.48 586.23 146.61 560.69 328.35 476.74 385.48 424.69 315.52Z"/>
+            <clipPath id="signalInteriorClip"><use href="#signalCrystalShape"/></clipPath>
             <!-- Четырёхлучевая искра: блик на углу огранки. -->
             <path id="signalGlint" d="M0-15C1-4.2 4.2-1 15 0 4.2 1 1 4.2 0 15-1 4.2-4.2 1-15 0-4.2-1-1-4.2 0-15Z"/>
             <linearGradient id="signalEmission" x1="480" y1="55" x2="520" y2="385" gradientUnits="userSpaceOnUse">
@@ -2605,6 +2589,8 @@
           <path d="M476.74 385.48 498.15 333 424.69 315.52Z" fill="url(#signalTipB)"/>
           <path d="M476.74 385.48 560.69 328.35 498.15 333Z" fill="url(#signalTipC)"/>
 
+          <g class="signal-energy" clip-path="url(#signalInteriorClip)"></g>
+
           <!-- Кромки. Дисперсия идёт отдельной нитью внутрь от силуэта. -->
           <use href="#signalCrystalShape" stroke="url(#signalEdge)" stroke-width="1.05" stroke-linejoin="round"/>
           <path d="M440.89 111.87 415.35 293.61" stroke="url(#signalFireWarm)" stroke-width=".9"/>
@@ -2637,15 +2623,28 @@
         </svg>
         <div class="signal-refraction"></div>
         <div class="signal-bloom"></div>
-        <span class="signal-caption signal-caption-in">событие</span>
-        <span class="signal-caption signal-caption-out">результат</span>
+      </div>
+      <div class="signal-result" aria-hidden="true">
+        <p class="signal-node-label">Уведомление</p>
+        <div class="signal-message">
+          <i class="signal-message-glow"></i>
+          <i class="signal-message-border"></i>
+          <i class="signal-message-scan"></i>
+          <div class="signal-message-header">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10 18-7-4 18-6-7-8-4Z"/><path d="m11 14 10-11M11 14l-1 5 4-2"/></svg>
+            <span>Telegram</span>
+            <svg class="signal-message-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3 12 4 4 9-9m-4 9 9-9"/></svg>
+          </div>
+          <p class="signal-message-text">Откройте<br>вторую кассу</p>
+        </div>
+        <span class="signal-result-port"></span>
       </div>
     </div>
 
     <ol class="signal-steps reveal" aria-label="Как работает автоматизация">
-      <li><span>01</span> Принимаем событие</li>
-      <li><span>02</span> Применяем правила</li>
-      <li><span>03</span> Запускаем действия</li>
+      <li><span>01</span> Событие</li>
+      <li><span>02</span> Обработка</li>
+      <li><span>03</span> Действие</li>
     </ol>
   </div>
 </section>
