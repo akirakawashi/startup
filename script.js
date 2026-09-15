@@ -610,7 +610,7 @@
     checkVisibility();
   })();
 
-  /* Автоматизация: свет задерживается в стекле и собирает уведомление.
+  /* Автоматизация: дорожки платы ведут сигнал к чипу и уведомлению.
      Геометрия считается при resize; в кадре меняются только transform/opacity. */
   (function initSignalDemo() {
     var stage = $('.signal-stage');
@@ -656,17 +656,17 @@
       var fixed = svg(parent, 'g', { transform: 'translate(' + point.join(' ') + ')' });
       var glow = svg(fixed, 'g', { 'class': 'signal-flare' });
       svg(glow, 'circle', { r: radius, fill: 'url(#signalPulseFill)' });
-      svg(glow, 'use', { href: '#signalGlint', fill: 'url(#signalGlintFill)' });
+      svg(glow, 'circle', { r: 2, fill: '#f2e5ff', opacity: .7 });
       light(glow, start, peak, end, .95);
       animate(glow, [[0, { transform: 'scale(.55)' }], [start, { transform: 'scale(.55)' }],
         [peak, { transform: 'scale(1)' }], [end, { transform: 'scale(1.6)' }], [duration, { transform: 'scale(1.6)' }]]);
     }
-    function travel(parent, points, start, end, strength, size) {
+    function travel(parent, points, start, end, strength, size, stops) {
       var traveler = svg(parent, 'g', { 'class': 'signal-traveler' });
       svg(traveler, 'ellipse', { cx: -size * .3, rx: size * .8, ry: 7, fill: 'url(#signalPulseFill)' });
       svg(traveler, 'path', { d: 'M-' + size + ' 0H0', stroke: 'url(#signalPulseTrail)', 'stroke-width': 1.8, 'stroke-linecap': 'round' });
       svg(traveler, 'circle', { r: 2.1, fill: '#fff3ff' });
-      var frames = points.map(function (p, i) {
+      var frames = stops ? [] : points.map(function (p, i) {
         var next = points[Math.min(i + 1, points.length - 1)];
         var prev = points[Math.max(0, i - 1)];
         var angle = Math.atan2(next[1] - prev[1], next[0] - prev[0]) * 180 / Math.PI;
@@ -674,8 +674,20 @@
           transform: 'translate(' + p[0] + 'px,' + p[1] + 'px) rotate(' + angle + 'deg)'
         }];
       });
+      if (stops) {
+        // Одна частица на всю дорожку: направление меняется на повороте,
+        // движение непрерывно, без перезапуска яркости.
+        for (var i = 0; i < points.length - 1; i++) {
+          var from = points[i], to = points[i + 1];
+          var angle = Math.atan2(to[1] - from[1], to[0] - from[0]) * 180 / Math.PI;
+          frames.push([stops[i], { transform: 'translate(' + from[0] + 'px,' + from[1] + 'px) rotate(' + angle + 'deg)' }]);
+          frames.push([stops[i + 1] - .1, { transform: 'translate(' + to[0] + 'px,' + to[1] + 'px) rotate(' + angle + 'deg)' }]);
+        }
+      }
       animate(traveler, [[0, frames[0][1]]].concat(frames, [[duration, frames[frames.length - 1][1]]]));
-      fade(traveler, [[0, 0], [start, 0], [start + 90, strength], [end - 60, strength], [end + 60, 0], [duration, 0]]);
+      var fadeIn = Math.min(90, (end - start) * .22);
+      var fadeOut = Math.min(60, (end - start) * .2);
+      fade(traveler, [[0, 0], [start, 0], [start + fadeIn, strength], [end - fadeOut, strength], [end + fadeOut, 0], [duration, 0]]);
     }
     function line(parent, points, start, end, strength, width, tail) {
       var ray = svg(parent, 'path', { d: path(points), fill: 'none', stroke: '#d1b6ff', 'stroke-width': width, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' });
@@ -731,7 +743,7 @@
       animations.forEach(function (animation) { animation.cancel(); });
       animations = [];
       routes.replaceChildren(); energy.replaceChildren();
-      var scale = mobile ? Math.max(.68, Math.min(.82, width / 550)) : Math.min(1.12, width / 1000);
+      var scale = mobile ? Math.max(.7, Math.min(.9, width / 410)) : Math.min(1.12, width / 1000);
       scene.style.setProperty('--signal-scale', scale);
       if (!stage.animate) return;
       var bounds = scene.getBoundingClientRect();
@@ -741,9 +753,24 @@
       }
       var source = port('.signal-source-port');
       var result = port('.signal-result-port');
-      var entry = mobile ? [523.26, 57] : [425, 220];
+      function route(node) {
+        return Array.from(node.points).map(function (p) { return [p.x,p.y]; });
+      }
+      function routeTimes(points, start, end) {
+        var distances = [0];
+        for (var i = 1; i < points.length; i++) {
+          distances.push(distances[i-1] + Math.hypot(points[i][0]-points[i-1][0], points[i][1]-points[i-1][1]));
+        }
+        return distances.map(function (distance) { return start + (end-start) * distance / distances[distances.length-1]; });
+      }
+      var mode = mobile ? 'mobile' : 'desktop';
+      var inputRoute = route($('.signal-chip-input[data-mode="'+mode+'"]', stage));
+      var outputRoute = route($('.signal-chip-output[data-mode="'+mode+'"]', stage));
+      var logic = route($('.signal-chip-logic', stage));
+      var core = outputRoute[0];
+      var entry = inputRoute[0];
       var merge = mobile ? [entry[0], entry[1] - 28] : [entry[0] - 40, entry[1]];
-      var exit = mobile ? [476.74, 382] : [576, 220];
+      var exit = outputRoute[outputRoute.length-1];
       [-1, 0, 1].forEach(function (lane, i) {
         var from = mobile ? [source[0] + lane * 38, source[1]] : [source[0], source[1] + lane * 33];
         var points = curve(from, merge, mobile);
@@ -754,32 +781,34 @@
       line(routes, [merge, entry], 2800, 3290, .6, 1.2);
       travel(routes, [merge, entry], 2920, 3500, 1, 32);
 
-      // Внутри — серия быстрых отражений; сборка в центре и выход
-      // возвращаются к спокойному темпу, сохраняя общий 12-секундный цикл.
-      var bounces = [entry,
-        [580, 182], [419, 258], [563, 302], [450.23, 133.78],
-        [560, 327], [439, 118], [575, 211], [425, 309],
-        [574, 132], [430, 202], [551, 333], [523.69, 151.26], [508, 220]];
-      var times = [3500, 3880, 4200, 4480, 4740, 4980, 5200, 5420, 5640, 5860, 6080, 6320, 6700, 7250];
-      for (var i = 0; i < bounces.length - 1; i++) {
-        var segment = [bounces[i], bounces[i + 1]];
-        line(energy, segment, times[i], times[i + 1], .48, 1, 380);
-        travel(energy, segment, times[i], times[i + 1], 1, 26);
-        flare(energy, bounces[i + 1], times[i + 1] - 70, times[i + 1] + 35, times[i + 1] + 320, 20);
+      // Быстрая обработка идёт по выгравированной схеме. Подводящие
+      // дорожки и вывод к уведомлению сохраняют спокойный темп.
+      line(energy, inputRoute, 3500, 4120, .65, 1.2, 350);
+      travel(energy, inputRoute, 3500, 4120, 1, 18, routeTimes(inputRoute,3500,4120));
+      var times = logic.map(function (_, i) { return i === logic.length-1 ? 7250 : 4120+i*120; });
+      travel(energy, logic, times[0], 7250, 1, 10, times);
+      for (var i = 0; i < logic.length-1; i++) {
+        line(energy, [logic[i],logic[i+1]], times[i], times[i+1], .85, 1.1, 200);
       }
-      var edges = [
-        [[523.26,54.52],[586.23,146.61],[560.69,328.35]],
-        [[439.31,111.65],[413.77,293.39],[476.74,385.48]],
-        [[476.74,385.48],[560.69,328.35],[498.15,333]],
-        [[523.26,54.52],[523.69,151.26],[498.15,333]]
-      ];
-      edges.forEach(function (points, i) {
-        var hit = times[2 + i * 3];
-        line(energy, points, hit - 120, hit + 100, .8, 2.3, 650);
+      $$('.signal-chip-bus', stage).forEach(function (node, i) {
+        var points = route(node), start = 4300+i*360;
+        line(energy, points, start, start+380, .65, 1.1, 300);
+        travel(energy, points, start, start+380, .85, 12, routeTimes(points,start,start+380));
+        var returning = points.slice().reverse(), back = 6250+i*120;
+        travel(energy, returning, back, back+380, .8, 12, routeTimes(returning,back,back+380));
       });
-      flare(energy, [508, 220], 6900, 7400, 8250, 50);
-      line(energy, [[508,220],exit], 7310, 7700, .85, 1.5);
-      travel(energy, [[508,220],exit], 7340, 7770, 1, 34);
+      $$('.signal-chip-bank', stage).forEach(function (node, i) {
+        var frames = [[0,.18]];
+        for (var turn = 0; turn < 3; turn++) {
+          var start = 4120+i*180+turn*880;
+          frames.push([start,.18],[start+100,.95],[start+330,.18]);
+        }
+        frames.push([duration,.18]); fade(node,frames);
+      });
+      fade($('.signal-chip-mark', stage), [[0,.4],[4120,.4],[7250,1],[8100,1],[9400,.4],[duration,.4]]);
+      flare(energy, core, 6900, 7400, 8250, 32);
+      line(energy, outputRoute, 7310, 7700, .85, 1.3);
+      travel(energy, outputRoute, 7340, 7770, 1, 22, routeTimes(outputRoute,7340,7770));
       var outgoing = curve(exit, result, mobile);
       svg(routes, 'path', { d: path(outgoing), stroke: '#ae9bd4', 'stroke-width': .7, opacity: .1 });
       line(routes, outgoing, 7640, 8190, .75, 1.4);
@@ -787,9 +816,9 @@
       flare(routes, result, 8170, 8500, 9090, 26);
 
       fade($('.signal-aura', stage), [[0,.075],[2800,.075],[4200,.16],[6800,.2],[7450,.34],[8500,.13],[11000,.075],[duration,.075]]);
-      fade($('.signal-emission', stage), [[0,.065],[3300,.065],[4900,.22],[6800,.25],[7480,.44],[8500,.1],[11000,.065],[duration,.065]]);
+      fade($('.signal-emission', stage), [[0,.045],[3300,.045],[4900,.1],[6800,.12],[7480,.22],[8500,.07],[11000,.045],[duration,.045]]);
       fade($('.signal-floor', stage), [[0,.1],[3000,.1],[7000,.4],[8100,.3],[10000,.1],[duration,.1]]);
-      fade($('.signal-refraction', stage), [[0,.015],[3500,.015],[7000,.07],[7480,.17],[8400,.025],[duration,.015]]);
+      fade($('.signal-chip-core', stage), [[0,.08],[3500,.08],[4900,.25],[6800,.32],[7480,.6],[8500,.16],[duration,.08]]);
       fade($('.signal-bloom', stage), [[0,.015],[6900,.015],[7460,.55],[8300,.06],[10000,.015],[duration,.015]]);
       fade($('.signal-source', stage), [[0,0],[120,0],[700,1],[10900,1],[11600,0],[duration,0]]);
       fade($('.signal-person-first', stage), [[0,.25],[600,.9],[10400,.9],[11600,.25],[duration,.25]]);
