@@ -3879,13 +3879,13 @@ button, input, select, textarea { font: inherit; color: inherit; }
   margin: 0 0 18px; color: var(--muted); text-align: left;
   font-family: var(--ff-mono); font-size: var(--fz-min); line-height: 1.5; letter-spacing: .025em;
 }
-.signal-camera {
+.signal-source-card {
   position: relative; width: 100%; overflow: hidden; border-radius: 12px;
   background: linear-gradient(140deg, rgba(26, 19, 46, .75), rgba(12, 8, 23, .5));
   border: 1px solid rgba(var(--accent-rgb), .14); color: #c8b4f4;
 }
-.signal-camera svg { display: block; width: 100%; height: auto; }
-.signal-camera-scan {
+.signal-source-card svg { display: block; width: 100%; height: auto; }
+.signal-source-scan {
   position: absolute; top: 0; bottom: 0; left: -30px; width: 30px; opacity: 0;
   background: linear-gradient(90deg, transparent, rgba(var(--accent-hi-rgb), .16), transparent);
 }

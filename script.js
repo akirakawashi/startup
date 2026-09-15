@@ -619,6 +619,7 @@
     var section = $('#automation');
     var routes = $('.signal-routes', stage);
     var energy = $('.signal-energy', stage);
+    var boardEnergy = $('.signal-board-energy', stage);
     var animations = [];
     var duration = 12000;
     var elapsed = 0;
@@ -661,11 +662,14 @@
       animate(glow, [[0, { transform: 'scale(.55)' }], [start, { transform: 'scale(.55)' }],
         [peak, { transform: 'scale(1)' }], [end, { transform: 'scale(1.6)' }], [duration, { transform: 'scale(1.6)' }]]);
     }
-    function travel(parent, points, start, end, strength, size, stops) {
+    function particle(parent, size) {
       var traveler = svg(parent, 'g', { 'class': 'signal-traveler' });
-      svg(traveler, 'ellipse', { cx: -size * .3, rx: size * .8, ry: 7, fill: 'url(#signalPulseFill)' });
+      svg(traveler, 'ellipse', { cx: -size * .3, rx: size * .8, ry: Math.min(7, size * .55), fill: 'url(#signalPulseFill)' });
       svg(traveler, 'path', { d: 'M-' + size + ' 0H0', stroke: 'url(#signalPulseTrail)', 'stroke-width': 1.8, 'stroke-linecap': 'round' });
-      svg(traveler, 'circle', { r: 2.1, fill: '#fff3ff' });
+      svg(traveler, 'circle', { r: Math.min(2.1, size * .25), fill: '#fff3ff' });
+      return traveler;
+    }
+    function movement(points, start, end, stops) {
       var frames = stops ? [] : points.map(function (p, i) {
         var next = points[Math.min(i + 1, points.length - 1)];
         var prev = points[Math.max(0, i - 1)];
@@ -684,10 +688,38 @@
           frames.push([stops[i + 1] - .1, { transform: 'translate(' + to[0] + 'px,' + to[1] + 'px) rotate(' + angle + 'deg)' }]);
         }
       }
+      return frames;
+    }
+    function routeTimes(points, start, end) {
+      var distances = [0];
+      for (var i = 1; i < points.length; i++) {
+        distances.push(distances[i-1] + Math.hypot(points[i][0]-points[i-1][0], points[i][1]-points[i-1][1]));
+      }
+      return distances.map(function (distance) { return start + (end-start) * distance / distances[distances.length-1]; });
+    }
+    function travel(parent, points, start, end, strength, size, stops) {
+      var traveler = particle(parent, size);
+      var frames = movement(points, start, end, stops);
       animate(traveler, [[0, frames[0][1]]].concat(frames, [[duration, frames[frames.length - 1][1]]]));
       var fadeIn = Math.min(90, (end - start) * .22);
       var fadeOut = Math.min(60, (end - start) * .2);
       fade(traveler, [[0, 0], [start, 0], [start + fadeIn, strength], [end - fadeOut, strength], [end + fadeOut, 0], [duration, 0]]);
+    }
+    function stream(parent, points, options) {
+      // Один SVG-элемент обслуживает весь поток на дорожке. Повторные
+      // запросы заданы ключевыми кадрами общего цикла, без таймеров и rAF.
+      var traveler = particle(parent, options.size);
+      traveler.classList.add('signal-request');
+      var frames = [], visibility = [[0, 0]], pass = 0;
+      for (var start = options.start; start + options.flight + 40 <= options.until; start += options.flight + options.gap) {
+        var end = start + options.flight;
+        var lane = options.alternate && pass % 2 ? points.slice().reverse() : points;
+        frames = frames.concat(movement(lane, start, end, routeTimes(lane, start, end)));
+        visibility.push([start, 0], [start + 30, options.strength], [end - 35, options.strength], [end + 40, 0]);
+        pass++;
+      }
+      animate(traveler, [[0, frames[0][1]]].concat(frames, [[duration, frames[frames.length - 1][1]]]));
+      fade(traveler, visibility.concat([[duration, 0]]));
     }
     function line(parent, points, start, end, strength, width, tail) {
       var ray = svg(parent, 'path', { d: path(points), fill: 'none', stroke: '#d1b6ff', 'stroke-width': width, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' });
@@ -742,7 +774,7 @@
       pause();
       animations.forEach(function (animation) { animation.cancel(); });
       animations = [];
-      routes.replaceChildren(); energy.replaceChildren();
+      routes.replaceChildren(); energy.replaceChildren(); boardEnergy.replaceChildren();
       var scale = mobile ? Math.max(.7, Math.min(.9, width / 410)) : Math.min(1.12, width / 1000);
       scene.style.setProperty('--signal-scale', scale);
       if (!stage.animate) return;
@@ -755,13 +787,6 @@
       var result = port('.signal-result-port');
       function route(node) {
         return Array.from(node.points).map(function (p) { return [p.x,p.y]; });
-      }
-      function routeTimes(points, start, end) {
-        var distances = [0];
-        for (var i = 1; i < points.length; i++) {
-          distances.push(distances[i-1] + Math.hypot(points[i][0]-points[i-1][0], points[i][1]-points[i-1][1]));
-        }
-        return distances.map(function (distance) { return start + (end-start) * distance / distances[distances.length-1]; });
       }
       var mode = mobile ? 'mobile' : 'desktop';
       var inputRoute = route($('.signal-chip-input[data-mode="'+mode+'"]', stage));
@@ -790,12 +815,19 @@
       for (var i = 0; i < logic.length-1; i++) {
         line(energy, [logic[i],logic[i+1]], times[i], times[i+1], .85, 1.1, 200);
       }
+      for (var part = 0; part < 4; part += 2) {
+        var segment = logic.slice(part*6, part === 3 ? logic.length : part*6+7);
+        stream(energy, segment, {
+          start: 4120+part*115, until: 7210, flight: 310+part*18,
+          gap: 115, strength: .8, size: 6, alternate: false
+        });
+      }
       $$('.signal-chip-bus', stage).forEach(function (node, i) {
-        var points = route(node), start = 4300+i*360;
-        line(energy, points, start, start+380, .65, 1.1, 300);
-        travel(energy, points, start, start+380, .85, 12, routeTimes(points,start,start+380));
-        var returning = points.slice().reverse(), back = 6250+i*120;
-        travel(energy, returning, back, back+380, .8, 12, routeTimes(returning,back,back+380));
+        if (i % 2) return;
+        stream(boardEnergy, route(node), {
+          start: 3790+(i*73)%480, until: 7160, flight: 280+(i%4)*35,
+          gap: 90+(i%3)*30, strength: .85, size: 8, alternate: true
+        });
       });
       $$('.signal-chip-bank', stage).forEach(function (node, i) {
         var frames = [[0,.18]];
@@ -821,14 +853,14 @@
       fade($('.signal-chip-core', stage), [[0,.08],[3500,.08],[4900,.25],[6800,.32],[7480,.6],[8500,.16],[duration,.08]]);
       fade($('.signal-bloom', stage), [[0,.015],[6900,.015],[7460,.55],[8300,.06],[10000,.015],[duration,.015]]);
       fade($('.signal-source', stage), [[0,0],[120,0],[700,1],[10900,1],[11600,0],[duration,0]]);
-      fade($('.signal-person-first', stage), [[0,.25],[600,.9],[10400,.9],[11600,.25],[duration,.25]]);
-      fade($('.signal-person-second', stage), [[0,.12],[450,.12],[1200,.95],[10400,.95],[11600,.12],[duration,.12]]);
-      animate($('.signal-person-second', stage), [[0,{transform:'translateX(-8px)'}],[450,{transform:'translateX(-8px)'}],[1200,{transform:'translateX(0)'}],[10400,{transform:'translateX(0)'}],[11600,{transform:'translateX(-8px)'}],[duration,{transform:'translateX(-8px)'}]]);
-      fade($('.signal-detection', stage), [[0,.1],[800,.1],[1550,.85],[3400,.85],[4400,.3],[10500,.3],[11600,.1],[duration,.1]]);
-      var scan = $('.signal-camera-scan', stage);
-      var cameraWidth = $('.signal-camera', stage).clientWidth + 30;
+      fade($('.signal-event-first', stage), [[0,.25],[600,.9],[10400,.9],[11600,.25],[duration,.25]]);
+      fade($('.signal-event-second', stage), [[0,.12],[450,.12],[1200,.95],[10400,.95],[11600,.12],[duration,.12]]);
+      animate($('.signal-event-second', stage), [[0,{transform:'translateX(-8px)'}],[450,{transform:'translateX(-8px)'}],[1200,{transform:'translateX(0)'}],[10400,{transform:'translateX(0)'}],[11600,{transform:'translateX(-8px)'}],[duration,{transform:'translateX(-8px)'}]]);
+      fade($('.signal-received', stage), [[0,.1],[800,.1],[1550,.85],[3400,.85],[4400,.3],[10500,.3],[11600,.1],[duration,.1]]);
+      var scan = $('.signal-source-scan', stage);
+      var sourceWidth = $('.signal-source-card', stage).clientWidth + 30;
       light(scan, 500, 1100, 1750, 1);
-      animate(scan, [[0,{transform:'translateX(0)'}],[500,{transform:'translateX(0)'}],[1750,{transform:'translateX('+cameraWidth+'px)'}],[duration,{transform:'translateX('+cameraWidth+'px)'}]]);
+      animate(scan, [[0,{transform:'translateX(0)'}],[500,{transform:'translateX(0)'}],[1750,{transform:'translateX('+sourceWidth+'px)'}],[duration,{transform:'translateX('+sourceWidth+'px)'}]]);
       fade($('.signal-source-rule', stage), [[0,.45],[1100,.45],[1750,1],[3300,1],[4500,.6],[11000,.6],[duration,.45]]);
 
       var messageWidth = $('.signal-message', stage).clientWidth + 30;
