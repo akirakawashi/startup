@@ -782,9 +782,11 @@ button, input, select, textarea { font: inherit; color: inherit; }
   68% { opacity: .5; }
   100% { opacity: 0; transform: translate(var(--dust-x), var(--dust-y)) scale(.95); }
 }
+/* Не --ease-out: у него почти весь путь приходится на первые 80 мс, и сброс
+   при уходе курсора выглядел скачком, а не возвратом. */
 .holo-parallax, .holo-parallax-near {
   transform-box: view-box; transform-origin: 0 0;
-  transition: transform .35s var(--ease-out);
+  transition: transform .8s var(--ease);
 }
 .holo-parallax { transform: translate(calc(var(--look-x, 0) * 6px), calc(var(--look-y, 0) * 4px)); }
 .holo-parallax-near { transform: translate(calc(var(--look-x, 0) * 3px), calc(var(--look-y, 0) * 2px)); }
@@ -1363,7 +1365,8 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .portfolio-rim::before {
   content: ""; position: absolute; inset: -50%;
   background: conic-gradient(from 20deg, transparent 0 70%, rgba(var(--accent-rgb), .15) 78%, #dbb9fa 84%, transparent 86%);
-  animation: portfolio-rim-turn 16s linear infinite; animation-delay: calc(0s - var(--shot-t, 0s));
+  /* та же доля цикла, что у парящего окна карточки: блики соседей не бегут в ногу */
+  animation: portfolio-rim-turn 16s linear infinite; animation-delay: calc(var(--portfolio-delay, 0s) * 16 / 9 - var(--shot-t, 0s));
 }
 .portfolio-badge {
   position: absolute; z-index: 2; top: 22px; left: 24px; display: inline-flex; align-items: center; gap: 8px;
@@ -2723,7 +2726,9 @@ button, input, select, textarea { font: inherit; color: inherit; }
 }
 .release-step { position: relative; min-width: 0; }
 .release-step h3 { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 0; font-size: 18px; line-height: 25px; font-weight: 500; }
-.release-step h3 > span { color: var(--accent); font: var(--fz-min)/1.5 var(--ff-mono); }
+.release-step h3 > span { color: var(--accent); font: var(--fz-min)/1.5 var(--ff-mono); transition: color .6s var(--ease); }
+.release-step[data-state="active"] h3 > span,
+.release-step[data-state="done"] h3 > span { color: var(--accent-hi); }
 .release-art { position: relative; width: min(220px, 100%); height: 164px; margin: 14px auto 0; }
 .release-art > svg { position: relative; display: block; width: 100%; height: 100%; overflow: visible; stroke-width: 1.25; }
 .release-aura {
@@ -2733,26 +2738,100 @@ button, input, select, textarea { font: inherit; color: inherit; }
 }
 .release-step[data-state="active"] .release-aura,
 .release-step[data-state="done"] .release-aura { opacity: .8; }
+/* Приход пакета виден на самой сцене: ореол вспыхивает там, где кончается
+   пробег по линии. Так стык двух анимаций читается причиной и следствием,
+   а не сменой кадра. */
+.release-demo[data-phase="launch"] [data-step="launch"] .release-aura,
+.release-demo[data-phase="deliver"] [data-step="live"] .release-aura { animation: releaseArrive 1.5s var(--ease-out) both; }
+@keyframes releaseArrive {
+  0% { opacity: .3; transform: scale(.88); }
+  26% { opacity: 1; transform: scale(1.07); }
+  100% { opacity: .8; transform: scale(1); }
+}
 .release-step-note { margin: 8px 0 0; min-height: 22px; font-size: 14px; line-height: 22px; color: var(--muted); }
 .release-glass { fill: url(#releaseGlass); stroke: rgba(var(--accent-hi-rgb), .55); }
 .release-line { stroke: rgba(var(--accent-hi-rgb), .72); }
 .release-line-dim { stroke: rgba(var(--accent-rgb), .3); }
-.release-check { opacity: .22; }
+.release-check { opacity: .22; transition: opacity .6s var(--ease); }
 .release-check-ring { stroke: rgba(var(--accent-rgb), .5); }
-.release-check-tick { stroke: var(--accent-hi); opacity: 0; }
+.release-check-tick { stroke: var(--accent-hi); opacity: 0; transition: opacity .45s var(--ease); }
 .release-step[data-state="done"] .release-check,
 .release-step[data-state="done"] .release-check-tick { opacity: 1; }
 .release-demo[data-phase="checks"] .release-check { animation: releaseCheck .8s var(--check-delay) both; }
 .release-demo[data-phase="checks"] .release-check-tick { animation: releaseTick .55s calc(var(--check-delay) + .3s) both; }
 @keyframes releaseCheck { from { opacity: .22; } to { opacity: 1; } }
 @keyframes releaseTick { from { opacity: 0; } to { opacity: 1; } }
+/* Проверки идут, а не просто зажигаются: по панели проходит луч, у ещё не
+   пройденной строки крутится дуга, строка дорисовывается, а в шапке растёт
+   полоска прогресса. Луч обрезан клипом по стеклу панели. */
+.release-scan { fill: url(#releaseScan); opacity: 0; }
+.release-demo[data-phase="checks"] .release-scan { animation: releaseScan 2.45s var(--ease) both; }
+@keyframes releaseScan {
+  0% { opacity: 0; transform: translateY(-42px); }
+  10%, 84% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(116px); }
+}
+.release-progress-track { fill: rgba(var(--accent-rgb), .22); }
+.release-progress {
+  fill: var(--accent); opacity: 0; transform: scaleX(0);
+  transform-box: fill-box; transform-origin: 0 50%;
+  transition: transform .7s var(--ease), opacity .6s;
+}
+.release-step[data-state="done"] .release-progress { opacity: 1; transform: scaleX(1); }
+.release-demo[data-phase="checks"] .release-progress { opacity: 1; animation: releaseProgress 2.4s var(--ease) both; }
+@keyframes releaseProgress { from { transform: scaleX(.05); } to { transform: scaleX(1); } }
+/* Дуга ожидания живёт только у текущей строки: появляется за полсекунды до
+   её галочки и гаснет вместе с ней. В кадре всегда ровно одно движение, и
+   между галочками нет паузы. Круги вынесены из групп проверок — внутри их
+   гасила прозрачность самой группы. */
+.release-check-spin {
+  stroke: var(--accent-hi); stroke-width: 1.5; stroke-dasharray: .18 .82; opacity: 0;
+  transform-box: fill-box; transform-origin: 50% 50%;
+}
+.release-demo[data-phase="checks"] .release-check-spin {
+  animation: releaseSpin .9s linear infinite,
+             releaseSpinLife .95s ease calc(var(--check-delay) - .6s) both;
+}
+@keyframes releaseSpin { to { transform: rotate(1turn); } }
+@keyframes releaseSpinLife { 0% { opacity: 0; } 22%, 68% { opacity: .95; } 100% { opacity: 0; } }
+/* Длины строк разные, поэтому у путей pathLength="1": штрих считается в
+   долях, и одна пара кадров подходит всем. */
+.release-check .release-line,
+.release-check .release-line-dim { stroke-dasharray: 1; stroke-dashoffset: 0; }
+.release-demo[data-phase="checks"] .release-check .release-line,
+.release-demo[data-phase="checks"] .release-check .release-line-dim { animation: releaseDraw .8s var(--ease-out) calc(var(--check-delay) + .16s) both; }
+@keyframes releaseDraw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
 .release-server-top { fill: url(#releaseGlass); stroke: rgba(var(--accent-hi-rgb), .6); }
 .release-server-face { fill: var(--bg); stroke: rgba(var(--accent-rgb), .44); }
+/* Группа держит общую яркость этапа, каждая лампа мигает сама и со своей
+   задержкой — вместе это читается работой, а не одной мигающей полосой. */
 .release-server-lights { stroke: var(--accent-hi); stroke-width: 2; opacity: .25; transition: opacity .8s; }
+.release-server-lights path { opacity: .3; transition: opacity .8s; }
+.release-step[data-state="active"] .release-server-lights,
 .release-step[data-state="done"] .release-server-lights { opacity: 1; }
-.release-demo[data-phase="launch"] .release-server-lights { animation: releaseLights 1.4s ease-in-out infinite alternate; }
-@keyframes releaseLights { from { opacity: .25; } to { opacity: 1; } }
-.release-package { transform: translate(-16px, -12px); opacity: 0; transition: transform 1.4s var(--ease-out), opacity .8s; }
+.release-step[data-state="done"] .release-server-lights path { opacity: 1; }
+.release-demo[data-phase="launch"] .release-server-lights path { animation: releaseLights 1.25s ease-in-out calc(.55s + var(--light)) infinite alternate; }
+@keyframes releaseLights { from { opacity: .3; } to { opacity: 1; } }
+/* Кольцо по крышке в момент касания: падение не обрывается, а переходит в
+   запуск. Задержка снята с реального момента приземления — у падения
+   var(--ease-out) почти вся дистанция проходит за первую треть. */
+.release-land { stroke: var(--accent-hi); stroke-width: 1.4; opacity: 0; transform-box: fill-box; transform-origin: 50% 50%; }
+.release-demo[data-phase="launch"] .release-land { animation: releaseLand 1.1s var(--ease-out) .48s both; }
+@keyframes releaseLand {
+  0% { opacity: 0; transform: scale(.3); }
+  22% { opacity: .9; }
+  100% { opacity: 0; transform: scale(1.22); }
+}
+/* Запущенная стойка не замирает до конца круга: по правым линиям идёт поток. */
+.release-server-flow { stroke-dasharray: .12 .1; opacity: 0; transition: opacity .8s; }
+.release-step[data-state="active"] .release-server-flow,
+.release-step[data-state="done"] .release-server-flow { opacity: 1; animation: releaseFlow 2.6s linear infinite; }
+@keyframes releaseFlow { to { stroke-dashoffset: -.44; } }
+.release-package {
+  transform: translate(-16px, -12px); opacity: 0;
+  filter: drop-shadow(0 3px 6px rgba(var(--accent-rgb), .5));
+  transition: transform 1.4s var(--ease-out), opacity .8s;
+}
 .release-package-top { fill: #4d3479; stroke: var(--accent-hi); }
 .release-package-face { fill: #25183e; stroke: rgba(var(--accent-hi-rgb), .8); }
 .release-demo[data-phase="transfer"] .release-package { transform: none; opacity: 1; }
@@ -2763,7 +2842,17 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .release-version-old { opacity: .8; }
 .release-version-new { opacity: 0; transform: translate(24px, -10px); }
 .release-window { fill: var(--bg); stroke: rgba(var(--accent-hi-rgb), .67); }
-.release-widget { fill: rgba(var(--accent-rgb), .1); stroke: rgba(var(--accent-rgb), .42); }
+.release-widget { fill: rgba(var(--accent-rgb), .1); stroke: rgba(var(--accent-rgb), .42); transform-box: fill-box; transform-origin: 50% 100%; }
+/* Версия не возникает целиком: сперва рамка, затем панели по очереди, и
+   последним дорисовывается график. Правила смотрят на класс, а не на группу:
+   роли old/new меняются местами каждый круг. */
+.release-demo[data-phase="deliver"] .release-version-new .release-widget { animation: releaseWidget .62s var(--ease-out) calc(.38s + var(--w, 0s)) both; }
+@keyframes releaseWidget { from { opacity: 0; transform: translateY(7px) scaleY(.55); } }
+.release-chart { stroke-dasharray: 1; }
+.release-demo[data-phase="deliver"] .release-version-new .release-chart { animation: releaseDraw 1.1s var(--ease-out) .62s both; }
+/* Огонёк работы — единственное движение в паузе на результате. */
+.release-live-dot { fill: var(--accent-hi); animation: releaseLive 2.8s ease-in-out infinite; }
+@keyframes releaseLive { 0%, 100% { opacity: .22; } 45% { opacity: 1; } }
 .release-demo[data-phase="deliver"] .release-version-old,
 .release-demo[data-phase="live"] .release-version-old { opacity: .25; transform: translate(-10px, -8px); }
 .release-demo[data-phase="deliver"] .release-version-new,
@@ -2779,8 +2868,16 @@ button, input, select, textarea { font: inherit; color: inherit; }
   transition: opacity .4s;
 }
 .release-step[data-state="done"] .release-bridge::before { opacity: .65; }
+/* Между пробегами пакета линия не пустая: по ней медленно идёт пунктир. */
+.release-bridge::after {
+  content: ""; position: absolute; inset: 0; opacity: 0;
+  background: repeating-linear-gradient(90deg, transparent 0 12px, rgba(var(--accent-hi-rgb), .62) 12px 21px, transparent 21px 33px);
+  transition: opacity .6s;
+}
+.release-step[data-state="done"] .release-bridge::after { opacity: .6; animation: releaseDrift 3.4s linear infinite; }
+@keyframes releaseDrift { to { background-position: 33px 0; } }
 .release-bridge i {
-  display: block; position: absolute; inset: -1px 0; opacity: 0;
+  display: block; position: absolute; z-index: 1; inset: -1px 0; opacity: 0;
   background: linear-gradient(90deg, transparent 15%, var(--accent) 45%, #f0e6ff 55%, transparent 75%);
   filter: drop-shadow(0 0 5px var(--accent));
 }
@@ -2791,9 +2888,14 @@ button, input, select, textarea { font: inherit; color: inherit; }
   20%, 70% { opacity: 1; }
   100% { transform: translateX(35%); opacity: 0; }
 }
-.release-outcome { display: flex; align-items: center; justify-content: center; gap: 10px; min-height: 48px; margin-top: 23px; }
-.release-outcome-dot { flex: none; width: 5px; height: 5px; border-radius: 50%; background: var(--accent-hi); box-shadow: 0 0 12px rgba(var(--accent-rgb), .7); }
-.release-status { font-size: 16px; line-height: 24px; }
+/* Смена подписи — небольшое падение: новая строка опускается сверху на своё
+   место, прежняя закреплена поверх в своих координатах и уходит вниз. */
+.release-step-note { position: relative; }
+.release-text { display: block; }
+.release-text.is-entering { animation: releaseTextIn .55s var(--ease) .14s both; }
+.release-text.is-leaving { position: absolute; animation: releaseTextOut .34s ease-in both; pointer-events: none; }
+@keyframes releaseTextIn { from { opacity: 0; transform: translateY(-12px); } }
+@keyframes releaseTextOut { to { opacity: 0; transform: translateY(12px); } }
 @media (max-width: 700px) {
   .release-demo { max-width: 420px; margin-top: 30px; }
   .release-flow { --release-gap: 16px; grid-template-columns: minmax(0, 1fr); }
@@ -2803,14 +2905,14 @@ button, input, select, textarea { font: inherit; color: inherit; }
   .release-art { grid-area: art; width: min(220px, 100%); height: 134px; margin: 0 auto; }
   .release-bridge { left: calc(104px + (100% - 104px) / 2); top: calc(100% - 10px); width: 1px; height: calc(var(--release-gap) + 20px); }
   .release-bridge::before { background: linear-gradient(transparent, var(--accent), transparent); }
+  .release-bridge::after { background: repeating-linear-gradient(180deg, transparent 0 12px, rgba(var(--accent-hi-rgb), .62) 12px 21px, transparent 21px 33px); }
+  @keyframes releaseDrift { to { background-position: 0 33px; } }
   .release-bridge i { inset: 0 -1px; background: linear-gradient(transparent 15%, var(--accent) 45%, #f0e6ff 55%, transparent 75%); }
   @keyframes releasePacket {
     0% { transform: translateY(-35%); opacity: 0; }
     20%, 70% { opacity: 1; }
     100% { transform: translateY(35%); opacity: 0; }
   }
-  .release-outcome { margin-top: 16px; min-height: 48px; }
-  .release-status { font-size: 14px; line-height: 22px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .release-demo *, .release-demo *::before, .release-demo *::after { animation: none !important; transition: none !important; }
@@ -2994,31 +3096,6 @@ button, input, select, textarea { font: inherit; color: inherit; }
   width: 4px; height: 7px;
   border: solid var(--ok); border-width: 0 1.5px 1.5px 0;
   transform: rotate(42deg);
-}
-
-/* --- три колонки --- */
-.checks-grid {
-  list-style: none; margin: clamp(56px, 7vw, 96px) 0 0; padding: 0;
-  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: clamp(28px, 4vw, 60px);
-}
-.checks-grid h3 { margin: 16px 0 0; font-size: 1.18rem; letter-spacing: -.01em; }
-.checks-grid p  { margin: 10px 0 0; color: var(--muted); font-size: .93rem; line-height: 1.6; }
-
-/* свечение под иконкой — приём с huly: пятно поверх в режиме сложения света */
-.checks-icon {
-  position: relative; display: inline-flex;
-  align-items: center; justify-content: center;
-  width: 40px; height: 40px;
-  border: 1px solid rgba(var(--accent-rgb), .28); border-radius: 12px;
-  color: var(--accent-hi); font-size: 1rem;
-}
-.checks-icon::after {
-  content: ""; position: absolute; left: -10px; top: -10px;
-  width: 34px; height: 34px; border-radius: 50%;
-  background: linear-gradient(180deg, #478beb 60%, rgba(71, 139, 235, 0) 100%);
-  opacity: .6; filter: blur(18px); mix-blend-mode: plus-lighter;
-  pointer-events: none;
 }
 
 /* ---------- Одна система: шпиль света ----------
@@ -3963,7 +4040,6 @@ button, input, select, textarea { font: inherit; color: inherit; }
   .hero-benefits { gap: 20px; }
   .hero-benefits li { flex-direction: column; gap: 10px; text-align: center; }
   .stack-grid, .formats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .checks-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .radar-core { width: 62px; height: 62px; }
   .radar-core svg { width: 28px; height: 28px; }
   .contact-grid { grid-template-columns: 1fr; }
@@ -4017,7 +4093,6 @@ button, input, select, textarea { font: inherit; color: inherit; }
   .footer-note { margin-right: 0; }
   .contact-links li { flex-direction: column; align-items: flex-start; gap: 6px; }
   .contact-label { width: auto; }
-  .checks-grid { grid-template-columns: 1fr; }
   .checks-list li { flex-wrap: wrap; row-gap: 2px; padding: 10px 14px; font-size: .85rem; }
   .checks-list span:last-child { width: 100%; padding-left: 27px; }
   .checks-window { padding: 4px; }

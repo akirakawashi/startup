@@ -897,7 +897,6 @@
     if (!demo) return;
     var steps = $$('.release-step', demo);
     var notes = $$('.release-step-note', demo);
-    var status = $('.release-status', demo);
     var phase = 'ready';
     var started = false;
     var visible = false;
@@ -906,16 +905,44 @@
     var remaining = 0;
     var armedAt = 0;
     var phases = {
-      ready:    [['pending', 'pending', 'idle'], ['Ожидание', 'Ожидание', 'Текущая версия'], 'Проверки → запуск → рабочая версия'],
-      checks:   [['active', 'pending', 'idle'], ['Проверяем', 'Ожидание', 'Текущая версия'], 'Проверяем новую версию'],
-      transfer: [['done', 'pending', 'idle'], ['Пройдено', 'Доставка', 'Текущая версия'], 'Доставляем на сервер'],
-      launch:   [['done', 'active', 'idle'], ['Пройдено', 'Запускаем', 'Текущая версия'], 'Запускаем новую версию'],
-      deliver:  [['done', 'done', 'active'], ['Пройдено', 'Запущено', 'Новая версия'], 'Новая версия отвечает'],
-      live:     [['done', 'done', 'done'], ['Пройдено', 'Запущено', 'Новая версия'], 'Новая версия в работе']
+      ready:    [['pending', 'pending', 'idle'], ['Ожидание', 'Ожидание', 'Текущая версия']],
+      checks:   [['active', 'pending', 'idle'], ['Проверяем', 'Ожидание', 'Текущая версия']],
+      transfer: [['done', 'pending', 'idle'], ['Пройдено', 'Доставка', 'Текущая версия']],
+      launch:   [['done', 'active', 'idle'], ['Пройдено', 'Запускаем', 'Текущая версия']],
+      deliver:  [['done', 'done', 'active'], ['Пройдено', 'Запущено', 'Новая версия']],
+      live:     [['done', 'done', 'done'], ['Пройдено', 'Запущено', 'Новая версия']]
     };
     var sequence = ['ready', 'checks', 'transfer', 'launch', 'deliver', 'live'];
     var timing = { ready: 1000, checks: 2600, transfer: 1500, launch: 2300, deliver: 1600, live: 1000 };
-    function show(next) {
+    /* Подписи сменяются небольшим падением. Новая строка сразу встаёт в поток
+       на итоговое место и опускается в него сверху; прежняя закрепляется
+       поверх в своих координатах, скрыта от скринридера, уходит вниз и
+       удаляется по концу анимации. */
+    function setText(el, text, instant) {
+      var current = el.querySelector('.release-text:not(.is-leaving)');
+      if ((current ? current.textContent : el.textContent) === text) return;
+      $$('.release-text.is-leaving', el).forEach(function (node) { node.remove(); });
+      var incoming = document.createElement('span');
+      incoming.className = 'release-text';
+      incoming.textContent = text;
+      if (instant || !current || motionQuery.matches) {
+        el.textContent = '';
+        el.appendChild(incoming);
+        return;
+      }
+      var old = current.getBoundingClientRect();
+      current.classList.add('is-leaving');
+      current.setAttribute('aria-hidden', 'true');
+      current.style.width = old.width + 'px';
+      current.addEventListener('animationend', function () { current.remove(); }, { once: true });
+      incoming.classList.add('is-entering');
+      incoming.addEventListener('animationend', function () { incoming.classList.remove('is-entering'); }, { once: true });
+      el.appendChild(incoming);
+      var box = el.getBoundingClientRect();
+      current.style.left = (old.left - box.left) + 'px';
+      current.style.top = (old.top - box.top) + 'px';
+    }
+    function show(next, instant) {
       phase = next;
       demo.dataset.phase = next;
       var view = phases[next];
@@ -923,9 +950,8 @@
         step.dataset.state = view[0][i];
         if (view[0][i] === 'active') step.setAttribute('aria-current', 'step');
         else step.removeAttribute('aria-current');
-        notes[i].textContent = view[1][i];
+        setText(notes[i], view[1][i], instant);
       });
-      status.textContent = view[2];
     }
     function pause() {
       if (!timer) return;
@@ -978,7 +1004,7 @@
         syncMotion();
       });
     }
-    show(motionQuery.matches ? 'live' : 'ready');
+    show(motionQuery.matches ? 'live' : 'ready', true);
     remaining = timing[phase];
     if ('IntersectionObserver' in window) new IntersectionObserver(checkVisibility, { threshold: [0, .25, .5] }).observe(demo);
     window.addEventListener('scroll', checkVisibility, { passive: true });

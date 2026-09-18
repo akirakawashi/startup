@@ -1871,20 +1871,32 @@
           <div class="release-art" aria-hidden="true">
             <span class="release-aura"></span>
             <svg viewBox="0 0 220 164" fill="none" stroke-linecap="round" stroke-linejoin="round">
-              <defs><linearGradient id="releaseGlass" x1="35" y1="20" x2="175" y2="150" gradientUnits="userSpaceOnUse"><stop stop-color="#b398ed" stop-opacity=".17"/><stop offset="1" stop-color="#8564ce" stop-opacity=".025"/></linearGradient></defs>
+              <defs>
+                <linearGradient id="releaseGlass" x1="35" y1="20" x2="175" y2="150" gradientUnits="userSpaceOnUse"><stop stop-color="#b398ed" stop-opacity=".17"/><stop offset="1" stop-color="#8564ce" stop-opacity=".025"/></linearGradient>
+                <linearGradient id="releaseScan" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#cdb7f7" stop-opacity="0"/><stop offset=".64" stop-color="#cdb7f7" stop-opacity=".14"/><stop offset="1" stop-color="#e6dbff" stop-opacity=".5"/></linearGradient>
+                <clipPath id="releaseGlassClip"><rect x="36" y="24" width="148" height="116" rx="12"/></clipPath>
+              </defs>
               <rect class="release-glass" x="36" y="24" width="148" height="116" rx="12"/>
               <path class="release-line-dim" d="M36 47h148M49 35h3m6 0h3m6 0h3"/>
+              <rect class="release-progress-track" x="126" y="33" width="48" height="3"/>
+              <rect class="release-progress" x="126" y="33" width="48" height="3"/>
+              <g clip-path="url(#releaseGlassClip)"><rect class="release-scan" x="36" y="24" width="148" height="40"/></g>
+              <g class="release-spins">
+                <circle class="release-check-spin" cx="58" cy="66" r="8" pathLength="1" style="--check-delay: 0s"/>
+                <circle class="release-check-spin" cx="58" cy="94" r="8" pathLength="1" style="--check-delay: .8s"/>
+                <circle class="release-check-spin" cx="58" cy="122" r="8" pathLength="1" style="--check-delay: 1.6s"/>
+              </g>
               <g class="release-check" style="--check-delay: 0s">
                 <circle class="release-check-ring" cx="58" cy="66" r="8"/><path class="release-check-tick" d="m54 66 3 3 5-6"/>
-                <path class="release-line" d="M80 66h60"/><path class="release-line-dim" d="M151 66h10"/>
+                <path class="release-line" pathLength="1" d="M80 66h60"/><path class="release-line-dim" pathLength="1" d="M151 66h10"/>
               </g>
               <g class="release-check" style="--check-delay: .8s">
                 <circle class="release-check-ring" cx="58" cy="94" r="8"/><path class="release-check-tick" d="m54 94 3 3 5-6"/>
-                <path class="release-line" d="M80 94h45"/><path class="release-line-dim" d="M140 94h21"/>
+                <path class="release-line" pathLength="1" d="M80 94h45"/><path class="release-line-dim" pathLength="1" d="M140 94h21"/>
               </g>
               <g class="release-check" style="--check-delay: 1.6s">
                 <circle class="release-check-ring" cx="58" cy="122" r="8"/><path class="release-check-tick" d="m54 122 3 3 5-6"/>
-                <path class="release-line" d="M80 122h54"/><path class="release-line-dim" d="M149 122h12"/>
+                <path class="release-line" pathLength="1" d="M80 122h54"/><path class="release-line-dim" pathLength="1" d="M149 122h12"/>
               </g>
             </svg>
           </div>
@@ -1899,8 +1911,9 @@
               <path class="release-server-top" d="m40 62 70-23 70 23-70 23Z"/>
               <path class="release-server-face" d="m40 62 70 23v62l-70-23Zm70 23 70-23v62l-70 23Z"/>
               <path class="release-line-dim" d="m40 83 70 23 70-23M40 104l70 23 70-23"/>
-              <path class="release-line" d="m123 101 34-11m-34 31 34-11"/>
-              <g class="release-server-lights"><path d="m53 87 8 3m-8 17 8 3"/></g>
+              <path class="release-line release-server-flow" pathLength="1" d="m123 101 34-11m-34 31 34-11"/>
+              <g class="release-server-lights"><path style="--light: 0s" d="m53 87 8 3"/><path style="--light: .26s" d="m53 107 8 3"/></g>
+              <path class="release-land" d="m40 62 70-23 70 23-70 23Z"/>
               <g class="release-package">
                 <path class="release-package-top" d="m86 24 24-9 24 9-24 9Z"/>
                 <path class="release-package-face" d="m86 24 24 9v25l-24-9Zm24 9 24-9v25l-24 9Z"/>
@@ -1919,21 +1932,22 @@
               <g class="release-version release-version-old">
                 <rect class="release-window" x="38" y="29" width="144" height="108" rx="11"/>
                 <path class="release-line-dim" d="M38 52h144M50 41h3m6 0h3M89 52v85M51 66h22m-22 14h16m-16 14h20"/>
-                <rect class="release-widget" x="102" y="65" width="64" height="23" rx="4"/>
-                <path class="release-line" d="M103 101h47m-47 12h33"/>
+                <rect class="release-widget" x="102" y="65" width="64" height="23" rx="4" style="--w: 0s"/>
+                <circle class="release-live-dot" cx="170" cy="41" r="2.6"/>
+                <path class="release-line release-chart" pathLength="1" d="M103 101h47m-47 12h33"/>
               </g>
               <g class="release-version release-version-new">
                 <rect class="release-window" x="38" y="29" width="144" height="108" rx="11"/>
                 <path class="release-line-dim" d="M38 52h144M50 41h3m6 0h3M52 118h116"/>
-                <rect class="release-widget" x="52" y="65" width="33" height="25" rx="4"/><rect class="release-widget" x="94" y="65" width="33" height="25" rx="4"/><rect class="release-widget" x="136" y="65" width="32" height="25" rx="4"/>
-                <path class="release-line" d="m54 111 24-8 22 5 27-12 18 7 20-8"/>
+                <rect class="release-widget" x="52" y="65" width="33" height="25" rx="4" style="--w: 0s"/><rect class="release-widget" x="94" y="65" width="33" height="25" rx="4" style="--w: .12s"/><rect class="release-widget" x="136" y="65" width="32" height="25" rx="4" style="--w: .24s"/>
+                <circle class="release-live-dot" cx="170" cy="41" r="2.6"/>
+                <path class="release-line release-chart" pathLength="1" d="m54 111 24-8 22 5 27-12 18 7 20-8"/>
               </g>
             </svg>
           </div>
           <p class="release-step-note">Новая версия</p>
         </li>
       </ol>
-      <div class="release-outcome"><span class="release-outcome-dot" aria-hidden="true"></span><p class="release-status">Новая версия в работе</p></div>
     </div>
   </div>
 </section>
@@ -2002,24 +2016,6 @@
         </div>
       </div>
     </div>
-
-    <ul class="checks-grid">
-      <li class="reveal">
-        <span class="checks-icon" aria-hidden="true">◇</span>
-        <h3>Ноль, а не «привычные 26»</h3>
-        <p>mypy работает как сигнал, только пока стоит на нуле. В AI Ad он держался на 26 ошибках — ни одна не была багом, и в него просто перестали смотреть.</p>
-      </li>
-      <li class="reveal">
-        <span class="checks-icon" aria-hidden="true">△</span>
-        <h3>Глушить — точечно и с причиной</h3>
-        <p>Если находку не выразить типами, её глушат на одной строке и с комментарием почему — не расширением сигнатуры и не исключением модуля.</p>
-      </li>
-      <li class="reveal">
-        <span class="checks-icon" aria-hidden="true">○</span>
-        <h3>Правилу нужны зубы</h3>
-        <p>Договорённость «геометрия не едет в списки» держалась на честном слове, пока список конструкций не стал тянуть 755 КБ за запрос. Теперь тест слушает SQL, который доходит до базы.</p>
-      </li>
-    </ul>
   </div>
 </section>
 
@@ -2074,6 +2070,7 @@
       </article>
 
       <article class="portfolio-card portfolio-ridebook reveal" data-project="ridebook" aria-labelledby="portfolio-ridebook-title">
+        <span class="portfolio-rim" aria-hidden="true"></span>
         <div class="portfolio-visual" role="img" aria-label="Схема Ridebook: рейс с тремя остановками, свободные места считаются отдельно на каждом участке, вход по коду из СМС. Это схема, а не снимок интерфейса.">
           <span class="portfolio-glow"></span>
           <span class="portfolio-gridlines"></span>
@@ -2111,6 +2108,7 @@
       </article>
 
       <article class="portfolio-card portfolio-aiad reveal" data-project="aiad" aria-labelledby="portfolio-aiad-title">
+        <span class="portfolio-rim" aria-hidden="true"></span>
         <div class="portfolio-visual" role="img" aria-label="Схема AI Ad: кадр с видеорегистратора, модель находит рекламный щит и считает секунды внимания по формуле V = S·α·β. Это схема, а не снимок интерфейса.">
           <span class="portfolio-glow"></span>
           <span class="portfolio-gridlines"></span>
@@ -2146,6 +2144,7 @@
       </article>
 
       <article class="portfolio-card portfolio-volnateca reveal" data-project="volnateca" aria-labelledby="portfolio-volnateca-title">
+        <span class="portfolio-rim" aria-hidden="true"></span>
         <div class="portfolio-visual" role="img" aria-label="Схема Volnateca: бот сообщества выдаёт задание с баллами, баллы копятся в уровень. Это схема, а не снимок интерфейса.">
           <span class="portfolio-glow"></span>
           <span class="portfolio-gridlines"></span>
@@ -3325,7 +3324,6 @@
 </footer>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
-
 <script src="script.js"></script>
 <script src="assets/globe.js"></script>
 </body>
