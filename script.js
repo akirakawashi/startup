@@ -537,7 +537,10 @@
     var sources = $$('.system-source', merge);
     var rows = $$('.system-log-row', merge);
     var order = ['client', 'staff', 'service'];
-    var BEAT = 2400;
+    /* Такт длиннее суммы кадров: цепочка идёт от штриха в карточке (0.04 с) до
+       затухания отметки «выполнено» (3.06 с), и между тактами остаётся пауза,
+       иначе конец записи обрывался бы приходом следующего источника. */
+    var BEAT = 3200;
     var index = 0;
     var started = false;
     var visible = false;

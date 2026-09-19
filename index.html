@@ -2582,7 +2582,9 @@
               <rect class="system-frame" x="6" y="6" width="108" height="56" rx="8"/>
               <path class="system-dim" d="M6 23h108M16 14h2m5 0h2m5 0h2"/>
               <path class="system-line" d="M20 36h40M20 47h26"/>
+              <path class="system-line-ink" pathLength="1" d="M20 36h40M20 47h26"/>
               <rect class="system-solid" x="74" y="33" width="30" height="15" rx="5"/>
+              <rect class="system-chip-ripple" x="74" y="33" width="30" height="15" rx="5"/>
             </svg>
           </div>
         </li>
@@ -2594,7 +2596,9 @@
               <rect class="system-frame" x="6" y="6" width="108" height="56" rx="8"/>
               <path class="system-dim" d="M42 6v56M16 22h16M16 33h16M16 44h12"/>
               <path class="system-line" d="M52 22h50M52 34h34"/>
+              <path class="system-line-ink" pathLength="1" d="M52 22h50M52 34h34"/>
               <rect class="system-solid" x="52" y="42" width="30" height="12" rx="4"/>
+              <rect class="system-chip-ripple" x="52" y="42" width="30" height="12" rx="4"/>
             </svg>
           </div>
         </li>
@@ -2605,7 +2609,9 @@
             <svg viewBox="0 0 120 62" fill="none" stroke-linecap="round" stroke-linejoin="round">
               <rect class="system-frame" x="6" y="6" width="108" height="56" rx="8"/>
               <path class="system-line" d="M18 34h24m-7-7 7 7-7 7"/>
+              <path class="system-line-ink" pathLength="1" d="M18 34h24m-7-7 7 7-7 7"/>
               <rect class="system-solid" x="52" y="22" width="48" height="24" rx="6"/>
+              <rect class="system-chip-ripple" x="52" y="22" width="48" height="24" rx="6"/>
               <path class="system-dim" d="M62 34h28"/>
             </svg>
           </div>
@@ -2622,9 +2628,18 @@
             <stop offset=".38" stop-color="#b398ed" stop-opacity=".22"/>
             <stop offset="1" stop-color="#b398ed" stop-opacity="0"/>
           </radialGradient>
+
+          <!-- Корпус светлеет к низу: у основания лежит пятно света, и ровная
+               заливка фоном читалась в нём дырой. -->
+          <linearGradient id="systemCoreBody" x1="360" y1="166" x2="360" y2="227" gradientUnits="userSpaceOnUse">
+            <stop offset="0" class="system-core-fill-top"/>
+            <stop offset="1" class="system-core-fill-foot"/>
+          </linearGradient>
         </defs>
 
-        <path class="system-wire" d="M120 0q0 116 240 166M360 0v166M600 0q0 116-240 166"/>
+        <path class="system-wire" data-wire="client"  d="M120 0q0 116 240 166"/>
+        <path class="system-wire" data-wire="staff"   d="M360 0v166"/>
+        <path class="system-wire" data-wire="service" d="M600 0q0 116-240 166"/>
         <path class="system-spark" data-from="client"  pathLength="1" d="M120 0q0 116 240 166"/>
         <path class="system-spark" data-from="staff"   pathLength="1" d="M360 0v166"/>
         <path class="system-spark" data-from="service" pathLength="1" d="M600 0q0 116-240 166"/>
@@ -2640,6 +2655,7 @@
         </g>
 
         <ellipse class="system-core-ring" cx="360" cy="166" rx="64" ry="15"/>
+        <ellipse class="system-core-ring system-core-ring-wide" cx="360" cy="166" rx="64" ry="15"/>
 
         <path class="system-wire" d="M360 227v17"/>
         <path class="system-spark system-spark-log" pathLength="1" d="M360 227v17"/>
@@ -2647,17 +2663,38 @@
         <g class="system-log">
           <rect class="system-log-frame" x="252" y="244" width="216" height="74" rx="10"/>
           <g class="system-log-row" data-row="client">
-            <circle cx="270" cy="263" r="2.6"/>
+            <g class="system-log-mark">
+              <circle class="system-log-fill" cx="270" cy="263" r="5.6"/>
+              <path class="system-log-ring-ghost" d="M270 256.6a6.4 6.4 0 0 1 0 12.8 6.4 6.4 0 0 1 0-12.8"/>
+              <path class="system-log-ring" pathLength="1" d="M270 256.6a6.4 6.4 0 0 1 0 12.8 6.4 6.4 0 0 1 0-12.8"/>
+              <path class="system-log-check-ghost" d="M266 263.6l2.6 2.7 5.4-6.6"/>
+              <path class="system-log-check" pathLength="1" d="M266 263.6l2.6 2.7 5.4-6.6"/>
+              <circle class="system-log-ripple" cx="270" cy="263" r="6.4"/>
+            </g>
             <path class="system-log-ghost" d="M282 263h118"/>
             <path class="system-log-ink" pathLength="1" d="M282 263h118"/>
           </g>
           <g class="system-log-row" data-row="staff">
-            <circle cx="270" cy="281" r="2.6"/>
+            <g class="system-log-mark">
+              <circle class="system-log-fill" cx="270" cy="281" r="5.6"/>
+              <path class="system-log-ring-ghost" d="M270 274.6a6.4 6.4 0 0 1 0 12.8 6.4 6.4 0 0 1 0-12.8"/>
+              <path class="system-log-ring" pathLength="1" d="M270 274.6a6.4 6.4 0 0 1 0 12.8 6.4 6.4 0 0 1 0-12.8"/>
+              <path class="system-log-check-ghost" d="M266 281.6l2.6 2.7 5.4-6.6"/>
+              <path class="system-log-check" pathLength="1" d="M266 281.6l2.6 2.7 5.4-6.6"/>
+              <circle class="system-log-ripple" cx="270" cy="281" r="6.4"/>
+            </g>
             <path class="system-log-ghost" d="M282 281h84"/>
             <path class="system-log-ink" pathLength="1" d="M282 281h84"/>
           </g>
           <g class="system-log-row" data-row="service">
-            <circle cx="270" cy="299" r="2.6"/>
+            <g class="system-log-mark">
+              <circle class="system-log-fill" cx="270" cy="299" r="5.6"/>
+              <path class="system-log-ring-ghost" d="M270 292.6a6.4 6.4 0 0 1 0 12.8 6.4 6.4 0 0 1 0-12.8"/>
+              <path class="system-log-ring" pathLength="1" d="M270 292.6a6.4 6.4 0 0 1 0 12.8 6.4 6.4 0 0 1 0-12.8"/>
+              <path class="system-log-check-ghost" d="M266 299.6l2.6 2.7 5.4-6.6"/>
+              <path class="system-log-check" pathLength="1" d="M266 299.6l2.6 2.7 5.4-6.6"/>
+              <circle class="system-log-ripple" cx="270" cy="299" r="6.4"/>
+            </g>
             <path class="system-log-ghost" d="M282 299h102"/>
             <path class="system-log-ink" pathLength="1" d="M282 299h102"/>
           </g>

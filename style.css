@@ -3227,7 +3227,12 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .system-source[data-state="active"] .system-frame { stroke: rgba(var(--accent-hi-rgb), .8); }
 .system-source[data-state="active"] .system-line  { stroke: var(--accent-hi); }
 
-.system-wire { stroke: rgba(var(--accent-rgb), .34); }
+.system-wire { stroke: rgba(var(--accent-rgb), .34); transition: stroke .55s var(--ease); }
+/* Ветка такта светлее двух других: видно, чья очередь писать, ещё до импульса.
+   Поэтому три кривые лежат порознь — одним путём подсветить одну нельзя. */
+.system-merge[data-beat="client"]  [data-wire="client"],
+.system-merge[data-beat="staff"]   [data-wire="staff"],
+.system-merge[data-beat="service"] [data-wire="service"] { stroke: rgba(var(--accent-hi-rgb), .62); }
 /* Бегущий импульс — короткий штрих, который проходит путь: у путей
    pathLength="1", поэтому одни и те же кадры годятся кривой и прямой. */
 .system-spark {
@@ -3238,15 +3243,39 @@ button, input, select, textarea { font: inherit; color: inherit; }
 }
 .system-merge[data-beat="client"]  [data-from="client"],
 .system-merge[data-beat="staff"]   [data-from="staff"],
-.system-merge[data-beat="service"] [data-from="service"] { animation: systemSpark 1.05s ease-in-out .1s both; }
+.system-merge[data-beat="service"] [data-from="service"] { animation: systemSpark .85s ease-in-out .36s both; }
 @keyframes systemSpark {
   0% { stroke-dashoffset: .3; opacity: 0; }
   12%, 80% { opacity: 1; }
   100% { stroke-dashoffset: -1.3; opacity: 0; }
 }
-/* Действие начинается внутри карточки: её кнопка коротко загорается, и только
-   потом по линии уходит импульс. */
-.system-source[data-state="active"] .system-solid { animation: systemChip .85s var(--ease) both; }
+/* Действие внутри карточки разложено по шагам: сперва по её содержимому
+   проходит светлый штрих — данные внесены, затем загорается кнопка, от неё
+   расходится рамка нажатия, и только после этого по проводу уходит импульс.
+   Раньше карточка вспыхивала целиком за один кадр, а импульс успевал уйти
+   раньше нажатия. Штрих идёт поверх обычной линии, как чернила поверх
+   подложки в журнале, — сама линия при этом никуда не пропадает. */
+.system-line-ink {
+  stroke: var(--accent-hi); stroke-width: 1.15; opacity: 0;
+  stroke-dasharray: 1; stroke-dashoffset: 0;
+}
+.system-source[data-state="active"] .system-line-ink { animation: systemLineInk .4s var(--ease-out) .04s both; }
+@keyframes systemLineInk {
+  0%   { opacity: 1; stroke-dashoffset: 1; }
+  64%  { opacity: 1; stroke-dashoffset: 0; }
+  100% { opacity: 0; stroke-dashoffset: 0; }
+}
+.system-chip-ripple {
+  fill: none; stroke: var(--accent-hi); stroke-width: 1; opacity: 0;
+  transform-box: fill-box; transform-origin: 50% 50%;
+}
+.system-source[data-state="active"] .system-chip-ripple { animation: systemChipRipple .46s var(--ease-out) .26s both; }
+@keyframes systemChipRipple {
+  0%   { opacity: .7; transform: scale(1); }
+  58%  { opacity: .16; }
+  100% { opacity: 0; transform: scale(1.5); }
+}
+.system-source[data-state="active"] .system-solid { animation: systemChip .72s var(--ease) .18s both; }
 @keyframes systemChip {
   0%, 100% { fill: rgba(var(--accent-rgb), .16); stroke: rgba(var(--accent-rgb), .42); }
   22% { fill: rgba(var(--accent-hi-rgb), .5); stroke: var(--accent-hi); }
@@ -3257,19 +3286,40 @@ button, input, select, textarea { font: inherit; color: inherit; }
    `data-beat` меняется, а имя нет. Поэтому скрипт ещё и переключает
    `data-tick` между «a» и «b», а кадры для них одинаковые. */
 .system-core-top  { fill: rgba(var(--accent-rgb), .07); stroke: rgba(var(--accent-hi-rgb), .6); }
-.system-core-body { fill: var(--bg); stroke: rgba(var(--accent-hi-rgb), .52); }
+.system-core-body { fill: url(#systemCoreBody); stroke: rgba(var(--accent-hi-rgb), .52); }
+.system-core-fill-top  { stop-color: var(--bg); }
+.system-core-fill-foot { stop-color: color-mix(in srgb, var(--bg) 86%, var(--accent)); }
+/* Импульс дошёл — крышка коротко наливается светом: у записи появляется
+   момент приёма, а не только кольцо, которое расходится потом. */
+.system-merge[data-tick="a"] .system-core-top { animation: systemTakeA .8s var(--ease-out) 1.2s both; }
+.system-merge[data-tick="b"] .system-core-top { animation: systemTakeB .8s var(--ease-out) 1.2s both; }
+@keyframes systemTakeA {
+  0%, 100% { fill: rgba(var(--accent-rgb), .07); stroke: rgba(var(--accent-hi-rgb), .6); }
+  26% { fill: rgba(var(--accent-rgb), .3); stroke: var(--accent-hi); }
+}
+@keyframes systemTakeB {
+  0%, 100% { fill: rgba(var(--accent-rgb), .07); stroke: rgba(var(--accent-hi-rgb), .6); }
+  26% { fill: rgba(var(--accent-rgb), .3); stroke: var(--accent-hi); }
+}
 .system-core-glow { opacity: .18; transform-box: fill-box; transform-origin: 50% 50%; }
-.system-merge[data-tick="a"] .system-core-glow { animation: systemPulseA 2.4s var(--ease-out) both; }
-.system-merge[data-tick="b"] .system-core-glow { animation: systemPulseB 2.4s var(--ease-out) both; }
+.system-merge[data-tick="a"] .system-core-glow { animation: systemPulseA 2.4s var(--ease-out) .1s both; }
+.system-merge[data-tick="b"] .system-core-glow { animation: systemPulseB 2.4s var(--ease-out) .1s both; }
 @keyframes systemPulseA { 0%, 100% { opacity: .18; transform: scale(.92); } 46% { opacity: .9; transform: scale(1.05); } }
 @keyframes systemPulseB { 0%, 100% { opacity: .18; transform: scale(.92); } 46% { opacity: .9; transform: scale(1.05); } }
 .system-core-ring { stroke: var(--accent-hi); stroke-width: 1.05; opacity: 0; transform-box: fill-box; transform-origin: 50% 50%; }
-.system-merge[data-tick="a"] .system-core-ring { animation: systemRingA .9s var(--ease-out) 1.05s both; }
-.system-merge[data-tick="b"] .system-core-ring { animation: systemRingB .9s var(--ease-out) 1.05s both; }
+.system-merge[data-tick="a"] .system-core-ring { animation: systemRingA .9s var(--ease-out) 1.25s both; }
+.system-merge[data-tick="b"] .system-core-ring { animation: systemRingB .9s var(--ease-out) 1.25s both; }
 @keyframes systemRingA { 0% { opacity: 0; transform: scale(.3); } 24% { opacity: .85; } 100% { opacity: 0; transform: scale(1.16); } }
 @keyframes systemRingB { 0% { opacity: 0; transform: scale(.3); } 24% { opacity: .85; } 100% { opacity: 0; transform: scale(1.16); } }
-.system-merge[data-tick="a"] .system-spark-log { animation: systemSparkA .6s var(--ease) 1.15s both; }
-.system-merge[data-tick="b"] .system-spark-log { animation: systemSparkB .6s var(--ease) 1.15s both; }
+/* Вторая волна идёт следом, шире и слабее: одна окружность читалась щелчком,
+   две — расходящимся кругом по воде. */
+.system-core-ring-wide { stroke-width: .8; }
+.system-merge[data-tick="a"] .system-core-ring-wide { animation: systemRingWideA 1.15s var(--ease-out) 1.46s both; }
+.system-merge[data-tick="b"] .system-core-ring-wide { animation: systemRingWideB 1.15s var(--ease-out) 1.46s both; }
+@keyframes systemRingWideA { 0% { opacity: 0; transform: scale(.55); } 22% { opacity: .42; } 100% { opacity: 0; transform: scale(1.5); } }
+@keyframes systemRingWideB { 0% { opacity: 0; transform: scale(.55); } 22% { opacity: .42; } 100% { opacity: 0; transform: scale(1.5); } }
+.system-merge[data-tick="a"] .system-spark-log { animation: systemSparkA .6s var(--ease) 1.32s both; }
+.system-merge[data-tick="b"] .system-spark-log { animation: systemSparkB .6s var(--ease) 1.32s both; }
 @keyframes systemSparkA {
   0% { stroke-dashoffset: .25; opacity: 0; }
   16%, 84% { opacity: 1; }
@@ -3285,19 +3335,97 @@ button, input, select, textarea { font: inherit; color: inherit; }
    дорисовывается штрихом. Пустая рамка в начале круга читалась заглушкой.
    Записи копятся за круг и гаснут переходом, а не рывком. */
 .system-log-frame { stroke: rgba(var(--accent-rgb), .26); }
-.system-log-row circle { fill: var(--accent-hi); opacity: .16; transition: opacity .55s var(--ease); }
+.system-merge[data-tick="a"] .system-log-frame { animation: systemLogFrameA .9s var(--ease-out) 1.78s both; }
+.system-merge[data-tick="b"] .system-log-frame { animation: systemLogFrameB .9s var(--ease-out) 1.78s both; }
+@keyframes systemLogFrameA {
+  0%, 100% { stroke: rgba(var(--accent-rgb), .26); }
+  24% { stroke: rgba(var(--accent-hi-rgb), .52); }
+}
+@keyframes systemLogFrameB {
+  0%, 100% { stroke: rgba(var(--accent-rgb), .26); }
+  24% { stroke: rgba(var(--accent-hi-rgb), .52); }
+}
 .system-log-ghost { stroke: rgba(var(--accent-rgb), .22); }
+/* Отметка о записи — галочка в кружке. Как и строка, пара лежит бледной
+   подложкой и поверх дорисовывается штрихом: сначала запись, потом обводится
+   кружок, внутрь ложится галочка, и отметка дважды мигает — «выполнено».
+   Кружок собран из двух дуг, а не из <circle>: pathLength у фигур поддержан
+   не везде, а обводка по контуру должна идти одинаково во всех браузерах. */
+.system-log-ring-ghost,
+.system-log-check-ghost { stroke: rgba(var(--accent-rgb), .22); }
+.system-log-ring,
+.system-log-check {
+  opacity: 0; stroke-dasharray: 1; stroke-dashoffset: 0;
+  transform-box: fill-box; transform-origin: 50% 50%;
+  transition: opacity .55s var(--ease);
+}
+.system-log-ring  { stroke: rgba(var(--accent-hi-rgb), .62); stroke-width: .9; }
+.system-log-check { stroke: var(--accent-hi); stroke-width: 1.3; }
+.system-log-fill  { fill: rgba(var(--accent-hi-rgb), .95); stroke: none; opacity: 0; }
+.system-log-ripple {
+  fill: none; stroke: var(--accent-hi); stroke-width: .8; opacity: 0;
+  transform-box: fill-box; transform-origin: 50% 50%;
+}
 .system-log-ink {
   stroke: rgba(var(--accent-hi-rgb), .6); opacity: 0;
   stroke-dasharray: 1; stroke-dashoffset: 0;
   transition: opacity .55s var(--ease);
 }
-.system-log-row[data-state="written"] circle { opacity: .5; }
+.system-log-row[data-state="written"] .system-log-ring,
+.system-log-row[data-state="written"] .system-log-check { opacity: .5; }
 .system-log-row[data-state="written"] .system-log-ink { opacity: .5; }
-.system-log-row[data-state="new"] circle { animation: systemRowDot .5s var(--ease) 1.68s both; }
-.system-log-row[data-state="new"] .system-log-ink { animation: systemRowInk .55s var(--ease-out) 1.68s both; }
-@keyframes systemRowDot { from { opacity: .16; } to { opacity: 1; } }
-@keyframes systemRowInk { from { opacity: 1; stroke-dashoffset: 1; } to { opacity: 1; stroke-dashoffset: 0; } }
+
+/* Завершение показывают не морганием по прозрачности: две ровные вспышки
+   читаются как «внимание» или «ждём», а не как «готово». Готовность в
+   интерфейсах собирают из резкого подъёма и долгого спада, плюс что-то
+   расходится наружу — заливка, круг, ореол. Поэтому тут четыре слоя с
+   разным началом и разной длиной: заливка внутри кружка, сам кружок с
+   галочкой в ореоле, кольцо, уходящее за край, и строка записи, которая
+   вспыхивает вместе с ними и оседает. Второго удара нет — есть эхо вдвое
+   слабее первого, как у затухающего звона. */
+.system-log-row[data-state="new"] .system-log-ring   { animation: systemRowRing .38s var(--ease-out) 1.96s both; }
+.system-log-row[data-state="new"] .system-log-check  { animation: systemRowCheck .32s var(--ease-out) 2.16s both; }
+.system-log-row[data-state="new"] .system-log-fill   { animation: systemRowFill .5s linear 2.46s both; }
+.system-log-row[data-state="new"] .system-log-mark   { animation: systemRowDone .58s linear 2.48s both; }
+.system-log-row[data-state="new"] .system-log-ripple { animation: systemRowRipple .52s var(--ease-out) 2.54s both; }
+.system-log-row[data-state="new"] .system-log-ink    { animation: systemRowInk 1.28s linear 1.78s both; }
+@keyframes systemRowRing { from { opacity: 1; stroke-dashoffset: 1; } to { opacity: 1; stroke-dashoffset: 0; } }
+@keyframes systemRowCheck {
+  0%   { opacity: 1; stroke-dashoffset: 1; transform: scale(.86); }
+  66%  { opacity: 1; stroke-dashoffset: 0; transform: scale(1.14); }
+  100% { opacity: 1; stroke-dashoffset: 0; transform: scale(1); }
+}
+/* Заливка набегает за один кадр и уходит медленно: подъём резче спада — от
+   этого отметка «щёлкает», а не мигает. */
+@keyframes systemRowFill {
+  0%   { opacity: 0; }
+  12%  { opacity: .26; animation-timing-function: var(--ease-out); }
+  58%  { opacity: .05; }
+  70%  { opacity: .12; animation-timing-function: var(--ease-out); }
+  100% { opacity: 0; }
+}
+@keyframes systemRowDone {
+  0%   { filter: drop-shadow(0 0 0 rgba(var(--accent-hi-rgb), 0)); }
+  9%   { filter: drop-shadow(0 0 6px rgba(var(--accent-hi-rgb), .95)); animation-timing-function: var(--ease-out); }
+  52%  { filter: drop-shadow(0 0 1px rgba(var(--accent-hi-rgb), .18)); }
+  66%  { filter: drop-shadow(0 0 3px rgba(var(--accent-hi-rgb), .5)); animation-timing-function: var(--ease-out); }
+  100% { filter: drop-shadow(0 0 0 rgba(var(--accent-hi-rgb), 0)); }
+}
+/* Кольцо уходит за край отметки и гаснет раньше, чем дойдёт до соседних
+   строк, — поэтому и доля прозрачности падает быстрее размера. */
+@keyframes systemRowRipple {
+  0%   { opacity: .6; transform: scale(1); }
+  55%  { opacity: .16; }
+  100% { opacity: 0; transform: scale(1.85); }
+}
+/* Строка дочерчивается к 39 % и ждёт отметку: на 55 % она вспыхивает вместе
+   с ней и оседает к прежней яркости — запись и отметка гаснут как одно. */
+@keyframes systemRowInk {
+  0%   { opacity: 1; stroke-dashoffset: 1; stroke: rgba(var(--accent-hi-rgb), .6); animation-timing-function: var(--ease-out); }
+  39%  { opacity: 1; stroke-dashoffset: 0; stroke: rgba(var(--accent-hi-rgb), .6); }
+  55%  { opacity: 1; stroke: var(--accent-hi); animation-timing-function: var(--ease-out); }
+  100% { opacity: 1; stroke-dashoffset: 0; stroke: rgba(var(--accent-hi-rgb), .6); }
+}
 
 @media (max-width: 760px) {
   .system-copy { padding-top: clamp(64px, 12vw, 96px); }
