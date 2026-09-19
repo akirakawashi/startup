@@ -3098,46 +3098,40 @@ button, input, select, textarea { font: inherit; color: inherit; }
   transform: rotate(42deg);
 }
 
-/* ---------- Одна система: шпиль света ----------
-   Статичный SVG: фиолетовая вогнутая оболочка и вытянутый свет вдоль оси.
-   Шпиль остаётся без точечной сетки — исключение из AGENTS.md.
-   Двигаются только три готовых слоя мелкой пыли. */
-.spire {
-  --spire: min(700px, 110vw);
-  --spire-top: clamp(40px, 5vw, 64px);
+/* ---------- Одна система: три входа сходятся в одну базу ----------
+   Прежний шпиль был единственным объёмным объектом на сайте и выпадал из
+   языка тонких линий; вместо него сцена, которая доказывает заголовок, —
+   поэтому подписей под ней больше нет, весь текст секции это лид в одну
+   строку. Источники стоят в сетке из трёх равных колонок, а кривые выходят
+   из 120, 360 и 600 при ширине viewBox 720 — это центры тех же третей,
+   поэтому линии сходятся с подписями при любой ширине. */
+.system {
   position: relative;
   overflow: hidden;
   padding-bottom: clamp(70px, 8vw, 128px);
   background: var(--bg);
   color: var(--text);
 }
-.spire-stage {
-  position: absolute; left: 50%; top: var(--spire-top);
-  width: var(--spire); aspect-ratio: 1;
-  transform: translateX(-50%);
-  pointer-events: none;
-}
-.spire-light { position: absolute; inset: 0; width: 100%; height: 100%; }
-
-/* Поле шире фигуры; на тексте и у острия пыль плавно исчезает. */
-.spire-stars {
-  position: absolute; left: 50%; top: 14%;
-  width: min(1040px, 100vw); height: 52%;
+/* Поле мелкой пыли осталось от прежней сцены: оно держит глубину
+   секции и гаснет к краям, не мешая рисунку. */
+.system-stars {
+  position: absolute; left: 50%; top: clamp(40px, 6vw, 96px);
+  width: min(1240px, 100vw); height: min(620px, 74%);
   transform: translateX(-50%);
   overflow: hidden;
   -webkit-mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 35%, transparent 100%);
           mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 35%, transparent 100%);
 }
-.spire-stars i {
+.system-stars i {
   position: absolute; left: 0; right: 0; top: 0;
   height: calc(100% + var(--star-step));
   display: block;
   background-repeat: repeat;
   background-size: var(--star-step) var(--star-step);
-  animation: spireRise var(--star-duration) linear infinite;
+  animation: systemRise var(--star-duration) linear infinite;
   animation-delay: calc(var(--delay) - var(--shot-t, 0s));
 }
-.spire-stars i:nth-child(1) {
+.system-stars i:nth-child(1) {
   --star-step: 300px; --star-duration: 42s; --delay: -13s;
   opacity: .7;
   background-image:
@@ -3146,7 +3140,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
     radial-gradient(circle at 86% 42%, #fff .5px, transparent 1px),
     radial-gradient(circle at 39% 91%, #d0ccff .5px, transparent 1px);
 }
-.spire-stars i:nth-child(2) {
+.system-stars i:nth-child(2) {
   --star-step: 370px; --star-duration: 68s; --delay: -37s;
   opacity: .5;
   background-image:
@@ -3155,7 +3149,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
     radial-gradient(circle at 49% 83%, #fff .5px, transparent 1px),
     radial-gradient(circle at 8% 60%, #ddd9ff .5px, transparent 1px);
 }
-.spire-stars i:nth-child(3) {
+.system-stars i:nth-child(3) {
   --star-step: 460px; --star-duration: 104s; --delay: -61s;
   opacity: .35;
   background-image:
@@ -3164,15 +3158,15 @@ button, input, select, textarea { font: inherit; color: inherit; }
     radial-gradient(circle at 91% 89%, #fff .5px, transparent 1px);
 }
 /* Сдвиг равен плитке каждого слоя: конец цикла совпадает с началом. */
-@keyframes spireRise { to { transform: translate3d(0, calc(0px - var(--star-step)), 0); } }
-.spire-stage.idle .spire-stars i { animation-play-state: paused; }
+@keyframes systemRise { to { transform: translate3d(0, calc(0px - var(--star-step)), 0); } }
+.system-stars.idle i { animation-play-state: paused; }
 
-.spire-copy {
+.system-copy {
   position: relative;
-  padding-top: calc(var(--spire-top) + var(--spire) * .61);
+  padding-top: clamp(84px, 10vw, 148px);
   text-align: center;
 }
-.spire-pill {
+.system-pill {
   display: inline-block; margin: 0;
   padding: 5px 14px; border-radius: 100px;
   border: 1px solid rgba(var(--accent-hi-rgb), .3);
@@ -3180,45 +3174,139 @@ button, input, select, textarea { font: inherit; color: inherit; }
   font-family: var(--ff-body); font-size: .85rem; line-height: 1.35;
   color: var(--text);
 }
-.spire-title {
+.system-title {
   margin: 14px auto 0; max-width: 24ch;
   font-size: clamp(1.9rem, 4.2vw, 3rem); font-weight: 500;
   line-height: 1.12; letter-spacing: -.035em;
   text-wrap: balance;
 }
-.spire-lede {
-  margin: 20px auto 0; max-width: 67ch;
+.system-lede {
+  margin: 18px auto 0; max-width: 68ch;
   color: var(--muted); line-height: 1.6;
   text-wrap: pretty;
 }
 
-/* карточки под шпилем: те же волосяные линии, что у радара */
-.spire-cards {
-  position: relative;
-  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(26px, 4vw, 54px) clamp(28px, 5vw, 74px);
-  margin-top: clamp(44px, 6vw, 78px);
-  padding-top: 30px;
-  text-align: left;
+/* Рисунок масштабируется целиком: у обоих SVG ширина 100 % и высота по
+   пропорции, поэтому доли ширины не разъезжаются. Сцена шире прежней
+   (640 → 880): в колонке 1180 px она читалась мелким пятном посреди пустого
+   поля. Карточка растёт следом и держит прежнюю долю колонки — 165/880 это
+   те же 0.1875, что и 120/640, иначе рисунки разошлись бы с кривыми. */
+.system-merge { position: relative; max-width: 880px; margin: clamp(30px, 4vw, 52px) auto 0; }
+.system-sources {
+  list-style: none; margin: 0; padding: 0;
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
 }
-.spire-cards::before {
-  content: ""; position: absolute; left: 0; right: 0; top: 0; height: 1px;
-  background: linear-gradient(90deg,
-      transparent, rgba(var(--text-rgb), .13) 22%, rgba(var(--text-rgb), .13) 78%, transparent);
+/* Подписи разной длины переносятся по-разному, поэтому рисунки прижаты к низу
+   ячейки: их край остаётся общим, и кривые выходят из одной высоты. */
+.system-source {
+  position: relative; min-width: 0;
+  display: flex; flex-direction: column; justify-content: flex-end;
 }
-.spire-cards::after {
-  content: ""; position: absolute; left: calc(50% - .5px); top: 0;
-  width: 1px; height: 100%;
-  background: linear-gradient(to bottom, rgba(var(--text-rgb), .13), transparent);
+.system-source-name {
+  margin: 0 0 12px; font-size: 1.05rem; color: var(--muted);
+  transition: color .6s var(--ease);
 }
-.spire-card { padding-inline: clamp(0px, 2vw, 26px); }
-.spire-card h3 { margin: 0 0 10px; font-size: 1.06rem; }
-.spire-card p { margin: 0; color: var(--muted); line-height: 1.62; font-size: .95rem; }
+.system-source[data-state="active"] .system-source-name { color: var(--text); }
+.system-source-art { position: relative; width: min(165px, 100%); margin: 0 auto; }
+/* Толщина линий снята с 1.25: сцена стала шире, и прежний штрих вырастал
+   вместе с ней до полутора пикселей — заметно жирнее волоска, которым
+   нарисован весь сайт. Импульс и кольцо базы уменьшены в той же доле. */
+.system-source-art > svg,
+.system-flow { display: block; width: 100%; height: auto; overflow: visible; stroke-width: 1; }
+.system-source-art > svg { position: relative; }
+.system-aura {
+  position: absolute; inset: -22% -18%; opacity: 0; pointer-events: none;
+  background: radial-gradient(ellipse, rgba(var(--accent-rgb), .38), transparent 70%);
+  filter: blur(16px); transition: opacity .6s;
+}
+.system-source[data-state="active"] .system-aura { opacity: .9; }
+.system-frame { stroke: rgba(var(--accent-hi-rgb), .42); transition: stroke .6s var(--ease); }
+.system-line  { stroke: rgba(var(--accent-hi-rgb), .5); transition: stroke .6s var(--ease); }
+.system-dim   { stroke: rgba(var(--accent-rgb), .3); }
+.system-solid { fill: rgba(var(--accent-rgb), .16); stroke: rgba(var(--accent-rgb), .42); }
+.system-source[data-state="active"] .system-frame { stroke: rgba(var(--accent-hi-rgb), .8); }
+.system-source[data-state="active"] .system-line  { stroke: var(--accent-hi); }
+
+.system-wire { stroke: rgba(var(--accent-rgb), .34); }
+/* Бегущий импульс — короткий штрих, который проходит путь: у путей
+   pathLength="1", поэтому одни и те же кадры годятся кривой и прямой. */
+.system-spark {
+  stroke: var(--accent-hi); stroke-width: 1.4; opacity: 0;
+  stroke-dasharray: .1 .014 .05 .02 .028 .03 .016 .742;
+  stroke-dashoffset: .3;
+  filter: drop-shadow(0 0 4px var(--accent));
+}
+.system-merge[data-beat="client"]  [data-from="client"],
+.system-merge[data-beat="staff"]   [data-from="staff"],
+.system-merge[data-beat="service"] [data-from="service"] { animation: systemSpark 1.05s ease-in-out .1s both; }
+@keyframes systemSpark {
+  0% { stroke-dashoffset: .3; opacity: 0; }
+  12%, 80% { opacity: 1; }
+  100% { stroke-dashoffset: -1.3; opacity: 0; }
+}
+/* Действие начинается внутри карточки: её кнопка коротко загорается, и только
+   потом по линии уходит импульс. */
+.system-source[data-state="active"] .system-solid { animation: systemChip .85s var(--ease) both; }
+@keyframes systemChip {
+  0%, 100% { fill: rgba(var(--accent-rgb), .16); stroke: rgba(var(--accent-rgb), .42); }
+  22% { fill: rgba(var(--accent-hi-rgb), .5); stroke: var(--accent-hi); }
+}
+
+/* Вспышка базы и вынос в журнал происходят каждый такт, но CSS перезапускает
+   анимацию только при смене её имени — у одного и того же селектора значение
+   `data-beat` меняется, а имя нет. Поэтому скрипт ещё и переключает
+   `data-tick` между «a» и «b», а кадры для них одинаковые. */
+.system-core-top  { fill: rgba(var(--accent-rgb), .07); stroke: rgba(var(--accent-hi-rgb), .6); }
+.system-core-body { fill: var(--bg); stroke: rgba(var(--accent-hi-rgb), .52); }
+.system-core-glow { opacity: .18; transform-box: fill-box; transform-origin: 50% 50%; }
+.system-merge[data-tick="a"] .system-core-glow { animation: systemPulseA 2.4s var(--ease-out) both; }
+.system-merge[data-tick="b"] .system-core-glow { animation: systemPulseB 2.4s var(--ease-out) both; }
+@keyframes systemPulseA { 0%, 100% { opacity: .18; transform: scale(.92); } 46% { opacity: .9; transform: scale(1.05); } }
+@keyframes systemPulseB { 0%, 100% { opacity: .18; transform: scale(.92); } 46% { opacity: .9; transform: scale(1.05); } }
+.system-core-ring { stroke: var(--accent-hi); stroke-width: 1.05; opacity: 0; transform-box: fill-box; transform-origin: 50% 50%; }
+.system-merge[data-tick="a"] .system-core-ring { animation: systemRingA .9s var(--ease-out) 1.05s both; }
+.system-merge[data-tick="b"] .system-core-ring { animation: systemRingB .9s var(--ease-out) 1.05s both; }
+@keyframes systemRingA { 0% { opacity: 0; transform: scale(.3); } 24% { opacity: .85; } 100% { opacity: 0; transform: scale(1.16); } }
+@keyframes systemRingB { 0% { opacity: 0; transform: scale(.3); } 24% { opacity: .85; } 100% { opacity: 0; transform: scale(1.16); } }
+.system-merge[data-tick="a"] .system-spark-log { animation: systemSparkA .6s var(--ease) 1.15s both; }
+.system-merge[data-tick="b"] .system-spark-log { animation: systemSparkB .6s var(--ease) 1.15s both; }
+@keyframes systemSparkA {
+  0% { stroke-dashoffset: .25; opacity: 0; }
+  16%, 84% { opacity: 1; }
+  100% { stroke-dashoffset: -.9; opacity: 0; }
+}
+@keyframes systemSparkB {
+  0% { stroke-dashoffset: .25; opacity: 0; }
+  16%, 84% { opacity: 1; }
+  100% { stroke-dashoffset: -.9; opacity: 0; }
+}
+
+/* Журнал: строки всегда на месте бледной подложкой, поверх неё запись
+   дорисовывается штрихом. Пустая рамка в начале круга читалась заглушкой.
+   Записи копятся за круг и гаснут переходом, а не рывком. */
+.system-log-frame { stroke: rgba(var(--accent-rgb), .26); }
+.system-log-row circle { fill: var(--accent-hi); opacity: .16; transition: opacity .55s var(--ease); }
+.system-log-ghost { stroke: rgba(var(--accent-rgb), .22); }
+.system-log-ink {
+  stroke: rgba(var(--accent-hi-rgb), .6); opacity: 0;
+  stroke-dasharray: 1; stroke-dashoffset: 0;
+  transition: opacity .55s var(--ease);
+}
+.system-log-row[data-state="written"] circle { opacity: .5; }
+.system-log-row[data-state="written"] .system-log-ink { opacity: .5; }
+.system-log-row[data-state="new"] circle { animation: systemRowDot .5s var(--ease) 1.68s both; }
+.system-log-row[data-state="new"] .system-log-ink { animation: systemRowInk .55s var(--ease-out) 1.68s both; }
+@keyframes systemRowDot { from { opacity: .16; } to { opacity: 1; } }
+@keyframes systemRowInk { from { opacity: 1; stroke-dashoffset: 1; } to { opacity: 1; stroke-dashoffset: 0; } }
 
 @media (max-width: 760px) {
-  .spire-cards { grid-template-columns: 1fr; gap: 26px; }
-  .spire-cards::after { display: none; }
-  .spire-card { padding-inline: 0; }
+  .system-copy { padding-top: clamp(64px, 12vw, 96px); }
+  .system-source-name { margin-bottom: 8px; font-size: var(--fz-min); }
+  .system-source-art { width: min(104px, 100%); }
+  .system-merge { margin-top: 26px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .system-merge *, .system-merge *::before, .system-merge *::after { animation: none !important; transition: none !important; }
 }
 
 /* ---------- Ключи: поле шифротекста ----------
@@ -4127,7 +4215,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
   .radar-sweep i, .radar-edge i { animation: none; }
   .blip-dot, .blip-tag { opacity: 1; }
   .blip-wave { display: none; }
-  .spire-stars i { animation: none; }
+  .system-stars i { animation: none; }
   .orb-dust i { animation: none; }
   .orb-trail { display: none; }
   .orb-trail i { animation: none; }
@@ -4137,11 +4225,11 @@ button, input, select, textarea { font: inherit; color: inherit; }
 
 @media print {
   .topbar, .hero-stage, .hero-deck, .hero-horizon, .checks-halo, .checks-glow, .checks-rim, .page-progress, .toast, .grain,
-  .contact-form, .tile-art, .dial, .radar-stage, .spire-stage, .crypt-stage, .crypt-lock,
+  .contact-form, .tile-art, .dial, .radar-stage, .system-stars, .crypt-stage, .crypt-lock,
   .arc-stage, .arc-chip, .arc-soon, .signal-stage,
   .orb-stage { display: none; }
-  body, .hero, .checks, .tiles, .radar, .spire, .crypt, .arc, .orb, .signal { background: #fff; color: #000; }
-  .radar-copy, .spire-copy, .arc-copy { padding-top: 0; }
+  body, .hero, .checks, .tiles, .radar, .system, .crypt, .arc, .orb, .signal { background: #fff; color: #000; }
+  .radar-copy, .system-copy, .arc-copy { padding-top: 0; }
   .crypt { padding-top: 0; }
   .arc-title, .orb-title, .orb-price b { -webkit-text-fill-color: #000; color: #000; }
   .orb-copy { padding-bottom: 0; }

@@ -2556,129 +2556,113 @@
 
 
 <!-- ===================== ОДНА СИСТЕМА ===================== -->
-<!-- Шпиль: фиолетовый свет вдоль оси, вогнутый силуэт и тихое поле пыли. -->
-<section class="spire" id="system">
+<!-- Сцена доказывает заголовок, поэтому текста под ней нет: три источника
+     сходятся в одну базу, каждое действие уходит строкой в общий журнал.
+     Подписи источников — HTML над рисунком (в SVG мелкого текста нет), а
+     колонки сетки и точки кривых стоят на одних долях ширины: центры третей
+     это 120, 360 и 600 в системе viewBox шириной 720. -->
+<section class="system" id="system" aria-labelledby="system-title">
+  <span class="system-stars" aria-hidden="true"><i></i><i></i><i></i></span>
 
-  <div class="spire-stage idle" aria-hidden="true">
-    <svg class="spire-light" viewBox="0 0 800 800" fill="none">
-      <defs>
-        <!-- Один силуэт для заливки, ореола и выреза в колоннах. -->
-        <path id="spireShape" d="M400 26 C400 238 362 370 110 470 Q400 674 690 470 C438 370 400 238 400 26Z"/>
-        <linearGradient id="spireBody" x1="400" y1="26" x2="400" y2="590" gradientUnits="userSpaceOnUse">
-          <stop stop-color="var(--accent-hi)" stop-opacity="0"/>
-          <stop offset=".13" stop-color="var(--accent-hi)" stop-opacity=".48"/>
-          <stop offset=".32" stop-color="var(--accent-hi)"/>
-          <stop offset=".52" stop-color="var(--accent)"/>
-          <stop offset=".7" stop-color="var(--accent-deep)" stop-opacity=".95"/>
-          <stop offset=".85" stop-color="var(--accent-deep)" stop-opacity=".6"/>
-          <stop offset="1" stop-color="var(--surface-2)" stop-opacity="0"/>
-        </linearGradient>
-        <linearGradient id="spireCore" x1="400" y1="132" x2="400" y2="475" gradientUnits="userSpaceOnUse">
-          <stop stop-color="var(--text)" stop-opacity="0"/>
-          <stop offset=".23" stop-color="var(--text)"/>
-          <stop offset=".48" stop-color="var(--text)"/>
-          <stop offset=".7" stop-color="var(--text)" stop-opacity=".95"/>
-          <stop offset="1" stop-color="var(--accent-hi)" stop-opacity="0"/>
-        </linearGradient>
-        <radialGradient id="spireHalo">
-          <stop stop-color="var(--accent-deep)" stop-opacity=".55"/>
-          <stop offset=".45" stop-color="var(--accent-deep)" stop-opacity=".28"/>
-          <stop offset="1" stop-color="var(--accent-deep)" stop-opacity="0"/>
-        </radialGradient>
-        <radialGradient id="spireFalloff" cx="400" cy="270" r="320" gradientUnits="userSpaceOnUse"
-                        gradientTransform="translate(400 270) scale(1 .9) translate(-400 -270)">
-          <stop offset=".42" stop-color="#fff"/>
-          <stop offset=".68" stop-color="#fff" stop-opacity=".7"/>
-          <stop offset=".88" stop-color="#fff" stop-opacity=".18"/>
-          <stop offset="1" stop-color="#fff" stop-opacity="0"/>
-        </radialGradient>
-        <linearGradient id="spireAura" x1="400" y1="100" x2="400" y2="560" gradientUnits="userSpaceOnUse">
-          <stop stop-color="var(--accent)" stop-opacity="0"/>
-          <stop offset=".4" stop-color="var(--accent)" stop-opacity=".28"/>
-          <stop offset=".7" stop-color="var(--accent-deep)" stop-opacity=".34"/>
-          <stop offset="1" stop-color="var(--accent-deep)" stop-opacity="0"/>
-        </linearGradient>
-        <linearGradient id="spireColBack" x1="0" y1="150" x2="0" y2="490" gradientUnits="userSpaceOnUse">
-          <stop stop-color="var(--accent)" stop-opacity="0"/>
-          <stop offset=".35" stop-color="var(--accent)" stop-opacity=".035"/>
-          <stop offset=".7" stop-color="var(--accent)" stop-opacity=".025"/>
-          <stop offset="1" stop-color="var(--accent)" stop-opacity="0"/>
-        </linearGradient>
-        <linearGradient id="spireColEdge" x1="0" y1="150" x2="0" y2="490" gradientUnits="userSpaceOnUse">
-          <stop stop-color="var(--accent-hi)" stop-opacity="0"/>
-          <stop offset=".22" stop-color="var(--accent-hi)" stop-opacity=".065"/>
-          <stop offset=".75" stop-color="var(--accent-hi)" stop-opacity=".17"/>
-          <stop offset="1" stop-color="var(--accent-hi)" stop-opacity="0"/>
-        </linearGradient>
-        <linearGradient id="spireRayFade" x1="400" y1="235" x2="400" y2="510" gradientUnits="userSpaceOnUse">
-          <stop stop-color="var(--text)" stop-opacity="0"/>
-          <stop offset=".4" stop-color="var(--text)" stop-opacity=".17"/>
-          <stop offset=".72" stop-color="var(--accent-hi)" stop-opacity=".11"/>
-          <stop offset="1" stop-color="var(--accent-hi)" stop-opacity="0"/>
-        </linearGradient>
-        <filter id="spireSoft" x="-60%" y="-30%" width="220%" height="160%" color-interpolation-filters="sRGB"><feGaussianBlur stdDeviation="18"/></filter>
-        <filter id="spireDiffuse" x="-40%" y="-25%" width="180%" height="150%" color-interpolation-filters="sRGB"><feGaussianBlur stdDeviation="34"/></filter>
-        <mask id="spireBehind"><rect width="800" height="800" fill="#fff"/><use href="#spireShape" fill="#000"/></mask>
-        <mask id="spireFade"><rect width="800" height="800" fill="url(#spireFalloff)"/></mask>
-        <clipPath id="spireInside"><use href="#spireShape"/></clipPath>
-      </defs>
-
-      <g mask="url(#spireBehind)">
-        <g fill="url(#spireColBack)">
-          <path d="M128 150h59v340h-59z M226 150h59v340h-59z M314 150h59v340h-59z M426 150h59v340h-59z M514 150h59v340h-59z M612 150h59v340h-59z"/>
-            </g>
-        <path d="M128 150v340M187 150v340M226 150v340M285 150v340M314 150v340M373 150v340M426 150v340M485 150v340M514 150v340M573 150v340M612 150v340M671 150v340"
-              stroke="url(#spireColEdge)" stroke-width=".8"/>
-      </g>
-      <ellipse cx="400" cy="481" rx="295" ry="132" fill="url(#spireHalo)"/>
-      <use href="#spireShape" fill="url(#spireAura)" filter="url(#spireDiffuse)"/>
-      <g mask="url(#spireFade)">
-        <use href="#spireShape" fill="url(#spireBody)"/>
-
-        <!-- Свет расширяется от оси по форме шпиля, без круглого белого пятна. -->
-        <g clip-path="url(#spireInside)">
-          <path d="M400 132 C390 248 367 330 327 416 Q400 505 473 416 C433 330 410 248 400 132Z"
-                fill="url(#spireCore)" filter="url(#spireSoft)"/>
-          <path d="M400 150 C398 245 388 310 363 381 Q400 448 437 381 C412 310 402 245 400 150Z"
-                fill="url(#spireCore)" opacity=".65" filter="url(#spireSoft)"/>
-          <!-- Тонкие расходящиеся кривые вписаны в свет и гаснут до основания. -->
-          <g stroke="url(#spireRayFade)" stroke-width=".8">
-            <path d="M392 238Q369 392 274 487M394 238Q378 391 312 499M397 238Q387 392 350 507M399 238Q396 392 387 510"/>
-            <path d="M408 238Q431 392 526 487M406 238Q422 391 488 499M403 238Q413 392 450 507M401 238Q404 392 413 510"/>
-          </g>
-            </g>
-      </g>
-    </svg>
-    <span class="spire-stars"><i></i><i></i><i></i></span>
-  </div>
-
-
-  <div class="wrap spire-copy">
-    <p class="spire-pill reveal">одна система</p>
-    <h2 class="spire-title reveal">Сайт, бот и админка — одна система, а не три</h2>
-    <p class="spire-lede reveal">
-      Данные не переносятся руками между сервисами. Заявка с сайта, сообщение боту
-      и правка в админке попадают в одну базу — с общими ролями и одним журналом
-      событий, по которому видно, где что произошло.
+  <div class="wrap system-copy">
+    <p class="system-pill reveal">одна система</p>
+    <h2 class="system-title reveal" id="system-title">Один источник данных,<br>а не три копии</h2>
+    <p class="system-lede reveal">
+      Ничего не переносится руками: что записано — записано один раз.
     </p>
 
-    <div class="spire-cards">
-      <article class="spire-card reveal">
-        <h3>Одна база</h3>
-        <p>В Volnateca бот и админка пишут в одну базу: баллы, транзакция и достижение коммитятся вместе, и баланс не расходится с историей.</p>
-      </article>
-      <article class="spire-card reveal">
-        <h3>Общий вход и права</h3>
-        <p>В AI Ad вход — доменной учёткой, права берутся из групп при каждом входе, а сессия живёт на сервере и гасится в любой момент.</p>
-      </article>
-      <article class="spire-card reveal">
-        <h3>Обмен со сторонними системами</h3>
-        <p>Tilda → очередь в PostgreSQL → Nextcloud. Повтор вебхука не создаёт дубль, временный сбой уходит в повтор.</p>
-      </article>
-      <article class="spire-card reveal">
-        <h3>Один журнал событий</h3>
-        <p>Переходы статусов пишутся отдельной таблицей и не переписываются: видно, когда задача ушла в повтор и почему упала.</p>
-      </article>
+    <div class="system-merge reveal" data-beat="client" role="img"
+         aria-label="Клиент, сотрудник и внешний сервис пишут в одну базу, и каждое действие остаётся в общем журнале событий.">
+      <ol class="system-sources" aria-hidden="true">
+        <li class="system-source" data-source="client">
+          <p class="system-source-name">Клиент</p>
+          <div class="system-source-art">
+            <span class="system-aura"></span>
+            <svg viewBox="0 0 120 62" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <rect class="system-frame" x="6" y="6" width="108" height="56" rx="8"/>
+              <path class="system-dim" d="M6 23h108M16 14h2m5 0h2m5 0h2"/>
+              <path class="system-line" d="M20 36h40M20 47h26"/>
+              <rect class="system-solid" x="74" y="33" width="30" height="15" rx="5"/>
+            </svg>
+          </div>
+        </li>
+        <li class="system-source" data-source="staff">
+          <p class="system-source-name">Сотрудник</p>
+          <div class="system-source-art">
+            <span class="system-aura"></span>
+            <svg viewBox="0 0 120 62" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <rect class="system-frame" x="6" y="6" width="108" height="56" rx="8"/>
+              <path class="system-dim" d="M42 6v56M16 22h16M16 33h16M16 44h12"/>
+              <path class="system-line" d="M52 22h50M52 34h34"/>
+              <rect class="system-solid" x="52" y="42" width="30" height="12" rx="4"/>
+            </svg>
+          </div>
+        </li>
+        <li class="system-source" data-source="service">
+          <p class="system-source-name">Внешний сервис</p>
+          <div class="system-source-art">
+            <span class="system-aura"></span>
+            <svg viewBox="0 0 120 62" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <rect class="system-frame" x="6" y="6" width="108" height="56" rx="8"/>
+              <path class="system-line" d="M18 34h24m-7-7 7 7-7 7"/>
+              <rect class="system-solid" x="52" y="22" width="48" height="24" rx="6"/>
+              <path class="system-dim" d="M62 34h28"/>
+            </svg>
+          </div>
+        </li>
+      </ol>
+
+      <svg class="system-flow" viewBox="0 0 720 330" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <defs>
+          <!-- Средняя точка делает спад быстрым у центра и длинным к краю:
+               с одним отрезком свет держался почти до границы эллипса и
+               обрывался о прямые стенки цилиндра. -->
+          <radialGradient id="systemGlow">
+            <stop stop-color="#b398ed" stop-opacity=".5"/>
+            <stop offset=".38" stop-color="#b398ed" stop-opacity=".22"/>
+            <stop offset="1" stop-color="#b398ed" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+
+        <path class="system-wire" d="M120 0q0 116 240 166M360 0v166M600 0q0 116-240 166"/>
+        <path class="system-spark" data-from="client"  pathLength="1" d="M120 0q0 116 240 166"/>
+        <path class="system-spark" data-from="staff"   pathLength="1" d="M360 0v166"/>
+        <path class="system-spark" data-from="service" pathLength="1" d="M600 0q0 116-240 166"/>
+
+        <!-- Пятно света лежит у основания (cy 214 при дне цилиндра на 227), а не
+             в его середине: посередине яркая часть приходилась ровно на прямые
+             стенки, и свечение выглядело срезанным по ним. Низ пятна 244 — там
+             же, где начинается журнал, поэтому оно не подсвечивает его рамку. -->
+        <ellipse class="system-core-glow" cx="360" cy="214" rx="150" ry="30" fill="url(#systemGlow)"/>
+        <g class="system-core">
+          <path class="system-core-body" d="M296 166v46a64 15 0 0 0 128 0v-46"/>
+          <ellipse class="system-core-top" cx="360" cy="166" rx="64" ry="15"/>
+        </g>
+
+        <ellipse class="system-core-ring" cx="360" cy="166" rx="64" ry="15"/>
+
+        <path class="system-wire" d="M360 227v17"/>
+        <path class="system-spark system-spark-log" pathLength="1" d="M360 227v17"/>
+
+        <g class="system-log">
+          <rect class="system-log-frame" x="252" y="244" width="216" height="74" rx="10"/>
+          <g class="system-log-row" data-row="client">
+            <circle cx="270" cy="263" r="2.6"/>
+            <path class="system-log-ghost" d="M282 263h118"/>
+            <path class="system-log-ink" pathLength="1" d="M282 263h118"/>
+          </g>
+          <g class="system-log-row" data-row="staff">
+            <circle cx="270" cy="281" r="2.6"/>
+            <path class="system-log-ghost" d="M282 281h84"/>
+            <path class="system-log-ink" pathLength="1" d="M282 281h84"/>
+          </g>
+          <g class="system-log-row" data-row="service">
+            <circle cx="270" cy="299" r="2.6"/>
+            <path class="system-log-ghost" d="M282 299h102"/>
+            <path class="system-log-ink" pathLength="1" d="M282 299h102"/>
+          </g>
+        </g>
+      </svg>
     </div>
   </div>
 </section>

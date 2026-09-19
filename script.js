@@ -504,25 +504,117 @@
     checkVisibility();
   })();
 
-  /* Пыль у шпиля: готовые слои движутся только пока поле видно. */
-  (function initSpireMotion() {
-    var stage = $('.spire-stage');
-    if (!stage) return;
+  /* Пыль в «Одной системе»: готовые слои движутся только пока поле видно. */
+  (function initSystemStars() {
+    var field = $('.system-stars');
+    if (!field) return;
     var visible = false;
     var sync = function () {
-      stage.classList.toggle('idle', !visible || document.hidden || motionQuery.matches);
+      field.classList.toggle('idle', !visible || document.hidden || motionQuery.matches);
     };
     if ('IntersectionObserver' in window) {
       new IntersectionObserver(function (entries) {
         visible = entries[0].isIntersecting;
         sync();
-      }).observe($('.spire-stars', stage));
+      }).observe(field);
     } else {
       visible = true;
       sync();
     }
     document.addEventListener('visibilitychange', sync);
     if (motionQuery.addEventListener) motionQuery.addEventListener('change', sync);
+  })();
+
+  /* Слияние: такт за тактом источники по очереди пишут в общую базу.
+     Один таймер, как у релизов: вне экрана и в скрытой вкладке он стоит, а
+     остаток паузы сохраняется. Скрипт держит три вещи: какой источник сейчас
+     активен (`data-beat` и `data-state` у него), какая половина такта идёт
+     (`data-tick` — без смены имени анимации CSS не перезапустил бы вспышку
+     базы) и что уже записано в журнале. */
+  (function initSystemMerge() {
+    var merge = $('.system-merge');
+    if (!merge) return;
+    var sources = $$('.system-source', merge);
+    var rows = $$('.system-log-row', merge);
+    var order = ['client', 'staff', 'service'];
+    var BEAT = 2400;
+    var index = 0;
+    var started = false;
+    var visible = false;
+    var queued = false;
+    var timer = 0;
+    var remaining = BEAT;
+    var armedAt = 0;
+
+    function show(i, instant) {
+      index = i;
+      var name = order[i];
+      merge.dataset.beat = name;
+      /* Первый такт тоже должен вспыхнуть, поэтому на старте тик не
+         переключается, а выставляется: у атрибута меняется значение — этого
+         достаточно, чтобы анимация началась. */
+      merge.dataset.tick = instant ? 'a' : (merge.dataset.tick === 'a' ? 'b' : 'a');
+      sources.forEach(function (el) {
+        el.dataset.state = el.dataset.source === name ? 'active' : '';
+      });
+      /* Круг начинается с чистого журнала: прежние записи гаснут переходом. */
+      rows.forEach(function (row, k) {
+        row.dataset.state = k === i ? 'new' : (k < i ? 'written' : '');
+      });
+    }
+    function rest() {
+      /* Покой для статичного показа: все записи на месте, ничего не летит. */
+      merge.dataset.beat = 'rest';
+      merge.dataset.tick = '';
+      sources.forEach(function (el) { el.dataset.state = ''; });
+      rows.forEach(function (row) { row.dataset.state = 'written'; });
+    }
+    function pause() {
+      if (!timer) return;
+      window.clearTimeout(timer);
+      timer = 0;
+      remaining = Math.max(0, remaining - (performance.now() - armedAt));
+    }
+    function arm() {
+      if (timer || !started || !visible || document.hidden || motionQuery.matches) return;
+      armedAt = performance.now();
+      timer = window.setTimeout(function () {
+        timer = 0;
+        show((index + 1) % order.length);
+        remaining = BEAT;
+        arm();
+      }, remaining);
+    }
+    function syncMotion() {
+      var active = visible && !document.hidden;
+      merge.classList.toggle('motion-paused', !active || motionQuery.matches);
+      if (motionQuery.matches) { pause(); rest(); return; }
+      if (active) arm();
+      else pause();
+    }
+    function checkVisibility() {
+      if (queued) return;
+      queued = true;
+      window.requestAnimationFrame(function () {
+        queued = false;
+        var rect = merge.getBoundingClientRect();
+        visible = rect.bottom > 0 && rect.top < window.innerHeight;
+        if (!started && !document.hidden && visible && rect.top < window.innerHeight - Math.min(140, rect.height * .3)) {
+          started = true;
+          show(0, true);
+          remaining = BEAT;
+        }
+        syncMotion();
+      });
+    }
+
+    if (motionQuery.matches) rest(); else show(0, true);
+    if ('IntersectionObserver' in window) new IntersectionObserver(checkVisibility, { threshold: [0, .25, .5] }).observe(merge);
+    window.addEventListener('scroll', checkVisibility, { passive: true });
+    window.addEventListener('resize', checkVisibility, { passive: true });
+    document.addEventListener('visibilitychange', checkVisibility);
+    if (motionQuery.addEventListener) motionQuery.addEventListener('change', function () { syncMotion(); checkVisibility(); });
+    checkVisibility();
   })();
 
   /* ============================================================
