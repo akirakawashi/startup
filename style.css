@@ -1646,37 +1646,184 @@ button, input, select, textarea { font: inherit; color: inherit; }
   .stack-ambient, .stack-tech-icon::before { display: none; }
 }
 
-/* ---------- форматы ---------- */
-.formats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; align-items: start; }
-.format {
-  padding: 34px 30px; border: 1px solid var(--line); border-radius: var(--radius);
-  background: var(--surface);
-  transition: border-color .3s var(--ease), transform .3s var(--ease);
+/* ---------- Форматы: три дистанции работы ---------- */
+.formats-section {
+  position: relative; isolation: isolate; overflow: hidden;
+  padding: clamp(76px, 8vw, 126px) 0 clamp(76px, 8vw, 120px);
+  background: var(--bg);
 }
-.format:hover { transform: translateY(-4px); border-color: var(--line-strong); }
-.format > * { position: relative; z-index: 1; }
-.format-featured {
-  border-color: var(--accent-line);
-  background: radial-gradient(560px 240px at 50% -20%, rgba(var(--accent-deep-rgb), .16), transparent 70%), var(--surface);
-  box-shadow: var(--shadow);
+.formats-section .wrap { max-width: 1240px; }
+.formats-head { text-align: center; margin-bottom: clamp(52px, 6vw, 78px); }
+.formats-eyebrow {
+  margin-bottom: 20px; color: var(--accent);
+  font-family: var(--ff-mono); font-size: var(--fz-min); line-height: 1.5;
+  letter-spacing: .13em;
 }
-.format-badge {
-  position: absolute; top: -12px; left: 30px; z-index: 2;
-  padding: 5px 13px; border-radius: 100px;
-  background: linear-gradient(135deg, var(--accent-hi), var(--accent-deep)); color: #fff;
-  font-family: var(--ff-mono); font-size: var(--fz-min); line-height: 1.5; letter-spacing: .04em;
+.formats-head h2 { font-size: clamp(2rem, 4.4vw, 3.4rem); line-height: 1.22; }
+.formats-head h2 span { color: var(--muted); }
+.formats-defs { position: absolute; pointer-events: none; }
+.formats { display: grid; grid-template-columns: 1fr 1.12fr 1fr; gap: clamp(20px, 3vw, 42px); align-items: start; }
+.format { position: relative; min-width: 0; padding: 24px 0 0; }
+.format-heading { position: relative; z-index: 1; padding-inline: 12px; }
+.format-kicker { display: flex; align-items: center; gap: 12px; margin-bottom: 19px; color: var(--faint); font-size: var(--fz-min); line-height: 1.5; }
+.format-kicker > span { font-family: var(--ff-mono); color: var(--accent); }
+.format h3 { font-size: clamp(1.22rem, 1.9vw, 1.5rem); line-height: 1.25; letter-spacing: -.025em; }
+.format-note { margin-top: 10px; font-size: .84rem; line-height: 1.6; color: var(--muted); }
+/* У среднего маршрута светлая верхняя кромка и рассеянный ореол, без
+   прямоугольной карточки. Подложка возвращается в общий фон по краям. */
+.format-growth::before {
+  content: ""; position: absolute; z-index: -1; inset: -10px -14px -32px;
+  border-radius: 36px;
+  background: radial-gradient(ellipse at 50% 43%, rgba(var(--accent-deep-rgb), .15), transparent 72%);
+  pointer-events: none;
 }
-.format h3 { margin-bottom: 6px; }
-.format-note { font-family: var(--ff-mono); font-size: .76rem; color: var(--accent); margin-bottom: 16px; }
-.format > p:not(.format-note) { color: var(--muted); font-size: .93rem; }
-
-.check { margin-top: 22px; padding-top: 19px; border-top: 1px dashed var(--line); display: grid; gap: 11px; }
-.check li { position: relative; padding-left: 26px; font-size: .875rem; color: var(--muted); }
-.check li::before {
-  content: ""; position: absolute; left: 0; top: .36em;
-  width: 14px; height: 8px;
-  border-left: 1.8px solid var(--accent); border-bottom: 1.8px solid var(--accent);
-  transform: rotate(-45deg);
+.format-growth::after {
+  content: ""; position: absolute; left: 12px; right: 12px; top: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(var(--accent-hi-rgb), .8), transparent);
+  box-shadow: 0 0 24px 3px rgba(var(--accent-deep-rgb), .14); pointer-events: none;
+}
+.format-growth .format-kicker { color: var(--accent-hi); }
+.format-scene {
+  --format-cycle: 9s; position: relative;
+  margin-top: 18px; padding-bottom: 20px;
+}
+.format-scene::before {
+  content: ""; position: absolute; inset: 9% 5% 16%; z-index: -1;
+  background: radial-gradient(ellipse, rgba(var(--accent-deep-rgb), .19), transparent 70%);
+  filter: blur(22px); pointer-events: none;
+}
+.format-growth .format-scene::before { background: radial-gradient(ellipse, rgba(var(--accent-deep-rgb), .36), transparent 70%); }
+.format-art { display: block; width: 100%; height: 260px; overflow: visible; }
+.format-art use, .format-art g { transform-box: view-box; transform-origin: 0 0; }
+.format-track { stroke: rgba(var(--accent-rgb), .38); stroke-width: 1; }
+.format-track-soft { stroke: rgba(var(--accent-deep-rgb), .3); stroke-width: 8; filter: blur(7px); }
+.format-node { fill: var(--accent-hi); }
+.format-orbit-track { stroke: rgba(var(--accent-rgb), .45); stroke-width: 1.4; }
+.format-orbit-soft { stroke: rgba(var(--accent-deep-rgb), .4); stroke-width: 12; filter: blur(9px); }
+.format-module-track { stroke: rgba(var(--accent-rgb), .4); stroke-dasharray: 3 6; }
+.format-existing { opacity: .7; }
+.format-task-flash, .format-launch-edge { opacity: 0; }
+.format-route-labels {
+  display: flex; align-items: center; justify-content: space-between; gap: 14px;
+  margin-top: 6px; padding-inline: 12px; font-size: var(--fz-min); line-height: 1.5; color: var(--faint);
+}
+.format-route-labels > span:last-child { color: var(--accent-hi); text-align: right; }
+.format-ongoing { display: inline-flex; align-items: center; gap: 8px; }
+.format-ongoing i { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 9px var(--accent); }
+.format-details { position: relative; margin: 8px 12px 0; border-top: 1px solid var(--line); }
+.format-details > summary {
+  position: relative; isolation: isolate; display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 0; list-style: none; cursor: pointer;
+  color: var(--muted); font-size: .85rem; line-height: 1.5;
+  transition: color .2s var(--ease);
+}
+.format-details > summary::-webkit-details-marker { display: none; }
+.format-details > summary::before {
+  content: ""; position: absolute; z-index: -1; inset: 3px -10px; border-radius: 9px;
+  background: radial-gradient(ellipse at 14% 50%, rgba(var(--accent-deep-rgb), .22), transparent 85%);
+  opacity: 0; transition: opacity .25s var(--ease); pointer-events: none;
+}
+.format-details > summary:is(:hover, :focus-visible) { color: var(--text); }
+.format-details > summary:is(:hover, :focus-visible)::before { opacity: 1; }
+.format-toggle { position: relative; width: 14px; height: 14px; flex: none; color: var(--accent); }
+.format-toggle::before, .format-toggle::after { content: ""; position: absolute; background: currentColor; border-radius: 1px; }
+.format-toggle::before { left: 1px; right: 1px; height: 1px; top: 6px; }
+.format-toggle::after { top: 1px; bottom: 1px; width: 1px; left: 6px; transition: opacity .2s; }
+.format-details[open] .format-toggle::after { opacity: 0; }
+.format-detail-body { padding: 2px 0 12px; color: var(--muted); font-size: .84rem; line-height: 1.7; }
+.format-detail-body ul { display: grid; gap: 10px; }
+.format-detail-body li { position: relative; padding-left: 15px; }
+.format-detail-body li::before { content: ""; position: absolute; width: 4px; height: 4px; left: 0; top: .68em; border-radius: 50%; background: var(--accent); }
+.format-details[open] .format-detail-body { animation: formatDetailIn .3s var(--ease) both; }
+.format-sr { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+/* Движение показывает разницу: сборка с результатом, непрерывный оборот
+   обновлений и установка одного модуля в готовый сервис. Только
+   transform/opacity; подписи вынесены из SVG, свет растрируется один раз. */
+.format-scene::before { animation: formatAura var(--format-cycle) ease-in-out infinite; }
+.format-launch-packet { animation: formatLaunchPacket var(--format-cycle) linear infinite; }
+.format-build-left { animation: formatBuildLeft var(--format-cycle) var(--ease) infinite; }
+.format-build-right { animation: formatBuildRight var(--format-cycle) var(--ease) infinite; }
+.format-build-top { animation: formatBuildTop var(--format-cycle) var(--ease) infinite; }
+.format-launch-result { animation: formatLaunchResult var(--format-cycle) var(--ease) infinite; }
+.format-launch-edge { animation: formatLaunchEdge var(--format-cycle) ease-in-out infinite; }
+.format-orbit-runner { animation: formatOrbit 7s linear infinite; }
+.format-growth-core { animation: formatCore 3.5s ease-in-out infinite; }
+.format-satellite { animation: formatSatellite 7s ease-in-out infinite; }
+.format-satellite-b { --format-delay: -3.5s; }
+.format-task .format-scene { --format-delay: -1s; }
+.format-module { animation: formatModule var(--format-cycle) var(--ease) infinite; }
+.format-task-flash { animation: formatTaskFlash var(--format-cycle) ease-in-out infinite; }
+.format-task-result { animation: formatTaskResult var(--format-cycle) var(--ease) infinite; }
+.format-scene::before, .format-scene .format-art * {
+  animation-delay: calc(var(--format-delay, 0s) - var(--shot-t, 0s));
+}
+@keyframes formatAura { 0%, 100% { opacity: .5; } 40%, 68% { opacity: 1; } }
+@keyframes formatLaunchPacket {
+  0%, 5% { opacity: 0; transform: translate(0, 0); }
+  10% { opacity: 1; }
+  30% { opacity: 1; transform: translate(110px, 0); }
+  35%, 100% { opacity: 0; transform: translate(126px, 0); }
+}
+@keyframes formatBuildLeft {
+  0%, 18%, 100% { opacity: .1; transform: translate(-15px, 9px); }
+  35%, 83% { opacity: 1; transform: translate(0, 0); }
+}
+@keyframes formatBuildRight {
+  0%, 27%, 100% { opacity: .1; transform: translate(15px, 9px); }
+  44%, 83% { opacity: 1; transform: translate(0, 0); }
+}
+@keyframes formatBuildTop {
+  0%, 35%, 100% { opacity: .1; transform: translateY(-20px); }
+  54%, 83% { opacity: 1; transform: translateY(0); }
+}
+@keyframes formatLaunchResult {
+  0%, 50%, 100% { opacity: 0; transform: translateY(6px); }
+  60%, 83% { opacity: 1; transform: translateY(0); }
+}
+@keyframes formatLaunchEdge { 0%, 48%, 72%, 100% { opacity: 0; } 57% { opacity: 1; } }
+@keyframes formatOrbit { to { transform: rotate(360deg); } }
+@keyframes formatCore { 0%, 100% { opacity: .55; } 50% { opacity: 1; } }
+@keyframes formatSatellite { 0%, 100% { opacity: .7; transform: translateY(0); } 50% { opacity: 1; transform: translateY(-5px); } }
+@keyframes formatModule {
+  0%, 12% { opacity: .65; transform: translate(80px, -48px); }
+  40%, 80% { opacity: 1; transform: translate(0, 0); }
+  90% { opacity: 0; transform: translate(0, 0); }
+  91% { opacity: 0; transform: translate(80px, -48px); }
+  100% { opacity: .65; transform: translate(80px, -48px); }
+}
+@keyframes formatTaskFlash { 0%, 30%, 64%, 100% { opacity: 0; } 42% { opacity: .85; } }
+@keyframes formatTaskResult { 0%, 40%, 95%, 100% { opacity: 0; transform: translateY(5px); } 51%, 80% { opacity: 1; transform: translateY(0); } }
+@keyframes formatDetailIn { from { opacity: 0; } to { opacity: 1; } }
+@media (max-width: 1050px) and (min-width: 761px) {
+  .formats { gap: 16px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .format-heading { min-height: 140px; padding-inline: 6px; }
+  .format-art { height: 220px; }
+  .format-kicker { gap: 8px; }
+  .format-note { max-width: 26ch; }
+  .format-route-labels { padding-inline: 6px; gap: 8px; }
+  .format-details { margin-inline: 6px; }
+}
+@media (max-width: 760px) {
+  .formats { grid-template-columns: minmax(0, 1fr); max-width: 440px; margin-inline: auto; gap: 48px; }
+  .formats-head { margin-bottom: 36px; }
+  .formats-head h2 { font-size: clamp(1.8rem, 5.6vw, 2.6rem); }
+  .format { padding-top: 20px; }
+  .format-art { height: auto; max-height: 290px; }
+  .format-scene { margin-top: 4px; }
+  .format-growth::before { inset-inline: -12px; }
+  .format-heading { padding-inline: 4px; }
+  .format h3 { font-size: 1.5rem; }
+  .format-note { font-size: .88rem; }
+  .format-details { margin-inline: 4px; }
+  .format-kicker { margin-bottom: 14px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .format-scene::before, .format-scene .format-art *, .format-details[open] .format-detail-body { animation: none !important; }
+  .format-launch-packet { display: none; }
+}
+@media print {
+  .format-scene, .format-growth::before, .format-growth::after { display: none; }
+  .formats-section { background: #fff; }
 }
 
 /* ---------- FAQ ---------- */
@@ -3557,257 +3704,340 @@ button, input, select, textarea { font: inherit; color: inherit; }
   .crypt { --lock: 72px; }
 }
 
-/* ---------- Ход работы: дуга света и снимок журнала ----------
-   Образец — блок «Meetings» на reflect.app. Дуга у них картинка, здесь
-   обводка дуги окружности: радиус 372 при хорде 660 — та же пологая
-   геометрия, что на образце. Слоёв два, как у панели проверок: дальний
-   свет размыт и разбит точечной сеткой, нить дуги идёт без сетки —
-   у кромки свет должен быть сплошным, иначе она рассыплется.
-
-   Снимок под текстом свёрстан разметкой, как макеты в плитке: резкий на
-   любом экране, ноль запросов и правится текстом, а не в редакторе. */
+/* ---------- Ход работы: журнал и светящийся календарь ---------- */
 .arc {
-  --arc:     min(960px, 116vw);
-  --arc-top: clamp(6px, 2vw, 34px);
-  position: relative;
-  overflow: hidden;
-  /* свой контекст наложения: screen у дальнего света смешивается с фоном
-     секции, а не с тем, что окажется под ней */
-  isolation: isolate;
-  padding: 0 0 clamp(80px, 9vw, 140px);
-  background: var(--bg);
-  color: var(--text);
+  position: relative; overflow: hidden; isolation: isolate;
+  padding: clamp(64px, 7vw, 108px) 0 clamp(80px, 9vw, 140px);
+  background: var(--bg); color: var(--text);
 }
-
-.arc-stage {
-  position: absolute; left: 50%; top: var(--arc-top);
-  width: var(--arc); aspect-ratio: 900 / 420;
-  transform: translateX(-50%);
-  pointer-events: none;
-}
-.arc-cols, .arc-dome, .arc-glow, .arc-line {
-  position: absolute; inset: 0;
-  width: 100%; height: 100%;
-}
-
-/* полосы света позади дуги: неровный шаг, иначе читаются забором */
-.arc-cols { -webkit-mask-image: var(--dots); mask-image: var(--dots);
-            -webkit-mask-size: var(--dots-size); mask-size: var(--dots-size); }
-
-/* свет, залитый внутрь купола */
-.arc-dome {
-  filter: blur(12px);
-  mix-blend-mode: screen;
-  -webkit-mask-image: var(--dots); mask-image: var(--dots);
-  -webkit-mask-size: var(--dots-size); mask-size: var(--dots-size);
-}
-
-/* широкий ореол под дугой: у образца свет заметно выходит за неё вверх
-   и заливает низ. Эллипс посажен на вершину дуги */
-.arc-wash {
-  position: absolute; left: 50%; top: 0;
-  width: 118%; height: 130%;
-  transform: translateX(-50%);
-  background: radial-gradient(ellipse 36% 22% at 50% 39%,
-      rgba(var(--accent-rgb), .5), rgba(var(--accent-deep-rgb), .15) 46%, transparent 73%);
-  mix-blend-mode: screen;
-  -webkit-mask-image: var(--dots); mask-image: var(--dots);
-  -webkit-mask-size: var(--dots-size); mask-size: var(--dots-size);
-}
-
-.arc-glow {
-  filter: blur(26px);
-  mix-blend-mode: screen;
-  -webkit-mask-image: var(--dots); mask-image: var(--dots);
-  -webkit-mask-size: var(--dots-size); mask-size: var(--dots-size);
-}
-/* нить дуги: ни размытия, ни сетки — filter и mask наследуются поддеревом,
-   поэтому она обязана быть отдельным элементом, а не ещё одним path в .arc-glow */
-.arc-line { mix-blend-mode: screen; }
-
-/* низ купола уводим в фон, чтобы хорда не обрывалась над меткой */
-.arc-veil {
-  position: absolute; left: -20%; right: -20%; bottom: -22%;
-  height: 54%;
-  background: linear-gradient(to bottom, transparent, rgba(var(--bg-rgb), .55) 40%, var(--bg) 82%);
-}
-
-.arc-copy {
-  position: relative;
-  padding-top: calc(var(--arc-top) + var(--arc) * .335);
-  text-align: center;
-}
+.arc-copy { position: relative; text-align: center; }
 .arc-pill {
-  display: inline-block; margin: 0;
-  padding: 6px 16px; border-radius: 100px;
-  border: 1px solid var(--accent-line);
+  display: inline-block; margin: 0; padding: 6px 16px;
+  border-radius: 100px; border: 1px solid var(--accent-line);
   background: rgba(var(--accent-deep-rgb), .1);
-  font-family: var(--ff-mono); font-size: var(--fz-min); line-height: 1.5; letter-spacing: .06em;
-  color: var(--accent-hi);
+  font-family: var(--ff-mono); font-size: var(--fz-min); line-height: 1.5;
+  letter-spacing: .06em; color: var(--accent-hi);
 }
-/* вторая строка заголовка гаснет — как у образца */
 .arc-title {
   margin: 20px auto 0; max-width: 16ch;
-  font-size: clamp(2rem, 4.8vw, 3.4rem); line-height: 1.04; letter-spacing: -.03em;
+  font-size: clamp(2rem, 4.8vw, 3.4rem); line-height: 1.12; letter-spacing: -.03em;
   background: linear-gradient(180deg, #ffffff 32%, #a8a0c8 98%);
   -webkit-background-clip: text; background-clip: text;
   -webkit-text-fill-color: transparent; color: transparent;
 }
-.arc-lede {
-  margin: 18px auto 0; max-width: 60ch;
-  color: var(--muted); line-height: 1.62;
-}
-
-/* --- снимок: журнал и календарь в одном окне --- */
+.arc-lede { margin: 20px auto 0; max-width: 52ch; color: var(--muted); line-height: 1.65; }
 .arc-shot {
-  position: relative;
-  max-width: 920px;
-  margin: clamp(46px, 6vw, 86px) auto 0;
-  text-align: left;
+  --arc-cycle: 10s;
+  position: relative; isolation: isolate; max-width: 960px;
+  margin: clamp(58px, 6vw, 80px) auto 0; text-align: left;
+}
+/* Размытие остаётся готовым растром. В общем цикле двигаются только
+   отдельные световые слои, их transform и opacity. */
+.arc-shot::before {
+  content: ""; position: absolute; z-index: -1;
+  width: 76%; height: 110%; right: -14%; top: -25%;
+  background: radial-gradient(ellipse at 50% 45%, rgba(var(--accent-deep-rgb), .4),
+      rgba(var(--accent-deep-rgb), .17) 36%, transparent 68%);
+  filter: blur(34px); pointer-events: none;
+}
+.arc-shot::after {
+  content: ""; position: absolute; z-index: -1;
+  inset: auto 8% -45px 30%; height: 90px; border-radius: 50%;
+  background: rgba(var(--accent-deep-rgb), .16); filter: blur(40px);
+  pointer-events: none;
 }
 .arc-window {
-  display: grid; grid-template-columns: minmax(0, 1fr) 306px;
-  min-height: 396px;
-  border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, .1);
-  background: var(--surface);
-  box-shadow: 0 50px 100px -44px rgba(0, 0, 0, .95),
-              inset 0 1px 0 rgba(255, 255, 255, .04);
-  overflow: hidden;
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 408px);
+  gap: 28px; padding-right: 24px;
+  border-radius: 24px; border: 1px solid rgba(var(--accent-rgb), .15);
+  background: linear-gradient(120deg, rgba(var(--text-rgb), .025), rgba(var(--accent-deep-rgb), .035)), var(--surface);
+  box-shadow: 0 30px 80px -40px #000, inset 0 1px 0 rgba(255, 255, 255, .035);
 }
-
-.arc-log { padding: clamp(20px, 3vw, 30px); }
-.arc-day {
-  margin: 44px 0 0;
-  font-family: var(--ff-display); font-weight: 600; font-size: .95rem;
-  letter-spacing: -.01em;
-}
-.arc-day:first-child { margin-top: 0; }
-.arc-notes { margin: 12px 0 0; }
-.arc-notes li {
-  position: relative;
-  padding-left: 19px; margin-top: 6px;
-  font-size: .87rem; line-height: 1.55; color: var(--accent-hi);
-}
-.arc-notes li::before {
-  content: ""; position: absolute; left: 4px; top: .58em;
-  width: 5px; height: 5px; border-radius: 50%;
-  background: rgba(var(--text-rgb), .26);
-}
-/* вложенные пункты: отступ и точка акцентом, как у образца */
-.arc-notes li.sub { margin-left: 22px; color: var(--muted); font-size: .84rem; }
-.arc-notes li.sub::before {
-  background: var(--accent-deep);
-  box-shadow: 0 0 0 3px rgba(var(--accent-deep-rgb), .16);
-}
-.arc-notes li.dim { color: var(--faint); }
-.arc-notes li.dim::before { background: rgba(var(--text-rgb), .12); box-shadow: none; }
-.arc-notes u {
-  text-decoration-color: rgba(var(--accent-rgb), .5);
-  text-underline-offset: 3px;
-  color: var(--accent-hi);
-}
-
-.arc-cal {
-  padding: clamp(18px, 2.4vw, 24px) clamp(14px, 1.8vw, 20px);
-  border-left: 1px solid rgba(255, 255, 255, .07);
-  background: rgba(255, 255, 255, .012);
-}
-.arc-cal-head {
+.arc-log { min-width: 0; padding: 28px 0 28px 32px; }
+.arc-log-head {
   display: flex; align-items: center; justify-content: space-between;
-  gap: 10px; margin-bottom: 16px;
+  gap: 12px; margin-bottom: 32px;
 }
-.arc-cal-month {
-  font-family: var(--ff-display); font-weight: 600; font-size: .98rem;
-  letter-spacing: -.01em;
+.arc-log-label { display: inline-flex; align-items: center; gap: 10px; font-size: .82rem; color: var(--muted); }
+.arc-log-label svg { width: 18px; height: 18px; color: var(--accent); }
+.arc-log-period { font-size: var(--fz-min); color: var(--faint); }
+.arc-entry { position: relative; padding: 0 0 28px 25px; margin-left: 8px; }
+.arc-entry::before {
+  content: ""; position: absolute; left: -4px; top: 8px;
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--accent); box-shadow: 0 0 0 4px rgba(var(--accent-rgb), .09);
 }
-.arc-cal-nav { display: flex; align-items: center; gap: 12px; color: var(--faint); }
-.arc-cal-nav svg { width: 15px; height: 15px; }
-
-/* столбцы без зазора: нижние границы дней недели складываются в одну линию */
-.arc-cal-grid {
-  display: grid; grid-template-columns: repeat(7, minmax(0, 1fr));
-  column-gap: 0; row-gap: 3px;
-  text-align: center; font-size: .78rem;
+.arc-entry-done::after {
+  content: ""; position: absolute; top: 22px; bottom: 5px; left: -1px;
+  width: 1px; background: linear-gradient(rgba(var(--accent-rgb), .26), rgba(var(--accent-rgb), .1));
 }
-.arc-cal-grid b {
-  padding-bottom: 10px; margin-bottom: 5px;
-  border-bottom: 1px solid rgba(255, 255, 255, .07);
-  font-weight: 500; font-size: var(--fz-min); color: var(--faint);
+.arc-entry-current::before { background: var(--accent-hi); box-shadow: 0 0 14px 3px rgba(var(--accent-deep-rgb), .55); }
+.arc-entry-head { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; }
+.arc-day { font-size: .85rem; font-weight: 500; color: var(--muted); }
+.arc-status {
+  padding: 2px 8px; border-radius: 6px;
+  font-size: var(--fz-min); line-height: 1.5; color: var(--accent-hi);
+  background: rgba(var(--accent-rgb), .1);
 }
-.arc-cal-grid i {
-  padding: 6px 0; border-radius: 8px;
-  font-style: normal; color: var(--accent-hi);
+.arc-entry-done .arc-status { color: var(--ok); background: color-mix(in srgb, var(--ok) 8%, transparent); }
+.arc-entry-title { margin-top: 9px; font-size: 1rem; font-weight: 500; letter-spacing: -.02em; }
+.arc-notes { margin-top: 12px; }
+.arc-notes li { position: relative; padding-left: 14px; margin-top: 7px; font-size: .81rem; line-height: 1.6; color: var(--muted); }
+.arc-notes li::before { content: ""; position: absolute; left: 0; top: .65em; width: 4px; height: 4px; border-radius: 50%; background: var(--accent); }
+.arc-next { display: flex; gap: 10px; margin-top: 16px; font-size: .8rem; color: var(--muted); }
+.arc-next span { color: var(--faint); }
+.arc-channels {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px;
+  margin-top: 1px; padding-top: 20px; border-top: 1px solid rgba(var(--accent-rgb), .1);
 }
-.arc-cal-grid i.out { color: var(--faint); opacity: .5; }
-.arc-cal-grid i.on {
-  background: var(--accent-deep); color: #fff; font-weight: 600;
-  box-shadow: 0 8px 22px -8px var(--accent-deep);
-}
-
-/* --- карточки поверх окна --- */
-.arc-chip, .arc-soon {
-  position: absolute;
-  border: 1px solid rgba(255, 255, 255, .11);
-  background: var(--surface-2);
-  box-shadow: 0 26px 54px -20px rgba(0, 0, 0, .9);
-}
+.arc-channels-cap { grid-column: 1 / -1; margin-bottom: 1px; font-size: var(--fz-min); color: var(--faint); }
 .arc-chip {
-  display: flex; align-items: center; gap: 11px;
-  padding: 10px 18px 10px 11px;
-  border-radius: 14px;
+  position: relative; isolation: isolate; overflow: hidden;
+  display: flex; align-items: center; gap: 9px; padding: 10px;
+  border: 1px solid rgba(var(--accent-rgb), .13); border-radius: 12px;
+  background: rgba(var(--accent-rgb), .035);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .025);
 }
-.arc-chip-a { left: 37%; top: 46%; }
-.arc-chip-b { left: 22%; top: 63%; }
-.arc-chip-ico {
-  flex: none; display: grid; place-items: center;
-  width: 31px; height: 31px; border-radius: 9px;
+.arc-chip-ico { position: relative; flex: none; display: grid; place-items: center; width: 30px; height: 34px; color: var(--accent); }
+.arc-chip-ico svg { width: 19px; height: 19px; }
+.arc-chip-txt { display: grid; gap: 3px; line-height: 1.5; }
+.arc-chip-txt b { font-size: .81rem; font-weight: 500; }
+.arc-chip-txt i { font-size: var(--fz-min); font-style: normal; color: var(--faint); }
+.arc-cal {
+  position: relative; isolation: isolate; align-self: start;
+  margin-top: -26px; margin-bottom: 24px; padding: 25px;
+  border: 1px solid rgba(var(--accent-rgb), .35); border-radius: 20px;
+  background: radial-gradient(ellipse 95% 60% at 50% 0%, rgba(var(--accent-deep-rgb), .22), transparent 80%),
+      linear-gradient(145deg, rgba(31, 24, 51, .88), rgba(18, 14, 31, .95));
+  -webkit-backdrop-filter: blur(24px); backdrop-filter: blur(24px);
+  box-shadow: 0 22px 55px -24px rgba(0, 0, 0, .85), 0 0 44px -18px rgba(var(--accent-deep-rgb), .35),
+      inset 0 1px 0 rgba(var(--accent-hi-rgb), .12);
 }
-.arc-chip-ico svg { width: 17px; height: 17px; }
-.arc-chip-a .arc-chip-ico { background: rgba(var(--accent-deep-rgb), .16); color: var(--accent-hi); }
-.arc-chip-b .arc-chip-ico { background: rgba(var(--accent-rgb), .16); color: var(--accent-hi); }
-.arc-chip-txt { display: grid; line-height: 1.35; }
-.arc-chip-txt b { font-size: .86rem; font-weight: 600; }
-.arc-chip-txt i { font-style: normal; font-size: .76rem; color: var(--faint); }
-
-/* список уходит под маску снизу: у образца он тоже обрезан, и видно,
-   что строк больше, чем помещается */
-.arc-soon {
-  right: 3.5%; top: 47%; width: min(318px, 41%);
-  padding: 13px 13px 22px;
-  border-radius: 14px;
-  -webkit-mask-image: linear-gradient(to bottom, #000 60%, transparent 98%);
-          mask-image: linear-gradient(to bottom, #000 60%, transparent 98%);
+.arc-cal::before {
+  content: ""; position: absolute; top: -1px; left: 12%; right: 12%; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent-hi), transparent);
+  box-shadow: 0 -3px 18px 2px rgba(var(--accent-rgb), .32); pointer-events: none;
 }
-.arc-soon-cap { margin: 0 0 9px; padding-left: 4px; font-size: var(--fz-min); color: var(--faint); }
+.arc-cal-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 24px; }
+.arc-cal-month { display: inline-flex; align-items: center; gap: 11px; font-size: 1.06rem; font-weight: 500; letter-spacing: -.02em; }
+.arc-cal-month svg { width: 20px; height: 20px; color: var(--accent); }
+.arc-cal-year { font-size: var(--fz-min); font-family: var(--ff-mono); color: var(--faint); }
+.arc-cal-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 5px; text-align: center; }
+.arc-cal-grid b { padding-bottom: 10px; font-size: var(--fz-min); font-weight: 400; color: var(--faint); }
+.arc-cal-grid i {
+  position: relative; display: grid; place-items: center; min-width: 0; height: 38px;
+  border-radius: 10px; font-size: .83rem; font-style: normal; color: var(--accent-hi);
+}
+.arc-cal-grid i.out { color: color-mix(in srgb, var(--faint) 55%, transparent); }
+.arc-cal-grid i.marked { background: rgba(var(--accent-rgb), .1); }
+.arc-cal-grid i.marked::after { content: ""; position: absolute; bottom: 4px; width: 3px; height: 3px; border-radius: 50%; background: var(--accent); }
+.arc-cal-grid i.on {
+  color: #fff; font-weight: 600;
+  background: linear-gradient(150deg, #bb9aff, var(--accent-deep) 62%, #6937ea);
+  box-shadow: 0 0 22px 4px rgba(var(--accent-deep-rgb), .5), 0 8px 22px rgba(var(--accent-deep-rgb), .3), inset 0 1px 0 rgba(255, 255, 255, .55);
+}
+.arc-cal-grid i.on::before {
+  content: ""; position: absolute; z-index: -1; inset: -45px;
+  border-radius: 50%; pointer-events: none;
+  background: radial-gradient(closest-side, rgba(var(--accent-deep-rgb), .5), transparent);
+  filter: blur(12px);
+}
+.arc-soon { margin-top: 22px; padding-top: 18px; border-top: 1px solid rgba(var(--accent-rgb), .15); }
+.arc-soon-cap { margin-bottom: 12px; font-size: var(--fz-min); color: var(--accent-hi); }
 .arc-soon li {
-  display: flex; align-items: center; gap: 9px;
-  margin-top: 6px; padding: 9px 11px;
-  border-radius: 9px; background: rgba(255, 255, 255, .05);
-  font-size: .8rem;
+  position: relative; isolation: isolate;
+  display: flex; align-items: center; gap: 12px; padding: 11px 12px; margin-top: 6px;
+  border: 1px solid rgba(var(--accent-rgb), .08); border-radius: 9px;
+  background: rgba(var(--accent-rgb), .045); font-size: .8rem; line-height: 1.5;
 }
-.arc-soon li span { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.arc-soon li em { font-style: normal; font-size: .76rem; color: var(--muted); }
-.arc-soon li svg { flex: none; width: 14px; height: 14px; color: var(--faint); }
+.arc-soon li:first-child {
+  border-color: rgba(var(--accent-rgb), .25);
+  background: linear-gradient(105deg, rgba(var(--accent-deep-rgb), .25), rgba(var(--accent-rgb), .06));
+  box-shadow: inset 2px 0 0 var(--accent);
+}
+.arc-soon li span { flex: 1; min-width: 0; }
+.arc-soon li em { flex: none; font-family: var(--ff-mono); font-size: var(--fz-min); font-style: normal; color: var(--muted); }
 
-/* список ближайшего накрыл бы календарь целиком: снимается первым,
-   колонки при этом ещё стоят рядом */
-@media (max-width: 900px) {
-  .arc-soon { display: none; }
-  .arc-chip-a { left: auto; right: 5%; top: 41%; }
-  .arc-chip-b { left: 5%; top: 63%; }
+/* Дата → запись → ближайшие события → уведомления. Один период на все
+   слои; .motion-paused сохраняет их взаимную фазу за пределами экрана.
+   Текст и карточки не масштабируются, геометрия макета не меняется. */
+.arc-cal-light, .arc-cal-edge {
+  position: absolute; inset: 0; z-index: -1; overflow: hidden;
+  border-radius: inherit; pointer-events: none;
 }
-@media (max-width: 720px) {
-  .arc-window { grid-template-columns: minmax(0, 1fr); min-height: 0; }
-  .arc-cal { border-left: 0; border-top: 1px solid rgba(255, 255, 255, .07); }
-  .arc-chip-a { top: 30%; }
-  .arc-chip-b { top: 47%; }
+.arc-cal-light::before {
+  content: ""; position: absolute; inset: -30% -20%;
+  background: linear-gradient(115deg, transparent 30%, rgba(var(--accent-rgb), .03) 39%,
+      rgba(var(--accent-hi-rgb), .16) 49%, rgba(var(--accent-deep-rgb), .08) 56%, transparent 65%);
+  transform: translateX(-100%); opacity: 0;
 }
-@media (max-width: 560px) {
-  /* две карточки перекрыли бы весь журнал: остаётся одна, у нижней кромки */
-  .arc-chip-a { display: none; }
-  .arc-chip-b { left: 50%; right: auto; top: auto; bottom: -22px; transform: translateX(-50%); }
-  .arc-notes li.sub { margin-left: 12px; }
+.arc-cal-edge { inset: -1px; z-index: 1; }
+.arc-cal-edge::before {
+  content: ""; position: absolute; top: 0; left: 0; width: 30%; height: 2px;
+  background: linear-gradient(90deg, transparent, #fff, var(--accent), transparent);
+  box-shadow: 0 0 15px 3px rgba(var(--accent-rgb), .75);
+  transform: translateX(-110%); opacity: 0;
+}
+.arc-cal-grid i.on::after {
+  content: ""; position: absolute; inset: -3px; border-radius: inherit;
+  border: 1px solid rgba(var(--accent-hi-rgb), .8);
+  box-shadow: 0 0 16px rgba(var(--accent-deep-rgb), .55);
+  opacity: 0; pointer-events: none;
+}
+.arc-log-trace { position: absolute; top: 20px; bottom: 0; left: -4px; width: 7px; overflow: hidden; }
+.arc-log-trace::before {
+  content: ""; position: absolute; left: 2px; top: 0; width: 2px; height: 36%;
+  border-radius: 2px; background: linear-gradient(transparent, var(--accent), #fff);
+  box-shadow: 0 0 7px var(--accent); opacity: 0;
+}
+.arc-entry-current { isolation: isolate; }
+.arc-entry-current::after {
+  content: ""; position: absolute; z-index: -1; inset: -10px -8px 12px 10px;
+  border-radius: 12px; pointer-events: none; opacity: 0;
+  background: linear-gradient(100deg, rgba(var(--accent-deep-rgb), .17), transparent 90%);
+  transform-origin: left center;
+}
+.arc-soon li::before {
+  content: ""; position: absolute; z-index: -1; inset: -1px; border-radius: inherit;
+  background: linear-gradient(100deg, rgba(var(--accent-deep-rgb), .28), rgba(var(--accent-rgb), .06));
+  border: 1px solid rgba(var(--accent-rgb), .45); opacity: 0; pointer-events: none;
+}
+.arc-chip::before {
+  content: ""; position: absolute; z-index: -1; inset: 0; pointer-events: none;
+  background: linear-gradient(105deg, transparent 10%, rgba(var(--accent-rgb), .25) 50%, transparent 90%);
+  transform: translateX(-105%); opacity: 0;
+}
+.arc-chip::after {
+  content: ""; position: absolute; inset: 0; border-radius: inherit;
+  border: 1px solid rgba(var(--accent-rgb), .65);
+  box-shadow: inset 0 0 22px rgba(var(--accent-deep-rgb), .15);
+  opacity: 0; pointer-events: none;
+}
+.arc-chip-ico::after {
+  content: ""; position: absolute; width: 14px; height: 8px;
+  top: 50%; left: 50%; border-left: 2px solid var(--ok); border-bottom: 2px solid var(--ok);
+  transform: translate(-50%, -70%) rotate(-45deg); opacity: 0;
+}
+.arc-shot.in::before { animation-name: arcAmbient; animation-timing-function: ease-in-out; }
+.arc-shot.in::after { animation-name: arcFloor; animation-timing-function: ease-in-out; }
+.arc-shot.in .arc-cal-light::before { animation-name: arcGlassSweep; animation-timing-function: linear; }
+.arc-shot.in .arc-cal-edge::before { animation-name: arcEdgeSweep; animation-timing-function: linear; }
+.arc-shot.in .arc-cal-grid i.on::before { animation-name: arcDateGlow; animation-timing-function: ease-in-out; }
+.arc-shot.in .arc-cal-grid i.on::after { animation-name: arcDateRing; animation-timing-function: var(--ease); }
+.arc-shot.in .arc-log-trace::before { animation-name: arcLogTrace; animation-timing-function: linear; }
+.arc-shot.in .arc-entry-current::before { animation-name: arcLogDot; animation-timing-function: ease-in-out; }
+.arc-shot.in .arc-entry-current::after { animation-name: arcLogWash; animation-timing-function: var(--ease); }
+.arc-shot.in .arc-notes li { animation-name: arcNoteWrite; animation-timing-function: var(--ease); }
+.arc-shot.in .arc-next { animation-name: arcNextWrite; animation-timing-function: var(--ease); }
+.arc-shot.in .arc-soon li::before { animation-name: arcEventLight; animation-timing-function: ease-in-out; }
+.arc-shot.in .arc-chip::before { animation-name: arcSendSweep; animation-timing-function: var(--ease); }
+.arc-shot.in .arc-chip::after { animation-name: arcSentFrame; animation-timing-function: ease-in-out; }
+.arc-shot.in .arc-chip-ico svg { animation-name: arcSendIcon; animation-timing-function: ease-in-out; }
+.arc-shot.in .arc-chip-ico::after { animation-name: arcSentCheck; animation-timing-function: ease-in-out; }
+.arc-notes li + li { --arc-delay: .65s; }
+.arc-soon li:nth-child(2) { --arc-delay: .65s; }
+.arc-soon li:nth-child(3) { --arc-delay: 1.3s; }
+.arc-chip + .arc-chip { --arc-delay: .65s; }
+/* Отрицательное время позволяет сверять кадры цикла на снимках. */
+.arc-shot.in::before, .arc-shot.in::after,
+.arc-shot.in *, .arc-shot.in *::before, .arc-shot.in *::after {
+  animation-duration: var(--arc-cycle);
+  animation-iteration-count: infinite;
+  animation-delay: calc(var(--arc-delay, 0s) - var(--shot-t, 0s));
+}
+@keyframes arcAmbient {
+  0%, 100% { opacity: .65; transform: translate3d(-18px, 8px, 0); }
+  22% { opacity: 1; transform: translate3d(20px, -16px, 0); }
+  65% { opacity: .8; transform: translate3d(-24px, 16px, 0); }
+}
+@keyframes arcFloor { 0%, 100% { opacity: .45; } 40%, 70% { opacity: 1; } }
+@keyframes arcGlassSweep {
+  0% { opacity: 0; transform: translateX(-100%); }
+  4% { opacity: 1; }
+  28% { opacity: 1; transform: translateX(100%); }
+  32%, 100% { opacity: 0; transform: translateX(100%); }
+}
+@keyframes arcEdgeSweep {
+  0% { opacity: 0; transform: translateX(-110%); }
+  3% { opacity: 1; }
+  28% { opacity: 1; transform: translateX(350%); }
+  30%, 100% { opacity: 0; transform: translateX(350%); }
+}
+@keyframes arcDateGlow {
+  0%, 35%, 100% { opacity: .4; transform: scale(.9); }
+  10%, 17% { opacity: 1; transform: scale(1.4); }
+  65% { opacity: .7; transform: scale(1.05); }
+}
+@keyframes arcDateRing {
+  0%, 3% { opacity: 0; transform: scale(1); }
+  7% { opacity: .9; transform: scale(1.05); }
+  23%, 100% { opacity: 0; transform: scale(1.85); }
+}
+@keyframes arcLogTrace {
+  0%, 13% { opacity: 0; transform: translateY(-110%); }
+  15% { opacity: 1; }
+  28% { opacity: 1; transform: translateY(300%); }
+  29%, 100% { opacity: 0; transform: translateY(300%); }
+}
+@keyframes arcLogDot {
+  0%, 15%, 48%, 100% { opacity: .7; transform: scale(1); }
+  26%, 31% { opacity: 1; transform: scale(1.65); }
+}
+@keyframes arcLogWash {
+  0%, 17%, 67%, 100% { opacity: 0; transform: scaleX(.3); }
+  30%, 43% { opacity: 1; transform: scaleX(1); }
+  57% { opacity: 0; transform: scaleX(1); }
+}
+@keyframes arcNoteWrite {
+  0%, 23% { opacity: .28; transform: translateY(5px); }
+  32%, 87% { opacity: 1; transform: translateY(0); }
+  96%, 100% { opacity: .28; transform: translateY(5px); }
+}
+@keyframes arcNextWrite {
+  0%, 37% { opacity: .35; transform: translateY(4px); }
+  46%, 89% { opacity: 1; transform: translateY(0); }
+  98%, 100% { opacity: .35; transform: translateY(4px); }
+}
+@keyframes arcEventLight { 0%, 39%, 63%, 100% { opacity: 0; } 46%, 51% { opacity: 1; } }
+@keyframes arcSendSweep {
+  0%, 54% { opacity: 0; transform: translateX(-105%); }
+  55% { opacity: 1; }
+  64% { opacity: 1; transform: translateX(105%); }
+  65%, 100% { opacity: 0; transform: translateX(105%); }
+}
+@keyframes arcSentFrame { 0%, 54%, 86%, 100% { opacity: 0; } 62%, 75% { opacity: 1; } }
+@keyframes arcSendIcon { 0%, 57%, 87%, 100% { opacity: 1; } 62%, 80% { opacity: 0; } }
+@keyframes arcSentCheck { 0%, 61%, 87%, 100% { opacity: 0; } 66%, 79% { opacity: 1; } }
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .arc-cal { background-color: var(--surface-2); }
+}
+@media (max-width: 960px) {
+  .arc-window { grid-template-columns: minmax(0, 1fr) minmax(0, 360px); gap: 20px; padding-right: 18px; }
+  .arc-log { padding-left: 24px; }
+  .arc-cal { padding: 20px; }
+  .arc-channels { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 760px) {
+  .arc-shot { max-width: 460px; margin-top: 48px; }
+  .arc-shot::before { width: 160%; height: 650px; top: -90px; right: -30%; }
+  .arc-shot::after { left: 10%; }
+  .arc-window { grid-template-columns: minmax(0, 1fr); gap: 0; padding: 0; }
+  .arc-cal { grid-row: 1; margin: -1px -1px 0; padding: 24px; }
+  .arc-log { padding: 26px 24px 24px; }
+  .arc-log-head { margin-bottom: 26px; }
+  .arc-channels { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 400px) {
+  .arc-cal, .arc-log { padding: 20px 16px; }
+  .arc-cal-grid { gap: 4px; }
+  .arc-cal-grid i { height: 35px; border-radius: 8px; }
+  .arc-channels { gap: 8px; }
+  .arc-chip { padding: 10px 8px; gap: 6px; }
+  .arc-chip-ico { width: 19px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .arc-shot.in::before, .arc-shot.in::after,
+  .arc-shot.in *, .arc-shot.in *::before, .arc-shot.in *::after { animation: none !important; }
 }
 
 /* ---------- Плитка «Интерфейсы, которые мы собираем» ----------
@@ -4255,7 +4485,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
   .hero { --deck-h: 380px; }
   .hero-benefits { gap: 20px; }
   .hero-benefits li { flex-direction: column; gap: 10px; text-align: center; }
-  .stack-grid, .formats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .stack-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .radar-core { width: 62px; height: 62px; }
   .radar-core svg { width: 28px; height: 28px; }
   .contact-grid { grid-template-columns: 1fr; }
@@ -4287,7 +4517,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
   .blip-extra { display: none; }
   .blip-wave { width: 54px; height: 54px; }
 
-  .stack-grid, .formats { grid-template-columns: 1fr; }
+  .stack-grid { grid-template-columns: 1fr; }
   .hero-facts { grid-template-columns: 1fr; gap: 16px; }
   .hero-summary { bottom: 24px; gap: 28px; max-width: 430px; }
   .hero-benefits { grid-template-columns: 1fr; gap: 20px; padding-top: 24px; }
@@ -4304,7 +4534,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
   .hero-flow-num, .hero-flow-note { display: none; }
   .hero-flow b { font-weight: 500; font-size: 14px; color: var(--muted); }
   .hero-flow li:last-child b { color: var(--text); }
-  .contact-form, .format { padding: 28px 22px; }
+  .contact-form { padding: 28px 22px; }
   .footer-inner { flex-direction: column; align-items: flex-start; gap: 16px; }
   .footer-note { margin-right: 0; }
   .contact-links li { flex-direction: column; align-items: flex-start; gap: 6px; }
@@ -4354,7 +4584,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 @media print {
   .topbar, .hero-stage, .hero-deck, .hero-horizon, .checks-halo, .checks-glow, .checks-rim, .page-progress, .toast, .grain,
   .contact-form, .tile-art, .dial, .radar-stage, .system-stars, .crypt-stage, .crypt-lock,
-  .arc-stage, .arc-chip, .arc-soon, .signal-stage,
+  .arc-shot::before, .arc-shot::after, .arc-chip, .arc-soon, .signal-stage,
   .orb-stage { display: none; }
   body, .hero, .checks, .tiles, .radar, .system, .crypt, .arc, .orb, .signal { background: #fff; color: #000; }
   .radar-copy, .system-copy, .arc-copy { padding-top: 0; }

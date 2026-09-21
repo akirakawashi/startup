@@ -2764,229 +2764,221 @@
 </section>
 
 <!-- ===================== ХОД РАБОТЫ ===================== -->
-<!-- Образец — блок «Meetings» на reflect.app: над заголовком встаёт дуга
-     света, под текстом лежит снимок интерфейса, из-под краёв которого
-     выступают карточки. У них дуга — растровая картинка, здесь вектор:
-     обводка дуги окружности градиентом от сиреневого через белое к синему.
-     Слоя два, как у панели проверок: дальний свет размыт и разбит точечной
-     сеткой, сама нить дуги — без сетки, иначе кромка рассыплется.
-     Снимок свёрстан, а не нарисован: резкий на любом экране и правится
-     текстом. -->
 <section class="arc" id="plan">
-
-  <div class="arc-stage" aria-hidden="true">
-    <svg class="arc-cols" viewBox="0 0 900 420" preserveAspectRatio="xMidYMid meet">
-      <defs>
-        <linearGradient id="arcColBack" x1="0" y1="0" x2="0" y2="360" gradientUnits="userSpaceOnUse">
-          <stop offset="0"   stop-color="#a78bfa" stop-opacity="0"/>
-          <stop offset=".34" stop-color="#a78bfa" stop-opacity=".032"/>
-          <stop offset=".74" stop-color="#7c4dff" stop-opacity=".024"/>
-          <stop offset="1"   stop-color="#7c4dff" stop-opacity="0"/>
-        </linearGradient>
-        <!-- концы полос гасим: без этого наверху остаются голые линии там,
-             где тело полосы уже растворилось -->
-        <linearGradient id="arcColFadeG" x1="0" y1="0" x2="0" y2="360" gradientUnits="userSpaceOnUse">
-          <stop offset="0"   stop-color="#000"/>
-          <stop offset=".3"  stop-color="#fff"/>
-          <stop offset=".74" stop-color="#fff"/>
-          <stop offset="1"   stop-color="#000"/>
-        </linearGradient>
-        <mask id="arcColFade">
-          <rect x="0" y="0" width="900" height="360" fill="url(#arcColFadeG)"/>
-        </mask>
-        <!-- обводка полос: центр градиента на вершине дуги, поэтому ближние
-             к ней полосы обведены ярче дальних -->
-        <radialGradient id="arcColEdge" gradientUnits="userSpaceOnUse" cx="450" cy="200" r="420">
-          <stop offset="0"   stop-color="#e6dcff" stop-opacity=".2"/>
-          <stop offset=".45" stop-color="#b9a4ff" stop-opacity=".12"/>
-          <stop offset=".78" stop-color="#8b5cf6" stop-opacity=".04"/>
-          <stop offset="1"   stop-color="#7c4dff" stop-opacity="0"/>
-        </radialGradient>
-        <!-- купол закрывает полосы: под дугой они просвечивали сквозь свет -->
-        <filter id="arcCut"><feGaussianBlur stdDeviation="6"/></filter>
-        <mask id="arcBehind">
-          <rect x="0" y="0" width="900" height="420" fill="#fff"/>
-          <path d="M120 348 A372 372 0 0 1 780 348 Z" fill="#000" filter="url(#arcCut)"/>
-        </mask>
-      </defs>
-      <g mask="url(#arcBehind)">
-        <g fill="url(#arcColBack)">
-          <rect x="196" y="0" width="62" height="360"/>
-          <rect x="298" y="0" width="62" height="360"/>
-          <rect x="404" y="0" width="62" height="360"/>
-          <rect x="512" y="0" width="62" height="360"/>
-          <rect x="620" y="0" width="62" height="360"/>
-            </g>
-        <g fill="none" stroke="url(#arcColEdge)" stroke-width="1"
-           vector-effect="non-scaling-stroke" mask="url(#arcColFade)">
-          <path d="M196 0V360M258 0V360"/>
-          <path d="M298 0V360M360 0V360"/>
-          <path d="M404 0V360M466 0V360"/>
-          <path d="M512 0V360M574 0V360"/>
-          <path d="M620 0V360M682 0V360"/>
-            </g>
-      </g>
-    </svg>
-
-    <!-- свет, залитый внутрь купола: у образца под дугой не чернота,
-         а фиолетовая полоса, гаснущая к хорде -->
-    <svg class="arc-dome" viewBox="0 0 900 420" preserveAspectRatio="xMidYMid meet">
-      <defs>
-        <radialGradient id="arcDomeG" gradientUnits="userSpaceOnUse" cx="450" cy="150" r="252">
-          <stop offset="0"   stop-color="#a78bfa" stop-opacity=".26"/>
-          <stop offset=".3"  stop-color="#7c4dff" stop-opacity=".12"/>
-          <stop offset=".62" stop-color="#4c1d95" stop-opacity=".035"/>
-          <stop offset="1"   stop-color="#2a1370" stop-opacity="0"/>
-        </radialGradient>
-      </defs>
-      <path d="M120 348 A372 372 0 0 1 780 348 Z" fill="url(#arcDomeG)"/>
-    </svg>
-
-    <span class="arc-wash"></span>
-
-    <!-- дальний свет: та же дуга толстой обводкой под размытием и сеткой -->
-    <svg class="arc-glow" viewBox="0 0 900 420" preserveAspectRatio="xMidYMid meet">
-      <defs>
-        <linearGradient id="arcGlowG" x1="120" y1="0" x2="780" y2="0" gradientUnits="userSpaceOnUse">
-          <stop offset="0"   stop-color="#a855f7" stop-opacity="0"/>
-          <stop offset=".2"  stop-color="#a855f7" stop-opacity=".7"/>
-          <stop offset=".33" stop-color="#d8c8ff" stop-opacity=".95"/>
-          <stop offset=".46" stop-color="#ffffff"/>
-          <stop offset=".62" stop-color="#8f7cff" stop-opacity=".95"/>
-          <stop offset=".78" stop-color="#5f7cff" stop-opacity=".62"/>
-          <stop offset="1"   stop-color="#5f7cff" stop-opacity="0"/>
-        </linearGradient>
-      </defs>
-      <path d="M120 348 A372 372 0 0 1 780 348" fill="none"
-            stroke="url(#arcGlowG)" stroke-width="26" stroke-linecap="round"/>
-    </svg>
-
-    <!-- нить дуги: без размытия и без сетки, иначе кромка рассыплется -->
-    <svg class="arc-line" viewBox="0 0 900 420" preserveAspectRatio="xMidYMid meet">
-      <defs>
-        <linearGradient id="arcLineG" x1="120" y1="0" x2="780" y2="0" gradientUnits="userSpaceOnUse">
-          <stop offset="0"   stop-color="#c4b5fd" stop-opacity="0"/>
-          <stop offset=".13" stop-color="#d9b8ff" stop-opacity=".35"/>
-          <stop offset=".24" stop-color="#e9d5ff" stop-opacity=".85"/>
-          <stop offset=".36" stop-color="#ffffff"/>
-          <stop offset=".5"  stop-color="#ffffff"/>
-          <stop offset=".68" stop-color="#c9c4ff"/>
-          <stop offset=".76" stop-color="#8ea3ff" stop-opacity=".85"/>
-          <stop offset=".87" stop-color="#6f8cff" stop-opacity=".35"/>
-          <stop offset="1"   stop-color="#5f7cff" stop-opacity="0"/>
-        </linearGradient>
-      </defs>
-      <path d="M120 348 A372 372 0 0 1 780 348" fill="none"
-            stroke="url(#arcLineG)" stroke-width="4" stroke-linecap="round"/>
-    </svg>
-
-    <span class="arc-veil"></span>
-  </div>
-
   <div class="wrap arc-copy">
     <p class="arc-pill reveal">ход работы</p>
     <h2 class="arc-title reveal">Работа видна<br>каждый день</h2>
-    <p class="arc-lede reveal">
-      Что сделано и что дальше — в одном журнале с датами. Важное приходит
-      в Telegram и на почту: спрашивать «как дела» не нужно.
-    </p>
+    <p class="arc-lede reveal">Что сделано и что дальше — в одном журнале.<br>Важное — в Telegram и на почту.</p>
 
     <div class="arc-shot reveal" aria-hidden="true">
       <div class="arc-window">
-
         <div class="arc-log">
-          <p class="arc-day">Ср, 9 сентября</p>
-          <ul class="arc-notes">
-            <li>Услуги: разрез проекта — <u>готово</u></li>
-          </ul>
-
-          <p class="arc-day">Чт, 10 сентября</p>
-          <ul class="arc-notes">
-            <li>Тексты по проектам — <u>в работе</u></li>
-            <li class="sub">Факты сверены с git и README</li>
-            <li class="sub">Отзывы заменены цитатами из правил</li>
-            <li class="sub dim">Дальше: проверка…</li>
-          </ul>
-        </div>
-
-        <div class="arc-cal">
-          <div class="arc-cal-head">
-            <span class="arc-cal-month">Сентябрь</span>
-            <span class="arc-cal-nav">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 6 9 12l5.5 6"/></svg>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="3.5" y="5" width="17" height="15" rx="3"/><path d="M3.5 9.5h17M8 3.5V6M16 3.5V6"/></svg>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m9.5 6 5.5 6-5.5 6"/></svg>
-            </span>
+          <div class="arc-log-head">
+            <span class="arc-log-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="3"/><path d="M8 8h8M8 12h8M8 16h4"/></svg>Журнал проекта</span>
+            <span class="arc-log-period">Сентябрь</span>
           </div>
-
+          <div class="arc-entry arc-entry-done">
+            <span class="arc-log-trace"></span>
+            <div class="arc-entry-head"><p class="arc-day">9 сентября</p><span class="arc-status">Готово</span></div>
+            <p class="arc-entry-title">Услуги: разрез проекта</p>
+          </div>
+          <div class="arc-entry arc-entry-current">
+            <div class="arc-entry-head"><p class="arc-day">10 сентября</p><span class="arc-status">В работе</span></div>
+            <p class="arc-entry-title">Тексты по проектам</p>
+            <ul class="arc-notes">
+              <li>Факты сверены с git и README</li>
+              <li>Отзывы заменены цитатами из правил</li>
+            </ul>
+            <p class="arc-next"><span>Дальше</span>Проверка</p>
+          </div>
+          <div class="arc-channels">
+            <p class="arc-channels-cap">Важное приходит само</p>
+            <div class="arc-chip">
+              <span class="arc-chip-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M21 3 10.5 13.5"/><path d="M21 3l-6.4 18-4.1-7.5L3 9.4z"/></svg></span>
+              <span class="arc-chip-txt"><b>Telegram</b><i>выкатки и аварии</i></span>
+            </div>
+            <div class="arc-chip">
+              <span class="arc-chip-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m4 7.4 7 5a2 2 0 0 0 2 0l7-5"/></svg></span>
+              <span class="arc-chip-txt"><b>Почта</b><i>отчёт по пятницам</i></span>
+            </div>
+          </div>
+        </div>
+        <div class="arc-cal">
+          <span class="arc-cal-light"></span>
+          <span class="arc-cal-edge"></span>
+          <div class="arc-cal-head">
+            <span class="arc-cal-month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="3.5" y="5" width="17" height="15" rx="3"/><path d="M3.5 9.5h17M8 3.5V6M16 3.5V6"/></svg>Сентябрь</span>
+            <span class="arc-cal-year">2026</span>
+          </div>
           <div class="arc-cal-grid">
             <b>Пн</b><b>Вт</b><b>Ср</b><b>Чт</b><b>Пт</b><b>Сб</b><b>Вс</b>
             <i class="out">31</i><i>1</i><i>2</i><i>3</i><i>4</i><i>5</i><i>6</i>
-            <i>7</i><i>8</i><i>9</i><i class="on">10</i><i>11</i><i>12</i><i>13</i>
+            <i>7</i><i>8</i><i class="marked">9</i><i class="on">10</i><i>11</i><i>12</i><i>13</i>
             <i>14</i><i>15</i><i>16</i><i>17</i><i>18</i><i>19</i><i>20</i>
             <i>21</i><i>22</i><i>23</i><i>24</i><i>25</i><i>26</i><i>27</i>
             <i>28</i><i>29</i><i>30</i><i class="out">1</i><i class="out">2</i><i class="out">3</i><i class="out">4</i>
           </div>
+          <div class="arc-soon">
+            <p class="arc-soon-cap">Ближайшее</p>
+            <ul>
+              <li><span>Демо новой версии</span><em>15:00</em></li>
+              <li><span>Выкатка 2.4.0</span><em>21:00</em></li>
+              <li><span>Проверка резервных копий</span><em>03:00</em></li>
+            </ul>
+          </div>
         </div>
-
-      </div>
-
-      <!-- карточки выступают из-под краёв окна, как у образца -->
-      <div class="arc-chip arc-chip-a">
-        <span class="arc-chip-ico">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M21 3 10.5 13.5"/><path d="M21 3l-6.4 18-4.1-7.5L3 9.4z"/></svg>
-        </span>
-        <span class="arc-chip-txt"><b>Telegram</b><i>выкатки и аварии</i></span>
-      </div>
-
-      <div class="arc-chip arc-chip-b">
-        <span class="arc-chip-ico">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m4 7.4 7 5a2 2 0 0 0 2 0l7-5"/></svg>
-        </span>
-        <span class="arc-chip-txt"><b>Почта</b><i>отчёт по пятницам</i></span>
-      </div>
-
-      <div class="arc-soon">
-        <p class="arc-soon-cap">Ближайшее</p>
-        <ul>
-          <li><span>Демо новой версии</span><em>15:00</em><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.4V12l3 1.9"/></svg></li>
-          <li><span>Выкатка 2.4.0</span><em>21:00</em><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.4V12l3 1.9"/></svg></li>
-          <li><span>Проверка резервных копий</span><em>03:00</em><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.4V12l3 1.9"/></svg></li>
-        </ul>
       </div>
     </div>
   </div>
 </section>
 
 <!-- ===================== ФОРМАТЫ ===================== -->
-<section class="section" id="formats">
+<section class="formats-section" id="formats" aria-labelledby="formats-title">
   <div class="wrap">
-    <header class="section-head reveal">
-      <p class="section-label">05 / форматы</p>
-      <h2 class="underline-grow">Как с нами можно работать</h2>
+    <header class="formats-head reveal">
+      <p class="formats-eyebrow">форматы работы</p>
+      <h2 id="formats-title">На запуск. На развитие.<br><span>На одну задачу.</span></h2>
     </header>
 
+    <svg class="formats-defs" width="0" height="0" aria-hidden="true" focusable="false">
+      <defs>
+        <linearGradient id="formatTop" x1="0" y1="0" x2="1" y2="1">
+          <stop stop-color="#514074"/><stop offset="1" stop-color="#241a3e"/>
+        </linearGradient>
+        <linearGradient id="formatLeft" x1="0" y1="0" x2="1" y2="1">
+          <stop stop-color="#241b3b"/><stop offset="1" stop-color="#100d1b"/>
+        </linearGradient>
+        <linearGradient id="formatRight" x1="0" y1="0" x2="1" y2="1">
+          <stop stop-color="#362453"/><stop offset="1" stop-color="#161020"/>
+        </linearGradient>
+        <linearGradient id="formatPulse" x1="0" y1="0" x2="1" y2="0">
+          <stop stop-color="#7c4dff" stop-opacity="0"/><stop offset=".75" stop-color="#a78bfa"/><stop offset="1" stop-color="#f3f0ff"/>
+        </linearGradient>
+        <linearGradient id="formatModule" x1="0" y1="0" x2="1" y2="1">
+          <stop stop-color="#d3c3fb"/><stop offset=".45" stop-color="#a78bfa"/><stop offset="1" stop-color="#7c4dff"/>
+        </linearGradient>
+        <radialGradient id="formatFloor">
+          <stop stop-color="#7c4dff" stop-opacity=".4"/><stop offset="1" stop-color="#7c4dff" stop-opacity="0"/>
+        </radialGradient>
+        <g id="formatServiceLeft">
+          <path d="M112 100 174 135V199L112 164Z" fill="url(#formatLeft)" stroke="#a78bfa" stroke-opacity=".45"/>
+          <path d="m125 127 34 19m-34-7 22 13m-22 1 34 19" fill="none" stroke="#a78bfa" stroke-opacity=".35" stroke-width="2" stroke-linecap="round"/>
+        </g>
+        <g id="formatServiceRight">
+          <path d="m174 135 62-35v64l-62 35Z" fill="url(#formatRight)" stroke="#a78bfa" stroke-opacity=".55"/>
+          <path d="m186 145 36-20m-36 32 36-20" fill="none" stroke="#a78bfa" stroke-opacity=".3" stroke-width="2" stroke-linecap="round"/>
+          <path d="m188 176 8-5m8-4 8-5" fill="none" stroke="#d3c3fb" stroke-opacity=".8" stroke-width="2" stroke-linecap="round"/>
+        </g>
+        <g id="formatServiceTop">
+          <path d="m112 100 62-35 62 35-62 35Z" fill="url(#formatTop)" stroke="#d3c3fb" stroke-opacity=".65"/>
+          <path d="m137 100 37-21 37 21-37 21Z" fill="#a78bfa" fill-opacity=".07" stroke="#d3c3fb" stroke-opacity=".3"/>
+        </g>
+        <g id="formatServiceOutline" fill="none" stroke="#a78bfa" stroke-opacity=".25">
+          <path d="m112 100 62-35 62 35v64l-62 35-62-35Zm0 0 62 35 62-35m-62 35v64"/>
+        </g>
+        <g id="formatService">
+          <use href="#formatServiceLeft"/><use href="#formatServiceRight"/><use href="#formatServiceTop"/>
+        </g>
+      </defs>
+    </svg>
+
     <div class="formats">
-      <article class="format spotlight reveal">
-        <h3>Проект под ключ</h3>
-        <p class="format-note">Фиксированный объём и стоимость</p>
-        <p>Задача известна, границы понятны. Согласуем состав и срок, дальше ведём проект до запуска и передаём работающий сервис с доступами и инструкцией.</p>
-        <ul class="check"><li>Проектирование, разработка, запуск</li><li>Демонстрация на каждом этапе</li><li>Гарантийные правки после сдачи</li></ul>
+      <article class="format format-launch reveal" aria-labelledby="format-launch-title">
+        <div class="format-heading">
+          <p class="format-kicker"><span>01</span> От идеи до запуска</p>
+          <h3 id="format-launch-title">Под ключ</h3>
+          <p class="format-note">Согласованный объём и стоимость.</p>
+        </div>
+        <div class="format-scene" aria-hidden="true">
+          <svg class="format-art" viewBox="0 0 340 260" fill="none">
+            <ellipse cx="174" cy="213" rx="138" ry="37" fill="url(#formatFloor)"/>
+            <path d="M16 214H111Q139 214 153 200L174 179" class="format-track"/>
+            <path d="M16 214H111Q139 214 153 200L174 179" class="format-track-soft"/>
+            <circle cx="26" cy="214" r="3" class="format-node"/><circle cx="70" cy="214" r="3" class="format-node"/>
+            <g class="format-launch-packet"><rect x="-18" y="212.5" width="40" height="3" rx="1.5" fill="url(#formatPulse)"/></g>
+            <use href="#formatServiceOutline"/>
+            <use class="format-build format-build-left" href="#formatServiceLeft"/>
+            <use class="format-build format-build-right" href="#formatServiceRight"/>
+            <use class="format-build format-build-top" href="#formatServiceTop"/>
+            <g class="format-launch-result">
+              <circle cx="251" cy="180" r="16" fill="#171327" stroke="#a78bfa" stroke-opacity=".55"/>
+              <path d="m244 180 5 5 9-10" stroke="#d3c3fb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </g>
+            <path class="format-launch-edge" d="m112 100 62 35 62-35" stroke="#d3c3fb" stroke-width="2"/>
+          </svg>
+          <div class="format-route-labels"><span>Задача</span><span>Готовый сервис</span></div>
+        </div>
+        <details class="format-details">
+          <summary>Что входит<span class="format-toggle" aria-hidden="true"></span><span class="format-sr"> в проект под ключ</span></summary>
+          <div class="format-detail-body"><ul><li>Проектирование, разработка и запуск</li><li>Демонстрация на каждом этапе</li><li>Код, доступы и инструкция при передаче</li><li>Гарантийные правки после сдачи</li></ul></div>
+        </details>
       </article>
 
-      <article class="format format-featured spotlight reveal">
-        <span class="format-badge">Советуем</span>
-        <h3>Проект + сопровождение</h3>
-        <p class="format-note">Разовая работа и ежемесячная поддержка</p>
-        <p>То же, что выше, плюс жизнь сервиса после запуска: обновления, небольшие доработки, реакция на инциденты, слежение за нагрузкой и сроками сертификатов.</p>
-        <ul class="check"><li>Оговорённое время на доработки каждый месяц</li><li>Резервные копии и их проверка</li><li>Приоритетная реакция на аварии</li></ul>
+      <article class="format format-growth reveal" aria-labelledby="format-growth-title">
+        <div class="format-heading">
+          <p class="format-kicker"><span>02</span> Вместе после запуска</p>
+          <h3 id="format-growth-title">С сопровождением</h3>
+          <p class="format-note">Разработка и ежемесячная поддержка.</p>
+        </div>
+        <div class="format-scene" aria-hidden="true">
+          <svg class="format-art" viewBox="0 0 340 260" fill="none">
+            <ellipse cx="174" cy="218" rx="155" ry="39" fill="url(#formatFloor)"/>
+            <g transform="translate(174 141) rotate(-18) scale(1 .52)">
+              <circle r="145" class="format-orbit-soft"/>
+              <circle r="145" class="format-orbit-track"/>
+              <g class="format-orbit-runner">
+                <path d="M111-93A145 145 0 0 1 145 0" stroke="#7c4dff" stroke-opacity=".45" stroke-width="3"/>
+                <path d="M130-64A145 145 0 0 1 145 0" stroke="#a78bfa" stroke-opacity=".65" stroke-width="3"/>
+                <path d="M142-29A145 145 0 0 1 145 0" stroke="#e9dfff" stroke-width="3"/>
+                <ellipse cx="145" rx="4" ry="7" fill="#f3f0ff"/>
+              </g>
+            </g>
+            <use href="#formatService"/>
+            <path class="format-growth-core" d="m147 100 27-15 27 15-27 15Z" fill="url(#formatModule)"/>
+            <g class="format-satellite format-satellite-a">
+              <path d="m37 169 17-10 17 10v19l-17 10-17-10Z" fill="#1c142c" stroke="#a78bfa" stroke-opacity=".55"/>
+              <path d="m45 179 9 5 9-5m-9-10v15" stroke="#d3c3fb" stroke-width="1.5" stroke-linecap="round"/>
+            </g>
+            <g class="format-satellite format-satellite-b">
+              <path d="m280 83 14-8 14 8v16l-14 8-14-8Z" fill="#241738" stroke="#a78bfa" stroke-opacity=".6"/>
+              <path d="m289 91 4 4 7-8" stroke="#d3c3fb" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </g>
+          </svg>
+          <div class="format-route-labels"><span>Запуск</span><span class="format-ongoing"><i></i>Развитие</span></div>
+        </div>
+        <details class="format-details">
+          <summary>Что входит<span class="format-toggle" aria-hidden="true"></span><span class="format-sr"> в сопровождение</span></summary>
+          <div class="format-detail-body"><ul><li>Время на доработки каждый месяц</li><li>Резервные копии и мониторинг</li><li>Приоритетная реакция на аварии</li></ul></div>
+        </details>
       </article>
 
-      <article class="format spotlight reveal">
-        <h3>Точечные работы</h3>
-        <p class="format-note">Почасово или небольшим пакетом</p>
-        <p>Есть система — нужно доделать, ускорить, починить или перенести. Разберёмся в чужом коде, приведём в порядок сборку и выкатку, закроем узкие места.</p>
-        <ul class="check"><li>Доработка существующего проекта</li><li>Настройка деплоя и CI/CD</li><li>Перенос на другой сервер или хостинг</li></ul>
+      <article class="format format-task reveal" aria-labelledby="format-task-title">
+        <div class="format-heading">
+          <p class="format-kicker"><span>03</span> Подключаемся точечно</p>
+          <h3 id="format-task-title">Отдельная задача</h3>
+          <p class="format-note">Почасово или небольшим пакетом.</p>
+        </div>
+        <div class="format-scene" aria-hidden="true">
+          <svg class="format-art" viewBox="0 0 340 260" fill="none">
+            <ellipse cx="174" cy="213" rx="124" ry="33" fill="url(#formatFloor)"/>
+            <use class="format-existing" href="#formatService"/>
+            <path d="M174 100 248 57Q257 52 267 52H302" class="format-module-track"/>
+            <circle cx="302" cy="52" r="3" class="format-node"/>
+            <path d="m148 100 26-15 26 15-26 15Z" fill="#100b1c" stroke="#a78bfa" stroke-opacity=".45" stroke-dasharray="3 4"/>
+            <g class="format-module">
+              <path d="m148 96 26 15 26-15v8l-26 15-26-15Z" fill="#7c4dff" stroke="#c4b5fd" stroke-opacity=".8"/>
+              <path d="m148 96 26-15 26 15-26 15Z" fill="url(#formatModule)" stroke="#e9dfff" stroke-opacity=".85"/>
+              <path d="m166 97 6 3 10-6" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </g>
+            <path class="format-task-flash" d="m112 100 62 35 62-35v64l-62 35-62-35Z" stroke="#c4b5fd" stroke-width="1.5"/>
+            <g class="format-task-result"><circle cx="251" cy="180" r="16" fill="#171327" stroke="#a78bfa" stroke-opacity=".55"/><path d="m244 180 5 5 9-10" stroke="#d3c3fb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></g>
+          </svg>
+          <div class="format-route-labels"><span>Ваш сервис</span><span>Нужное изменение</span></div>
+        </div>
+        <details class="format-details">
+          <summary>Что входит<span class="format-toggle" aria-hidden="true"></span><span class="format-sr"> в точечные работы</span></summary>
+          <div class="format-detail-body"><ul><li>Доработка существующего проекта</li><li>Настройка сборки и автоматического выпуска</li><li>Перенос на другой сервер</li></ul></div>
+        </details>
       </article>
     </div>
   </div>
@@ -3001,7 +2993,7 @@
     </header>
 
     <div class="faq">
-      <details class="faq-item reveal"><summary>Сколько стоит и от чего зависит цена</summary><p>Цена считается от объёма, а не от количества часов. После разбора задачи присылаем предложение с фиксированной стоимостью пакета и сроком — вы заранее знаете сумму. Небольшой сайт и учётная система отличаются по цене на порядок, поэтому назвать число до разговора честно не получится.</p></details>
+      <details class="faq-item reveal"><summary>Сколько стоит и от чего зависит цена</summary><p>Стоимость зависит от задачи и формата работы. Для проекта под ключ согласуем объём, сумму и срок; для отдельных доработок — пакет или почасовую работу. Сопровождение обсуждаем отдельно. Небольшой сайт и учётная система отличаются по цене на порядок, поэтому назвать число до разговора честно не получится.</p></details>
       <details class="faq-item reveal"><summary>Сколько занимает по времени</summary><p>Лендинг или простой сайт — от нескольких дней. Сервис с личным кабинетом, ролями и оплатой — от нескольких недель. Точный срок называем вместе со сметой, и он делится на этапы, чтобы вы видели прогресс, а не ждали в тишине.</p></details>
       <details class="faq-item reveal"><summary>Что если у меня ещё нет технического задания</summary><p>Это нормальная ситуация и чаще всего так и бывает. Достаточно рассказать своими словами, что должно происходить и кто этим будет пользоваться — техническую часть сформулируем сами и покажем вам на согласование.</p></details>
       <details class="faq-item reveal"><summary>Возьмётесь за чужой недоделанный проект</summary><p>Да. Сначала смотрим код и инфраструктуру и честно говорим, что дешевле: доводить существующее или переписать часть. Бывает и так, и так — решение принимаете вы, но с нашей оценкой на руках.</p></details>
