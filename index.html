@@ -2984,28 +2984,8 @@
   </div>
 </section>
 
-<!-- ===================== FAQ ===================== -->
-<section class="section" id="faq">
-  <div class="wrap wrap-narrow">
-    <header class="section-head reveal">
-      <p class="section-label">06 / вопросы</p>
-      <h2 class="underline-grow">Частые вопросы</h2>
-    </header>
-
-    <div class="faq">
-      <details class="faq-item reveal"><summary>Сколько стоит и от чего зависит цена</summary><p>Стоимость зависит от задачи и формата работы. Для проекта под ключ согласуем объём, сумму и срок; для отдельных доработок — пакет или почасовую работу. Сопровождение обсуждаем отдельно. Небольшой сайт и учётная система отличаются по цене на порядок, поэтому назвать число до разговора честно не получится.</p></details>
-      <details class="faq-item reveal"><summary>Сколько занимает по времени</summary><p>Лендинг или простой сайт — от нескольких дней. Сервис с личным кабинетом, ролями и оплатой — от нескольких недель. Точный срок называем вместе со сметой, и он делится на этапы, чтобы вы видели прогресс, а не ждали в тишине.</p></details>
-      <details class="faq-item reveal"><summary>Что если у меня ещё нет технического задания</summary><p>Это нормальная ситуация и чаще всего так и бывает. Достаточно рассказать своими словами, что должно происходить и кто этим будет пользоваться — техническую часть сформулируем сами и покажем вам на согласование.</p></details>
-      <details class="faq-item reveal"><summary>Возьмётесь за чужой недоделанный проект</summary><p>Да. Сначала смотрим код и инфраструктуру и честно говорим, что дешевле: доводить существующее или переписать часть. Бывает и так, и так — решение принимаете вы, но с нашей оценкой на руках.</p></details>
-      <details class="faq-item reveal"><summary>Кому принадлежит код и доступы</summary><p>Вам. Репозиторий, сервер, домен и все учётные записи оформляются на заказчика, а не на нас. Уйти к другому исполнителю вы можете в любой момент и без нашего участия — это принципиальная позиция, а не уступка.</p></details>
-      <details class="faq-item reveal"><summary>Делаете ли дизайн</summary><p>Интерфейсы приложений и админок — да: в Ridebook и Volnateca они наши. Если нужен выразительный имиджевый дизайн, берём его подрядом у дизайнера и собираем сами — так честнее, чем выдавать вёрстку за дизайн.</p></details>
-      <details class="faq-item reveal"><summary>Как оформляются отношения и оплата</summary><p>По договору; форму оформления обсуждаем до начала работы. Оплата обычно делится на этапы: предоплата, промежуточный платёж по ходу и остаток при сдаче.</p></details>
-    </div>
-  </div>
-</section>
-
 <!-- ===================== ЧТО СОБИРАЕМ ===================== -->
-<!-- Светлая полоса среди тёмной страницы: плитка карточек разной ширины,
+<!-- Тёмная плитка карточек разной ширины,
      в каждой подпись сверху и живой макет интерфейса снизу. Макеты сверстаны,
      а не нарисованы: остаются резкими на любом экране и весят ноль. -->
 <section class="tiles" id="tiles">
@@ -3055,6 +3035,7 @@
       <!-- 3. Круг: выкатка -->
       <article class="tile tile-dial reveal">
         <div class="dial" aria-hidden="true">
+          <span class="dial-orbit"></span>
           <span class="dial-ver">v1.4</span>
           <span class="dial-sub">выкачено</span>
           <span class="dial-plus"></span>
@@ -3070,6 +3051,7 @@
               <div class="bub in"><span></span><span class="w2"></span></div>
               <div class="bub out"><span class="w2"></span></div>
               <div class="bub in"><span></span></div>
+              <div class="mk-typing"><i></i><i></i><i></i></div>
               <div class="mk-input"></div>
             </div>
           </div>
@@ -3095,19 +3077,26 @@
         <div class="tile-body">
           <p class="tile-cap"><b>Карты и маршруты.</b> Геозоны, треки, привязка к дорогам.</p>
           <div class="tile-art" aria-hidden="true">
-            <svg class="mk mk-map" viewBox="0 0 420 200" preserveAspectRatio="xMidYMid slice">
+            <svg class="mk mk-map" viewBox="0 0 420 200" preserveAspectRatio="xMidYMid meet">
               <defs>
                 <pattern id="tgrid" width="34" height="34" patternUnits="userSpaceOnUse">
                   <path d="M34 0H0v34" fill="none" stroke="rgba(255,255,255,.06)"/>
                 </pattern>
               </defs>
               <rect width="420" height="200" fill="url(#tgrid)"/>
-              <path d="M18 168C90 168 96 96 150 92s70 52 128 40 84-76 128-72"
+              <path class="map-route" d="M18 168C90 168 96 96 150 92s70 52 128 40 84-76 128-72"
                     fill="none" stroke="var(--accent-hi)" stroke-width="2.5" stroke-linecap="round"/>
               <circle cx="18" cy="168" r="5" fill="var(--accent-hi)"/>
               <circle cx="406" cy="60" r="5" fill="var(--ok)"/>
               <rect x="196" y="34" width="96" height="62" rx="10"
                     fill="rgba(94,234,212,.1)" stroke="rgba(94,234,212,.5)" stroke-dasharray="5 4"/>
+              <g class="map-arrival" transform="translate(406 60)"><circle r="6"/></g>
+              <g class="map-moving">
+                <g class="map-traveller" transform="translate(406 60)">
+                  <circle class="map-halo" r="14"/>
+                  <circle class="map-dot" r="5"/>
+                </g>
+              </g>
             </svg>
           </div>
         </div>
@@ -3269,6 +3258,70 @@
     <canvas class="team-globe-canvas"></canvas>
   </div>
   <div class="team-stars" aria-hidden="true"><i></i><i></i><i></i></div>
+</section>
+
+<!-- ===================== FAQ ===================== -->
+<section class="faq-section" id="faq" aria-labelledby="faq-title">
+  <div class="wrap faq-layout">
+    <header class="faq-intro reveal">
+      <div class="faq-ambient" aria-hidden="true"></div>
+      <p class="faq-eyebrow">вопросы и ответы</p>
+      <h2 id="faq-title">Перед тем<br><span>как начать.</span></h2>
+      <p class="faq-lede">О стоимости, сроках<br>и работе вместе.</p>
+    </header>
+
+    <div class="faq reveal">
+      <details class="faq-item" open>
+        <summary aria-controls="faq-answer-price"><span>Сколько стоит проект?</span><i class="faq-toggle" aria-hidden="true"></i></summary>
+        <div class="faq-answer" id="faq-answer-price">
+          <div class="faq-answer-inner"><p>Стоимость зависит от задачи и формата работы. Для проекта под ключ согласуем объём, сумму и срок; для отдельных доработок — пакет или почасовую работу. Сопровождение обсуждаем отдельно. Небольшой сайт и учётная система отличаются по цене на порядок, поэтому назвать число до разговора честно не получится.</p></div>
+        </div>
+        <span class="faq-glint" aria-hidden="true"></span>
+      </details>
+      <details class="faq-item">
+        <summary aria-controls="faq-answer-timing"><span>Какие сроки?</span><i class="faq-toggle" aria-hidden="true"></i></summary>
+        <div class="faq-answer" id="faq-answer-timing">
+          <div class="faq-answer-inner"><p>Лендинг или простой сайт — от нескольких дней. Сервис с личным кабинетом, ролями и оплатой — от нескольких недель. Точный срок называем вместе со сметой, и он делится на этапы, чтобы вы видели прогресс, а не ждали в тишине.</p></div>
+        </div>
+        <span class="faq-glint" aria-hidden="true"></span>
+      </details>
+      <details class="faq-item">
+        <summary aria-controls="faq-answer-brief"><span>Можно начать без технического задания?</span><i class="faq-toggle" aria-hidden="true"></i></summary>
+        <div class="faq-answer" id="faq-answer-brief">
+          <div class="faq-answer-inner"><p>Это нормальная ситуация и чаще всего так и бывает. Достаточно рассказать своими словами, что должно происходить и кто этим будет пользоваться — техническую часть сформулируем сами и покажем вам на согласование.</p></div>
+        </div>
+        <span class="faq-glint" aria-hidden="true"></span>
+      </details>
+      <details class="faq-item">
+        <summary aria-controls="faq-answer-existing"><span>Берётесь за чужой проект?</span><i class="faq-toggle" aria-hidden="true"></i></summary>
+        <div class="faq-answer" id="faq-answer-existing">
+          <div class="faq-answer-inner"><p>Да. Сначала смотрим код и инфраструктуру и честно говорим, что дешевле: доводить существующее или переписать часть. Бывает и так, и так — решение принимаете вы, но с нашей оценкой на руках.</p></div>
+        </div>
+        <span class="faq-glint" aria-hidden="true"></span>
+      </details>
+      <details class="faq-item">
+        <summary aria-controls="faq-answer-ownership"><span>Кому принадлежат код и доступы?</span><i class="faq-toggle" aria-hidden="true"></i></summary>
+        <div class="faq-answer" id="faq-answer-ownership">
+          <div class="faq-answer-inner"><p>Вам. Репозиторий, сервер, домен и все учётные записи оформляются на заказчика, а не на нас. Уйти к другому исполнителю вы можете в любой момент и без нашего участия — это принципиальная позиция, а не уступка.</p></div>
+        </div>
+        <span class="faq-glint" aria-hidden="true"></span>
+      </details>
+      <details class="faq-item">
+        <summary aria-controls="faq-answer-design"><span>Делаете дизайн?</span><i class="faq-toggle" aria-hidden="true"></i></summary>
+        <div class="faq-answer" id="faq-answer-design">
+          <div class="faq-answer-inner"><p>Интерфейсы приложений и админок — да: в Ridebook и Volnateca они наши. Если нужен выразительный имиджевый дизайн, берём его подрядом у дизайнера и собираем сами — так честнее, чем выдавать вёрстку за дизайн.</p></div>
+        </div>
+        <span class="faq-glint" aria-hidden="true"></span>
+      </details>
+      <details class="faq-item">
+        <summary aria-controls="faq-answer-payment"><span>Как оформляем работу и оплату?</span><i class="faq-toggle" aria-hidden="true"></i></summary>
+        <div class="faq-answer" id="faq-answer-payment">
+          <div class="faq-answer-inner"><p>По договору; форму оформления обсуждаем до начала работы. Оплата обычно делится на этапы: предоплата, промежуточный платёж по ходу и остаток при сдаче.</p></div>
+        </div>
+        <span class="faq-glint" aria-hidden="true"></span>
+      </details>
+    </div>
+  </div>
 </section>
 
 <!-- ===================== КОНТАКТ ===================== -->

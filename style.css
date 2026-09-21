@@ -1826,29 +1826,134 @@ button, input, select, textarea { font: inherit; color: inherit; }
   .formats-section { background: #fff; }
 }
 
-/* ---------- FAQ ---------- */
-.faq { display: grid; gap: 10px; }
-.faq-item {
-  border: 1px solid var(--line); border-radius: var(--radius-sm);
-  background: var(--surface); overflow: hidden;
-  transition: border-color .3s var(--ease), background .3s var(--ease);
+/* ---------- FAQ: последние вопросы перед контактом ---------- */
+.faq-section {
+  position: relative; isolation: isolate; overflow: clip;
+  padding: clamp(80px, 8vw, 124px) 0 clamp(72px, 7vw, 108px);
+  background: var(--bg);
 }
-.faq-item[open] { border-color: var(--accent-line); background: var(--surface-2); }
+.faq-layout { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.35fr); gap: clamp(48px, 6vw, 88px); align-items: start; }
+.faq-intro { position: sticky; top: 128px; isolation: isolate; padding: 15px 0 36px; }
+.faq-eyebrow { margin-bottom: 24px; color: var(--accent); font-family: var(--ff-mono); font-size: var(--fz-min); line-height: 1.5; letter-spacing: .09em; }
+.faq-intro h2 { font-size: clamp(2.2rem, 4vw, 3.25rem); line-height: 1.15; letter-spacing: -.035em; }
+.faq-intro h2 span { color: var(--muted); }
+.faq-lede { margin-top: 24px; font-size: .97rem; line-height: 1.75; color: var(--muted); }
+/* Ореол — готовый размытый слой. Движется только его transform/opacity;
+   край секции остаётся общим с соседями. */
+.faq-ambient { position: absolute; z-index: -1; inset: -40px -44px -34px -60px; pointer-events: none; }
+.faq-ambient::before, .faq-ambient::after { content: ""; position: absolute; border-radius: 50%; }
+.faq-ambient::before {
+  inset: 10% 0 0;
+  background: radial-gradient(ellipse at 46% 50%, rgba(var(--accent-deep-rgb), .23), rgba(var(--accent-deep-rgb), .05) 43%, transparent 70%);
+  filter: blur(24px); will-change: transform;
+  animation: faqAmbientDrift 10s ease-in-out infinite;
+}
+.faq-ambient::after {
+  width: 42%; height: 30%; left: 18%; top: 31%;
+  background: radial-gradient(ellipse, rgba(var(--accent-rgb), .16), transparent 70%);
+  filter: blur(20px); animation: faqAmbientBreath 7s ease-in-out infinite;
+}
+.faq { --faq-inset: 26px; --faq-radius: 14px; position: relative; display: grid; gap: 14px; min-width: 0; }
+.faq-item { position: relative; isolation: isolate; border-radius: var(--faq-radius); }
+.faq-item::before {
+  content: ""; position: absolute; z-index: -1; inset: 0;
+  border-radius: inherit; pointer-events: none; opacity: 0;
+  background: radial-gradient(ellipse at 0 0, rgba(var(--accent-rgb), .08), transparent 65%),
+    linear-gradient(105deg, rgba(var(--accent-deep-rgb), .12), rgba(var(--accent-rgb), .025) 62%, transparent);
+  box-shadow: inset 0 1px 0 rgba(var(--accent-rgb), .12);
+  transition: opacity .3s var(--ease);
+}
+.faq-item::after {
+  content: ""; position: absolute; left: 0; top: 24px; bottom: 28px; width: 2px;
+  border-radius: 2px; opacity: 0; pointer-events: none;
+  background: linear-gradient(transparent, var(--accent-hi) 28%, var(--accent) 68%, transparent);
+  box-shadow: 0 0 18px 4px rgba(var(--accent-deep-rgb), .36);
+  transition: opacity .3s var(--ease);
+}
+.faq-item:has(summary:focus-visible)::before { opacity: .6; }
+@media (hover: hover) and (pointer: fine) {
+  .faq-item:has(summary:hover)::before { opacity: .5; }
+  .faq-item summary:hover .faq-toggle { border-color: rgba(var(--accent-rgb), .5); background: rgba(var(--accent-deep-rgb), .16); }
+}
+.faq-item[open]:not(.is-closing)::before, .faq-item[open]:not(.is-closing)::after { opacity: 1; }
 .faq-item summary {
-  display: flex; align-items: center; justify-content: space-between; gap: 16px;
-  padding: 20px 24px; cursor: pointer; list-style: none;
-  font-family: var(--ff-display); font-weight: 600; font-size: 1rem; letter-spacing: -.012em;
-  transition: color .2s var(--ease);
+  position: relative; display: flex; align-items: center; justify-content: space-between; gap: 22px;
+  padding: 24px var(--faq-inset); cursor: pointer; list-style: none;
+  font-family: var(--ff-body); font-weight: 500; font-size: .99rem; line-height: 1.55; letter-spacing: -.015em;
+  color: var(--muted); transition: color .2s var(--ease);
 }
 .faq-item summary::-webkit-details-marker { display: none; }
-.faq-item summary::after {
-  content: ""; flex: none; width: 10px; height: 10px;
-  border-right: 1.8px solid var(--accent); border-bottom: 1.8px solid var(--accent);
-  transform: rotate(45deg) translateY(-2px); transition: transform .3s var(--ease);
+.faq-item:not(:last-child) summary::after {
+  content: ""; position: absolute; left: var(--faq-radius); right: var(--faq-radius); bottom: 0; height: 1px;
+  background: rgba(var(--accent-rgb), .1); pointer-events: none; transition: opacity .2s var(--ease);
 }
-.faq-item[open] summary::after { transform: rotate(-135deg) translateY(-2px); }
-.faq-item summary:hover { color: var(--accent-hi); }
-.faq-item p { padding: 0 24px 22px; color: var(--muted); font-size: .93rem; max-width: 72ch; }
+.faq-item[open] summary::after { opacity: 0; }
+.faq-item summary:is(:hover, :focus-visible), .faq-item[open]:not(.is-closing) summary { color: var(--text); }
+.faq-toggle {
+  position: relative; display: block; flex: none; width: 25px; height: 25px;
+  border: 1px solid rgba(var(--accent-rgb), .22); border-radius: 50%;
+  color: var(--accent); background: rgba(var(--accent-rgb), .025);
+  transition: background .25s var(--ease), border-color .25s var(--ease);
+}
+.faq-toggle::before, .faq-toggle::after { content: ""; position: absolute; background: currentColor; border-radius: 1px; }
+.faq-toggle::before { top: 11px; left: 7px; width: 9px; height: 1px; }
+.faq-toggle::after { left: 11px; top: 7px; width: 1px; height: 9px; transition: opacity .2s var(--ease); }
+.faq-item[open]:not(.is-closing) .faq-toggle { border-color: rgba(var(--accent-rgb), .45); background: rgba(var(--accent-deep-rgb), .16); }
+.faq-item[open]:not(.is-closing) .faq-toggle::after { opacity: 0; }
+.faq-answer { overflow: hidden; }
+.faq-answer-inner { padding: 2px calc(var(--faq-inset) + 30px) 32px var(--faq-inset); }
+.faq-answer p { margin: 0; color: var(--muted); font-size: .91rem; line-height: 1.8; }
+/* Неподвижная маска повторяет кромку карточки, включая оба скругления.
+   Блик проходит всю ширину; затухание начинается уже за правым краем. */
+.faq-glint {
+  position: absolute; inset: 0; padding: 1px; overflow: hidden; pointer-events: none; border-radius: var(--faq-radius);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude;
+}
+.faq-glint::before {
+  content: ""; position: absolute; inset: 0 0 auto; height: calc(var(--faq-radius) * 2); opacity: 0;
+  background: linear-gradient(90deg, transparent 25%, rgba(var(--accent-rgb), .35) 42%, var(--accent-hi) 50%, rgba(var(--accent-rgb), .2) 58%, transparent 75%);
+  -webkit-mask-image: linear-gradient(#000 50%, transparent); mask-image: linear-gradient(#000 50%, transparent);
+  transform: translateX(-100%);
+}
+.faq-item[open]:not(.is-closing) .faq-glint::before { animation: faqAnswerGlint 1.1s linear both; }
+@keyframes faqAmbientDrift {
+  0%, 100% { opacity: .6; transform: translate3d(-14px, 7px, 0); }
+  50% { opacity: 1; transform: translate3d(19px, -12px, 0); }
+}
+@keyframes faqAmbientBreath { 0%, 100% { opacity: .3; } 50% { opacity: .9; } }
+@keyframes faqAnswerGlint {
+  0% { opacity: 0; transform: translateX(-100%); }
+  20%, 86% { opacity: .9; }
+  100% { opacity: 0; transform: translateX(100%); }
+}
+@media (max-width: 900px) {
+  .faq-layout { grid-template-columns: minmax(0, .7fr) minmax(0, 1.3fr); gap: 44px; }
+  .faq-intro h2 { font-size: 2.25rem; }
+  .faq { --faq-inset: 22px; }
+  .faq-answer-inner { padding-right: var(--faq-inset); }
+}
+@media (max-width: 720px) {
+  .faq-layout { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+  .faq-intro { position: relative; top: auto; padding: 0 0 14px; }
+  .faq-intro h2 { font-size: clamp(2.15rem, 7vw, 2.9rem); }
+  .faq-eyebrow { margin-bottom: 18px; }
+  .faq-lede { margin-top: 18px; }
+  .faq-ambient { inset: -24px 4% -24px -30px; }
+  .faq { --faq-inset: 18px; gap: 12px; }
+  .faq-item summary { gap: 16px; padding-block: 22px; font-size: .94rem; }
+  .faq-answer-inner { padding-top: 0; padding-bottom: 28px; }
+  .faq-answer p { font-size: .9rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .faq-ambient::before, .faq-ambient::after, .faq-item[open] .faq-glint::before { animation: none !important; }
+}
+@media print {
+  .faq-section { background: #fff; }
+  .faq-intro { position: static; }
+  .faq-ambient, .faq-glint, .faq-item::before, .faq-item::after { display: none; }
+}
 
 /* ---------- Предложение: сфера из Reflect ----------
    Исходный PNG 1488 × 1674 содержит свет, меридианы и отражение.
@@ -4046,6 +4151,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
    Макеты внутри карточек свёрстаны, а не нарисованы: резкие на любом
    экране, ноль запросов, правятся текстом. */
 .tiles {
+  --tile-cycle: 12s;
   --card:  var(--surface-2);
   --ink:   var(--text);
   --ink-2: var(--muted);
@@ -4084,7 +4190,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 /* Два слоя: .tile — только позиция и свечение, .tile-body — сама карточка.
    Разнесены потому, что у карточки overflow: hidden ради обрезки макета,
    и свечение, будь оно её псевдоэлементом, срезалось бы по той же границе */
-.tile { position: relative; min-height: 318px; }
+.tile { --tile-delay: 0s; position: relative; min-height: 318px; }
 .tile-body {
   position: relative; z-index: 1; height: 100%;
   padding: 24px 28px;
@@ -4190,6 +4296,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 }
 .dial {
   position: relative;
+  container-type: inline-size;
   width: min(276px, 100%);
   aspect-ratio: 1;   /* высоту считаем от ширины: фиксированная давала эллипс */
   border-radius: 50%;
@@ -4210,14 +4317,14 @@ button, input, select, textarea { font: inherit; color: inherit; }
 }
 .dial-ver {
   position: relative;
-  font-family: var(--ff-display); font-size: 3.4rem; font-weight: 600;
+  font-family: var(--ff-display); font-size: clamp(2rem, 29cqi, 3.4rem); font-weight: 600;
   letter-spacing: -.04em; color: #fff;
   text-shadow: 0 0 26px rgba(255, 255, 255, .5);
 }
 .dial-sub { position: relative; font-family: var(--ff-mono); font-size: var(--fz-min); color: rgba(var(--text-rgb), .5); }
 .dial-plus {
   position: absolute; right: -8px; bottom: 8px;
-  width: 60px; height: 60px; border-radius: 50%;
+  width: clamp(36px, 32%, 60px); aspect-ratio: 1; border-radius: 50%;
   background: var(--surface-2);
   box-shadow: 0 8px 20px -8px rgba(30, 20, 70, .5);
 }
@@ -4244,7 +4351,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
   height: 30px; width: 45%; border-radius: 8px;
   background: linear-gradient(135deg, var(--accent-hi), var(--accent-deep));
 }
-.mk-roles { display: flex; gap: 6px; margin-top: 2px; }
+.mk-roles { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 2px; }
 .mk-roles i {
   font-style: normal; font-family: var(--ff-mono); font-size: var(--fz-min); line-height: 1.35;
   padding: 2px 7px; border-radius: 999px;
@@ -4259,12 +4366,12 @@ button, input, select, textarea { font: inherit; color: inherit; }
   background: rgba(255, 255, 255, .03);
 }
 .mk-row.head { background: none; opacity: .5; }
-.mk-row.on { background: rgba(94, 234, 212, .1); box-shadow: inset 0 0 0 1px rgba(94, 234, 212, .22); }
+.mk-row.on { position: relative; isolation: isolate; }
 .mk-row i {
   flex: none; width: 12px; height: 12px; border-radius: 3px;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .22);
 }
-.mk-row i.ck { background: var(--ok); box-shadow: none; }
+.mk-row i.ck { position: relative; }
 .mk-row span { height: 6px; border-radius: 3px; background: rgba(255, 255, 255, .18); flex: 1; }
 .mk-row span.w2 { flex: 2; }
 .mk-row em { flex: none; width: 26px; height: 6px; border-radius: 3px; background: rgba(255, 255, 255, .1); }
@@ -4272,7 +4379,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 /* чат */
 .mk-chat { display: flex; flex-direction: column; gap: 8px; padding-top: 10px; }
 .bub { display: flex; flex-direction: column; gap: 5px; max-width: 62%; padding: 9px 11px; border-radius: 12px; }
-.bub span { height: 6px; border-radius: 3px; background: rgba(255, 255, 255, .3); width: 62px; }
+.bub span { height: 6px; flex: none; border-radius: 3px; background: rgba(255, 255, 255, .3); width: 62px; max-width: 100%; }
 .bub span.w2 { width: 104px; }
 .bub.in  { background: rgba(255, 255, 255, .06); border-bottom-left-radius: 4px; }
 .bub.out { align-self: flex-end; background: rgba(var(--accent-rgb), .2); border-bottom-right-radius: 4px; }
@@ -4326,11 +4433,174 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .box.b2 i { background: var(--accent-hi); color: #1a0f3d; }
 .box.b3 { left: 68%; top: 30%; width: 20%; height: 40%; }
 .scan {
-  position: absolute; left: 0; right: 0; top: 0; height: 2px;
-  background: linear-gradient(90deg, transparent, rgba(94, 234, 212, .8), transparent);
-  animation: cvScan 3.4s linear infinite;
+  position: absolute; inset: 0; opacity: 0; pointer-events: none;
 }
-@keyframes cvScan { to { transform: translateY(150px); } }
+.scan::before {
+  content: ""; position: absolute; left: 0; right: 0; top: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(94, 234, 212, .8), transparent);
+  box-shadow: 0 0 14px 3px rgba(94, 234, 212, .16);
+}
+
+/* Короткие действия внутри неподвижных макетов. Размытия и тени статичны,
+   в циклах меняются только готовые слои через transform и opacity. */
+.tile-b { --tile-delay: -2.2s; }
+.tile-c { --tile-delay: -4.4s; }
+.tile-d { --tile-delay: -1.2s; }
+.tile-e { --tile-delay: -5.8s; }
+.tile-f { --tile-delay: -7.4s; }
+.tile-dial { --tile-delay: -3s; }
+.mk-field { position: relative; overflow: hidden; }
+.mk-field::before {
+  content: ""; position: absolute; left: 12px; top: calc(50% - 3px); width: 58%; height: 6px;
+  border-radius: 3px; background: rgba(var(--accent-hi-rgb), .55); transform-origin: left;
+}
+.mk-field.short::before {
+  width: 54%; border-radius: 0;
+  background: radial-gradient(circle at 3px 3px, var(--accent-hi) 2px, transparent 2.5px) 0 0 / 9px 6px;
+}
+.mk-roles i { position: relative; isolation: isolate; }
+.mk-roles i:first-child::before {
+  content: ""; position: absolute; z-index: -1; inset: 0; border-radius: inherit;
+  background: rgba(var(--accent-rgb), .26); box-shadow: inset 0 0 0 1px rgba(var(--accent-rgb), .5);
+}
+.mk-btn { position: relative; overflow: hidden; flex-shrink: 0; }
+.mk-btn::before {
+  content: ""; position: absolute; inset: 0; opacity: 0;
+  background: linear-gradient(90deg, transparent, #ffffffb3, transparent);
+}
+.mk-btn::after {
+  content: ""; position: absolute; left: 50%; top: 50%; width: 10px; height: 6px;
+  border-left: 2px solid #fff; border-bottom: 2px solid #fff; transform: translate(-50%, -70%) rotate(-45deg);
+}
+.mk-row.on::before {
+  content: ""; position: absolute; z-index: -1; inset: 0; border-radius: inherit;
+  background: rgba(94, 234, 212, .1); box-shadow: inset 0 0 0 1px rgba(94, 234, 212, .3);
+}
+.mk-row i.ck::after { content: ""; position: absolute; inset: 0; border-radius: inherit; background: var(--ok); }
+.mk-row.on em { position: relative; }
+.mk-row.on em::after { content: ""; position: absolute; inset: 0; border-radius: inherit; background: var(--ok); }
+.mk-row.on:nth-child(3) { --step-delay: .8s; }
+.mk-typing { position: absolute; left: 10px; top: 94px; display: flex; gap: 4px; opacity: 0; }
+.mk-typing i { width: 4px; height: 4px; border-radius: 50%; background: var(--accent-hi); }
+.mk-input { position: relative; flex-shrink: 0; overflow: hidden; }
+.mk-input::before {
+  content: ""; position: absolute; left: 12px; right: 38%; top: calc(50% - 2px); height: 4px;
+  border-radius: 3px; background: rgba(var(--accent-hi-rgb), .6); transform-origin: left; opacity: 0;
+}
+.file span { position: relative; overflow: hidden; }
+.file span::after { content: ""; position: absolute; inset: 0; background: var(--accent-hi); border-radius: inherit; transform-origin: left; }
+.file em { position: relative; background: transparent; }
+.file em::after {
+  content: ""; position: absolute; top: -1px; right: 4px; width: 8px; height: 5px;
+  border-left: 1.5px solid var(--ok); border-bottom: 1.5px solid var(--ok); transform: rotate(-45deg);
+}
+.file:nth-child(2) { --step-delay: 1.2s; }
+.file:nth-child(3) { --step-delay: 2.4s; }
+.map-halo { fill: rgba(94, 234, 212, .16); }
+.map-dot { fill: var(--ok); stroke: #fff; stroke-width: 1.5; }
+.map-traveller { transform-box: view-box; transform-origin: 0 0; }
+.map-arrival circle { fill: none; stroke: var(--ok); stroke-width: 1; opacity: 0; transform-box: fill-box; transform-origin: center; }
+.dial-orbit { position: absolute; inset: 7%; border: 1px solid rgba(var(--accent-rgb), .18); border-radius: 50%; }
+.dial-orbit::after {
+  content: ""; position: absolute; left: calc(50% - 2px); top: -2px; width: 4px; height: 4px;
+  border-radius: 50%; background: var(--accent-hi); box-shadow: 0 0 12px 3px rgba(var(--accent-rgb), .6);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .mk-field::before { animation: tileFieldFill var(--tile-cycle) linear infinite; }
+  .mk-field.short { --step-delay: 1.4s; }
+  .mk-roles i:first-child::before { animation: tileAuthRole var(--tile-cycle) linear infinite; }
+  .mk-btn::before { animation: tileAuthSubmit var(--tile-cycle) linear infinite; }
+  .mk-btn::after { animation: tileAuthDone var(--tile-cycle) linear infinite; }
+  .mk-row.on::before, .mk-row i.ck::after { animation: tileRowSelect var(--tile-cycle) linear infinite; }
+  .mk-row.on em::after { animation: tileRowDone var(--tile-cycle) linear infinite; }
+  .bub { animation: tileChatIn var(--tile-cycle) var(--ease) infinite; }
+  .bub.out { animation-name: tileChatReply; }
+  .bub.in:nth-child(3) { animation-name: tileChatResult; }
+  .mk-typing { animation: tileChatTyping var(--tile-cycle) linear infinite; }
+  .mk-input::before { animation: tileChatInput var(--tile-cycle) linear infinite; }
+  .file span::after { animation: tileFileLoad var(--tile-cycle) var(--ease) infinite; }
+  .file em::after { animation: tileFileDone var(--tile-cycle) linear infinite; }
+  .route-ready .map-traveller { animation: tileRouteTravel var(--tile-cycle) linear infinite; }
+  .route-ready .map-moving { animation: tileRouteVisible var(--tile-cycle) linear infinite; }
+  .route-ready .map-arrival circle { animation: tileRouteArrival var(--tile-cycle) ease-out infinite; }
+  .mk-cv .scan { animation: tileCvScan var(--tile-cycle) linear infinite; }
+  .mk-cv .box { animation: tileCvTrack var(--tile-cycle) ease-in-out infinite; }
+  .mk-cv .b2 { --step-delay: .9s; }
+  .mk-cv .b3 { --step-delay: .4s; }
+  .dial-orbit { animation: tileDialOrbit var(--tile-cycle) linear infinite; }
+  .tiles .mk-field::before, .tiles .mk-roles i::before, .tiles .mk-btn::before, .tiles .mk-btn::after,
+  .tiles .mk-row::before, .tiles .mk-row i::after, .tiles .mk-row em::after,
+  .tiles .bub, .tiles .mk-typing, .tiles .mk-input::before, .tiles .file span::after, .tiles .file em::after,
+  .tiles .map-traveller, .tiles .map-moving, .tiles .map-arrival circle, .tiles .scan, .tiles .box, .tiles .dial-orbit {
+    animation-delay: calc(var(--tile-delay) + var(--step-delay, 0s) - var(--shot-t, 0s));
+    animation-fill-mode: both;
+  }
+}
+@keyframes tileFieldFill {
+  0%, 6%, 100% { opacity: 0; transform: scaleX(0); }
+  8% { opacity: 1; transform: scaleX(.08); }
+  24%, 80% { opacity: 1; transform: scaleX(1); }
+  90% { opacity: 0; transform: scaleX(1); }
+}
+@keyframes tileAuthRole { 0%, 8%, 94%, 100% { opacity: 0; } 16%, 84% { opacity: 1; } }
+@keyframes tileAuthSubmit {
+  0%, 38%, 53%, 100% { opacity: 0; transform: translateX(-100%); }
+  40% { opacity: .8; transform: translateX(-100%); }
+  50% { opacity: .8; transform: translateX(100%); }
+  52% { opacity: 0; transform: translateX(100%); }
+}
+@keyframes tileAuthDone { 0%, 46%, 96%, 100% { opacity: 0; } 52%, 84% { opacity: 1; } }
+@keyframes tileRowSelect { 0%, 12%, 94%, 100% { opacity: 0; } 20%, 82% { opacity: 1; } }
+@keyframes tileRowDone { 0%, 40%, 94%, 100% { opacity: 0; } 48%, 82% { opacity: 1; } }
+@keyframes tileChatIn {
+  0%, 4%, 100% { opacity: 0; transform: translateY(8px); }
+  14%, 84% { opacity: 1; transform: translateY(0); }
+  94% { opacity: 0; transform: translateY(0); }
+}
+@keyframes tileChatReply {
+  0%, 26%, 100% { opacity: 0; transform: translateY(8px); }
+  36%, 84% { opacity: 1; transform: translateY(0); }
+  94% { opacity: 0; transform: translateY(0); }
+}
+@keyframes tileChatResult {
+  0%, 52%, 100% { opacity: 0; transform: translateY(8px); }
+  62%, 84% { opacity: 1; transform: translateY(0); }
+  94% { opacity: 0; transform: translateY(0); }
+}
+@keyframes tileChatTyping { 0%, 34%, 52%, 100% { opacity: 0; } 38%, 44% { opacity: .8; } 41%, 48% { opacity: .3; } }
+@keyframes tileChatInput {
+  0%, 12%, 100% { opacity: 0; transform: scaleX(0); }
+  16% { opacity: .7; transform: scaleX(.1); }
+  26% { opacity: .7; transform: scaleX(1); }
+  30%, 96% { opacity: 0; transform: scaleX(1); }
+}
+@keyframes tileFileLoad {
+  0%, 8%, 100% { opacity: 0; transform: scaleX(0); }
+  12% { opacity: 1; transform: scaleX(.05); }
+  42%, 78% { opacity: 1; transform: scaleX(1); }
+  90% { opacity: 0; transform: scaleX(1); }
+}
+@keyframes tileFileDone { 0%, 40%, 94%, 100% { opacity: 0; } 46%, 78% { opacity: 1; } }
+@keyframes tileRouteVisible { 0%, 4%, 94%, 100% { opacity: 0; } 10%, 82% { opacity: 1; } }
+@keyframes tileRouteArrival {
+  0%, 71%, 100% { opacity: 0; transform: scale(1); }
+  74% { opacity: .8; transform: scale(1); }
+  90%, 99% { opacity: 0; transform: scale(2.8); }
+}
+@keyframes tileCvScan {
+  0%, 4%, 100% { opacity: 0; transform: translateY(0); }
+  7% { opacity: .8; transform: translateY(0); }
+  46% { opacity: .8; transform: translateY(100%); }
+  48%, 99% { opacity: 0; transform: translateY(100%); }
+}
+@keyframes tileCvTrack {
+  0%, 14%, 100% { opacity: .12; transform: translate(0, 0); }
+  20%, 28% { opacity: 1; transform: translate(0, 0); }
+  52% { opacity: 1; transform: translate(7px, -4px); }
+  76% { opacity: 1; transform: translate(-3px, 3px); }
+  92% { opacity: .12; transform: translate(0, 0); }
+}
+@keyframes tileDialOrbit { to { transform: rotate(360deg); } }
 
 @media (max-width: 1040px) {
   .tiles-grid { gap: 10px; }
@@ -4346,6 +4616,14 @@ button, input, select, textarea { font: inherit; color: inherit; }
   .tile { min-height: 224px; }
   .tile-body { padding: 16px 18px; border-radius: 22px; }
   .tile-art { left: 18px; right: 18px; height: 132px; }
+  .mk-auth { gap: 6px; }
+  .mk-table { gap: 4px; padding-top: 6px; }
+  .mk-row { padding: 5px 8px; }
+  .mk-files { gap: 6px; padding-top: 8px; }
+  .file { padding-block: 6px; }
+  .mk-chat { gap: 6px; }
+  .mk-chat .bub { padding-block: 7px; }
+  .mk-typing { top: 78px; }
 }
 
 /* ---------- Автоматизация: событие, чип на плате, уведомление ----------

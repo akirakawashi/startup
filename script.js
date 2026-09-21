@@ -1116,7 +1116,7 @@
      play-state сохраняет фазу, в том числе общую фазу луча и отметок радара.
      ============================================================ */
   (function initMotionVisibility() {
-    var scopes = $$('.hero-rim, .hero-flow, .pulse, .portfolio-card, .stack-display, .button-lit, .radar-stage, .mk-cv, .work, .strata-projector, .strata-selector, .arc-shot, .format-scene');
+    var scopes = $$('.hero-rim, .hero-flow, .pulse, .portfolio-card, .stack-display, .button-lit, .radar-stage, .tile, .work, .strata-projector, .strata-selector, .arc-shot, .format-scene, .faq-section');
     var visible = new Set(scopes);
     var sync = function () {
       scopes.forEach(function (el) {
@@ -1135,6 +1135,93 @@
     }
     document.addEventListener('visibilitychange', sync);
     sync();
+  })();
+
+  /* Координаты движения берём из самой линии маршрута один раз.
+     Дальше это обычная CSS-анимация transform с общей паузой плитки. */
+  (function initTileRoute() {
+    var path = $('.mk-map .map-route');
+    if (!path || !path.getPointAtLength) return;
+    var length = path.getTotalLength();
+    var frames = [];
+    function frame(percent, distance) {
+      var point = path.getPointAtLength(distance);
+      return percent + '%{transform:translate(' + point.x.toFixed(2) + 'px,' + point.y.toFixed(2) + 'px)}';
+    }
+    frames.push(frame(0, 0));
+    for (var i = 0; i <= 64; i++) frames.push(frame(12 + i * 60 / 64, length * i / 64));
+    frames.push(frame(92, length), frame(100, 0));
+    var style = document.createElement('style');
+    style.textContent = '@keyframes tileRouteTravel{' + frames.join('') + '}';
+    document.head.appendChild(style);
+    path.closest('.mk-map').classList.add('route-ready');
+  })();
+
+  /* FAQ сохраняет нативные details и управление с клавиатуры. На время
+     раскрытия open удерживает ответ в потоке; при повторном клике берём
+     текущую высоту, чтобы разворот не прыгал. Без WAAPI остаётся native. */
+  (function initFaqAccordion() {
+    var section = $('#faq');
+    if (!section) return;
+    var controls = [];
+    $$('.faq-item', section).forEach(function (item) {
+      var summary = $('summary', item);
+      var answer = $('.faq-answer', item);
+      var inner = $('.faq-answer-inner', item);
+      if (!summary || !answer || !inner || !answer.animate) return;
+      var expanded = item.open;
+      var animation = null;
+
+      function settle() {
+        if (animation) {
+          animation.onfinish = null;
+          animation.cancel();
+          animation = null;
+        }
+        item.open = expanded;
+        item.classList.remove('is-closing');
+        summary.setAttribute('aria-expanded', String(expanded));
+      }
+
+      function setExpanded(next) {
+        var from = item.open ? answer.getBoundingClientRect().height : 0;
+        var opacity = item.open ? parseFloat(getComputedStyle(answer).opacity) : 0;
+        if (animation) {
+          animation.onfinish = null;
+          animation.cancel();
+          animation = null;
+        }
+        expanded = next;
+        summary.setAttribute('aria-expanded', String(next));
+        if (motionQuery.matches || document.hidden) { settle(); return; }
+        item.open = true;
+        item.classList.toggle('is-closing', !next);
+        var to = next ? inner.getBoundingClientRect().height : 0;
+        animation = answer.animate([
+          { height: from + 'px', opacity: opacity },
+          { height: to + 'px', opacity: next ? 1 : 0 }
+        ], { duration: 340, easing: 'cubic-bezier(.22,.61,.36,1)', fill: 'both' });
+        animation.onfinish = settle;
+      }
+
+      summary.addEventListener('click', function (event) {
+        event.preventDefault();
+        setExpanded(!expanded);
+      });
+      item.addEventListener('toggle', function () {
+        if (animation) return;
+        expanded = item.open;
+        summary.setAttribute('aria-expanded', String(expanded));
+      });
+      if ('ResizeObserver' in window) new ResizeObserver(function () {
+        if (animation && expanded) setExpanded(true);
+      }).observe(inner);
+      summary.setAttribute('aria-expanded', String(expanded));
+      controls.push(settle);
+    });
+    function settleAll() { controls.forEach(function (settle) { settle(); }); }
+    motionQuery.addEventListener('change', function () { if (motionQuery.matches) settleAll(); });
+    document.addEventListener('visibilitychange', function () { if (document.hidden) settleAll(); });
   })();
 
   /* ============================================================
