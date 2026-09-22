@@ -1,5 +1,5 @@
 /* ============================================================
-   ERGO — поведение страницы
+   VoidLabs — поведение страницы
    Без зависимостей. Всё, что двигается, отключается системной
    настройкой prefers-reduced-motion.
    ============================================================ */
@@ -1116,7 +1116,7 @@
      play-state сохраняет фазу, в том числе общую фазу луча и отметок радара.
      ============================================================ */
   (function initMotionVisibility() {
-    var scopes = $$('.hero-rim, .hero-flow, .pulse, .portfolio-card, .stack-display, .button-lit, .radar-stage, .tile, .work, .strata-projector, .strata-selector, .arc-shot, .format-scene, .faq-section');
+    var scopes = $$('.hero-rim, .hero-flow, .pulse, .portfolio-card, .stack-display, .button-lit, .radar-stage, .tile, .work, .strata-projector, .strata-selector, .arc-shot, .format-scene, .faq-section, .contact-scene');
     var visible = new Set(scopes);
     var sync = function () {
       scopes.forEach(function (el) {
@@ -1135,6 +1135,64 @@
     }
     document.addEventListener('visibilitychange', sync);
     sync();
+  })();
+
+  /* Общий фон сцепленных карточек: контур включает обе выкружки.
+     Пересчёт только при изменении размеров, без покадровой работы. */
+  (function initTileJoin() {
+    var grid = $('.tiles-grid');
+    var join = $('.tiles-join', grid);
+    if (!grid || !join) return;
+    var upper = $('.tile-a .tile-body', grid);
+    var lower = $('.tile-d .tile-body', grid);
+    var clip = $('#tilesJoinClip path', join);
+    if (!upper || !lower || !clip) return;
+    var wide = window.matchMedia('(min-width: 1041px)');
+
+    function update() {
+      if (!wide.matches) { grid.classList.remove('join-ready'); return; }
+      var origin = grid.getBoundingClientRect();
+      function rect(body) {
+        var box = body.getBoundingClientRect();
+        var style = getComputedStyle(body);
+        var transform = getComputedStyle(body.parentElement).transform;
+        var shift = transform === 'none' ? { m41: 0, m42: 0 } : new DOMMatrixReadOnly(transform);
+        return { x: box.left - origin.left - shift.m41, y: box.top - origin.top - shift.m42,
+          w: box.width, h: box.height, r: [style.borderTopLeftRadius, style.borderTopRightRadius,
+            style.borderBottomRightRadius, style.borderBottomLeftRadius].map(parseFloat) };
+      }
+      var a = rect(upper), d = rect(lower);
+      var left = Math.min(a.x, d.x), top = Math.min(a.y, d.y);
+      var width = Math.max(a.x + a.w, d.x + d.w) - left;
+      var height = Math.max(a.y + a.h, d.y + d.h) - top;
+      a.x -= left; a.y -= top; d.x -= left; d.y -= top;
+      function outline(b) {
+        var x = b.x, y = b.y, r = b.r, right = x + b.w, bottom = y + b.h;
+        function corner(radius, px, py) { return radius ? 'A' + radius + ' ' + radius + ' 0 0 1 ' + px + ' ' + py : 'L' + px + ' ' + py; }
+        return 'M' + (x + r[0]) + ' ' + y + 'H' + (right - r[1]) + corner(r[1], right, y + r[1])
+          + 'V' + (bottom - r[2]) + corner(r[2], right - r[2], bottom) + 'H' + (x + r[3])
+          + corner(r[3], x, bottom - r[3]) + 'V' + (y + r[0]) + corner(r[0], x + r[0], y) + 'Z';
+      }
+      var radius = parseFloat(getComputedStyle(grid).getPropertyValue('--fillet'));
+      var ax = a.x, ay = a.y + a.h, dx = d.x + d.w, dy = d.y;
+      var upperFillet = 'M' + ax + ' ' + (ay - radius) + 'V' + ay + 'H' + (ax - radius)
+        + 'A' + radius + ' ' + radius + ' 0 0 0 ' + ax + ' ' + (ay - radius) + 'Z';
+      var lowerFillet = 'M' + dx + ' ' + (dy + radius) + 'V' + dy + 'H' + (dx + radius)
+        + 'A' + radius + ' ' + radius + ' 0 0 0 ' + dx + ' ' + (dy + radius) + 'Z';
+      clip.setAttribute('d', outline(a) + outline(d) + upperFillet + lowerFillet);
+      Object.assign(join.style, { left: left + 'px', top: top + 'px', width: width + 'px', height: height + 'px' });
+      join.style.setProperty('--join-x', ((a.x + a.w * .12 + d.x + d.w * .88) / 2) + 'px');
+      join.style.setProperty('--join-y', dy + 'px');
+      join.style.setProperty('--join-rx', Math.max(a.w, d.w) * .58 + 'px');
+      join.style.setProperty('--join-ry', height * .43 + 'px');
+      grid.classList.add('join-ready');
+    }
+    if ('ResizeObserver' in window) {
+      var observer = new ResizeObserver(update);
+      observer.observe(grid); observer.observe(upper); observer.observe(lower);
+    } else window.addEventListener('resize', update, { passive: true });
+    wide.addEventListener('change', update);
+    update();
   })();
 
   /* Координаты движения берём из самой линии маршрута один раз.
@@ -1574,6 +1632,173 @@
     });
   });
 
+  /* Список строится из select: подписи и полные значения имеют один источник.
+     До инициализации остаётся нативное поле. Фокус в открытом списке держит
+     combobox, а активный пункт озвучивается через aria-activedescendant. */
+  (function initContactSelect() {
+    var select = $('#topic');
+    var trigger = $('#topic-control');
+    var menu = $('#topic-options');
+    if (!select || !trigger || !menu) return;
+    var container = select.parentElement;
+    var label = $('#topic-label');
+    var value = $('span', trigger);
+    var active = select.selectedIndex;
+    var opened = false;
+    var positionFrame = 0;
+    var search = '', searchTime = 0;
+    var items = Array.from(select.options).map(function (option, index) {
+      var item = document.createElement('li');
+      item.id = 'topic-option-' + index;
+      item.className = 'contact-select-option';
+      item.setAttribute('role', 'option');
+      item.dataset.index = index;
+      item.textContent = option.text;
+      menu.appendChild(item);
+      return item;
+    });
+
+    function sync() {
+      value.textContent = select.options[select.selectedIndex].text;
+      items.forEach(function (item, index) {
+        item.setAttribute('aria-selected', String(index === select.selectedIndex));
+      });
+    }
+    function setActive(index, scroll) {
+      active = Math.max(0, Math.min(items.length - 1, index));
+      items.forEach(function (item, i) { item.classList.toggle('is-active', i === active); });
+      if (opened) trigger.setAttribute('aria-activedescendant', items[active].id);
+      if (scroll && opened) {
+        var item = items[active];
+        if (item.offsetTop < menu.scrollTop) menu.scrollTop = item.offsetTop;
+        else if (item.offsetTop + item.offsetHeight > menu.scrollTop + menu.clientHeight) {
+          menu.scrollTop = item.offsetTop + item.offsetHeight - menu.clientHeight;
+        }
+      }
+    }
+    function place() {
+      if (!opened) return;
+      var rect = trigger.getBoundingClientRect();
+      var viewport = window.visualViewport;
+      var top = viewport ? viewport.offsetTop : 0;
+      var bottom = top + (viewport ? viewport.height : window.innerHeight);
+      var header = $('#topbar');
+      var safeTop = Math.max(top + 8, header ? header.getBoundingClientRect().bottom + 8 : 0);
+      if (rect.bottom <= safeTop || rect.top >= bottom) { close(); return; }
+      var below = bottom - rect.bottom - 16;
+      var above = rect.top - safeTop - 8;
+      var up = below < Math.min(menu.scrollHeight + 2, 240) && above > below;
+      container.classList.toggle('opens-up', up);
+      menu.style.setProperty('--contact-menu-height', Math.max(44, Math.min(336, up ? above : below)) + 'px');
+    }
+    function schedulePlace() {
+      if (!opened || positionFrame) return;
+      positionFrame = window.requestAnimationFrame(function () {
+        positionFrame = 0;
+        place();
+        if (opened) setActive(active, true);
+      });
+    }
+    function open(index) {
+      if (opened) return;
+      opened = true;
+      search = '';
+      menu.hidden = false;
+      trigger.setAttribute('aria-expanded', 'true');
+      container.classList.add('is-open');
+      place();
+      setActive(index == null ? select.selectedIndex : index, true);
+    }
+    function close() {
+      opened = false;
+      search = '';
+      menu.hidden = true;
+      trigger.setAttribute('aria-expanded', 'false');
+      trigger.removeAttribute('aria-activedescendant');
+      container.classList.remove('is-open', 'opens-up');
+      if (positionFrame) window.cancelAnimationFrame(positionFrame);
+      positionFrame = 0;
+    }
+    function commit(index) {
+      var changed = select.selectedIndex !== index;
+      select.selectedIndex = index;
+      sync();
+      close();
+      if (changed) {
+        select.dispatchEvent(new Event('input', { bubbles: true }));
+        select.dispatchEvent(new Event('change', { bubbles: true }));
+      }
+    }
+    trigger.addEventListener('click', function () { if (opened) close(); else open(); });
+    trigger.addEventListener('keydown', function (event) {
+      var key = event.key;
+      if (key === 'Escape' && opened) { event.preventDefault(); close(); return; }
+      if (key === 'Tab') { if (opened) commit(active); return; }
+      if (key === 'Enter' || (key === ' ' && (!search || Date.now() - searchTime >= 650))) {
+        event.preventDefault();
+        if (opened) commit(active); else open();
+      } else if (key === 'ArrowDown' || key === 'ArrowUp') {
+        event.preventDefault();
+        if (opened && event.altKey && key === 'ArrowUp') commit(active);
+        else if (!opened) open();
+        else setActive(active + (key === 'ArrowDown' ? 1 : -1), true);
+      } else if (key === 'Home' || key === 'End') {
+        event.preventDefault();
+        var end = key === 'Home' ? 0 : items.length - 1;
+        if (!opened) open(end); else setActive(end, true);
+      } else if (key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey) {
+        event.preventDefault();
+        var now = Date.now();
+        search = now - searchTime < 650 ? search + key.toLocaleLowerCase() : key.toLocaleLowerCase();
+        searchTime = now;
+        if (search.split('').every(function (letter) { return letter === search[0]; })) search = search[0];
+        var from = opened ? active : select.selectedIndex;
+        for (var offset = search.length > 1 ? 0 : 1; offset <= items.length; offset++) {
+          var index = (from + offset) % items.length;
+          if (select.options[index].text.toLocaleLowerCase().indexOf(search) === 0) {
+            if (opened) setActive(index, true);
+            else { var query = search; commit(index); search = query; }
+            break;
+          }
+        }
+      }
+    });
+    menu.addEventListener('pointermove', function (event) {
+      var item = event.target.closest('[role="option"]');
+      if (item && event.pointerType === 'mouse') setActive(+item.dataset.index, false);
+    });
+    menu.addEventListener('pointerdown', function (event) {
+      if (event.pointerType === 'mouse') event.preventDefault();
+    });
+    menu.addEventListener('click', function (event) {
+      var item = event.target.closest('[role="option"]');
+      if (!item) return;
+      commit(+item.dataset.index);
+      trigger.focus({ preventScroll: true });
+    });
+    document.addEventListener('pointerdown', function (event) {
+      if (opened && !container.contains(event.target)) close();
+    });
+    document.addEventListener('focusin', function (event) {
+      if (opened && !container.contains(event.target)) close();
+    });
+    select.addEventListener('change', function () { sync(); if (opened) setActive(select.selectedIndex, true); });
+    if (select.form) select.form.addEventListener('reset', function () {
+      close(); window.setTimeout(sync, 0);
+    });
+    window.addEventListener('pageshow', sync);
+    window.addEventListener('resize', schedulePlace);
+    window.addEventListener('scroll', schedulePlace, { passive: true });
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', schedulePlace);
+      window.visualViewport.addEventListener('scroll', schedulePlace);
+    }
+    sync();
+    select.hidden = true;
+    trigger.hidden = false;
+    label.htmlFor = trigger.id;
+  })();
+
   /* ============================================================
      Форма: собираем письмо
      ============================================================ */
@@ -1595,6 +1820,7 @@
         var field = $(pair[0]);
         var empty = !pair[1];
         field.classList.toggle('invalid', empty);
+        field.setAttribute('aria-invalid', String(empty));
         if (empty) missing.push(field);
       });
 
@@ -1615,14 +1841,17 @@
         '&body='    + encodeURIComponent(body);
 
       if (formNote) {
-        formNote.textContent = 'Письмо открыто в почтовом клиенте — осталось нажать «отправить».';
+        formNote.textContent = 'Письмо подготовлено. Отправьте его в почтовом приложении.';
         formNote.classList.add('ok');
       }
       showToast('Письмо подготовлено');
     });
 
     $$('#contactForm input, #contactForm textarea').forEach(function (field) {
-      field.addEventListener('input', function () { field.classList.remove('invalid'); });
+      field.addEventListener('input', function () {
+        field.classList.remove('invalid');
+        field.removeAttribute('aria-invalid');
+      });
     });
   }
 

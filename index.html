@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ERGO — веб-сервисы под ключ: разработка, инфраструктура, сопровождение</title>
+<title>VoidLabs — веб-сервисы под ключ: разработка, инфраструктура, сопровождение</title>
 <meta name="description" content="Разрабатываем веб-приложения и сайты целиком: бэкенд, интерфейс, инфраструктура и релизы. От схемы базы данных до работающего продакшена и сопровождения после запуска.">
 <meta name="theme-color" content="#06050d">
 
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="ERGO">
-<meta property="og:title" content="ERGO — веб-сервисы под ключ">
+<meta property="og:site_name" content="VoidLabs">
+<meta property="og:title" content="VoidLabs — веб-сервисы под ключ">
 <meta property="og:description" content="Бэкенд, интерфейс, инфраструктура и релизы. Полный цикл и сопровождение после запуска.">
 <meta property="og:image" content="assets/blackhole-poster.jpg">
 
@@ -52,7 +52,7 @@
           <path d="M8 50h84" stroke="currentColor" stroke-width="6" stroke-linecap="round" opacity=".75"/>
         </svg>
       </span>
-      <span class="wordmark-text">ERGO</span>
+      <span class="wordmark-text">VoidLabs</span>
     </a>
 
     <nav class="topnav" id="topnav" aria-label="Разделы сайта">
@@ -1961,9 +1961,8 @@
   <div class="wrap">
     <h2 class="checks-title reveal">Проверки, которые<br>нельзя обойти.</h2>
     <p class="checks-lede reveal">
-      Договорённости живут ровно до первого дедлайна, поэтому важные из них
-      мы делаем исполняемыми. В AI Ad линтер, типы и тесты зелёные после
-      каждого изменения — это база, а не цель.
+      Проверяем код, типы и работу сервиса после изменений.
+      Ошибка в проверках останавливает выпуск.
     </p>
 
     <div class="checks-shot reveal">
@@ -1979,38 +1978,38 @@
         <div class="checks-screen">
           <div class="checks-bar">
             <span class="checks-dots" aria-hidden="true"><i></i><i></i><i></i></span>
-            <span class="checks-path">AI Ad · все проверки</span>
+            <span class="checks-path">Сервис · все проверки</span>
             <span class="checks-badge">8 / 8</span>
           </div>
 
           <ul class="checks-list">
-            <li><span class="checks-ok" aria-hidden="true"></span><b>access-control</b><span>новая ручка закрыта по умолчанию</span></li>
-            <li><span class="checks-ok" aria-hidden="true"></span><b>processing-contract</b><span>неизвестная версия контракта — отказ</span></li>
-            <li><span class="checks-ok" aria-hidden="true"></span><b>worker-boundary</b><span>в воркере нет ни базы, ни импортов бэкенда</span></li>
-            <li><span class="checks-ok" aria-hidden="true"></span><b>geometry-deferred</b><span>тяжёлая геометрия не уезжает в списки</span></li>
-            <li><span class="checks-ok" aria-hidden="true"></span><b>route-snapping</b><span>маршрут сверен с семью реальными</span></li>
-            <li><span class="checks-ok" aria-hidden="true"></span><b>types</b><span>mypy на нуле, а не на «привычных 26»</span></li>
-            <li><span class="checks-ok" aria-hidden="true"></span><b>lint</b><span>единый стиль во всей кодовой базе</span></li>
-            <li><span class="checks-ok" aria-hidden="true"></span><b>tests</b><span>прогон на живой базе, не на заглушках</span></li>
+            <li><span class="checks-ok" aria-hidden="true"></span><b>Доступ</b><span>действия доступны по правам</span></li>
+            <li><span class="checks-ok" aria-hidden="true"></span><b>API</b><span>формат данных проверен</span></li>
+            <li><span class="checks-ok" aria-hidden="true"></span><b>Обработка</b><span>фоновые задачи изолированы</span></li>
+            <li><span class="checks-ok" aria-hidden="true"></span><b>Загрузка</b><span>данные загружаются по запросу</span></li>
+            <li><span class="checks-ok" aria-hidden="true"></span><b>Расчёты</b><span>результаты сверены с примерами</span></li>
+            <li><span class="checks-ok" aria-hidden="true"></span><b>Типы</b><span>ошибок типов нет</span></li>
+            <li><span class="checks-ok" aria-hidden="true"></span><b>Линтер</b><span>единый стиль кода</span></li>
+            <li><span class="checks-ok" aria-hidden="true"></span><b>Тесты</b><span>проверка с настоящей базой данных</span></li>
           </ul>
         </div>
 
         <div class="checks-screen checks-screen-alt">
           <div class="checks-bar">
             <span class="checks-dots" aria-hidden="true"><i></i><i></i><i></i></span>
-            <span class="checks-path">AI Ad · проверка упала</span>
+            <span class="checks-path">Сервис · нужна правка</span>
             <span class="checks-badge bad">7 / 8</span>
           </div>
 
           <ul class="checks-list">
-            <li><span class="checks-ok" aria-hidden="true"></span><b>access-control</b><span>новая ручка закрыта по умолчанию</span></li>
-            <li><span class="checks-ok" aria-hidden="true"></span><b>processing-contract</b><span>неизвестная версия контракта — отказ</span></li>
-            <li><span class="checks-ok" aria-hidden="true"></span><b>worker-boundary</b><span>в воркере нет ни базы, ни импортов бэкенда</span></li>
-            <li class="bad"><span class="checks-ok" aria-hidden="true"></span><b>geometry-deferred</b><span>список конструкций тянет 755 КБ</span></li>
-            <li><span class="checks-ok" aria-hidden="true"></span><b>route-snapping</b><span>маршрут сверен с семью реальными</span></li>
-            <li><span class="checks-ok" aria-hidden="true"></span><b>types</b><span>mypy на нуле, а не на «привычных 26»</span></li>
-            <li><span class="checks-ok" aria-hidden="true"></span><b>lint</b><span>единый стиль во всей кодовой базе</span></li>
-            <li><span class="checks-ok" aria-hidden="true"></span><b>tests</b><span>прогон на живой базе, не на заглушках</span></li>
+            <li><span class="checks-ok" aria-hidden="true"></span><b>Доступ</b><span>действия доступны по правам</span></li>
+            <li><span class="checks-ok" aria-hidden="true"></span><b>API</b><span>формат данных проверен</span></li>
+            <li><span class="checks-ok" aria-hidden="true"></span><b>Обработка</b><span>фоновые задачи изолированы</span></li>
+            <li class="bad"><span class="checks-ok" aria-hidden="true"></span><b>Загрузка</b><span>в ответе есть лишние данные</span></li>
+            <li><span class="checks-ok" aria-hidden="true"></span><b>Расчёты</b><span>результаты сверены с примерами</span></li>
+            <li><span class="checks-ok" aria-hidden="true"></span><b>Типы</b><span>ошибок типов нет</span></li>
+            <li><span class="checks-ok" aria-hidden="true"></span><b>Линтер</b><span>единый стиль кода</span></li>
+            <li><span class="checks-ok" aria-hidden="true"></span><b>Тесты</b><span>проверка с настоящей базой данных</span></li>
           </ul>
         </div>
         </div>
@@ -2028,15 +2027,15 @@
     </header>
 
     <div class="portfolio-grid">
-      <article class="portfolio-card portfolio-ainocraft reveal" data-project="ainocraft" aria-labelledby="portfolio-ainocraft-title">
+      <article class="portfolio-card portfolio-gaming reveal" data-project="gaming" aria-labelledby="portfolio-gaming-title">
         <span class="portfolio-rim" aria-hidden="true"></span>
-        <div class="portfolio-visual" role="img" aria-label="Визуализация игровой платформы AiNoCraft: лаунчер, личный кабинет и игровой мир. Это схема, а не снимок интерфейса.">
+        <div class="portfolio-visual" role="img" aria-label="Схема игровой платформы: лаунчер, личный кабинет и игровой мир.">
           <span class="portfolio-glow"></span>
           <span class="portfolio-gridlines"></span>
           <span class="portfolio-badge portfolio-badge-live"><i></i> В продакшене</span>
 
           <div class="portfolio-launcher">
-            <div class="portfolio-launcher-bar"><span class="portfolio-mark">A<span>✦</span></span><span>AiNoCraft</span><i></i><i></i></div>
+            <div class="portfolio-launcher-bar"><span class="portfolio-mark" aria-hidden="true">✦</span><span>Игровой сервис</span><i></i><i></i></div>
             <div class="portfolio-launcher-body">
               <div class="portfolio-launcher-copy"><span>Игровая платформа</span><b>Целый мир.<br>В одной системе.</b></div>
               <svg class="portfolio-world" viewBox="0 0 320 250" fill="none" aria-hidden="true">
@@ -2063,15 +2062,15 @@
           <span class="portfolio-visual-caption">Визуализация платформы</span>
         </div>
         <div class="portfolio-info">
-          <div class="portfolio-name-row"><h3 id="portfolio-ainocraft-title">AiNoCraft</h3><span class="portfolio-kind">Игровая платформа</span></div>
-          <p>Наш Minecraft-проект: сайт с магазином и личным кабинетом, лаунчер, бутстраппер на C#, игровой сервер и свои моды. Своя авторизация и продакшен в Kubernetes.</p>
+          <div class="portfolio-name-row"><h3 id="portfolio-gaming-title">Игровая платформа</h3><span class="portfolio-kind">Веб и десктоп</span></div>
+          <p>Личный кабинет, магазин и лаунчер с единым аккаунтом для игрового сервера.</p>
           <ul class="portfolio-tech" aria-label="Основные технологии"><li>Python</li><li>React</li><li>C#</li><li>Java</li></ul>
         </div>
       </article>
 
-      <article class="portfolio-card portfolio-ridebook reveal" data-project="ridebook" aria-labelledby="portfolio-ridebook-title">
+      <article class="portfolio-card portfolio-booking reveal" data-project="booking" aria-labelledby="portfolio-booking-title">
         <span class="portfolio-rim" aria-hidden="true"></span>
-        <div class="portfolio-visual" role="img" aria-label="Схема Ridebook: рейс с тремя остановками, свободные места считаются отдельно на каждом участке, вход по коду из СМС. Это схема, а не снимок интерфейса.">
+        <div class="portfolio-visual" role="img" aria-label="Схема бронирования поездок: маршрут, свободные места и вход по коду из СМС.">
           <span class="portfolio-glow"></span>
           <span class="portfolio-gridlines"></span>
           <span class="portfolio-badge">MVP</span>
@@ -2079,7 +2078,7 @@
           <!-- Места по участкам: A→B почти распродан, а B→C свободен —
                в этом и смысл сегментной вместимости. -->
           <div class="portfolio-launcher">
-            <div class="portfolio-launcher-bar"><span class="portfolio-mark">R<span>✦</span></span><span>Рейс 08:30</span><i></i><i></i></div>
+            <div class="portfolio-launcher-bar"><span class="portfolio-mark" aria-hidden="true">✦</span><span>Рейс 08:30</span><i></i><i></i></div>
             <div class="portfolio-launcher-body">
               <div class="ride-route">
                 <span class="ride-stop"><b>A</b><em>08:30</em></span><span class="ride-seg"></span>
@@ -2097,19 +2096,19 @@
           <span class="portfolio-visual-caption">Схема бронирования</span>
         </div>
         <div class="portfolio-info">
-          <div class="portfolio-name-row"><h3 id="portfolio-ridebook-title">Ridebook</h3><span class="portfolio-kind">Бронирование рейсов</span></div>
-          <p>Бронирование междугородних рейсов: места по участкам маршрута, вход по коду из СМС, диспетчерская. Бэкенд, фронтенд и выкатка&nbsp;— наши.</p>
+          <div class="portfolio-name-row"><h3 id="portfolio-booking-title">Бронирование поездок</h3><span class="portfolio-kind">Веб-сервис</span></div>
+          <p>Поиск рейсов, бронирование мест и кабинет диспетчера.</p>
           <ul class="portfolio-tech" aria-label="Основные технологии"><li>React</li><li>FastAPI</li><li>PostgreSQL</li><li>Redis</li></ul>
           <details class="portfolio-release-details">
             <summary>Как устроен релиз</summary>
-            <p>CI запускает Ruff, Pyrefly и тесты с PostgreSQL, Redis и MinIO в контейнерах. Затем собирается образ, применяются миграции и проверяется запуск. При неуспешном старте возвращается предыдущий образ.</p>
+            <p>Автоматические проверки, сборка и запуск новой версии. Если запуск не удался, возвращается предыдущая версия.</p>
           </details>
         </div>
       </article>
 
-      <article class="portfolio-card portfolio-aiad reveal" data-project="aiad" aria-labelledby="portfolio-aiad-title">
+      <article class="portfolio-card portfolio-ad-analysis reveal" data-project="ad-analysis" aria-labelledby="portfolio-ad-analysis-title">
         <span class="portfolio-rim" aria-hidden="true"></span>
-        <div class="portfolio-visual" role="img" aria-label="Схема AI Ad: кадр с видеорегистратора, модель находит рекламный щит и считает секунды внимания по формуле V = S·α·β. Это схема, а не снимок интерфейса.">
+        <div class="portfolio-visual" role="img" aria-label="Схема анализа рекламы: поиск рекламного щита на видео и оценка его видимости.">
           <span class="portfolio-glow"></span>
           <span class="portfolio-gridlines"></span>
           <span class="portfolio-badge">На стенде</span>
@@ -2133,25 +2132,25 @@
             </div>
           </div>
 
-          <div class="portfolio-account"><span class="portfolio-account-icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.3"/></svg></span><div><b>4,2 с внимания</b><span>V = S · α · β</span></div></div>
+          <div class="portfolio-account"><span class="portfolio-account-icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.3"/></svg></span><div><b>Объект найден</b><span>Оценка видимости</span></div></div>
           <span class="portfolio-visual-caption">Схема видеоаналитики</span>
         </div>
         <div class="portfolio-info">
-          <div class="portfolio-name-row"><h3 id="portfolio-aiad-title">AI Ad</h3><span class="portfolio-kind">Видеоаналитика</span></div>
-          <p>Видимость наружной рекламы по видео с регистратора: детекция, трекинг, бренд и «секунды внимания». Бэкенд, ML-воркер, обучение модели и интерфейс&nbsp;— наши.</p>
+          <div class="portfolio-name-row"><h3 id="portfolio-ad-analysis-title">Анализ рекламы</h3><span class="portfolio-kind">Компьютерное зрение</span></div>
+          <p>Сервис для анализа наружной рекламы по видео: распознавание объектов и оценка их видимости.</p>
           <ul class="portfolio-tech" aria-label="Основные технологии"><li>YOLO</li><li>FastAPI</li><li>React</li><li>MinIO</li></ul>
         </div>
       </article>
 
-      <article class="portfolio-card portfolio-volnateca reveal" data-project="volnateca" aria-labelledby="portfolio-volnateca-title">
+      <article class="portfolio-card portfolio-community-bot reveal" data-project="community-bot" aria-labelledby="portfolio-community-bot-title">
         <span class="portfolio-rim" aria-hidden="true"></span>
-        <div class="portfolio-visual" role="img" aria-label="Схема Volnateca: бот сообщества выдаёт задание с баллами, баллы копятся в уровень. Это схема, а не снимок интерфейса.">
+        <div class="portfolio-visual" role="img" aria-label="Схема ВК-бота: задания для участников сообщества, баллы и уровни.">
           <span class="portfolio-glow"></span>
           <span class="portfolio-gridlines"></span>
           <span class="portfolio-badge">На стенде</span>
 
           <div class="portfolio-launcher">
-            <div class="portfolio-launcher-bar"><span class="portfolio-mark">V<span>✦</span></span><span>Бот сообщества</span><i></i><i></i></div>
+            <div class="portfolio-launcher-bar"><span class="portfolio-mark" aria-hidden="true">✦</span><span>Бот сообщества</span><i></i><i></i></div>
             <div class="portfolio-launcher-body">
               <p class="chat-msg">Задание дня: комментарий под постом<span class="chat-row"><b>+50 баллов</b><span class="chat-act">Выполнить</span></span></p>
               <p class="chat-msg chat-me">Готово ✓</p>
@@ -2162,8 +2161,8 @@
           <span class="portfolio-visual-caption">Схема бота</span>
         </div>
         <div class="portfolio-info">
-          <div class="portfolio-name-row"><h3 id="portfolio-volnateca-title">Volnateca</h3><span class="portfolio-kind">VK-бот</span></div>
-          <p>Игровой VK-бот: задания, баллы, уровни, приглашения друзей и магазин призов. Бот, API и админка с графиками и рассылками&nbsp;— наши.</p>
+          <div class="portfolio-name-row"><h3 id="portfolio-community-bot-title">ВК-бот</h3><span class="portfolio-kind">Сообщество</span></div>
+          <p>Бот для сообщества ВК: задания, баллы и награды. Управление через веб-панель.</p>
           <ul class="portfolio-tech" aria-label="Основные технологии"><li>FastAPI</li><li>PostgreSQL</li><li>VK API</li><li>React</li></ul>
         </div>
       </article>
@@ -2780,14 +2779,14 @@
           <div class="arc-entry arc-entry-done">
             <span class="arc-log-trace"></span>
             <div class="arc-entry-head"><p class="arc-day">9 сентября</p><span class="arc-status">Готово</span></div>
-            <p class="arc-entry-title">Услуги: разрез проекта</p>
+            <p class="arc-entry-title">Структура сервиса</p>
           </div>
           <div class="arc-entry arc-entry-current">
             <div class="arc-entry-head"><p class="arc-day">10 сентября</p><span class="arc-status">В работе</span></div>
-            <p class="arc-entry-title">Тексты по проектам</p>
+            <p class="arc-entry-title">Личный кабинет</p>
             <ul class="arc-notes">
-              <li>Факты сверены с git и README</li>
-              <li>Отзывы заменены цитатами из правил</li>
+              <li>Готовы основные экраны</li>
+              <li>Проверяем вход и права доступа</li>
             </ul>
             <p class="arc-next"><span>Дальше</span>Проверка</p>
           </div>
@@ -3000,6 +2999,10 @@
     </header>
 
     <div class="tiles-grid">
+      <div class="tiles-join" aria-hidden="true">
+        <svg width="0" height="0" focusable="false"><defs><clipPath id="tilesJoinClip" clipPathUnits="userSpaceOnUse"><path/></clipPath></defs></svg>
+        <i class="tiles-join-light"></i>
+      </div>
 
       <!-- 1. Личные кабинеты -->
       <article class="tile tile-a reveal">
@@ -3164,8 +3167,8 @@
 </section>
 
 <!-- ===================== ОТЗЫВЫ ===================== -->
-<!-- Не отзывы, а цитаты из правил проектов автора: AGENTS.md и документация
-     проекта, названного в подписи. Копии лент для анимации создаёт script.js. -->
+<!-- Обобщённые принципы из правил разработки. В подписях только тип задачи,
+     без названий проектов. Копии лент для анимации создаёт script.js. -->
 <section class="love idle" id="reviews" aria-labelledby="reviews-title">
   <div class="love-heart" aria-hidden="true">
     <img class="love-heart-image" src="assets/love-heart.png" width="1204" height="1114" alt="" loading="lazy" decoding="async">
@@ -3179,7 +3182,7 @@
   <header class="wrap love-copy">
     <p class="love-pill">Правила</p>
     <h2 class="love-title" id="reviews-title">Чему научили поломки</h2>
-    <p class="love-description">Цитаты из правил наших проектов</p>
+    <p class="love-description">Принципы из практики разработки</p>
   </header>
 
   <div class="love-wall" id="reviews-wall">
@@ -3187,20 +3190,20 @@
       <div class="love-track">
         <ul class="love-group">
           <li class="love-card"><figure>
-            <figcaption class="love-author"><span class="love-avatar" aria-hidden="true">AC</span><div><p class="love-name">AiNoCraft RPG</p><p class="love-role">правила мода · тесты</p></div></figcaption>
-            <blockquote><p><em>Любой тест надо ронять специально.</em> Иначе не узнаешь, что он смотрит не туда: тест кометы однажды прошёл на заведомо сломанной длине.</p></blockquote>
+            <figcaption class="love-author"><span class="love-avatar" aria-hidden="true">01</span><div><p class="love-name">Игровая платформа</p><p class="love-role">тестирование</p></div></figcaption>
+            <p class="love-quote"><em>Проверяем и сами тесты.</em> Тест должен замечать ошибку, если специально сломать проверяемое поведение.</p>
           </figure></li>
           <li class="love-card"><figure>
-            <figcaption class="love-author"><span class="love-avatar" aria-hidden="true">RB</span><div><p class="love-name">Ridebook</p><p class="love-role">правила фронтенда</p></div></figcaption>
-            <blockquote><p>Один компонент и для сайта, и для диспетчерской: диспетчер должен видеть ровно то, что увидит пассажир. <em>Вторая копия блока рано или поздно перестанет быть тем же блоком.</em></p></blockquote>
+            <figcaption class="love-author"><span class="love-avatar" aria-hidden="true">02</span><div><p class="love-name">Сервис бронирования</p><p class="love-role">интерфейсы</p></div></figcaption>
+            <p class="love-quote"><em>Общий интерфейс — общий компонент.</em> Одинаковые элементы сайта и панели управления меняются вместе.</p>
           </figure></li>
           <li class="love-card"><figure>
-            <figcaption class="love-author"><span class="love-avatar" aria-hidden="true">AI</span><div><p class="love-name">AI Ad</p><p class="love-role">правила проекта · маршруты</p></div></figcaption>
-            <blockquote><p>Редкий клик тихо спрямляет объезды: клик раз в 800 м уводит длину маршрута на четверть. Попросят упростить рисование — <em>принесите измерение, а не мнение.</em></p></blockquote>
+            <figcaption class="love-author"><span class="love-avatar" aria-hidden="true">03</span><div><p class="love-name">Анализ рекламы</p><p class="love-role">точность расчётов</p></div></figcaption>
+            <p class="love-quote"><em>Изменения проверяем измерениями.</em> Упрощение алгоритма не должно незаметно ухудшать точность результата.</p>
           </figure></li>
           <li class="love-card"><figure>
-            <figcaption class="love-author"><span class="love-avatar" aria-hidden="true">AC</span><div><p class="love-name">AiNoCraft RPG</p><p class="love-role">правила мода · сеть</p></div></figcaption>
-            <blockquote><p>По сети идёт <em>описание, а не результат.</em> Разметку опасной зоны слали частицами — около 23 000 пакетов на игрока за каст. Теперь это один пакет с описанием круга.</p></blockquote>
+            <figcaption class="love-author"><span class="love-avatar" aria-hidden="true">04</span><div><p class="love-name">Игровая платформа</p><p class="love-role">обмен данными</p></div></figcaption>
+            <p class="love-quote"><em>Передаём только нужные данные.</em> Клиент строит визуальный эффект по короткому описанию с сервера.</p>
           </figure></li>
         </ul>
       </div>
@@ -3209,20 +3212,20 @@
       <div class="love-track">
         <ul class="love-group">
           <li class="love-card"><figure>
-            <figcaption class="love-author"><span class="love-avatar" aria-hidden="true">AI</span><div><p class="love-name">AI Ad</p><p class="love-role">правила проекта · данные</p></div></figcaption>
-            <blockquote><p>Скрытие без пути назад — дверь в одну сторону: так однажды пропали три города разом. <em>Любое мягкое скрытие едет вместе со своим раскрытием.</em></p></blockquote>
+            <figcaption class="love-author"><span class="love-avatar" aria-hidden="true">05</span><div><p class="love-name">Анализ рекламы</p><p class="love-role">управление данными</p></div></figcaption>
+            <p class="love-quote"><em>Скрытые данные можно вернуть.</em> Вместе со скрытием записи добавляем понятный способ её восстановить.</p>
           </figure></li>
           <li class="love-card"><figure>
-            <figcaption class="love-author"><span class="love-avatar" aria-hidden="true">AL</span><div><p class="love-name">AI Ad Learning</p><p class="love-role">обучение модели</p></div></figcaption>
-            <blockquote><p>Дообучать модель на разметке, которую она же и поставила, почти бессмысленно: <em>она подтвердит собственные ответы</em> и закрепит собственные промахи.</p></blockquote>
+            <figcaption class="love-author"><span class="love-avatar" aria-hidden="true">06</span><div><p class="love-name">Компьютерное зрение</p><p class="love-role">обучение модели</p></div></figcaption>
+            <p class="love-quote"><em>Разметку проверяем перед обучением.</em> Ответы самой модели могут закрепить её ошибки.</p>
           </figure></li>
           <li class="love-card"><figure>
-            <figcaption class="love-author"><span class="love-avatar" aria-hidden="true">RB</span><div><p class="love-name">Ridebook</p><p class="love-role">правила бэкенда</p></div></figcaption>
-            <blockquote><p>Документация — часть изменения, а не задача на потом. <em>Врущий документ стоит дороже отсутствующего:</em> следующий читатель доверится и построит на том, чего уже нет.</p></blockquote>
+            <figcaption class="love-author"><span class="love-avatar" aria-hidden="true">07</span><div><p class="love-name">Сервис бронирования</p><p class="love-role">документация</p></div></figcaption>
+            <p class="love-quote"><em>Документация меняется вместе с кодом.</em> Инструкции должны описывать текущее поведение сервиса.</p>
           </figure></li>
           <li class="love-card"><figure>
-            <figcaption class="love-author"><span class="love-avatar" aria-hidden="true">AS</span><div><p class="love-name">ai_shop</p><p class="love-role">контроль очереди</p></div></figcaption>
-            <blockquote><p>Таймер идёт по монотонным часам, а не по кадрам: <em>пропуски и смена FPS не сокращают</em> 20-секундное ожидание перед сообщением «Откройте вторую кассу».</p></blockquote>
+            <figcaption class="love-author"><span class="love-avatar" aria-hidden="true">08</span><div><p class="love-name">Видеоаналитика</p><p class="love-role">обработка событий</p></div></figcaption>
+            <p class="love-quote"><em>Время считаем независимо от кадров.</em> Пропуски видео не должны сокращать ожидание перед уведомлением.</p>
           </figure></li>
         </ul>
       </div>
@@ -3246,7 +3249,7 @@
   <div class="wrap team-copy">
     <p class="team-pill reveal">о нас</p>
     <h2 class="team-title reveal" id="about-title">Собираем веб-сервисы.<br>От идеи до запуска.</h2>
-    <p class="team-description reveal">ERGO — команда, где бэкенд на Python, интерфейсы, инфраструктура и ML собраны в одном месте. Запускаем проект и остаёмся рядом после релиза.</p>
+    <p class="team-description reveal">VoidLabs — команда, где бэкенд на Python, интерфейсы, инфраструктура и ML собраны в одном месте. Запускаем проект и остаёмся рядом после релиза.</p>
     <a class="btn btn-ghost team-cta reveal" href="#value">Наши принципы</a>
   </div>
 
@@ -3309,7 +3312,7 @@
       <details class="faq-item">
         <summary aria-controls="faq-answer-design"><span>Делаете дизайн?</span><i class="faq-toggle" aria-hidden="true"></i></summary>
         <div class="faq-answer" id="faq-answer-design">
-          <div class="faq-answer-inner"><p>Интерфейсы приложений и админок — да: в Ridebook и Volnateca они наши. Если нужен выразительный имиджевый дизайн, берём его подрядом у дизайнера и собираем сами — так честнее, чем выдавать вёрстку за дизайн.</p></div>
+          <div class="faq-answer-inner"><p>Да, проектируем интерфейсы приложений и панелей управления. Для имиджевого дизайна привлекаем дизайнера и реализуем готовые макеты.</p></div>
         </div>
         <span class="faq-glint" aria-hidden="true"></span>
       </details>
@@ -3325,49 +3328,118 @@
 </section>
 
 <!-- ===================== КОНТАКТ ===================== -->
-<section class="section section-contact" id="contact">
+<section class="section section-contact" id="contact" aria-labelledby="contact-title">
   <div class="wrap">
     <div class="contact-grid">
       <div class="contact-copy reveal">
-        <p class="section-label">07 / контакт</p>
-        <h2 class="underline-grow">Расскажите, что нужно сделать</h2>
-        <p class="section-lede">Опишите задачу своими словами — этого достаточно для начала. Ответим в течение рабочего дня, зададим уточняющие вопросы и скажем, берёмся ли и сколько это будет стоить. Консультация и оценка — бесплатно.</p>
+        <p class="contact-eyebrow"><span></span> Начнём с разговора</p>
+        <h2 id="contact-title">Есть задача?<br><span>Давайте обсудим.</span></h2>
+        <p class="contact-lede">Расскажите, что должно работать.<br>Детали разберём вместе.</p>
 
-        <ul class="contact-links">
-          <li><span class="contact-label">Telegram</span><a class="contact-value" href="https://t.me/akirakawashi" target="_blank" rel="noopener">@akirakawashi</a></li>
-          <li><span class="contact-label">Почта</span><button class="contact-value copy-btn" type="button" data-copy="akirakawashikz@gmail.com">akirakawashikz@gmail.com<span class="copy-hint">копировать</span></button></li>
-          <li><span class="contact-label">GitHub</span><a class="contact-value" href="https://github.com/akirakawashi" target="_blank" rel="noopener">github.com/akirakawashi</a></li>
-        </ul>
+        <div class="contact-scene" aria-hidden="true">
+          <svg viewBox="0 0 560 340" fill="none" focusable="false">
+            <defs>
+              <radialGradient id="contactHalo"><stop stop-color="#9b6bff" stop-opacity=".32"/><stop offset=".48" stop-color="#7036dd" stop-opacity=".13"/><stop offset="1" stop-color="#7036dd" stop-opacity="0"/></radialGradient>
+              <linearGradient id="contactGlass" x1="138" y1="137" x2="373" y2="288" gradientUnits="userSpaceOnUse"><stop stop-color="#42325f" stop-opacity=".94"/><stop offset=".55" stop-color="#1c142e"/><stop offset="1" stop-color="#100c1d"/></linearGradient>
+              <linearGradient id="contactPaper" x1="202" y1="71" x2="303" y2="220" gradientUnits="userSpaceOnUse"><stop stop-color="#e7d9ff" stop-opacity=".24"/><stop offset="1" stop-color="#7853b8" stop-opacity=".06"/></linearGradient>
+              <linearGradient id="contactEdge" x1="157" y1="103" x2="381" y2="267" gradientUnits="userSpaceOnUse"><stop stop-color="#ad86ec" stop-opacity=".25"/><stop offset=".42" stop-color="#e5d7ff" stop-opacity=".95"/><stop offset="1" stop-color="#9063ce" stop-opacity=".2"/></linearGradient>
+              <linearGradient id="contactFold" x1="174" y1="217" x2="401" y2="267" gradientUnits="userSpaceOnUse"><stop stop-color="#322144"/><stop offset=".55" stop-color="#24182f"/><stop offset="1" stop-color="#191222"/></linearGradient>
+              <linearGradient id="contactOrbit" x1="84" y1="229" x2="484" y2="267" gradientUnits="userSpaceOnUse"><stop stop-color="#a879ef" stop-opacity="0"/><stop offset=".3" stop-color="#a879ef" stop-opacity=".45"/><stop offset=".65" stop-color="#ddc5ff" stop-opacity=".7"/><stop offset="1" stop-color="#a879ef" stop-opacity="0"/></linearGradient>
+              <filter id="contactSoftGlow" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="6"/></filter>
+            </defs>
+            <ellipse cx="281" cy="234" rx="255" ry="105" fill="url(#contactHalo)"/>
+            <ellipse cx="282" cy="260" rx="143" ry="24" fill="#9b6bff" opacity=".07" filter="url(#contactSoftGlow)"/>
+            <g stroke="url(#contactOrbit)" transform="rotate(-9 280 230)">
+              <ellipse cx="280" cy="230" rx="222" ry="65" opacity=".28"/>
+              <ellipse cx="280" cy="230" rx="198" ry="52" opacity=".35" stroke-dasharray="2 10"/>
+            </g>
+            <g class="contact-envelope-motion">
+              <path d="m137 139 98-93a12 12 0 0 1 13-3l116 52-91 125Z" fill="#1b122c" stroke="url(#contactEdge)"/>
+              <path d="m145 142 99-85 108 43" stroke="#d3b4ff" stroke-opacity=".12"/>
+              <g class="contact-letter">
+                <path d="m175 91 148-29a10 10 0 0 1 12 8l30 144-169 34-30-145a10 10 0 0 1 9-12Z" fill="url(#contactPaper)" stroke="url(#contactEdge)"/>
+                <path d="m192 111 32-6m-28 25 117-23m-112 44 91-18m-87 38 109-22" stroke="#d9c5f5" stroke-opacity=".48" stroke-width="3" stroke-linecap="round"/>
+                <path d="m303 87 4-1" stroke="#eadfff" stroke-width="5" stroke-linecap="round"/>
+              </g>
+              <path d="m137 139 226-44 44 140-226 45Z" fill="url(#contactGlass)" stroke="url(#contactEdge)"/>
+              <path d="m181 280 226-45 2 8-226 45Z" fill="#21152f" stroke="#865cae" stroke-opacity=".3"/>
+              <path d="m137 139 130 62 96-106" stroke="#dac2ff" stroke-opacity=".64" stroke-width="1.2"/>
+              <path d="m181 280 81-103a8 8 0 0 1 10-2l135 60Z" fill="url(#contactFold)" stroke="url(#contactEdge)"/>
+              <path d="m187 277 78-98a4 4 0 0 1 5-1l132 57" stroke="#e6ceff" stroke-opacity=".18"/>
+              <path class="contact-envelope-shine" d="m183 280 116-23" stroke="#bd8afa" stroke-width="3" opacity=".45" filter="url(#contactSoftGlow)"/>
+              <path d="m183 280 116-23" stroke="#d6b1ff" stroke-opacity=".55"/>
+              <g transform="translate(299 225)">
+                <circle r="17" fill="#241736" stroke="#c59aed" stroke-opacity=".55"/>
+                <path d="m-5 0 4 4 7-8" stroke="#e0c6ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </g>
+            </g>
+            <path d="M59 246c10 40 130 53 253 23 104-25 181-66 182-98" stroke="url(#contactOrbit)"/>
+            <g class="contact-spark contact-spark-a" transform="translate(99 257)"><circle r="10" fill="#ad79ff" opacity=".5" filter="url(#contactSoftGlow)"/><circle r="2.5" fill="#e7d2ff"/></g>
+            <g class="contact-spark contact-spark-b" transform="translate(449 212)"><circle r="9" fill="#ad79ff" opacity=".5" filter="url(#contactSoftGlow)"/><circle r="2" fill="#e7d2ff"/></g>
+            <g class="contact-spark contact-spark-c" stroke="#b99adf" stroke-linecap="round"><path d="M427 93v10m-5-5h10M121 103v6m-3-3h6"/></g>
+            <circle cx="78" cy="187" r="1.5" fill="#a48aba" opacity=".5"/>
+            <circle cx="469" cy="136" r="1.5" fill="#a48aba" opacity=".6"/>
+          </svg>
+        </div>
+
+        <div class="contact-direct">
+          <a class="contact-channel" href="https://t.me/akirakawashi" target="_blank" rel="noopener">
+            <span class="contact-channel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="m3 11 17-7-4 16-5-6-4 3 1-5 9-6-11 7Z" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span><b>Telegram</b><small>Написать напрямую</small></span>
+            <svg class="contact-channel-action" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M5 15 15 5M5 5h10v10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <button class="contact-channel copy-btn" type="button" data-copy="akirakawashikz@gmail.com" aria-label="Скопировать почту akirakawashikz@gmail.com">
+            <span class="contact-channel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="3" stroke="currentColor" stroke-width="1.4"/><path d="m4 7 8 6 8-6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span><b>Почта</b><small>Скопировать адрес</small></span>
+            <svg class="contact-channel-action" viewBox="0 0 20 20" fill="none" aria-hidden="true"><rect x="7" y="7" width="9" height="10" rx="2" stroke="currentColor" stroke-width="1.3"/><path d="M12 7V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2" stroke="currentColor" stroke-width="1.3"/></svg>
+          </button>
+        </div>
+        <p class="contact-response">Ответим в течение рабочего дня</p>
       </div>
 
-      <form class="contact-form reveal" id="contactForm" novalidate>
-        <div class="field">
-          <label for="name">Как к вам обращаться</label>
-          <input type="text" id="name" name="name" placeholder="Имя" autocomplete="name" required>
+      <div class="contact-draft reveal">
+        <span class="contact-draft-aura" aria-hidden="true"></span>
+        <span class="contact-draft-sheet" aria-hidden="true"></span>
+        <div class="contact-draft-window">
+          <div class="contact-draft-bar" aria-hidden="true"><span class="contact-draft-dots"><i></i><i></i><i></i></span><span>новое сообщение</span><svg viewBox="0 0 20 20" fill="none"><path d="M6 5h8M6 10h8M6 15h5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></div>
+          <form class="contact-form" id="contactForm" aria-labelledby="contact-form-title" novalidate>
+            <div class="contact-form-intro"><h3 id="contact-form-title">Пара слов о задаче</h3><p>Можно без технического задания.</p></div>
+            <div class="contact-form-row">
+              <div class="field">
+                <label for="name">Ваше имя</label>
+                <input type="text" id="name" name="name" placeholder="Как к вам обращаться" autocomplete="name" required>
+              </div>
+              <div class="field">
+                <label for="reply">Для ответа</label>
+                <input type="text" id="reply" name="reply" placeholder="Telegram или почта" autocomplete="email" autocapitalize="none" spellcheck="false" required>
+              </div>
+            </div>
+            <div class="field">
+              <label for="topic" id="topic-label">Что нужно сделать</label>
+              <div class="contact-select">
+                <select id="topic" name="topic">
+                  <option value="Веб-приложение или сервис">Веб-сервис</option>
+                  <option>Сайт или лендинг</option>
+                  <option value="Интеграция и автоматизация">Интеграции</option>
+                  <option value="Бот в Telegram или VK">Telegram / ВК-бот</option>
+                  <option value="Инфраструктура, деплой, перенос">Инфраструктура</option>
+                  <option value="Доработка существующего проекта">Доработка сервиса</option>
+                  <option>Другое</option>
+                </select>
+                <button class="contact-select-trigger" id="topic-control" type="button" role="combobox" aria-expanded="false" aria-haspopup="listbox" aria-controls="topic-options" aria-labelledby="topic-label" hidden><span></span></button>
+                <ul class="contact-select-menu" id="topic-options" role="listbox" aria-labelledby="topic-label" hidden></ul>
+                <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="m6 8 4 4 4-4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+            </div>
+            <div class="field">
+              <label for="message">О вашей задаче</label>
+              <textarea id="message" name="message" rows="4" placeholder="Что хотите запустить или улучшить?" required></textarea>
+            </div>
+            <button class="btn btn-primary btn-block contact-submit" type="submit" aria-describedby="formNote">Подготовить письмо <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10h12m-5-5 5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            <p class="form-note" id="formNote" role="status" aria-live="polite">Откроется ваше почтовое приложение.</p>
+          </form>
         </div>
-        <div class="field">
-          <label for="reply">Telegram или почта для ответа</label>
-          <input type="text" id="reply" name="reply" placeholder="@username или mail@domain.ru" required>
-        </div>
-        <div class="field">
-          <label for="topic">Что нужно</label>
-          <select id="topic" name="topic">
-            <option>Веб-приложение или сервис</option>
-            <option>Сайт или лендинг</option>
-            <option>Интеграция и автоматизация</option>
-            <option>Бот в Telegram или VK</option>
-            <option>Инфраструктура, деплой, перенос</option>
-            <option>Доработка существующего проекта</option>
-            <option>Другое</option>
-          </select>
-        </div>
-        <div class="field">
-          <label for="message">Коротко о задаче</label>
-          <textarea id="message" name="message" rows="5" placeholder="Что должно работать, для кого, есть ли сроки" required></textarea>
-        </div>
-        <button class="btn btn-primary btn-block" type="submit">Отправить</button>
-        <p class="form-note" id="formNote">Кнопка откроет письмо в вашем почтовом клиенте с уже заполненным текстом.</p>
-      </form>
+      </div>
     </div>
   </div>
 </section>
@@ -3380,11 +3452,11 @@
       <span class="wordmark-mark" aria-hidden="true">
         <svg viewBox="0 0 100 100" width="22" height="22"><ellipse cx="50" cy="50" rx="26" ry="26" fill="none" stroke="currentColor" stroke-width="9"/><path d="M8 50h84" stroke="currentColor" stroke-width="6" stroke-linecap="round" opacity=".75"/></svg>
       </span>
-      <span>ERGO</span>
+      <span>VoidLabs</span>
     </div>
     <p class="footer-note">Разработка веб-сервисов и сопровождение.</p>
     <nav class="footer-nav" aria-label="Разделы">
-      <a href="#services">Услуги</a><a href="#cases">Проекты</a><a href="#faq">Вопросы</a><a href="#contact">Контакт</a>
+      <a href="#services">Услуги</a><a href="#cases">Проекты</a><a href="#faq">Вопросы</a><a href="https://github.com/akirakawashi" target="_blank" rel="noopener">GitHub ↗</a>
     </nav>
   </div>
 </footer>
