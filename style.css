@@ -33,6 +33,7 @@
   --accent-rgb:    167, 139, 250;
   --accent-hi-rgb: 211, 195, 251;
   --accent-deep-rgb: 124, 77, 255;
+  --ambient-blue-rgb: 70, 96, 225;
   --line:          rgba(var(--accent-rgb), .13);
   --line-strong:   rgba(var(--accent-rgb), .30);
   --text:          rgb(var(--text-rgb));
@@ -138,6 +139,53 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .wrap-narrow { max-width: 840px; }
 
 .section { padding-block: clamp(78px, 9vw, 138px); position: relative; }
+
+/* Общий свет страницы. Градиенты лежат в фоне секций, под всей графикой
+   и текстом. Они полностью гаснут до верхнего и нижнего края, поэтому
+   не требуют больших размытых слоёв или перерисовки при анимации. */
+@media screen {
+  main > section:not(.hero) {
+    background-image:
+      radial-gradient(ellipse min(780px, 76vw) var(--ambient-violet-height, 52%)
+        at var(--ambient-violet-x, 18%) var(--ambient-violet-y, 38%),
+        rgba(var(--accent-deep-rgb), var(--ambient-violet-strength, .18)),
+        rgba(var(--accent-deep-rgb), .055) 38%, transparent 72%),
+      radial-gradient(ellipse min(680px, 68vw) var(--ambient-blue-height, 38%)
+        at var(--ambient-blue-x, 86%) var(--ambient-blue-y, 72%),
+        rgba(var(--ambient-blue-rgb), var(--ambient-blue-strength, .14)),
+        rgba(var(--ambient-blue-rgb), .035) 42%, transparent 72%),
+      var(--ambient-surface, linear-gradient(var(--bg), var(--bg)));
+  }
+  main > section:nth-of-type(3n) {
+    --ambient-violet-x: 82%;
+    --ambient-blue-x: 12%;
+  }
+  main > section:nth-of-type(3n + 1) {
+    --ambient-violet-x: 48%;
+    --ambient-blue-x: 96%;
+  }
+  #checks, #tiles { --ambient-surface: var(--surface-fade); }
+  /* У сцен со своим сильным светом фон тише. У радара пятна находятся
+     ниже непрозрачной завесы, которая скрывает нижнюю половину колец. */
+  #ai, #offer, #reviews, #about, #faq, #contact {
+    --ambient-violet-strength: .12;
+    --ambient-blue-strength: .1;
+  }
+  #release {
+    --ambient-violet-y: 82%; --ambient-violet-height: 22%;
+    --ambient-blue-y: 88%; --ambient-blue-height: 16%;
+  }
+  @media (max-width: 620px) {
+    main > section:not(.hero) {
+      --ambient-violet-x: 8%;
+      --ambient-blue-x: 96%;
+    }
+    main > section:nth-of-type(even):not(.hero) {
+      --ambient-violet-x: 92%;
+      --ambient-blue-x: 4%;
+    }
+  }
+}
 
 .section-head { max-width: 680px; margin-bottom: clamp(40px, 5vw, 66px); }
 
@@ -3387,39 +3435,27 @@ button, input, select, textarea { font: inherit; color: inherit; }
   border: 1.5px solid rgba(255, 255, 255, .34);
   box-shadow: 0 40px 90px -40px rgba(0, 0, 0, .9);
 }
-/* Два экрана друг над другом: первый в потоке задаёт высоту, второй лежит
-   поверх. Контейнер наложения обязателен: inset: 0 у абсолютного элемента
-   отсчитывается от padding-бокса предка, и без обёртки второй экран накрыл
-   бы безель окна. Переключаются плавным наплывом на проходе света (script.js).
-   visibility снимается без перехода, но с задержкой в длительность наплыва:
-   без неё экранный диктор читал бы оба экрана подряд, а с ней скрытый уходит
-   из дерева доступности ровно когда перестаёт быть виден. */
-.checks-stack { position: relative; }
+/* Одна ячейка держит общую высоту редактора и окна приложения, в том числе
+   на телефоне. Наплыв считает общий отсчёт в JS; независимого CSS-перехода
+   нет, поэтому уход со страницы замораживает и свет, и содержимое. */
+.checks-stack { position: relative; display: grid; isolation: isolate; }
 
 .checks-screen {
+  grid-area: 1 / 1; min-width: 0;
   border-radius: 10px;
   background: var(--bg-soft);
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .05);
   overflow: hidden;
   display: flex; flex-direction: column;
-  transition: opacity .5s var(--ease), visibility 0s .5s;
 }
-/* Экран держит 16:9 — в него встаёт снимок экрана без обрезки и полей.
-   Пропорция включается только на широком экране: у́же 900 px её высота
-   становится меньше содержимого, и строки пришлось бы резать. min-height
-   страхует тот же случай там, где ширина близка к границе. */
+/* На широком экране — 16:9. На телефоне обе сцены задают общую высоту
+   по содержимому, чтобы графика и подписи сохраняли свой размер. */
 @media (min-width: 900px) {
   .checks-screen { aspect-ratio: 16 / 9; min-height: fit-content; }
-  .checks-list li { align-items: center; }
 }
 .checks-screen-alt {
-  position: absolute; inset: 0;
   opacity: 0; visibility: hidden;
 }
-/* :not обязателен: без него правило накрывает и второй экран, он ведь тоже
-   .checks-screen, и по специфичности выигрывает у правила ниже */
-.checks-window.failing .checks-screen:not(.checks-screen-alt) { opacity: 0; visibility: hidden; }
-.checks-window.failing .checks-screen-alt { opacity: 1; visibility: visible; transition-delay: 0s; }
 
 .checks-bar {
   display: flex; align-items: center; gap: 14px;
@@ -3432,60 +3468,116 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .checks-dots i { width: 9px; height: 9px; border-radius: 50%; background: rgba(255, 255, 255, .16); }
 .checks-path { flex: 1; }
 .checks-badge {
+  flex: none; min-width: 6ch; text-align: center;
   padding: 3px 9px; border-radius: 999px;
   background: rgba(94, 234, 212, .12); color: var(--ok);
-  transition: background-color .2s var(--ease), color .2s var(--ease);
 }
-.checks-badge.bad { background: rgba(248, 113, 113, .14); color: #f87171; }
+.checks-badge.is-running { background: rgba(var(--accent-rgb), .12); color: var(--accent-hi); }
 
-.checks-list {
-  list-style: none; margin: 0; padding: 6px 0;
-  /* строки делят между собой всю высоту экрана: при 16:9 её больше,
-     чем нужно восьми строкам, и остаток уходит в них, а не в пустоту снизу */
-  flex: 1; display: flex; flex-direction: column;
+/* Две разные композиции внутри панели. Их движение считает отсчёт света. */
+.checks-code-layout, .checks-service-layout { flex: 1; min-width: 0; padding: clamp(20px, 3.5vw, 48px); }
+.checks-code-layout {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(150px, .34fr); gap: clamp(24px, 4vw, 50px); align-items: center;
+  background: radial-gradient(ellipse at 24% 55%, rgba(var(--accent-deep-rgb), .12), transparent 70%);
 }
-.checks-list li { flex: 1; }
-.checks-list li {
-  display: flex; align-items: baseline; gap: 12px;
-  padding: 11px 18px;
-  font-size: .9rem;
-  border-top: 1px solid rgba(255, 255, 255, .04);
+.checks-editor { min-width: 0; border: 1px solid rgba(var(--accent-rgb), .23); border-radius: 13px; overflow: hidden; background: #100c1a; box-shadow: 0 24px 60px -30px #000; }
+.checks-editor-tab { display: flex; align-items: center; gap: 12px; padding: 12px 18px; border-bottom: 1px solid var(--line); font: var(--fz-min)/1.5 var(--ff-mono); color: var(--muted); }
+.checks-editor-tab > span { color: var(--accent); font-weight: 600; }
+.checks-editor-tab > i { width: 5px; height: 5px; margin-left: auto; border-radius: 50%; background: var(--accent); }
+.checks-code { padding: 22px 0; }
+.checks-code-line { position: relative; display: flex; align-items: center; gap: 12px; height: 30px; padding-right: 24px; border-left: 2px solid transparent; }
+.checks-code-line > span { flex: none; width: 44px; padding-left: 18px; color: #777087; font: var(--fz-min)/1 var(--ff-mono); }
+.checks-code-line > i { height: 6px; width: var(--w); border-radius: 2px; background: #7b708e; opacity: .66; }
+.checks-code-line > i.violet { background: #b098ef; }
+.checks-code-line > i.blue { background: #829eee; }
+.checks-code-line > i.mint { background: #85c9bd; }
+.checks-code-line.indent > i:first-of-type { margin-left: 22px; }
+.checks-code-line[data-current="true"] { border-left-color: var(--accent-hi); background: linear-gradient(90deg, rgba(var(--accent-rgb), .18), transparent); }
+.checks-code-line[data-current="true"] > i { opacity: 1; }
+.checks-console { position: relative; display: flex; align-items: center; gap: 12px; min-height: 56px; padding: 14px 18px; border-top: 1px solid var(--line); font: var(--fz-min)/1.5 var(--ff-mono); color: var(--muted); }
+.checks-console > span:first-child { color: var(--accent); }
+.checks-code-progress { position: absolute; inset: auto 0 0; height: 2px; overflow: hidden; }
+.checks-code-progress > i { display: block; height: 100%; background: linear-gradient(90deg, var(--accent-deep), var(--accent-hi)); transform-origin: left; }
+.checks-code-results, .checks-flow-steps { list-style: none; padding: 0; margin: 0; }
+.checks-code-results { display: grid; gap: 18px; }
+.checks-code-results > li { display: grid; grid-template-columns: 32px 1fr 16px; align-items: center; gap: 14px; padding: 22px 18px; border: 1px solid rgba(var(--accent-rgb), .2); border-radius: 12px; background: linear-gradient(120deg, #1a132a, #110d1c); }
+.checks-code-results svg { width: 32px; height: 32px; fill: none; stroke: var(--accent-hi); stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+.checks-code-results > li > span { font-size: 14px; color: var(--text); }
+.checks-stage-mark { position: relative; display: block; flex: none; width: 16px; height: 16px; border: 1px solid rgba(94, 234, 212, .45); border-radius: 50%; background: rgba(94, 234, 212, .08); }
+.checks-stage-mark::after { content: ''; position: absolute; left: 5px; top: 3px; width: 4px; height: 7px; border: solid var(--ok); border-width: 0 1.5px 1.5px 0; transform: rotate(42deg); }
+[data-check-stage][data-state="pending"] { opacity: .46; }
+[data-check-stage][data-state="running"] .checks-stage-mark { border-color: var(--accent-hi) var(--accent) rgba(var(--accent-rgb), .15) rgba(var(--accent-rgb), .15); background: none; }
+[data-check-stage][data-state="pending"] .checks-stage-mark { border-color: rgba(var(--accent-rgb), .4); background: none; }
+[data-check-stage]:not([data-state="done"])[data-state] .checks-stage-mark::after { display: none; }
+.checks-code-results > li[data-state="running"] { border-color: rgba(var(--accent-rgb), .65); background: linear-gradient(120deg, #2c2045, #171023); }
+.checks-service-layout {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 28px;
+  background: radial-gradient(ellipse at 74% 55%, rgba(var(--ambient-blue-rgb), .15), transparent 70%);
 }
-.checks-list li:first-child { border-top: 0; }
-.checks-list b { font-family: var(--ff-mono); font-weight: 500; color: var(--text); }
-.checks-list li > span:last-child { color: var(--faint); }
-
-
-
-/* галочка рисуется бордюрами: одна вершина, без иконочного шрифта */
-.checks-ok {
-  flex: none; position: relative; top: -1px;
-  width: 15px; height: 15px; border-radius: 50%;
-  background: rgba(94, 234, 212, .14);
-  box-shadow: inset 0 0 0 1px rgba(94, 234, 212, .45);
+.checks-browser { width: min(100%, 660px); border: 1px solid #3b3555; border-radius: 13px; overflow: hidden; background: #0d0c18; box-shadow: 0 24px 60px -30px #000; }
+.checks-browser-bar { display: flex; align-items: center; gap: 16px; min-height: 43px; padding: 10px 18px; border-bottom: 1px solid var(--line); color: var(--faint); font-size: var(--fz-min); background: #171323; }
+.checks-browser-bar > svg { width: 20px; height: 16px; flex: none; fill: none; stroke: var(--faint); stroke-width: 1.2; }
+.checks-browser-bar > i { width: 5px; height: 5px; border-radius: 50%; background: #8396d6; margin-left: auto; }
+.checks-app { display: grid; grid-template-columns: 58px minmax(0, 1fr); }
+.checks-app-nav { display: flex; flex-direction: column; align-items: center; gap: 26px; padding: 22px 12px; border-right: 1px solid var(--line); background: #12101f; }
+.checks-app-nav b { display: grid; grid-template-columns: repeat(2, 7px); gap: 3px; margin-bottom: 6px; }
+.checks-app-nav b i { width: 7px; height: 7px; border-radius: 2px; background: #a18add; }
+.checks-app-nav > span { width: 17px; height: 13px; border: 1px solid #635775; border-radius: 3px; }
+.checks-app-nav > span:first-of-type { border-color: #a190cd; background: rgba(var(--accent-rgb), .1); }
+.checks-app-content { position: relative; padding: 24px 32px; }
+.checks-app-form { max-width: 400px; margin-inline: auto; }
+.checks-app-heading { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; font: 500 20px/1.3 var(--ff-display); }
+.checks-app-heading > span { color: var(--faint); }
+.checks-app-field { margin-bottom: 14px; }
+.checks-app-field > span { display: block; margin-bottom: 6px; color: var(--faint); font-size: var(--fz-min); }
+.checks-app-input { min-width: 0; display: flex; align-items: center; height: 42px; padding: 0 12px; border: 1px solid #332b49; border-radius: 7px; background: #0c0a14; color: var(--muted); font-size: 14px; white-space: nowrap; }
+.checks-app-input > svg { width: 16px; height: 16px; margin-left: auto; fill: none; stroke: var(--faint); stroke-width: 1.5; }
+.checks-type-caret { display: inline-block; width: 1px; height: 15px; margin-left: 3px; background: var(--accent-hi); opacity: 0; }
+.checks-app-save { position: relative; isolation: isolate; overflow: hidden; display: flex; align-items: center; justify-content: space-between; height: 42px; padding: 0 14px; border: 1px solid #65548d; border-radius: 7px; background: #201735; color: var(--accent-hi); font-size: 14px; }
+.checks-app-save > i { position: absolute; z-index: -1; inset: 0; background: linear-gradient(90deg, #51357d, #7955a5); transform-origin: left; }
+.checks-app-save svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.5; }
+.checks-confirmation { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; background: radial-gradient(ellipse, #141526 25%, #0d0c18 72%); }
+.checks-confirmation > span { display: grid; place-items: center; width: 84px; height: 84px; margin-bottom: 12px; border: 1px solid rgba(94, 234, 212, .32); border-radius: 50%; background: radial-gradient(circle at 30% 25%, #233d3b, #101e24 80%); box-shadow: 0 0 70px rgba(94, 234, 212, .07); }
+.checks-confirmation svg { width: 48px; height: 48px; fill: none; stroke: #a5ead8; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.checks-confirmation b { font: 500 clamp(18px, 2vw, 24px)/1.25 var(--ff-display); }
+.checks-confirmation small { color: var(--muted); font-size: var(--fz-min); }
+.checks-flow-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; width: min(100%, 580px); }
+.checks-flow-steps > li { position: relative; display: flex; align-items: center; justify-content: center; gap: 10px; color: var(--muted); font-size: 13px; }
+.checks-flow-steps > li + li::before { content: ''; position: absolute; width: 18px; height: 1px; left: -23px; background: var(--line-strong); }
+@media (max-width: 700px) {
+  .checks-code-layout { grid-template-columns: minmax(0, 1fr); gap: 22px; }
+  .checks-code-results { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+  .checks-code-results > li { position: relative; display: flex; flex-direction: column; gap: 8px; padding: 14px 8px; }
+  .checks-code-results svg { width: 24px; height: 24px; }
+  .checks-code-results .checks-stage-mark { position: absolute; top: 9px; right: 8px; width: 12px; height: 12px; }
+  .checks-code-results .checks-stage-mark::after { left: 3px; top: 1px; }
+  .checks-code-line { height: 26px; }
 }
-/* упавшая проверка: кружок краснеет, а галочка складывается в крест —
-   вторая палочка это ::before, в обычном состоянии его нет */
-.checks-list li.bad .checks-ok {
-  background: rgba(248, 113, 113, .16);
-  box-shadow: inset 0 0 0 1px rgba(248, 113, 113, .5);
-}
-.checks-list li.bad .checks-ok::after,
-.checks-list li.bad .checks-ok::before {
-  content: ""; position: absolute;
-  left: 6.6px; top: 3.5px;
-  width: 1.5px; height: 8px;
-  border: 0; border-radius: 1px;
-  background: #f87171;
-  transform: rotate(45deg);
-}
-.checks-list li.bad .checks-ok::before { transform: rotate(-45deg); }
-
-.checks-ok::after {
-  content: ""; position: absolute; left: 5px; top: 3px;
-  width: 4px; height: 7px;
-  border: solid var(--ok); border-width: 0 1.5px 1.5px 0;
-  transform: rotate(42deg);
+@media (max-width: 520px) {
+  .checks-bar { gap: 10px; min-height: 62px; padding: 10px 12px; }
+  .checks-dots { gap: 4px; }
+  .checks-dots i { width: 6px; height: 6px; }
+  .checks-path { font-size: var(--fz-min); }
+  .checks-badge { min-width: 5ch; padding-inline: 6px; }
+  .checks-code-layout, .checks-service-layout { padding: 16px; }
+  .checks-editor-tab, .checks-console { padding-inline: 12px; }
+  .checks-code { padding-block: 12px; }
+  .checks-code-line { gap: 8px; padding-right: 12px; }
+  .checks-code-line > span { width: 34px; padding-left: 10px; }
+  .checks-code-line.indent > i:first-of-type { margin-left: 12px; }
+  .checks-code-results > li > span { font-size: var(--fz-min); }
+  .checks-browser-bar { gap: 10px; padding-inline: 12px; }
+  .checks-browser-bar > svg { display: none; }
+  .checks-app { grid-template-columns: 34px minmax(0, 1fr); }
+  .checks-app-nav { padding-inline: 8px; }
+  .checks-app-content { padding: 22px 14px; }
+  .checks-app-heading { font-size: 18px; }
+  .checks-app-input { font-size: var(--fz-min); padding-inline: 9px; }
+  .checks-flow-steps { gap: 8px; }
+  .checks-flow-steps > li { flex-direction: column; gap: 8px; font-size: var(--fz-min); }
+  .checks-flow-steps > li + li::before { display: none; }
+  .checks-confirmation > span { width: 66px; height: 66px; }
+  .checks-confirmation b { font-size: 17px; }
 }
 
 /* ---------- Одна система: три входа сходятся в одну базу ----------
@@ -4976,8 +5068,6 @@ button, input, select, textarea { font: inherit; color: inherit; }
   .hero-flow li:last-child b { color: var(--text); }
   .footer-inner { flex-direction: column; align-items: flex-start; gap: 16px; }
   .footer-note { margin-right: 0; }
-  .checks-list li { flex-wrap: wrap; row-gap: 2px; padding: 10px 14px; font-size: .85rem; }
-  .checks-list span:last-child { width: 100%; padding-left: 27px; }
   .checks-window { padding: 4px; }
 }
 

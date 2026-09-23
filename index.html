@@ -1970,47 +1970,67 @@
       <canvas class="checks-rim" aria-hidden="true"></canvas>
       <span class="checks-halo" aria-hidden="true"></span>
       <div class="checks-window">
-        <!-- Два экрана друг над другом. Первый задаёт высоту, второй лежит
-             поверх с inset: 0 — так их высоты совпадают при любом тексте.
-             Это важно: холст свечения посчитан под высоту панели, и прыжок
-             потребовал бы пересчёта полей посреди анимации. -->
+        <!-- Оба экрана занимают одну ячейку и задают общую высоту.
+             Проверки, проход углов и наплыв управляются одним отсчётом. -->
         <div class="checks-stack">
-        <div class="checks-screen">
+        <div class="checks-screen" data-check-scene="code">
           <div class="checks-bar">
             <span class="checks-dots" aria-hidden="true"><i></i><i></i><i></i></span>
-            <span class="checks-path">Сервис · все проверки</span>
-            <span class="checks-badge">8 / 8</span>
+            <span class="checks-path">01 / Проверка кода</span>
+            <span class="checks-badge">3 / 3</span>
           </div>
-
-          <ul class="checks-list">
-            <li><span class="checks-ok" aria-hidden="true"></span><b>Доступ</b><span>действия доступны по правам</span></li>
-            <li><span class="checks-ok" aria-hidden="true"></span><b>API</b><span>формат данных проверен</span></li>
-            <li><span class="checks-ok" aria-hidden="true"></span><b>Обработка</b><span>фоновые задачи изолированы</span></li>
-            <li><span class="checks-ok" aria-hidden="true"></span><b>Загрузка</b><span>данные загружаются по запросу</span></li>
-            <li><span class="checks-ok" aria-hidden="true"></span><b>Расчёты</b><span>результаты сверены с примерами</span></li>
-            <li><span class="checks-ok" aria-hidden="true"></span><b>Типы</b><span>ошибок типов нет</span></li>
-            <li><span class="checks-ok" aria-hidden="true"></span><b>Линтер</b><span>единый стиль кода</span></li>
-            <li><span class="checks-ok" aria-hidden="true"></span><b>Тесты</b><span>проверка с настоящей базой данных</span></li>
-          </ul>
+          <div class="checks-code-layout">
+            <div class="checks-editor">
+              <div class="checks-editor-tab"><span aria-hidden="true">{ }</span> validation.ts <i aria-hidden="true"></i></div>
+              <div class="checks-code" aria-hidden="true">
+                <div class="checks-code-line"><span>01</span><i class="violet" style="--w: 19%"></i><i style="--w: 33%"></i></div>
+                <div class="checks-code-line indent"><span>02</span><i style="--w: 26%"></i><i class="blue" style="--w: 18%"></i></div>
+                <div class="checks-code-line indent"><span>03</span><i style="--w: 18%"></i><i class="mint" style="--w: 31%"></i></div>
+                <div class="checks-code-line"><span>04</span><i class="violet" style="--w: 8%"></i></div>
+                <div class="checks-code-line gap"><span>05</span></div>
+                <div class="checks-code-line"><span>06</span><i class="violet" style="--w: 23%"></i><i class="blue" style="--w: 41%"></i></div>
+                <div class="checks-code-line indent"><span>07</span><i class="violet" style="--w: 16%"></i><i style="--w: 32%"></i></div>
+                <div class="checks-code-line indent"><span>08</span><i class="mint" style="--w: 27%"></i><i style="--w: 14%"></i></div>
+                <div class="checks-code-line"><span>09</span><i class="violet" style="--w: 8%"></i></div>
+              </div>
+              <div class="checks-console"><span aria-hidden="true">›_</span><span class="checks-console-status">Проверки пройдены</span><div class="checks-code-progress" aria-hidden="true"><i></i></div></div>
+            </div>
+            <ol class="checks-code-results" aria-label="Этапы проверки кода">
+              <li data-check-stage="0"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="m11 9-7 7 7 7m10-14 7 7-7 7m-3-19-4 24"/></svg><span>Типы</span><i class="checks-stage-mark" aria-hidden="true"></i></li>
+              <li data-check-stage="1"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M6 8h20M6 16h13M6 24h9m5-2 3 3 5-7"/></svg><span>Стиль</span><i class="checks-stage-mark" aria-hidden="true"></i></li>
+              <li data-check-stage="2"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M11 4h10m-8 0v10L5 26a1 1 0 0 0 1 2h20a1 1 0 0 0 1-2l-8-12V4M10 20h12"/></svg><span>Тесты</span><i class="checks-stage-mark" aria-hidden="true"></i></li>
+            </ol>
+          </div>
         </div>
 
-        <div class="checks-screen checks-screen-alt">
+        <div class="checks-screen checks-screen-alt" data-check-scene="service">
           <div class="checks-bar">
             <span class="checks-dots" aria-hidden="true"><i></i><i></i><i></i></span>
-            <span class="checks-path">Сервис · нужна правка</span>
-            <span class="checks-badge bad">7 / 8</span>
+            <span class="checks-path">02 / Проверка сервиса</span>
+            <span class="checks-badge">3 / 3</span>
           </div>
-
-          <ul class="checks-list">
-            <li><span class="checks-ok" aria-hidden="true"></span><b>Доступ</b><span>действия доступны по правам</span></li>
-            <li><span class="checks-ok" aria-hidden="true"></span><b>API</b><span>формат данных проверен</span></li>
-            <li><span class="checks-ok" aria-hidden="true"></span><b>Обработка</b><span>фоновые задачи изолированы</span></li>
-            <li class="bad"><span class="checks-ok" aria-hidden="true"></span><b>Загрузка</b><span>в ответе есть лишние данные</span></li>
-            <li><span class="checks-ok" aria-hidden="true"></span><b>Расчёты</b><span>результаты сверены с примерами</span></li>
-            <li><span class="checks-ok" aria-hidden="true"></span><b>Типы</b><span>ошибок типов нет</span></li>
-            <li><span class="checks-ok" aria-hidden="true"></span><b>Линтер</b><span>единый стиль кода</span></li>
-            <li><span class="checks-ok" aria-hidden="true"></span><b>Тесты</b><span>проверка с настоящей базой данных</span></li>
-          </ul>
+          <div class="checks-service-layout">
+            <div class="checks-browser" role="img" aria-label="Проверка пользовательского сценария: ввод данных, сохранение записи и подтверждение результата.">
+              <div class="checks-browser-bar" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="m6 4-4 4 4 4m4-8 4 4-4 4"/></svg><span>Сценарий пользователя</span><i></i></div>
+              <div class="checks-app" aria-hidden="true">
+                <div class="checks-app-nav"><b><i></i><i></i><i></i><i></i></b><span></span><span></span><span></span><span></span></div>
+                <div class="checks-app-content">
+                  <div class="checks-app-form">
+                    <div class="checks-app-heading">Новая запись <span>＋</span></div>
+                    <div class="checks-app-field"><span>Название</span><div class="checks-app-input"><span class="checks-typed">Новая задача</span><i class="checks-type-caret"></i></div></div>
+                    <div class="checks-app-field"><span>Доступ</span><div class="checks-app-input">Только команда <svg viewBox="0 0 16 16"><path d="m4 6 4 4 4-4"/></svg></div></div>
+                    <span class="checks-app-save"><i></i><span>Сохранить</span><svg viewBox="0 0 20 20"><path d="M4 10h12m-5-5 5 5-5 5"/></svg></span>
+                  </div>
+                  <div class="checks-confirmation"><span><svg viewBox="0 0 48 48"><path d="m13 24 8 8 15-17"/></svg></span><b>Запись сохранена</b><small>Результат проверен</small></div>
+                </div>
+              </div>
+            </div>
+            <ol class="checks-flow-steps" aria-label="Этапы проверки сервиса">
+              <li data-check-stage="0"><i class="checks-stage-mark" aria-hidden="true"></i><span>Ввод</span></li>
+              <li data-check-stage="1"><i class="checks-stage-mark" aria-hidden="true"></i><span>Сохранение</span></li>
+              <li data-check-stage="2"><i class="checks-stage-mark" aria-hidden="true"></i><span>Результат</span></li>
+            </ol>
+          </div>
         </div>
         </div>
       </div>

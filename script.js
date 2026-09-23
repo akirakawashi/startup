@@ -1859,44 +1859,35 @@
   /* ============================================================
      Свет у панели проверок
 
-     У huly.io на этом месте видео: 2944×2112, 60 к/с, 12 секунд, 9,6 МБ,
-     отрендерено в motion-редакторе. Два источника, тёплый и холодный,
-     обходят рамку по часовой стрелке за 12 секунд, находясь на
-     противоположных концах периметра. Видео сюда не годится: высота нашей
-     панели зависит от текста, а кадр требует фиксированных пропорций.
-     Поэтому та же картина считается здесь в реальном времени, в цветах
-     сайта: насыщенный фиолетовый и светлая лаванда.
-
-     Движение не равномерное: по прямой свет ползёт, углы проходит быстро.
-     Опорные точки — середины сторон, три секунды на переход с ease-in-out,
-     поэтому пик скорости приходится ровно на угол. Второй источник всегда
-     на противоположной стороне.
-
-     На проходе угла переключается экран панели — там же меняет картинку
-     Rive-анимация у huly.io. Смена приходится на самый быстрый участок:
-     под движущимся светом подмена не читается как скачок.
-
-     Два холста вдвое меньше панели: .checks-glow — полоса и дымка, поверх
-     него CSS-маска кладёт сетку точек; .checks-rim — нить у самой рамки,
-     без маски, свет там сплошной. Один раз считаются поля: расстояние до
-     скруглённой рамки и положение ближайшей точки рамки на периметре.
-     Каждый кадр — только цвет и яркость по этим полям, без геометрии.
-     Считается только пока панель на экране; при prefers-reduced-motion
-     один кадр.
+     Один отсчёт управляет проверками, светом и наплывом экранов.
+     5.2 с свет медленно проходит сторону, внутри проигрывается одна сцена:
+     редактор с проверками или приложение с пользовательским сценарием.
+     Затем 1.2 с ускоряется через угол; середина наплыва совпадает с углом
+     при любых пропорциях панели. Скорость непрерывна на стыках фаз.
+     Два холста разделяют точечную дымку и сплошную кромку. Геометрия
+     считается только при resize, в кадре обходим только видимое кольцо.
+     Пауза сохраняет весь цикл, включая незаконченный наплыв.
      ============================================================ */
-  var glowCanvas = $('.checks-glow');
-  var rimCanvas  = $('.checks-rim');
-  if (glowCanvas && rimCanvas && glowCanvas.getContext) {
+  (function initChecksScene() {
+    var shot = $('.checks-shot');
+    if (!shot) return;
+    var glowCanvas = $('.checks-glow', shot);
+    var rimCanvas = $('.checks-rim', shot);
+    if (!glowCanvas || !rimCanvas) return;
+    var ctx = glowCanvas.getContext('2d');
+    var rctx = rimCanvas.getContext('2d');
+    if (!ctx || !rctx) return;
     var BLOCK  = 2;      // размер блока, px
     var PAD    = 230;    // насколько холст шире панели с каждой стороны, px
     var RADIUS = 15;     // скругление рамки окна, px
     var RIM    = 6;      // дальность нити, px
     var BAND   = 52;     // дальность цветной полосы, px
     var HAZE   = 160;    // дальность дымки, px
-    var SPAN   = 0.24;   // полуширина пятна вдоль периметра, доля периметра
-    var STEP   = 3000;   // переход от середины стороны до следующей, мс
-    var FPS    = 30;
-    var FADE   = 500;    // длительность наплыва между экранами, мс (см. style.css)
+    var SPAN   = 0.18;   // полуширина пятна вдоль периметра
+    var CALM   = 5200;   // спокойное проигрывание экрана, мс
+    var BURST  = 1200;   // разгон, угол и торможение, мс
+    var STEP   = CALM + BURST;
+    var FADE   = 900;    // наплыв внутри ускорения, мс
 
     // Палитру читаем один раз: вычисление стилей не попадает в кадр.
     var paletteStyle = getComputedStyle(document.documentElement);
@@ -1906,17 +1897,15 @@
     var VIOLET = { hot: paletteRgb('--text-rgb'), mid: paletteRgb('--accent-rgb'), deep: paletteRgb('--accent-deep-rgb') };
     var LAVENDER = { hot: paletteRgb('--text-rgb'), mid: paletteRgb('--accent-hi-rgb'), deep: paletteRgb('--accent-rgb') };
 
-    var ctx  = glowCanvas.getContext('2d');
-    var rctx = rimCanvas.getContext('2d');
     var W = 0, H = 0, N = 0, img = null, px = null, rimg = null, rpx = null;
-    var fMask, fRim, fBand, fHaze, fU;
-    var stops = [.125, .375, .625, .875, 1.125];   // середины сторон, уточняются в build
+    var activePixels, fRim, fBand, fHaze, fU;
+    var corners = [], reach = 0;
     var builtKey = '';
 
     var build = function () {
-      var shot = glowCanvas.parentNode;
       var PW = shot.offsetWidth, PH = shot.offsetHeight;
-      var key = PW + 'x' + PH;
+      var bottomSpace = parseFloat(getComputedStyle(shot.closest('.checks')).paddingBottom);
+      var key = PW + 'x' + PH + ':' + bottomSpace;
       if (!PW || !PH) return false;
       if (key === builtKey) return true;
       builtKey = key;
@@ -1935,16 +1924,20 @@
       img  = ctx.createImageData(W, H);  px  = img.data;
       rimg = rctx.createImageData(W, H); rpx = rimg.data;
 
-      fMask = new Uint8Array(N);
+      var active = [];
       fRim  = new Float32Array(N);
       fBand = new Float32Array(N);
       fHaze = new Float32Array(N);
       fU    = new Float32Array(N);
 
-      var P = 2 * (PW + PH);           // периметр
+      var a = PW - RADIUS * 2, b = PH - RADIUS * 2;
+      var arc = Math.PI * RADIUS / 2;
+      var P = 2 * (a + b) + arc * 4;
       var maxd = PAD - 6;              // дальше этого — гарантированный ноль
-      var mt = PW / 2, mr = PW + PH / 2, mb = PW + PH + PW / 2, ml = 2 * PW + PH + PH / 2;
-      stops = [mt / P, mr / P, mb / P, ml / P, mt / P + 1];
+      corners = [-arc / 2, a + arc / 2, a + b + arc * 1.5,
+        a * 2 + b + arc * 2.5, P - arc / 2].map(function (u) { return u / P; });
+      corners.push(corners[1] + 1);
+      reach = Math.min(.075, Math.min(a, b) * .4 / P);
       for (var j = 0; j < H; j++) {
         for (var i = 0; i < W; i++) {
           var k = j * W + i;
@@ -1960,36 +1953,44 @@
 
           var dd = dist > 0 ? dist : 0;
           var fade = 1 - dd / maxd;
-          fMask[k] = 1;
-          fRim[k]  = Math.exp(-dd / RIM);
-          fBand[k] = Math.exp(-dd / BAND) * fade;
-          fHaze[k] = Math.exp(-dd / HAZE) * fade * fade;
+          // На телефоне поле под панелью короче дымки. Гасим её заранее,
+          // чтобы overflow секции не срезал свет горизонтальной полосой.
+          var edge = clamp((PH + bottomSpace - y) / Math.min(bottomSpace, 72), 0, 1);
+          edge = edge * edge * (3 - 2 * edge);
+          if (!edge) continue;
+          active.push(k);
+          fRim[k]  = Math.exp(-dd / RIM) * edge;
+          fBand[k] = Math.exp(-dd / BAND) * fade * edge;
+          fHaze[k] = Math.exp(-dd / HAZE) * fade * fade * edge;
 
-          // положение ближайшей точки рамки на периметре, по часовой
-          // стрелке от верхнего левого угла: верх → право → низ → лево.
-          // Точки внутри габарита (клинья между дугой скругления и прямым
-          // углом) относятся к ближайшей стороне — без этого они уходили
-          // на левую и на правых углах брали цвет второго источника
-          var cx = clamp(x, 0, PW), cy = clamp(y, 0, PH), u;
-          var inside = x >= 0 && x <= PW && y >= 0 && y <= PH;
-          var side = inside
-            ? [y, PW - x, PH - y, x].indexOf(Math.min(y, PW - x, PH - y, x))
-            : (y < 0 ? 0 : x > PW ? 1 : y > PH ? 2 : 3);
-          if (side === 0)      u = cx;
-          else if (side === 1) u = PW + cy;
-          else if (side === 2) u = PW + PH + (PW - cx);
-          else                 u = 2 * PW + PH + (PH - cy);
+          // Проекция на настоящий скруглённый периметр, включая дуги.
+          var u, angle;
+          if (x < RADIUS && y < RADIUS) {
+            angle = Math.atan2(y - RADIUS, x - RADIUS);
+            if (angle < 0) angle += Math.PI * 2;
+            u = P - arc + (angle - Math.PI) * RADIUS;
+          } else if (x > PW - RADIUS && y < RADIUS) {
+            u = a + (Math.atan2(y - RADIUS, x - PW + RADIUS) + Math.PI / 2) * RADIUS;
+          } else if (x > PW - RADIUS && y > PH - RADIUS) {
+            u = a + arc + b + Math.atan2(y - PH + RADIUS, x - PW + RADIUS) * RADIUS;
+          } else if (x < RADIUS && y > PH - RADIUS) {
+            u = a * 2 + arc * 2 + b + (Math.atan2(y - PH + RADIUS, x - RADIUS) - Math.PI / 2) * RADIUS;
+          } else if (y < RADIUS) u = x - RADIUS;
+          else if (x > PW - RADIUS) u = a + arc + y - RADIUS;
+          else if (y > PH - RADIUS) u = a + b + arc * 2 + PW - RADIUS - x;
+          else u = a * 2 + b + arc * 3 + PH - RADIUS - y;
           fU[k] = u / P;
         }
       }
+      activePixels = new Uint32Array(active);
       return true;
     };
 
-    var paint = function (phase) {
+    var paint = function (phase, strength) {
       var out = px, rout = rpx, o, c;
-      for (var z = 0; z < out.length; z++) { out[z] = 0; rout[z] = 0; }
-      for (var k = 0; k < N; k++) {
-        if (!fMask[k]) continue;
+      out.fill(0); rout.fill(0);
+      for (var z = 0; z < activePixels.length; z++) {
+        var k = activePixels[z];
 
         // расстояние вдоль периметра до каждого из двух источников;
         // второй на полпериметра дальше первого
@@ -1998,7 +1999,7 @@
         var d2 = du > .5 ? du - .5 : .5 - du;
         var w1 = d1 < SPAN ? 1 - d1 / SPAN : 0; w1 *= w1;
         var w2 = d2 < SPAN ? 1 - d2 / SPAN : 0; w2 *= w2;
-        var wl = w1 > w2 ? w1 : w2;
+        var wl = Math.max(w1, w2) * strength;
         if (wl < .004) continue;
 
         var pal = w1 > w2 ? VIOLET : LAVENDER;
@@ -2028,35 +2029,110 @@
       rctx.putImageData(rimg, 0, 0);
     };
 
-    // фаза по времени: номер перехода выбирает пару соседних середин сторон,
-    // дробная часть с кубическим ease-in-out — положение между ними. Угол
-    // лежит посередине перехода, где скорость максимальна
-    var phaseAt = function (t) {
-      var seg = Math.floor(t / STEP) % 4;
-      var f = (t % STEP) / STEP;
-      f = f < .5 ? 4 * f * f * f : 1 - 4 * (1 - f) * (1 - f) * (1 - f);
-      return stops[seg] + (stops[seg + 1] - stops[seg]) * f;
+    var smooth = function (v) { return v * v * (3 - 2 * v); };
+    var travel = function (start, end, v0, v1, f) {
+      var f2 = f * f, f3 = f2 * f, duration = BURST / 2;
+      return (2 * f3 - 3 * f2 + 1) * start + (f3 - 2 * f2 + f) * v0 * duration +
+        (-2 * f3 + 3 * f2) * end + (f3 - f2) * v1 * duration;
+    };
+    var stateAt = function (t) {
+      var leg = Math.floor(t / STEP) % 4, local = t % STEP;
+      var corner = corners[leg + 1];
+      var before = (corner - corners[leg] - reach * 2) / CALM;
+      var after = (corners[leg + 2] - corner - reach * 2) / CALM;
+      var burst = clamp((local - CALM) / BURST, 0, 1);
+      var peak = reach * 1.9 / (BURST / 2);
+      var phase = local < CALM ? corners[leg] + reach + before * local :
+        burst < .5 ? travel(corner - reach, corner, before, peak, burst * 2) :
+        travel(corner, corner + reach, peak, after, burst * 2 - 1);
+      var mix = smooth(clamp((local - CALM - (BURST - FADE) / 2) / FADE, 0, 1));
+      return { leg: leg, local: local, phase: phase, mix: mix,
+        strength: .86 + .28 * Math.pow(Math.sin(Math.PI * burst), 2) };
     };
 
-    // экран панели: наплыв начинается перед углом, чтобы его середина
-    // пришлась ровно на самый быстрый участок — под движущимся светом
-    // подмена не читается как скачок. Цикл смены — два перехода, шесть секунд
-    var screenEl = $('.checks-window');
-    var failing = null;
-    var setScreen = function (t) {
-      if (!screenEl) return;
-      var q = ((t + FADE / 2) / (STEP * 2)) % 1;
-      var bad = q >= .25 && q < .75;
-      if (bad === failing) return;
-      failing = bad;
-      screenEl.classList.toggle('failing', bad);
+    var screens = $$('.checks-screen', shot).map(function (el) {
+      return {
+        el: el, kind: el.dataset.checkScene,
+        badge: $('.checks-badge', el), lastCount: -1,
+        stages: $$('[data-check-stage]', el).map(function (stage) {
+          return { el: stage, mark: $('.checks-stage-mark', stage), state: '' };
+        }),
+        lines: $$('.checks-code-line', el), lastLine: -2,
+        console: $('.checks-console-status', el), progress: $('.checks-code-progress i', el),
+        typed: $('.checks-typed', el), text: $('.checks-typed', el) ? $('.checks-typed', el).textContent : '',
+        lastLetters: -1, caret: $('.checks-type-caret', el),
+        save: $('.checks-app-save > i', el), form: $('.checks-app-form', el),
+        confirmation: $('.checks-confirmation', el)
+      };
+    });
+    if (screens.length !== 2) return;
+
+    var playChecks = function (screen, age, t) {
+      var code = screen.kind === 'code';
+      var ends = code ? [1300, 2600, 3900] : [1600, 3000, 4200];
+      var finished = 0;
+      screen.stages.forEach(function (stage, index) {
+        var state = age >= ends[index] ? 'done' : age >= (index ? ends[index - 1] : 0) ? 'running' : 'pending';
+        if (state !== stage.state) {
+          stage.state = state;
+          stage.el.dataset.state = state;
+          if (state !== 'running') stage.mark.style.transform = '';
+        }
+        if (state === 'running') {
+          stage.mark.style.transform = 'rotate(' + (t % 1000 * .36).toFixed(2) + 'deg)';
+        }
+        if (state === 'done') finished++;
+      });
+      if (finished !== screen.lastCount) {
+        screen.lastCount = finished;
+        screen.badge.textContent = finished + ' / ' + screen.stages.length;
+        screen.badge.classList.toggle('is-running', finished < screen.stages.length);
+        screen.el.dataset.scenePhase = (code ? ['types', 'style', 'tests', 'done'] : ['input', 'save', 'result', 'done'])[finished];
+        if (code) screen.console.textContent = ['Анализируем типы…', 'Проверяем стиль…', 'Запускаем тесты…', 'Проверки пройдены'][finished];
+      }
+      if (code) {
+        var line = age < 3900 ? Math.min(screen.lines.length - 1, Math.floor(age / (3900 / screen.lines.length))) : -1;
+        if (line !== screen.lastLine) {
+          screen.lastLine = line;
+          screen.lines.forEach(function (el, index) { el.dataset.current = String(index === line); });
+        }
+        screen.progress.style.transform = 'scaleX(' + clamp(age / 3900, 0, 1).toFixed(4) + ')';
+      } else {
+        var letters = Math.floor(clamp((age - 250) / 1250, 0, 1) * screen.text.length);
+        if (letters !== screen.lastLetters) {
+          screen.lastLetters = letters;
+          screen.typed.textContent = screen.text.slice(0, letters);
+        }
+        screen.caret.style.opacity = age > 150 && age < 1700 ? String(Math.floor(age / 300) % 2) : '0';
+        screen.save.style.transform = 'scaleX(' + smooth(clamp((age - 1800) / 1200, 0, 1)).toFixed(4) + ')';
+        var confirmation = smooth(clamp((age - 3350) / 750, 0, 1));
+        screen.confirmation.style.opacity = confirmation.toFixed(4);
+        screen.form.style.opacity = (1 - confirmation * .8).toFixed(4);
+      }
+    };
+    var renderScreens = function (state, t, still) {
+      var from = state.leg % 2, to = 1 - from;
+      screens.forEach(function (screen, index) {
+        // Нижний экран остаётся непрозрачным: у наплыва нет тёмного провала.
+        var incoming = index === to, visibleScreen = incoming ? state.mix > 0 : state.mix < 1;
+        screen.el.style.zIndex = incoming ? '1' : '0';
+        screen.el.style.opacity = incoming ? state.mix.toFixed(4) : '1';
+        screen.el.style.visibility = visibleScreen ? 'visible' : 'hidden';
+        var hidden = String(index !== (state.mix < .5 ? from : to));
+        if (screen.el.getAttribute('aria-hidden') !== hidden) screen.el.setAttribute('aria-hidden', hidden);
+        if (visibleScreen) playChecks(screen, still ? CALM : incoming ? 0 : state.local, t);
+      });
+    };
+    var render = function (t, drawLight, still) {
+      var state = stateAt(t);
+      if (drawLight) paint(state.phase, state.strength);
+      renderScreens(state, t, still);
     };
 
-    var visible = false, frame = 0, last = 0, previous = null, elapsed = 0;
+    var visible = false, frame = 0, previous = null, elapsed = 0, paintTime = -Infinity;
     var stop = function () {
       if (frame) window.cancelAnimationFrame(frame);
       frame = 0;
-      last = 0;
       previous = null;
     };
     var tick = function (now) {
@@ -2064,18 +2140,20 @@
       if (!visible || document.hidden || motionQuery.matches) { stop(); return; }
       if (previous !== null) elapsed += now - previous;
       previous = now;
-      if (!last || now - last >= 1000 / FPS) {
-        last = now;
-        paint(phaseAt(elapsed));
-        setScreen(elapsed);
-      }
+      // Наплыв идёт каждый кадр. Свет — 30 fps в покое и 60 на ускорении;
+      // сохраняем остаток интервала, чтобы пропуск кадра не снижал частоту.
+      var interval = 1000 / (elapsed % STEP >= CALM ? 60 : 30);
+      var drawLight = elapsed - paintTime >= interval - .1;
+      if (drawLight) paintTime = elapsed - (Number.isFinite(paintTime) ? (elapsed - paintTime) % interval : 0);
+      render(elapsed, drawLight, false);
       frame = window.requestAnimationFrame(tick);
     };
     var sync = function () {
       if (!visible || document.hidden) { stop(); return; }
       if (!build()) return;
-      glowCanvas.parentNode.classList.add('has-glow');
-      if (motionQuery.matches) { stop(); paint(0); setScreen(0); return; }
+      render(motionQuery.matches ? 0 : elapsed, true, motionQuery.matches);
+      shot.classList.add('has-glow');
+      if (motionQuery.matches) { stop(); return; }
       if (!frame) frame = window.requestAnimationFrame(tick);
     };
 
@@ -2086,27 +2164,14 @@
       new IntersectionObserver(function (entries) {
         visible = entries[0].isIntersecting;
         sync();
-      }, { rootMargin: '120px' }).observe(glowCanvas.parentNode);
+      }, { rootMargin: '120px' }).observe(shot);
     }
 
     document.addEventListener('visibilitychange', sync);
     if (motionQuery.addEventListener) motionQuery.addEventListener('change', sync);
     window.addEventListener('load', sync);
-    var glowQueued = false;
-    window.addEventListener('resize', function () {
-      if (glowQueued) return;
-      glowQueued = true;
-      window.requestAnimationFrame(function () {
-        glowQueued = false;
-        if (!visible || document.hidden) return;
-        if (build()) {
-          var t = motionQuery.matches ? 0 : elapsed;
-          paint(phaseAt(t));
-          setScreen(t);
-          sync();
-        }
-      });
-    }, { passive: true });
-  }
+    if ('ResizeObserver' in window) new ResizeObserver(sync).observe(shot);
+    else window.addEventListener('resize', sync, { passive: true });
+  })();
 
 })();
