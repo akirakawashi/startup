@@ -1900,37 +1900,39 @@
     var W = 0, H = 0, N = 0, img = null, px = null, rimg = null, rpx = null;
     var activePixels, fRim, fBand, fDistance, fEdge, fU, fDither;
     var corners = [], reach = 0, span = 0;
-    var builtKey = '';
+    var builtKey = '', building = null;
 
-    var build = function () {
+    var build = function (budget) {
       var PW = shot.offsetWidth, PH = shot.offsetHeight;
       var bottomSpace = parseFloat(getComputedStyle(shot.closest('.checks')).paddingBottom);
       var key = PW + 'x' + PH + ':' + bottomSpace;
       if (!PW || !PH) return false;
       if (key === builtKey) return true;
-      builtKey = key;
+      if (!building || building.key !== key) {
+        builtKey = '';
+        W = Math.ceil((PW + PAD * 2) / BLOCK);
+        H = Math.ceil((PH + PAD * 2) / BLOCK);
+        N = W * H;
+        [glowCanvas, rimCanvas].forEach(function (c) {
+          c.width = W;
+          c.height = H;
+          c.style.width  = (W * BLOCK) + 'px';
+          c.style.height = (H * BLOCK) + 'px';
+          c.style.left = (-PAD) + 'px';
+          c.style.top  = (-PAD) + 'px';
+        });
+        img  = ctx.createImageData(W, H);  px  = img.data;
+        rimg = rctx.createImageData(W, H); rpx = rimg.data;
 
-      W = Math.ceil((PW + PAD * 2) / BLOCK);
-      H = Math.ceil((PH + PAD * 2) / BLOCK);
-      N = W * H;
-      [glowCanvas, rimCanvas].forEach(function (c) {
-        c.width = W;
-        c.height = H;
-        c.style.width  = (W * BLOCK) + 'px';
-        c.style.height = (H * BLOCK) + 'px';
-        c.style.left = (-PAD) + 'px';
-        c.style.top  = (-PAD) + 'px';
-      });
-      img  = ctx.createImageData(W, H);  px  = img.data;
-      rimg = rctx.createImageData(W, H); rpx = rimg.data;
-
-      var active = [];
-      fRim  = new Float32Array(N);
-      fBand = new Float32Array(N);
-      fDistance = new Float32Array(N);
-      fEdge = new Float32Array(N);
-      fU    = new Float32Array(N);
-      fDither = new Float32Array(N);
+        fRim  = new Float32Array(N);
+        fBand = new Float32Array(N);
+        fDistance = new Float32Array(N);
+        fEdge = new Float32Array(N);
+        fU    = new Float32Array(N);
+        fDither = new Float32Array(N);
+        building = { key: key, row: 0, active: [] };
+      }
+      var active = building.active;
 
       var a = PW - RADIUS * 2, b = PH - RADIUS * 2;
       var arc = Math.PI * RADIUS / 2;
@@ -1941,7 +1943,7 @@
         a * 2 + b + arc * 2.5, P - arc / 2].map(function (u) { return u / P; });
       corners.push(corners[1] + 1);
       reach = Math.min(.075, Math.min(a, b) * .4 / P);
-      for (var j = 0; j < H; j++) {
+      for (var j = building.row; j < H; j++) {
         for (var i = 0; i < W; i++) {
           var k = j * W + i;
           var x = (i + .5) * BLOCK - PAD;   // координаты в системе панели
@@ -1989,8 +1991,14 @@
           else u = a * 2 + b + arc * 3 + PH - RADIUS - y;
           fU[k] = u / P;
         }
+        building.row = j + 1;
+        // Фоновая подготовка отдаёт управление между строками. При быстром
+        // переходе к секции обычный build() завершает оставшуюся работу.
+        if (budget && budget.timeRemaining() < 1) return false;
       }
       activePixels = new Uint32Array(active);
+      builtKey = key;
+      building = null;
       return true;
     };
 
@@ -2178,6 +2186,19 @@
       if (!frame) frame = window.requestAnimationFrame(tick);
     };
 
+    var warmChecks = window.VoidLabsWarmup && window.VoidLabsWarmup.add(shot, function (budget) {
+      if (visible) return;
+      if (!build(budget)) return false;
+      // После геометрии кадр рисуется один раз: ожидание длинного idle-окна
+      // может откладывать его бесконечно, пока работает первый экран.
+      var state = stateAt(elapsed);
+      paint(state.phase, state.strength);
+    });
+    var resizeChecks = function () {
+      sync();
+      if (warmChecks && !visible) warmChecks();
+    };
+
     if (!('IntersectionObserver' in window)) {
       visible = true;
       sync();
@@ -2191,8 +2212,8 @@
     document.addEventListener('visibilitychange', sync);
     if (motionQuery.addEventListener) motionQuery.addEventListener('change', sync);
     window.addEventListener('load', sync);
-    if ('ResizeObserver' in window) new ResizeObserver(sync).observe(shot);
-    else window.addEventListener('resize', sync, { passive: true });
+    if ('ResizeObserver' in window) new ResizeObserver(resizeChecks).observe(shot);
+    else window.addEventListener('resize', resizeChecks, { passive: true });
   })();
 
 })();

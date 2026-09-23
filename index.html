@@ -17,6 +17,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" href="assets/blackhole-poster.jpg" as="image" fetchpriority="high">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 <link rel="stylesheet" href="assets/orb-masks.css">
@@ -131,7 +132,7 @@
   <div class="hero-deck" aria-hidden="true">
     <span class="hero-deck-glow"></span>
     <img class="hero-deck-mirror" src="assets/blackhole-poster.jpg" alt=""
-         width="1600" height="900" loading="lazy" decoding="async">
+         width="1600" height="900" loading="eager" decoding="async" fetchpriority="high">
   </div>
 
   <!-- Этапы и результат на общей панели. Текст находится вне декоративной
@@ -3482,6 +3483,7 @@
 </footer>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script src="assets/warmup.js"></script>
 <script src="script.js"></script>
 <script src="assets/globe.js"></script>
 </body>

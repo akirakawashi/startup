@@ -459,6 +459,11 @@
     });
   }
 
+  var warmGlobe = window.VoidLabsWarmup && window.VoidLabsWarmup.add(section, function () {
+    if (running || failed || motion.matches) return;
+    if (initialize()) { resize(); draw(); }
+  }, { motion: true });
+
   if ('IntersectionObserver' in window) new IntersectionObserver(checkVisibility).observe(section);
   window.addEventListener('scroll', checkVisibility, { passive: true });
   window.addEventListener('resize', checkVisibility, { passive: true });
@@ -480,6 +485,7 @@
     failed = false;
     // Restored contexts reset uniforms even if the canvas size is unchanged.
     canvas.width = 0;
+    if (warmGlobe) warmGlobe();
     checkVisibility();
   });
   checkVisibility();
