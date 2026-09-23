@@ -1898,7 +1898,7 @@
     var LAVENDER = { hot: paletteRgb('--text-rgb'), mid: paletteRgb('--accent-hi-rgb'), deep: paletteRgb('--accent-rgb') };
 
     var W = 0, H = 0, N = 0, img = null, px = null, rimg = null, rpx = null;
-    var activePixels, fRim, fBand, fHaze, fU;
+    var activePixels, fRim, fBand, fHaze, fU, fDither;
     var corners = [], reach = 0;
     var builtKey = '';
 
@@ -1929,6 +1929,7 @@
       fBand = new Float32Array(N);
       fHaze = new Float32Array(N);
       fU    = new Float32Array(N);
+      fDither = new Float32Array(N);
 
       var a = PW - RADIUS * 2, b = PH - RADIUS * 2;
       var arc = Math.PI * RADIUS / 2;
@@ -1962,6 +1963,10 @@
           fRim[k]  = Math.exp(-dd / RIM) * edge;
           fBand[k] = Math.exp(-dd / BAND) * fade * edge;
           fHaze[k] = Math.exp(-dd / HAZE) * fade * fade * edge;
+          // Статичный дизеринг в пределах половины шага 8-битной прозрачности.
+          // Считаем при resize: слабый свет растворяется без полос и мерцания.
+          var noise = .06711056 * i + .00583715 * j;
+          fDither[k] = (52.9829189 * (noise - Math.floor(noise))) % 1 - .5;
 
           // Проекция на настоящий скруглённый периметр, включая дуги.
           var u, angle;
@@ -2000,21 +2005,19 @@
         var w1 = d1 < SPAN ? 1 - d1 / SPAN : 0; w1 *= w1;
         var w2 = d2 < SPAN ? 1 - d2 / SPAN : 0; w2 *= w2;
         var wl = Math.max(w1, w2) * strength;
-        if (wl < .004) continue;
+        if (!wl) continue;
 
         var pal = w1 > w2 ? VIOLET : LAVENDER;
         var rim = fRim[k], band = fBand[k], haze = fHaze[k];
         o = k * 4;
 
-        // полоса и дымка — под сетку точек
+        // Полоса и дымка затухают до нуля: порог прозрачности даёт видимый контур.
         var a = (rim * .5 + band * .95 + haze * .5) * wl;
         if (a > 1) a = 1;
-        if (a >= .01) {
-          for (c = 0; c < 3; c++) {
-            out[o + c] = pal.deep[c] + (pal.mid[c] - pal.deep[c]) * band;
-          }
-          out[o + 3] = a * 255;
+        for (c = 0; c < 3; c++) {
+          out[o + c] = pal.deep[c] + (pal.mid[c] - pal.deep[c]) * band;
         }
+        out[o + 3] = a * 255 + fDither[k];
 
         // нить — сплошная, к рамке уходит в белый
         var r = rim * wl;
