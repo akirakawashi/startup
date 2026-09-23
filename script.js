@@ -1882,8 +1882,8 @@
     var RADIUS = 15;     // скругление рамки окна, px
     var RIM    = 6;      // дальность нити, px
     var BAND   = 52;     // дальность цветной полосы, px
-    var HAZE   = 160;    // дальность дымки, px
-    var SPAN   = 0.18;   // полуширина пятна вдоль периметра
+    var HAZE   = 220;    // дальность дымки в центре источника, px
+    var SPAN   = 420;    // полудлина пятна вдоль периметра, px
     var CALM   = 5200;   // спокойное проигрывание экрана, мс
     var BURST  = 1200;   // разгон, угол и торможение, мс
     var STEP   = CALM + BURST;
@@ -1898,8 +1898,8 @@
     var LAVENDER = { hot: paletteRgb('--text-rgb'), mid: paletteRgb('--accent-hi-rgb'), deep: paletteRgb('--accent-rgb') };
 
     var W = 0, H = 0, N = 0, img = null, px = null, rimg = null, rpx = null;
-    var activePixels, fRim, fBand, fHaze, fU, fDither;
-    var corners = [], reach = 0;
+    var activePixels, fRim, fBand, fDistance, fEdge, fU, fDither;
+    var corners = [], reach = 0, span = 0;
     var builtKey = '';
 
     var build = function () {
@@ -1927,13 +1927,15 @@
       var active = [];
       fRim  = new Float32Array(N);
       fBand = new Float32Array(N);
-      fHaze = new Float32Array(N);
+      fDistance = new Float32Array(N);
+      fEdge = new Float32Array(N);
       fU    = new Float32Array(N);
       fDither = new Float32Array(N);
 
       var a = PW - RADIUS * 2, b = PH - RADIUS * 2;
       var arc = Math.PI * RADIUS / 2;
       var P = 2 * (a + b) + arc * 4;
+      span = Math.min(SPAN, Math.min(PW, PH) * .76) / P;
       var maxd = PAD - 6;              // дальше этого — гарантированный ноль
       corners = [-arc / 2, a + arc / 2, a + b + arc * 1.5,
         a * 2 + b + arc * 2.5, P - arc / 2].map(function (u) { return u / P; });
@@ -1962,7 +1964,8 @@
           active.push(k);
           fRim[k]  = Math.exp(-dd / RIM) * edge;
           fBand[k] = Math.exp(-dd / BAND) * fade * edge;
-          fHaze[k] = Math.exp(-dd / HAZE) * fade * fade * edge;
+          fDistance[k] = dd / HAZE;
+          fEdge[k] = edge;
           // Статичный дизеринг в пределах половины шага 8-битной прозрачности.
           // Считаем при resize: слабый свет растворяется без полос и мерцания.
           var noise = .06711056 * i + .00583715 * j;
@@ -2002,30 +2005,45 @@
         var du = fU[k] - phase; du -= Math.floor(du);
         var d1 = du > .5 ? 1 - du : du;
         var d2 = du > .5 ? du - .5 : .5 - du;
-        var w1 = d1 < SPAN ? 1 - d1 / SPAN : 0; w1 *= w1;
-        var w2 = d2 < SPAN ? 1 - d2 / SPAN : 0; w2 *= w2;
-        var wl = Math.max(w1, w2) * strength;
-        if (!wl) continue;
+        var along = Math.min(d1, d2) / span;
+        var body = Math.max(0, 1 - along * along); body *= body;
+        var core = body * body;
+        var wl = body * strength;
 
-        var pal = w1 > w2 ? VIOLET : LAVENDER;
-        var rim = fRim[k], band = fBand[k], haze = fHaze[k];
+        // Узкая лента светится по всему периметру и переливается в общей фазе.
+        // Цвет между источниками меняется плавно, без шва на их границе.
+        var flow = 1 - Math.min(d1, d2) * 4;
+        flow = flow * flow * (3 - 2 * flow);
+        var rim = fRim[k], band = fBand[k];
+        // Дымка шире в движущемся центре и сужается к концам пятна.
+        // Кубический спад даёт мягкий край без покадрового размытия.
+        var haze = 0;
+        if (body) {
+          var radial = fDistance[k] / (.2 + .8 * core);
+          haze = Math.max(0, 1 - radial * radial);
+          haze = haze * haze * haze * fEdge[k];
+        }
         o = k * 4;
 
         // Полоса и дымка затухают до нуля: порог прозрачности даёт видимый контур.
-        var a = (rim * .5 + band * .95 + haze * .5) * wl;
+        var a = (rim * .35 + band * (.35 + .85 * core) + haze * .65 * core) * wl;
         if (a > 1) a = 1;
-        for (c = 0; c < 3; c++) {
-          out[o + c] = pal.deep[c] + (pal.mid[c] - pal.deep[c]) * band;
-        }
-        out[o + 3] = a * 255 + fDither[k];
+        a += band * band * (.34 + .34 * flow) * (1 - a);
 
-        // нить — сплошная, к рамке уходит в белый
-        var r = rim * wl;
-        if (r >= .02) {
-          for (c = 0; c < 3; c++) {
-            rout[o + c] = pal.mid[c] + (pal.hot[c] - pal.mid[c]) * rim;
-          }
-          rout[o + 3] = r * 255;
+        // Сплошная кромка движется с лентой, широкая волна остаётся у ядра.
+        var r = Math.min(1, rim * wl * (.25 + .75 * core));
+        r += rim * (.2 + .3 * flow) * (1 - r);
+        out[o + 3] = a * 255 + fDither[k];
+        rout[o + 3] = r * 255 + fDither[k];
+        // Цвет нужен только после округления прозрачности в готовый пиксель.
+        if (!out[o + 3] && !rout[o + 3]) continue;
+        var tint = d1 * 2;
+        tint = tint * tint * (3 - 2 * tint);
+        for (c = 0; c < 3; c++) {
+          var mid = VIOLET.mid[c] + (LAVENDER.mid[c] - VIOLET.mid[c]) * tint;
+          var deep = VIOLET.deep[c] + (LAVENDER.deep[c] - VIOLET.deep[c]) * tint;
+          out[o + c] = deep + (mid - deep) * band;
+          rout[o + c] = mid + (VIOLET.hot[c] - mid) * rim;
         }
       }
       ctx.putImageData(img, 0, 0);
