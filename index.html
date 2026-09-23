@@ -36,6 +36,40 @@
         <feFuncB type="linear" slope="1.085106" intercept="-.085106"/>
       </feComponentTransfer>
     </filter>
+    <radialGradient id="sceneOrbitMist">
+      <stop stop-color="#ad79ff" stop-opacity=".2"/>
+      <stop offset=".45" stop-color="#9865e9" stop-opacity=".1"/>
+      <stop offset="1" stop-color="#9865e9" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="sceneOrbitHaze">
+      <stop offset=".3" stop-color="#9b6bff" stop-opacity="0"/>
+      <stop offset=".65" stop-color="#9b6bff" stop-opacity=".13"/>
+      <stop offset="1" stop-color="#9b6bff" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="sceneOrbitEdge" x1="-190" y1="0" x2="190" y2="0" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#a879ef" stop-opacity="0"/>
+      <stop offset=".28" stop-color="#a879ef" stop-opacity=".45"/>
+      <stop offset=".65" stop-color="#ddc5ff" stop-opacity=".75"/>
+      <stop offset="1" stop-color="#a879ef" stop-opacity="0"/>
+    </linearGradient>
+    <radialGradient id="sceneOrbitSpark">
+      <stop stop-color="#e7d2ff" stop-opacity=".7"/>
+      <stop offset=".22" stop-color="#b98aff" stop-opacity=".4"/>
+      <stop offset="1" stop-color="#ad79ff" stop-opacity="0"/>
+    </radialGradient>
+    <g id="sceneOrbitBase" fill="none">
+      <ellipse rx="225" ry="40" fill="url(#sceneOrbitHaze)"/>
+      <ellipse rx="152" ry="22" fill="url(#sceneOrbitMist)"/>
+      <g stroke="url(#sceneOrbitEdge)">
+        <ellipse rx="180" ry="26" opacity=".45" stroke-width=".7" vector-effect="non-scaling-stroke"/>
+        <ellipse rx="159" ry="21" opacity=".3" stroke-dasharray="1 8" stroke-width=".8" vector-effect="non-scaling-stroke"/>
+        <path d="M-178 4C-160 29-52 35 56 24 126 17 174 4 180-5" opacity=".8" stroke-width=".85" vector-effect="non-scaling-stroke"/>
+      </g>
+    </g>
+    <g id="sceneOrbitLight">
+      <circle r="12" fill="url(#sceneOrbitSpark)"/>
+      <circle r="1.7" fill="#e7d2ff"/>
+    </g>
   </defs>
 </svg>
 
@@ -1909,6 +1943,12 @@
           <div class="release-art" aria-hidden="true">
             <span class="release-aura"></span>
             <svg viewBox="0 0 220 164" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <g class="scene-orbit release-orbit" transform="translate(110 141) scale(.52 .46)">
+                <use href="#sceneOrbitBase"/>
+                <g transform="translate(-151 14)"><g class="scene-orbit-spark"><use href="#sceneOrbitLight"/></g></g>
+                <g transform="translate(158 -10)"><g class="scene-orbit-spark scene-orbit-spark-b"><use href="#sceneOrbitLight"/></g></g>
+                <g transform="translate(65 24)"><g class="scene-orbit-spark scene-orbit-spark-c"><use href="#sceneOrbitLight"/></g></g>
+              </g>
               <path class="release-server-top" d="m40 62 70-23 70 23-70 23Z"/>
               <path class="release-server-face" d="m40 62 70 23v62l-70-23Zm70 23 70-23v62l-70 23Z"/>
               <path class="release-line-dim" d="m40 83 70 23 70-23M40 104l70 23 70-23"/>
@@ -2322,6 +2362,14 @@
       <div class="signal-scene" aria-hidden="true">
         <div class="signal-aura"></div>
         <div class="signal-floor"></div>
+        <svg class="signal-orbit" viewBox="0 0 1000 440" fill="none">
+          <g class="scene-orbit" transform="translate(500 344) rotate(-4) scale(1.05 .95)">
+            <use href="#sceneOrbitBase"/>
+            <g transform="translate(-151 14)"><g class="scene-orbit-spark"><use href="#sceneOrbitLight"/></g></g>
+            <g transform="translate(158 -10)"><g class="scene-orbit-spark scene-orbit-spark-b"><use href="#sceneOrbitLight"/></g></g>
+            <g transform="translate(65 24)"><g class="scene-orbit-spark scene-orbit-spark-c"><use href="#sceneOrbitLight"/></g></g>
+          </g>
+        </svg>
         <svg class="signal-emission" viewBox="0 0 1000 440" fill="none">
           <use href="#signalBoardOutline" fill="url(#signalEmission)"/>
         </svg>
@@ -2638,7 +2686,7 @@
         </li>
       </ol>
 
-      <svg class="system-flow" viewBox="0 0 720 330" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <svg class="system-flow" viewBox="0 0 720 362" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <defs>
           <!-- Средняя точка делает спад быстрым у центра и длинным к краю:
                с одним отрезком свет держался почти до границы эллипса и
@@ -2655,6 +2703,31 @@
             <stop offset="0" class="system-core-fill-top"/>
             <stop offset="1" class="system-core-fill-foot"/>
           </linearGradient>
+          <radialGradient id="systemFieldHaze">
+            <stop offset=".18" stop-color="#9e6aff" stop-opacity="0"/>
+            <stop offset=".57" stop-color="#9460ef" stop-opacity=".17"/>
+            <stop offset=".8" stop-color="#ad7df8" stop-opacity=".07"/>
+            <stop offset="1" stop-color="#9460ef" stop-opacity="0"/>
+          </radialGradient>
+          <linearGradient id="systemFieldGlass" x1="252" y1="177" x2="386" y2="259" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#b58aff" stop-opacity="0"/>
+            <stop offset=".48" stop-color="#aa78fa" stop-opacity=".025"/>
+            <stop offset=".86" stop-color="#be94ff" stop-opacity=".14"/>
+            <stop offset="1" stop-color="#c8aaff" stop-opacity=".02"/>
+          </linearGradient>
+          <linearGradient id="systemFieldEdge" x1="217" y1="182" x2="503" y2="244" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#9e6dec" stop-opacity="0"/>
+            <stop offset=".22" stop-color="#a97bf5" stop-opacity=".45"/>
+            <stop offset=".54" stop-color="#e0c9ff" stop-opacity=".95"/>
+            <stop offset=".82" stop-color="#bb8ff8" stop-opacity=".6"/>
+            <stop offset="1" stop-color="#a879ef" stop-opacity="0"/>
+          </linearGradient>
+          <filter id="systemFieldSoft" x="-15%" y="-50%" width="130%" height="200%">
+            <feGaussianBlur stdDeviation="3"/>
+          </filter>
+          <path id="systemFieldFront" d="M215 179C224 222 323 259 411 253 463 250 497 237 495 220"/>
+          <path id="systemFieldLeft" d="M215 179C224 222 296 250 360 254"/>
+          <path id="systemFieldRight" d="M495 220C484 239 431 259 360 254"/>
         </defs>
 
         <path class="system-wire" data-wire="client"  d="M120 0q0 116 240 166"/>
@@ -2664,23 +2737,45 @@
         <path class="system-spark" data-from="staff"   pathLength="1" d="M360 0v166"/>
         <path class="system-spark" data-from="service" pathLength="1" d="M600 0q0 116-240 166"/>
 
-        <!-- Пятно света лежит у основания (cy 214 при дне цилиндра на 227), а не
-             в его середине: посередине яркая часть приходилась ровно на прямые
-             стенки, и свечение выглядело срезанным по ним. Низ пятна 244 — там
-             же, где начинается журнал, поэтому оно не подсвечивает его рамку. -->
+        <!-- Дальняя дуга проходит за базой, ближняя — перед основанием.
+             Журнал ниже поля: свет не касается его рамки. -->
+        <g class="system-field-back">
+          <ellipse cx="360" cy="198" rx="184" ry="74" fill="url(#systemFieldHaze)"/>
+          <path d="M215 179C213 144 289 129 370 141 462 154 517 196 495 220" stroke="url(#systemFieldEdge)" opacity=".27"/>
+          <path d="M232 174C250 140 403 139 481 197" stroke="url(#systemFieldEdge)" stroke-dasharray="1 8" opacity=".3"/>
+          <path d="M215 179C224 222 323 259 411 253 463 250 497 237 495 220L491 221C485 232 452 241 408 244 326 250 240 218 215 179Z" fill="url(#systemFieldGlass)"/>
+        </g>
         <ellipse class="system-core-glow" cx="360" cy="214" rx="150" ry="30" fill="url(#systemGlow)"/>
         <g class="system-core">
-          <path class="system-core-body" d="M296 166v46a64 15 0 0 0 128 0v-46"/>
+          <!-- Заливка стенки начинается по передней дуге крышки:
+               прямое замыкание проступало через полупрозрачный эллипс. -->
+          <path class="system-core-body" d="M296 166a64 15 0 0 0 128 0v46a64 15 0 0 1-128 0Z"/>
+          <path class="system-core-edge" d="M296 166v46a64 15 0 0 0 128 0v-46"/>
           <ellipse class="system-core-top" cx="360" cy="166" rx="64" ry="15"/>
+        </g>
+
+        <g class="system-field-front" stroke="url(#systemFieldEdge)">
+          <use href="#systemFieldFront" stroke-width="7" opacity=".28" filter="url(#systemFieldSoft)"/>
+          <use href="#systemFieldFront" stroke-width="1.15"/>
+          <path d="M236 199C264 230 343 257 423 245" stroke-width=".65" opacity=".28"/>
+          <path class="system-field-response" d="M296 212a64 15 0 0 0 128 0" stroke-width="1.7"/>
+        </g>
+        <g class="system-field-traveler" data-field-route="systemFieldLeft">
+          <ellipse cx="-9" rx="21" ry="5" fill="url(#sceneOrbitSpark)"/>
+          <circle r="13" fill="url(#sceneOrbitSpark)"/><circle r="2" fill="#efddff"/>
+        </g>
+        <g class="system-field-traveler" data-field-route="systemFieldRight">
+          <ellipse cx="-9" rx="21" ry="5" fill="url(#sceneOrbitSpark)"/>
+          <circle r="13" fill="url(#sceneOrbitSpark)"/><circle r="2" fill="#efddff"/>
         </g>
 
         <ellipse class="system-core-ring" cx="360" cy="166" rx="64" ry="15"/>
         <ellipse class="system-core-ring system-core-ring-wide" cx="360" cy="166" rx="64" ry="15"/>
 
-        <path class="system-wire" d="M360 227v17"/>
-        <path class="system-spark system-spark-log" pathLength="1" d="M360 227v17"/>
+        <path class="system-wire" d="M360 227v49"/>
+        <path class="system-spark system-spark-log" pathLength="1" d="M360 227v49"/>
 
-        <g class="system-log">
+        <g class="system-log" transform="translate(0 32)">
           <rect class="system-log-frame" x="252" y="244" width="216" height="74" rx="10"/>
           <g class="system-log-row" data-row="client">
             <g class="system-log-mark">

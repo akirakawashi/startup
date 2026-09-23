@@ -549,6 +549,30 @@
     var remaining = BEAT;
     var armedAt = 0;
 
+    // Маршруты света берём из SVG один раз. Блики идут непрерывно со сдвигом
+    // в полцикла; общий контроллер видимости сохраняет их фазу на паузе.
+    var fieldStyles = document.createElement('style');
+    $$('.system-field-traveler', merge).forEach(function (traveler, index) {
+      var route = document.getElementById(traveler.dataset.fieldRoute);
+      if (!route) return;
+      var length = route.getTotalLength(), frames = [];
+      for (var step = 0; step <= 32; step++) {
+        var distance = length * step / 32;
+        var point = route.getPointAtLength(distance);
+        var before = route.getPointAtLength(Math.max(0, distance - .5));
+        var after = route.getPointAtLength(Math.min(length, distance + .5));
+        var angle = Math.atan2(after.y - before.y, after.x - before.x) * 180 / Math.PI;
+        var opacity = Math.min(1, step / 4, (32 - step) / 5);
+        frames.push((step / 32 * 100) + '%{transform:translate(' + point.x.toFixed(3) + 'px,' +
+          point.y.toFixed(3) + 'px) rotate(' + angle.toFixed(3) + 'deg);opacity:' + opacity + '}');
+      }
+      var name = 'systemFieldTravel' + index;
+      traveler.style.setProperty('--field-motion', name);
+      traveler.style.setProperty('--field-delay', (index * -1.4) + 's');
+      fieldStyles.textContent += '@keyframes ' + name + '{' + frames.join('') + '}';
+    });
+    document.head.appendChild(fieldStyles);
+
     function show(i, instant) {
       index = i;
       var name = order[i];
@@ -945,6 +969,15 @@
       fade($('.signal-aura', stage), [[0,.075],[2800,.075],[4200,.16],[6800,.2],[7450,.34],[8500,.13],[11000,.075],[duration,.075]]);
       fade($('.signal-emission', stage), [[0,.045],[3300,.045],[4900,.1],[6800,.12],[7480,.22],[8500,.07],[11000,.045],[duration,.045]]);
       fade($('.signal-floor', stage), [[0,.1],[3000,.1],[7000,.4],[8100,.3],[10000,.1],[duration,.1]]);
+      $$('.signal-orbit .scene-orbit-spark', stage).forEach(function (spark, index) {
+        var frames = [];
+        for (var step = 0; step <= 12; step++) {
+          var wave = Math.sin(step / 12 * Math.PI * 2 + index * Math.PI * 2 / 3);
+          frames.push([step * 1000, { opacity: .58 + wave * .27,
+            transform: 'translate(' + (wave * 4).toFixed(3) + 'px,' + (-wave).toFixed(3) + 'px)' }]);
+        }
+        animate(spark, frames);
+      });
       fade($('.signal-chip-core', stage), [[0,.08],[3500,.08],[4900,.25],[6800,.32],[7480,.6],[8500,.16],[duration,.08]]);
       fade($('.signal-bloom', stage), [[0,.015],[6900,.015],[7460,.55],[8300,.06],[10000,.015],[duration,.015]]);
       fade($('.signal-source', stage), [[0,0],[120,0],[700,1],[10900,1],[11600,0],[duration,0]]);
