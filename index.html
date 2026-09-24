@@ -92,9 +92,9 @@
 
     <nav class="topnav" id="topnav" aria-label="Разделы сайта">
       <a href="#services">Услуги</a>
-      <a href="#work">Как работаем</a>
       <a href="#cases">Проекты</a>
       <a href="#stack">Стек</a>
+      <a href="#work">Как работаем</a>
       <a href="#faq">Вопросы</a>
     </nav>
 
@@ -115,8 +115,12 @@
 
   <div class="wrap hero-inner">
     <p class="eyebrow reveal">
-      <span class="pulse" aria-hidden="true"></span>
-      Открыты для новых проектов
+      <span class="eyebrow-glow" aria-hidden="true"></span>
+      <span class="eyebrow-face">
+        <span class="eyebrow-dot" aria-hidden="true"></span>
+        <span class="eyebrow-sheen" aria-hidden="true"></span>
+        Открыты для новых проектов
+      </span>
     </p>
 
     <h1 class="hero-title" data-split>Собираем веб-сервисы целиком — и отвечаем за них после запуска</h1>
@@ -124,7 +128,7 @@
     <p class="lede reveal">
       Бэкенд, интерфейс, база данных, инфраструктура и релизы. Одна команда
       на весь проект: ничего не теряется на стыке между фронтендом, сервером
-      и деплоем, и некому сказать «это не ко мне».
+      и деплоем.
     </p>
 
     <div class="hero-cta reveal">
@@ -1669,416 +1673,6 @@
   </div>
 </section>
 
-<!-- ===================== ВАША ЗАДАЧА ===================== -->
-<section class="work" id="work" data-scenario="ai" aria-labelledby="work-title">
-  <div class="wrap">
-    <header class="work-head reveal">
-      <p class="work-eyebrow"><span></span> Подключаемся там, где нужны</p>
-      <h2 id="work-title">Начнём с <span>вашей задачи.</span></h2>
-      <p class="work-lede">Одна функция или целый сервис. Масштаб выбираете вы.</p>
-    </header>
-
-    <div class="work-tabs" role="tablist" aria-label="С какой задачей вы приходите">
-      <button class="work-tab" id="work-tab-ai" type="button" role="tab" aria-selected="true" aria-controls="work-panel-ai" data-scenario="ai">
-        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m12 3 2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5L12 3Z" stroke="currentColor" stroke-width="1.4"/></svg>
-        <span>Внедрить AI</span>
-      </button>
-      <button class="work-tab" id="work-tab-upgrade" type="button" role="tab" aria-selected="false" aria-controls="work-panel-upgrade" tabindex="-1" data-scenario="upgrade">
-        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3.5" y="3.5" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.4"/><rect x="14.5" y="14.5" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.4"/><path d="M17.5 3v7M14 6.5h7M3.5 14.5h6v6h-6z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
-        <span>Доработать<span class="work-tab-long"> сервис</span></span>
-      </button>
-      <button class="work-tab" id="work-tab-launch" type="button" role="tab" aria-selected="false" aria-controls="work-panel-launch" tabindex="-1" data-scenario="launch">
-        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m12 3 9 5-9 5-9-5 9-5ZM3 12l9 5 9-5M3 16l9 5 9-5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        <span>Создать с нуля</span>
-      </button>
-      <span class="work-tab-line" aria-hidden="true"></span>
-    </div>
-
-    <div class="work-body">
-      <div class="work-copy">
-        <div class="work-panel" id="work-panel-ai" role="tabpanel" aria-labelledby="work-tab-ai" tabindex="0">
-          <p class="work-kicker">Ваш сервис + AI</p>
-          <h3>Меньше рутины.<br>Больше возможностей.</h3>
-          <p class="work-description">Помощник, поиск по документам или обработка заявок — прямо в вашем сервисе.</p>
-          <a class="work-link" href="#contact">Обсудить внедрение <span aria-hidden="true">↗</span></a>
-        </div>
-        <div class="work-panel" id="work-panel-upgrade" role="tabpanel" aria-labelledby="work-tab-upgrade" tabindex="0" hidden>
-          <p class="work-kicker">Новый потенциал вашего сервиса</p>
-          <h3>Уже работает.<br>Будет ещё лучше.</h3>
-          <p class="work-description">Добавим нужную функцию, свяжем системы или ускорим то, что тормозит.</p>
-          <a class="work-link" href="#contact">Рассказать о доработке <span aria-hidden="true">↗</span></a>
-        </div>
-        <div class="work-panel" id="work-panel-launch" role="tabpanel" aria-labelledby="work-tab-launch" tabindex="0" hidden>
-          <p class="work-kicker">От идеи до первой версии</p>
-          <h3>Ваша идея.<br>Можно пользоваться.</h3>
-          <p class="work-description">Выделим главное и соберём первую версию, которую можно дать пользователям.</p>
-          <a class="work-link" href="#contact">Обсудить идею <span aria-hidden="true">↗</span></a>
-        </div>
-      </div>
-
-      <!-- Одна основа приложения; сценарии меняют её слои. Весь дальний свет под общей точечной маской. -->
-      <div class="work-stage reveal" aria-hidden="true">
-        <div class="work-scene">
-          <div class="work-aura"></div>
-          <div class="work-orbit work-orbit-outer"><span class="work-orbit-trail"></span></div>
-          <div class="work-orbit work-orbit-inner"><span class="work-orbit-trail"></span></div>
-          <div class="work-floor"></div>
-          <div class="work-platform work-platform-back"><span>Данные</span></div>
-          <div class="work-platform work-platform-front"><span>Логика</span></div>
-
-          <div class="work-app">
-            <span class="work-edge work-edge-app"></span>
-            <div class="work-app-bar"><span class="work-app-logo">s<span>✦</span></span><span>Ваш сервис</span><i></i><span class="work-app-menu">···</span></div>
-            <div class="work-app-layout">
-              <div class="work-sidebar"><b></b><i></i><i></i><i></i><span></span></div>
-              <div class="work-app-content">
-                <div class="work-app-heading"><span class="work-app-heading-wide">Рабочее пространство</span><span class="work-app-heading-compact">Обзор сервиса</span><i>+</i></div>
-                <div class="work-metrics"><div><span></span><b></b><i></i></div><div><span></span><b></b><i></i></div><div><span></span><b></b><i></i></div></div>
-                <div class="work-chart"><span>Активность</span><div class="work-bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
-                <div class="work-app-rows"><i></i><i></i></div>
-              </div>
-            </div>
-            <div class="work-app-scan"></div>
-          </div>
-
-          <div class="work-satellite work-source"><span class="work-source-icon">▤</span><div><b>Ваши знания</b><span>Документы и данные</span></div><i>↗</i></div>
-          <div class="work-satellite work-assistant">
-            <span class="work-edge"></span>
-            <div class="work-assistant-top"><span class="work-spark">✦</span><b>AI-помощник</b><span class="work-live-dot"></span></div>
-            <div class="work-prompt">Найди главное в документе <span>↵</span></div>
-            <div class="work-answer"><span>✦</span><div><i></i><i></i><i></i></div></div>
-            <div class="work-assistant-foot"><span>На основе ваших данных</span><span>✓</span></div>
-          </div>
-
-          <div class="work-satellite work-module"><span class="work-edge"></span><span class="work-module-icon">↗</span><b>Новая возможность</b><div class="work-module-bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><span class="work-module-foot">Встроена в ваш процесс <i>✓</i></span></div>
-          <div class="work-satellite work-update"><span>✓</span> Обновление установлено</div>
-
-          <div class="work-satellite work-launch"><span class="work-edge"></span><span class="work-launch-icon">↗</span><div><b>Ваш сервис запущен</b><span>Всё готово к первому входу</span></div><i class="work-live-dot"></i></div>
-          <div class="work-scene-caption"><span></span><span class="work-caption-ai">Знакомый сервис. Новые возможности.</span><span class="work-caption-upgrade">Нужные изменения. На вашей основе.</span><span class="work-caption-launch">Всё складывается в работающий продукт.</span></div>
-        </div>
-      </div>
-    </div>
-
-    <ul class="work-assurances">
-      <li><span aria-hidden="true">✓</span> Объём согласуем заранее</li>
-      <li><span aria-hidden="true">✓</span> Результат виден по ходу</li>
-      <li><span aria-hidden="true">✓</span> Код и доступы — у вас</li>
-    </ul>
-  </div>
-</section>
-
-<!-- ===================== РЕЛИЗЫ ===================== -->
-<!-- Радар: кольца и спицы нарисованы svg, по ним идёт вращающийся сектор с
-     ведущей линией, а отметки вспыхивают ровно в тот момент, когда луч до них
-     доходит — задержка у каждой посчитана из её угла. Свет сектора и ореол
-     ядра разбиты общей точечной сеткой, как всё свечение на сайте. -->
-<section class="radar" id="release" aria-labelledby="release-title">
-
-  <div class="radar-stage" aria-hidden="true">
-    <svg class="radar-net" viewBox="0 0 900 900" aria-hidden="true">
-      <defs>
-        <!-- общий спад яркости от центра к ободу: у них он плавный, а не
-             ступенями по кольцам. Замер: rgb(36,23,114) в центре при фоне (3,0,20) -->
-        <radialGradient id="radarDome">
-          <stop offset="0"   stop-color="#7a5cff" stop-opacity=".15"/>
-          <stop offset=".38" stop-color="#7a5cff" stop-opacity=".105"/>
-          <stop offset=".72" stop-color="#6b4dff" stop-opacity=".055"/>
-          <stop offset=".93" stop-color="#6b4dff" stop-opacity=".034"/>
-          <stop offset="1"   stop-color="#6b4dff" stop-opacity="0"/>
-        </radialGradient>
-        <!-- свечение, прижатое к линии изнутри: у каждого кольца своё, потому
-             что полоса должна быть одной ширины в пикселях, а не в долях радиуса -->
-        <radialGradient id="radarBand104">
-          <stop offset="0.712" stop-color="#9578ff" stop-opacity="0"/>
-          <stop offset="0.870" stop-color="#9578ff" stop-opacity=".45"/>
-          <stop offset="1" stop-color="#a98fff" stop-opacity="1"/>
-        </radialGradient>
-        <radialGradient id="radarBand192">
-          <stop offset="0.844" stop-color="#9578ff" stop-opacity="0"/>
-          <stop offset="0.930" stop-color="#9578ff" stop-opacity=".45"/>
-          <stop offset="1" stop-color="#a98fff" stop-opacity="1"/>
-        </radialGradient>
-        <radialGradient id="radarBand288">
-          <stop offset="0.896" stop-color="#9578ff" stop-opacity="0"/>
-          <stop offset="0.953" stop-color="#9578ff" stop-opacity=".45"/>
-          <stop offset="1" stop-color="#a98fff" stop-opacity="1"/>
-        </radialGradient>
-        <radialGradient id="radarBand392">
-          <stop offset="0.923" stop-color="#9578ff" stop-opacity="0"/>
-          <stop offset="0.966" stop-color="#9578ff" stop-opacity=".45"/>
-          <stop offset="1" stop-color="#a98fff" stop-opacity="1"/>
-        </radialGradient>
-        <radialGradient id="radarBand424">
-          <stop offset="0.929" stop-color="#9578ff" stop-opacity="0"/>
-          <stop offset="0.968" stop-color="#9578ff" stop-opacity=".45"/>
-          <stop offset="1" stop-color="#a98fff" stop-opacity="1"/>
-        </radialGradient>
-      </defs>
-      <circle cx="450" cy="450" r="424" fill="url(#radarDome)"/>
-      <circle cx="450" cy="450" r="424" fill="url(#radarBand424)" opacity="0.075"/>
-      <circle cx="450" cy="450" r="392" fill="url(#radarBand392)" opacity="0.1"/>
-      <circle cx="450" cy="450" r="288" fill="url(#radarBand288)" opacity="0.1"/>
-      <circle cx="450" cy="450" r="192" fill="url(#radarBand192)" opacity="0.1"/>
-      <circle cx="450" cy="450" r="104" fill="url(#radarBand104)" opacity="0.085"/>
-      <circle cx="450" cy="450" r="104" fill="none" stroke="rgba(190,175,255,.16)" stroke-width="1" vector-effect="non-scaling-stroke"/>
-      <circle cx="450" cy="450" r="192" fill="none" stroke="rgba(190,175,255,.16)" stroke-width="1" vector-effect="non-scaling-stroke"/>
-      <circle cx="450" cy="450" r="288" fill="none" stroke="rgba(190,175,255,.16)" stroke-width="1" vector-effect="non-scaling-stroke"/>
-      <circle cx="450" cy="450" r="392" fill="none" stroke="rgba(190,175,255,.16)" stroke-width="1" vector-effect="non-scaling-stroke"/>
-      <circle cx="450" cy="450" r="424" fill="none" stroke="rgba(190,175,255,.34)" stroke-width="1" vector-effect="non-scaling-stroke"/>
-      <line x1="450" y1="450" x2="789.5" y2="254.0" stroke="rgba(190,175,255,.1)" stroke-width="1" vector-effect="non-scaling-stroke"/>
-      <line x1="450" y1="450" x2="646.0" y2="110.5" stroke="rgba(190,175,255,.1)" stroke-width="1" vector-effect="non-scaling-stroke"/>
-      <line x1="450" y1="450" x2="450.0" y2="58.0" stroke="rgba(190,175,255,.1)" stroke-width="1" vector-effect="non-scaling-stroke"/>
-      <line x1="450" y1="450" x2="254.0" y2="110.5" stroke="rgba(190,175,255,.1)" stroke-width="1" vector-effect="non-scaling-stroke"/>
-      <line x1="450" y1="450" x2="110.5" y2="254.0" stroke="rgba(190,175,255,.1)" stroke-width="1" vector-effect="non-scaling-stroke"/>
-      <circle cx="346" cy="450" r="3" fill="rgba(214,206,255,.42)"/>
-      <circle cx="554" cy="450" r="3" fill="rgba(214,206,255,.42)"/>
-      <circle cx="258" cy="450" r="3" fill="rgba(214,206,255,.42)"/>
-      <circle cx="642" cy="450" r="3" fill="rgba(214,206,255,.42)"/>
-      <circle cx="162" cy="450" r="3" fill="rgba(214,206,255,.42)"/>
-      <circle cx="738" cy="450" r="3" fill="rgba(214,206,255,.42)"/>
-      <circle cx="58" cy="450" r="3" fill="rgba(214,206,255,.42)"/>
-      <circle cx="842" cy="450" r="3" fill="rgba(214,206,255,.42)"/>
-      <line x1="756.2" y1="143.8" x2="764.7" y2="135.3" stroke="rgba(214,206,255,.34)" stroke-width="1" vector-effect="non-scaling-stroke"/>
-      <line x1="143.8" y1="143.8" x2="135.3" y2="135.3" stroke="rgba(214,206,255,.34)" stroke-width="1" vector-effect="non-scaling-stroke"/>
-      <line x1="450" y1="17" x2="450" y2="5" stroke="rgba(214,206,255,.34)" stroke-width="1" vector-effect="non-scaling-stroke"/>
-    </svg>
-
-    <div class="radar-sweep"><i></i></div>
-    <div class="radar-edge"><i></i></div>
-
-    <div class="radar-blips">
-      <span class="blip" style="--x: 17.0%; --y: 45.4%; --delay: 6.95s">
-        <span class="blip-wave"></span><span class="blip-wave blip-wave-2"></span>
-        <span class="blip-dot"></span><span class="blip-tag">коммит</span>
-      </span>
-      <span class="blip blip-extra" style="--x: 30.8%; --y: 38.9%; --delay: 7.50s">
-        <span class="blip-wave"></span><span class="blip-wave blip-wave-2"></span>
-        <span class="blip-dot"></span><span class="blip-tag">линтер</span>
-      </span>
-      <span class="blip blip-extra" style="--x: 24.7%; --y: 17.6%; --delay: 8.05s">
-        <span class="blip-wave"></span><span class="blip-wave blip-wave-2"></span>
-        <span class="blip-dot"></span><span class="blip-tag">типы</span>
-      </span>
-      <span class="blip" style="--x: 42.2%; --y: 22.8%; --delay: 8.60s">
-        <span class="blip-wave"></span><span class="blip-wave blip-wave-2"></span>
-        <span class="blip-dot"></span><span class="blip-tag">тесты</span>
-      </span>
-      <span class="blip" style="--x: 51.7%; --y: 33.4%; --delay: 0.15s">
-        <span class="blip-wave"></span><span class="blip-wave blip-wave-2"></span>
-        <span class="blip-dot"></span><span class="blip-tag">сборка</span>
-      </span>
-      <span class="blip blip-left blip-extra" style="--x: 68.3%; --y: 18.2%; --delay: 0.75s">
-        <span class="blip-wave"></span><span class="blip-wave blip-wave-2"></span>
-        <span class="blip-dot"></span><span class="blip-tag">миграции</span>
-      </span>
-      <span class="blip blip-left blip-extra" style="--x: 70.2%; --y: 35.3%; --delay: 1.35s">
-        <span class="blip-wave"></span><span class="blip-wave blip-wave-2"></span>
-        <span class="blip-dot"></span><span class="blip-tag">старт</span>
-      </span>
-      <span class="blip blip-left" style="--x: 92.4%; --y: 41.0%; --delay: 1.95s">
-        <span class="blip-wave"></span><span class="blip-wave blip-wave-2"></span>
-        <span class="blip-dot"></span><span class="blip-tag">продакшен</span>
-      </span>
-    </div>
-
-    <!-- ореол идёт ДО завесы: под горизонтом она его срезает, иначе внизу
-         остаётся серая клякса. Сама шайба — после, она лежит на линии -->
-    <span class="radar-core-glow"></span>
-    <div class="radar-fade"></div>
-    <div class="radar-horizon"></div>
-
-    <span class="radar-core">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
-           stroke-linecap="round" stroke-linejoin="round">
-        <path d="M20 11.5a8 8 0 0 0-14-4.7"/><path d="M4 12.5a8 8 0 0 0 14 4.7"/>
-        <path d="M6 3.2v3.6h3.6"/><path d="M18 20.8v-3.6h-3.6"/>
-      </svg>
-    </span>
-  </div>
-
-  <div class="wrap radar-copy">
-    <p class="radar-pill reveal">релизы</p>
-    <h2 class="radar-title reveal" id="release-title">Релиз под контролем</h2>
-    <div class="release-demo reveal" data-phase="live" role="group" aria-label="Демонстрация выпуска новой версии">
-      <ol class="release-flow" aria-label="Этапы релиза">
-        <li class="release-step" data-step="checks" data-state="done">
-          <h3><span>01</span> Проверки</h3>
-          <div class="release-art" aria-hidden="true">
-            <span class="release-aura"></span>
-            <svg viewBox="0 0 220 164" fill="none" stroke-linecap="round" stroke-linejoin="round">
-              <defs>
-                <linearGradient id="releaseGlass" x1="35" y1="20" x2="175" y2="150" gradientUnits="userSpaceOnUse"><stop stop-color="#b398ed" stop-opacity=".17"/><stop offset="1" stop-color="#8564ce" stop-opacity=".025"/></linearGradient>
-                <linearGradient id="releaseScan" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#cdb7f7" stop-opacity="0"/><stop offset=".64" stop-color="#cdb7f7" stop-opacity=".14"/><stop offset="1" stop-color="#e6dbff" stop-opacity=".5"/></linearGradient>
-                <clipPath id="releaseGlassClip"><rect x="36" y="24" width="148" height="116" rx="12"/></clipPath>
-              </defs>
-              <rect class="release-glass" x="36" y="24" width="148" height="116" rx="12"/>
-              <path class="release-line-dim" d="M36 47h148M49 35h3m6 0h3m6 0h3"/>
-              <rect class="release-progress-track" x="126" y="33" width="48" height="3"/>
-              <rect class="release-progress" x="126" y="33" width="48" height="3"/>
-              <g clip-path="url(#releaseGlassClip)"><rect class="release-scan" x="36" y="24" width="148" height="40"/></g>
-              <g class="release-spins">
-                <circle class="release-check-spin" cx="58" cy="66" r="8" pathLength="1" style="--check-delay: 0s"/>
-                <circle class="release-check-spin" cx="58" cy="94" r="8" pathLength="1" style="--check-delay: .8s"/>
-                <circle class="release-check-spin" cx="58" cy="122" r="8" pathLength="1" style="--check-delay: 1.6s"/>
-              </g>
-              <g class="release-check" style="--check-delay: 0s">
-                <circle class="release-check-ring" cx="58" cy="66" r="8"/><path class="release-check-tick" d="m54 66 3 3 5-6"/>
-                <path class="release-line" pathLength="1" d="M80 66h60"/><path class="release-line-dim" pathLength="1" d="M151 66h10"/>
-              </g>
-              <g class="release-check" style="--check-delay: .8s">
-                <circle class="release-check-ring" cx="58" cy="94" r="8"/><path class="release-check-tick" d="m54 94 3 3 5-6"/>
-                <path class="release-line" pathLength="1" d="M80 94h45"/><path class="release-line-dim" pathLength="1" d="M140 94h21"/>
-              </g>
-              <g class="release-check" style="--check-delay: 1.6s">
-                <circle class="release-check-ring" cx="58" cy="122" r="8"/><path class="release-check-tick" d="m54 122 3 3 5-6"/>
-                <path class="release-line" pathLength="1" d="M80 122h54"/><path class="release-line-dim" pathLength="1" d="M149 122h12"/>
-              </g>
-            </svg>
-          </div>
-          <p class="release-step-note">Пройдено</p>
-          <span class="release-bridge" aria-hidden="true"><i></i></span>
-        </li>
-        <li class="release-step" data-step="launch" data-state="done">
-          <h3><span>02</span> Запуск</h3>
-          <div class="release-art" aria-hidden="true">
-            <span class="release-aura"></span>
-            <svg viewBox="0 0 220 164" fill="none" stroke-linecap="round" stroke-linejoin="round">
-              <g class="scene-orbit release-orbit" transform="translate(110 141) scale(.52 .46)">
-                <use href="#sceneOrbitBase"/>
-                <g transform="translate(-151 14)"><g class="scene-orbit-spark"><use href="#sceneOrbitLight"/></g></g>
-                <g transform="translate(158 -10)"><g class="scene-orbit-spark scene-orbit-spark-b"><use href="#sceneOrbitLight"/></g></g>
-                <g transform="translate(65 24)"><g class="scene-orbit-spark scene-orbit-spark-c"><use href="#sceneOrbitLight"/></g></g>
-              </g>
-              <path class="release-server-top" d="m40 62 70-23 70 23-70 23Z"/>
-              <path class="release-server-face" d="m40 62 70 23v62l-70-23Zm70 23 70-23v62l-70 23Z"/>
-              <path class="release-line-dim" d="m40 83 70 23 70-23M40 104l70 23 70-23"/>
-              <path class="release-line release-server-flow" pathLength="1" d="m123 101 34-11m-34 31 34-11"/>
-              <g class="release-server-lights"><path style="--light: 0s" d="m53 87 8 3"/><path style="--light: .26s" d="m53 107 8 3"/></g>
-              <path class="release-land" d="m40 62 70-23 70 23-70 23Z"/>
-              <g class="release-package">
-                <path class="release-package-top" d="m86 24 24-9 24 9-24 9Z"/>
-                <path class="release-package-face" d="m86 24 24 9v25l-24-9Zm24 9 24-9v25l-24 9Z"/>
-                <path class="release-line" d="m96 39 7 3m14 0 7-3"/>
-              </g>
-            </svg>
-          </div>
-          <p class="release-step-note">Запущено</p>
-          <span class="release-bridge" aria-hidden="true"><i></i></span>
-        </li>
-        <li class="release-step" data-step="live" data-state="done">
-          <h3><span>03</span> В работе</h3>
-          <div class="release-art" aria-hidden="true">
-            <span class="release-aura"></span>
-            <svg viewBox="0 0 220 164" fill="none" stroke-linecap="round" stroke-linejoin="round">
-              <g class="release-version release-version-old">
-                <rect class="release-window" x="38" y="29" width="144" height="108" rx="11"/>
-                <path class="release-line-dim" d="M38 52h144M50 41h3m6 0h3M89 52v85M51 66h22m-22 14h16m-16 14h20"/>
-                <rect class="release-widget" x="102" y="65" width="64" height="23" rx="4" style="--w: 0s"/>
-                <circle class="release-live-dot" cx="170" cy="41" r="2.6"/>
-                <path class="release-line release-chart" pathLength="1" d="M103 101h47m-47 12h33"/>
-              </g>
-              <g class="release-version release-version-new">
-                <rect class="release-window" x="38" y="29" width="144" height="108" rx="11"/>
-                <path class="release-line-dim" d="M38 52h144M50 41h3m6 0h3M52 118h116"/>
-                <rect class="release-widget" x="52" y="65" width="33" height="25" rx="4" style="--w: 0s"/><rect class="release-widget" x="94" y="65" width="33" height="25" rx="4" style="--w: .12s"/><rect class="release-widget" x="136" y="65" width="32" height="25" rx="4" style="--w: .24s"/>
-                <circle class="release-live-dot" cx="170" cy="41" r="2.6"/>
-                <path class="release-line release-chart" pathLength="1" d="m54 111 24-8 22 5 27-12 18 7 20-8"/>
-              </g>
-            </svg>
-          </div>
-          <p class="release-step-note">Новая версия</p>
-        </li>
-      </ol>
-    </div>
-  </div>
-</section>
-
-<!-- ===================== ПРОВЕРКИ ===================== -->
-<!-- Свечение вокруг панели рисует canvas (script.js, «Свет у панели
-     проверок»): два источника света обходят рамку по кругу. У huly.io это
-     видео на 9,6 МБ под панелью с фиксированными пропорциями; у нас высота
-     панели зависит от текста, поэтому тот же свет считается на лету. -->
-<section class="checks" id="checks">
-  <div class="wrap">
-    <h2 class="checks-title reveal">Проверки, которые<br>нельзя обойти.</h2>
-    <p class="checks-lede reveal">
-      Проверяем код, типы и работу сервиса после изменений.
-      Ошибка в проверках останавливает выпуск.
-    </p>
-
-    <div class="checks-shot reveal">
-      <canvas class="checks-glow" aria-hidden="true"></canvas>
-      <canvas class="checks-rim" aria-hidden="true"></canvas>
-      <span class="checks-halo" aria-hidden="true"></span>
-      <div class="checks-window">
-        <!-- Оба экрана занимают одну ячейку и задают общую высоту.
-             Проверки, проход углов и наплыв управляются одним отсчётом. -->
-        <div class="checks-stack">
-        <div class="checks-screen" data-check-scene="code">
-          <div class="checks-bar">
-            <span class="checks-dots" aria-hidden="true"><i></i><i></i><i></i></span>
-            <span class="checks-path">01 / Проверка кода</span>
-            <span class="checks-badge">3 / 3</span>
-          </div>
-          <div class="checks-code-layout">
-            <div class="checks-editor">
-              <div class="checks-editor-tab"><span aria-hidden="true">{ }</span> validation.ts <i aria-hidden="true"></i></div>
-              <div class="checks-code" aria-hidden="true">
-                <div class="checks-code-line"><span>01</span><i class="violet" style="--w: 19%"></i><i style="--w: 33%"></i></div>
-                <div class="checks-code-line indent"><span>02</span><i style="--w: 26%"></i><i class="blue" style="--w: 18%"></i></div>
-                <div class="checks-code-line indent"><span>03</span><i style="--w: 18%"></i><i class="mint" style="--w: 31%"></i></div>
-                <div class="checks-code-line"><span>04</span><i class="violet" style="--w: 8%"></i></div>
-                <div class="checks-code-line gap"><span>05</span></div>
-                <div class="checks-code-line"><span>06</span><i class="violet" style="--w: 23%"></i><i class="blue" style="--w: 41%"></i></div>
-                <div class="checks-code-line indent"><span>07</span><i class="violet" style="--w: 16%"></i><i style="--w: 32%"></i></div>
-                <div class="checks-code-line indent"><span>08</span><i class="mint" style="--w: 27%"></i><i style="--w: 14%"></i></div>
-                <div class="checks-code-line"><span>09</span><i class="violet" style="--w: 8%"></i></div>
-              </div>
-              <div class="checks-console"><span aria-hidden="true">›_</span><span class="checks-console-status">Проверки пройдены</span><div class="checks-code-progress" aria-hidden="true"><i></i></div></div>
-            </div>
-            <ol class="checks-code-results" aria-label="Этапы проверки кода">
-              <li data-check-stage="0"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="m11 9-7 7 7 7m10-14 7 7-7 7m-3-19-4 24"/></svg><span>Типы</span><i class="checks-stage-mark" aria-hidden="true"></i></li>
-              <li data-check-stage="1"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M6 8h20M6 16h13M6 24h9m5-2 3 3 5-7"/></svg><span>Стиль</span><i class="checks-stage-mark" aria-hidden="true"></i></li>
-              <li data-check-stage="2"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M11 4h10m-8 0v10L5 26a1 1 0 0 0 1 2h20a1 1 0 0 0 1-2l-8-12V4M10 20h12"/></svg><span>Тесты</span><i class="checks-stage-mark" aria-hidden="true"></i></li>
-            </ol>
-          </div>
-        </div>
-
-        <div class="checks-screen checks-screen-alt" data-check-scene="service">
-          <div class="checks-bar">
-            <span class="checks-dots" aria-hidden="true"><i></i><i></i><i></i></span>
-            <span class="checks-path">02 / Проверка сервиса</span>
-            <span class="checks-badge">3 / 3</span>
-          </div>
-          <div class="checks-service-layout">
-            <div class="checks-browser" role="img" aria-label="Проверка пользовательского сценария: ввод данных, сохранение записи и подтверждение результата.">
-              <div class="checks-browser-bar" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="m6 4-4 4 4 4m4-8 4 4-4 4"/></svg><span>Сценарий пользователя</span><i></i></div>
-              <div class="checks-app" aria-hidden="true">
-                <div class="checks-app-nav"><b><i></i><i></i><i></i><i></i></b><span></span><span></span><span></span><span></span></div>
-                <div class="checks-app-content">
-                  <div class="checks-app-form">
-                    <div class="checks-app-heading">Новая запись <span>＋</span></div>
-                    <div class="checks-app-field"><span>Название</span><div class="checks-app-input"><span class="checks-typed">Новая задача</span><i class="checks-type-caret"></i></div></div>
-                    <div class="checks-app-field"><span>Доступ</span><div class="checks-app-input">Только команда <svg viewBox="0 0 16 16"><path d="m4 6 4 4 4-4"/></svg></div></div>
-                    <span class="checks-app-save"><i></i><span>Сохранить</span><svg viewBox="0 0 20 20"><path d="M4 10h12m-5-5 5 5-5 5"/></svg></span>
-                  </div>
-                  <div class="checks-confirmation"><span><svg viewBox="0 0 48 48"><path d="m13 24 8 8 15-17"/></svg></span><b>Запись сохранена</b><small>Результат проверен</small></div>
-                </div>
-              </div>
-            </div>
-            <ol class="checks-flow-steps" aria-label="Этапы проверки сервиса">
-              <li data-check-stage="0"><i class="checks-stage-mark" aria-hidden="true"></i><span>Ввод</span></li>
-              <li data-check-stage="1"><i class="checks-stage-mark" aria-hidden="true"></i><span>Сохранение</span></li>
-              <li data-check-stage="2"><i class="checks-stage-mark" aria-hidden="true"></i><span>Результат</span></li>
-            </ol>
-          </div>
-        </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- ===================== ПРОЕКТЫ ===================== -->
 <section class="portfolio" id="cases" aria-labelledby="portfolio-title">
   <div class="wrap">
@@ -2859,6 +2453,318 @@
   </div>
 </section>
 
+<!-- ===================== ПРОВЕРКИ ===================== -->
+<!-- Свечение вокруг панели рисует canvas (script.js, «Свет у панели
+     проверок»): два источника света обходят рамку по кругу. У huly.io это
+     видео на 9,6 МБ под панелью с фиксированными пропорциями; у нас высота
+     панели зависит от текста, поэтому тот же свет считается на лету. -->
+<section class="checks" id="checks">
+  <div class="wrap">
+    <h2 class="checks-title reveal">Проверки, которые<br>нельзя обойти.</h2>
+    <p class="checks-lede reveal">
+      Проверяем код, типы и работу сервиса после изменений.
+      Ошибка в проверках останавливает выпуск.
+    </p>
+
+    <div class="checks-shot reveal">
+      <canvas class="checks-glow" aria-hidden="true"></canvas>
+      <canvas class="checks-rim" aria-hidden="true"></canvas>
+      <span class="checks-halo" aria-hidden="true"></span>
+      <div class="checks-window">
+        <!-- Оба экрана занимают одну ячейку и задают общую высоту.
+             Проверки, проход углов и наплыв управляются одним отсчётом. -->
+        <div class="checks-stack">
+        <div class="checks-screen" data-check-scene="code">
+          <div class="checks-bar">
+            <span class="checks-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+            <span class="checks-path">01 / Проверка кода</span>
+            <span class="checks-badge">3 / 3</span>
+          </div>
+          <div class="checks-code-layout">
+            <div class="checks-editor">
+              <div class="checks-editor-tab"><span aria-hidden="true">{ }</span> validation.ts <i aria-hidden="true"></i></div>
+              <div class="checks-code" aria-hidden="true">
+                <div class="checks-code-line"><span>01</span><i class="violet" style="--w: 19%"></i><i style="--w: 33%"></i></div>
+                <div class="checks-code-line indent"><span>02</span><i style="--w: 26%"></i><i class="blue" style="--w: 18%"></i></div>
+                <div class="checks-code-line indent"><span>03</span><i style="--w: 18%"></i><i class="mint" style="--w: 31%"></i></div>
+                <div class="checks-code-line"><span>04</span><i class="violet" style="--w: 8%"></i></div>
+                <div class="checks-code-line gap"><span>05</span></div>
+                <div class="checks-code-line"><span>06</span><i class="violet" style="--w: 23%"></i><i class="blue" style="--w: 41%"></i></div>
+                <div class="checks-code-line indent"><span>07</span><i class="violet" style="--w: 16%"></i><i style="--w: 32%"></i></div>
+                <div class="checks-code-line indent"><span>08</span><i class="mint" style="--w: 27%"></i><i style="--w: 14%"></i></div>
+                <div class="checks-code-line"><span>09</span><i class="violet" style="--w: 8%"></i></div>
+              </div>
+              <div class="checks-console"><span aria-hidden="true">›_</span><span class="checks-console-status">Проверки пройдены</span><div class="checks-code-progress" aria-hidden="true"><i></i></div></div>
+            </div>
+            <ol class="checks-code-results" aria-label="Этапы проверки кода">
+              <li data-check-stage="0"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="m11 9-7 7 7 7m10-14 7 7-7 7m-3-19-4 24"/></svg><span>Типы</span><i class="checks-stage-mark" aria-hidden="true"></i></li>
+              <li data-check-stage="1"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M6 8h20M6 16h13M6 24h9m5-2 3 3 5-7"/></svg><span>Стиль</span><i class="checks-stage-mark" aria-hidden="true"></i></li>
+              <li data-check-stage="2"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M11 4h10m-8 0v10L5 26a1 1 0 0 0 1 2h20a1 1 0 0 0 1-2l-8-12V4M10 20h12"/></svg><span>Тесты</span><i class="checks-stage-mark" aria-hidden="true"></i></li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="checks-screen checks-screen-alt" data-check-scene="service">
+          <div class="checks-bar">
+            <span class="checks-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+            <span class="checks-path">02 / Проверка сервиса</span>
+            <span class="checks-badge">3 / 3</span>
+          </div>
+          <div class="checks-service-layout">
+            <div class="checks-browser" role="img" aria-label="Проверка пользовательского сценария: ввод данных, сохранение записи и подтверждение результата.">
+              <div class="checks-browser-bar" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="m6 4-4 4 4 4m4-8 4 4-4 4"/></svg><span>Сценарий пользователя</span><i></i></div>
+              <div class="checks-app" aria-hidden="true">
+                <div class="checks-app-nav"><b><i></i><i></i><i></i><i></i></b><span></span><span></span><span></span><span></span></div>
+                <div class="checks-app-content">
+                  <div class="checks-app-form">
+                    <div class="checks-app-heading">Новая запись <span>＋</span></div>
+                    <div class="checks-app-field"><span>Название</span><div class="checks-app-input"><span class="checks-typed">Новая задача</span><i class="checks-type-caret"></i></div></div>
+                    <div class="checks-app-field"><span>Доступ</span><div class="checks-app-input">Только команда <svg viewBox="0 0 16 16"><path d="m4 6 4 4 4-4"/></svg></div></div>
+                    <span class="checks-app-save"><i></i><span>Сохранить</span><svg viewBox="0 0 20 20"><path d="M4 10h12m-5-5 5 5-5 5"/></svg></span>
+                  </div>
+                  <div class="checks-confirmation"><span><svg viewBox="0 0 48 48"><path d="m13 24 8 8 15-17"/></svg></span><b>Запись сохранена</b><small>Результат проверен</small></div>
+                </div>
+              </div>
+            </div>
+            <ol class="checks-flow-steps" aria-label="Этапы проверки сервиса">
+              <li data-check-stage="0"><i class="checks-stage-mark" aria-hidden="true"></i><span>Ввод</span></li>
+              <li data-check-stage="1"><i class="checks-stage-mark" aria-hidden="true"></i><span>Сохранение</span></li>
+              <li data-check-stage="2"><i class="checks-stage-mark" aria-hidden="true"></i><span>Результат</span></li>
+            </ol>
+          </div>
+        </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== РЕЛИЗЫ ===================== -->
+<!-- Радар: кольца и спицы нарисованы svg, по ним идёт вращающийся сектор с
+     ведущей линией, а отметки вспыхивают ровно в тот момент, когда луч до них
+     доходит — задержка у каждой посчитана из её угла. Свет сектора и ореол
+     ядра разбиты общей точечной сеткой, как всё свечение на сайте. -->
+<section class="radar" id="release" aria-labelledby="release-title">
+
+  <div class="radar-stage" aria-hidden="true">
+    <svg class="radar-net" viewBox="0 0 900 900" aria-hidden="true">
+      <defs>
+        <!-- общий спад яркости от центра к ободу: у них он плавный, а не
+             ступенями по кольцам. Замер: rgb(36,23,114) в центре при фоне (3,0,20) -->
+        <radialGradient id="radarDome">
+          <stop offset="0"   stop-color="#7a5cff" stop-opacity=".15"/>
+          <stop offset=".38" stop-color="#7a5cff" stop-opacity=".105"/>
+          <stop offset=".72" stop-color="#6b4dff" stop-opacity=".055"/>
+          <stop offset=".93" stop-color="#6b4dff" stop-opacity=".034"/>
+          <stop offset="1"   stop-color="#6b4dff" stop-opacity="0"/>
+        </radialGradient>
+        <!-- свечение, прижатое к линии изнутри: у каждого кольца своё, потому
+             что полоса должна быть одной ширины в пикселях, а не в долях радиуса -->
+        <radialGradient id="radarBand104">
+          <stop offset="0.712" stop-color="#9578ff" stop-opacity="0"/>
+          <stop offset="0.870" stop-color="#9578ff" stop-opacity=".45"/>
+          <stop offset="1" stop-color="#a98fff" stop-opacity="1"/>
+        </radialGradient>
+        <radialGradient id="radarBand192">
+          <stop offset="0.844" stop-color="#9578ff" stop-opacity="0"/>
+          <stop offset="0.930" stop-color="#9578ff" stop-opacity=".45"/>
+          <stop offset="1" stop-color="#a98fff" stop-opacity="1"/>
+        </radialGradient>
+        <radialGradient id="radarBand288">
+          <stop offset="0.896" stop-color="#9578ff" stop-opacity="0"/>
+          <stop offset="0.953" stop-color="#9578ff" stop-opacity=".45"/>
+          <stop offset="1" stop-color="#a98fff" stop-opacity="1"/>
+        </radialGradient>
+        <radialGradient id="radarBand392">
+          <stop offset="0.923" stop-color="#9578ff" stop-opacity="0"/>
+          <stop offset="0.966" stop-color="#9578ff" stop-opacity=".45"/>
+          <stop offset="1" stop-color="#a98fff" stop-opacity="1"/>
+        </radialGradient>
+        <radialGradient id="radarBand424">
+          <stop offset="0.929" stop-color="#9578ff" stop-opacity="0"/>
+          <stop offset="0.968" stop-color="#9578ff" stop-opacity=".45"/>
+          <stop offset="1" stop-color="#a98fff" stop-opacity="1"/>
+        </radialGradient>
+      </defs>
+      <circle cx="450" cy="450" r="424" fill="url(#radarDome)"/>
+      <circle cx="450" cy="450" r="424" fill="url(#radarBand424)" opacity="0.075"/>
+      <circle cx="450" cy="450" r="392" fill="url(#radarBand392)" opacity="0.1"/>
+      <circle cx="450" cy="450" r="288" fill="url(#radarBand288)" opacity="0.1"/>
+      <circle cx="450" cy="450" r="192" fill="url(#radarBand192)" opacity="0.1"/>
+      <circle cx="450" cy="450" r="104" fill="url(#radarBand104)" opacity="0.085"/>
+      <circle cx="450" cy="450" r="104" fill="none" stroke="rgba(190,175,255,.16)" stroke-width="1" vector-effect="non-scaling-stroke"/>
+      <circle cx="450" cy="450" r="192" fill="none" stroke="rgba(190,175,255,.16)" stroke-width="1" vector-effect="non-scaling-stroke"/>
+      <circle cx="450" cy="450" r="288" fill="none" stroke="rgba(190,175,255,.16)" stroke-width="1" vector-effect="non-scaling-stroke"/>
+      <circle cx="450" cy="450" r="392" fill="none" stroke="rgba(190,175,255,.16)" stroke-width="1" vector-effect="non-scaling-stroke"/>
+      <circle cx="450" cy="450" r="424" fill="none" stroke="rgba(190,175,255,.34)" stroke-width="1" vector-effect="non-scaling-stroke"/>
+      <line x1="450" y1="450" x2="789.5" y2="254.0" stroke="rgba(190,175,255,.1)" stroke-width="1" vector-effect="non-scaling-stroke"/>
+      <line x1="450" y1="450" x2="646.0" y2="110.5" stroke="rgba(190,175,255,.1)" stroke-width="1" vector-effect="non-scaling-stroke"/>
+      <line x1="450" y1="450" x2="450.0" y2="58.0" stroke="rgba(190,175,255,.1)" stroke-width="1" vector-effect="non-scaling-stroke"/>
+      <line x1="450" y1="450" x2="254.0" y2="110.5" stroke="rgba(190,175,255,.1)" stroke-width="1" vector-effect="non-scaling-stroke"/>
+      <line x1="450" y1="450" x2="110.5" y2="254.0" stroke="rgba(190,175,255,.1)" stroke-width="1" vector-effect="non-scaling-stroke"/>
+      <circle cx="346" cy="450" r="3" fill="rgba(214,206,255,.42)"/>
+      <circle cx="554" cy="450" r="3" fill="rgba(214,206,255,.42)"/>
+      <circle cx="258" cy="450" r="3" fill="rgba(214,206,255,.42)"/>
+      <circle cx="642" cy="450" r="3" fill="rgba(214,206,255,.42)"/>
+      <circle cx="162" cy="450" r="3" fill="rgba(214,206,255,.42)"/>
+      <circle cx="738" cy="450" r="3" fill="rgba(214,206,255,.42)"/>
+      <circle cx="58" cy="450" r="3" fill="rgba(214,206,255,.42)"/>
+      <circle cx="842" cy="450" r="3" fill="rgba(214,206,255,.42)"/>
+      <line x1="756.2" y1="143.8" x2="764.7" y2="135.3" stroke="rgba(214,206,255,.34)" stroke-width="1" vector-effect="non-scaling-stroke"/>
+      <line x1="143.8" y1="143.8" x2="135.3" y2="135.3" stroke="rgba(214,206,255,.34)" stroke-width="1" vector-effect="non-scaling-stroke"/>
+      <line x1="450" y1="17" x2="450" y2="5" stroke="rgba(214,206,255,.34)" stroke-width="1" vector-effect="non-scaling-stroke"/>
+    </svg>
+
+    <div class="radar-sweep"><i></i></div>
+    <div class="radar-edge"><i></i></div>
+
+    <div class="radar-blips">
+      <span class="blip" style="--x: 17.0%; --y: 45.4%; --delay: 6.95s">
+        <span class="blip-wave"></span><span class="blip-wave blip-wave-2"></span>
+        <span class="blip-dot"></span><span class="blip-tag">коммит</span>
+      </span>
+      <span class="blip blip-extra" style="--x: 30.8%; --y: 38.9%; --delay: 7.50s">
+        <span class="blip-wave"></span><span class="blip-wave blip-wave-2"></span>
+        <span class="blip-dot"></span><span class="blip-tag">линтер</span>
+      </span>
+      <span class="blip blip-extra" style="--x: 24.7%; --y: 17.6%; --delay: 8.05s">
+        <span class="blip-wave"></span><span class="blip-wave blip-wave-2"></span>
+        <span class="blip-dot"></span><span class="blip-tag">типы</span>
+      </span>
+      <span class="blip" style="--x: 42.2%; --y: 22.8%; --delay: 8.60s">
+        <span class="blip-wave"></span><span class="blip-wave blip-wave-2"></span>
+        <span class="blip-dot"></span><span class="blip-tag">тесты</span>
+      </span>
+      <span class="blip" style="--x: 51.7%; --y: 33.4%; --delay: 0.15s">
+        <span class="blip-wave"></span><span class="blip-wave blip-wave-2"></span>
+        <span class="blip-dot"></span><span class="blip-tag">сборка</span>
+      </span>
+      <span class="blip blip-left blip-extra" style="--x: 68.3%; --y: 18.2%; --delay: 0.75s">
+        <span class="blip-wave"></span><span class="blip-wave blip-wave-2"></span>
+        <span class="blip-dot"></span><span class="blip-tag">миграции</span>
+      </span>
+      <span class="blip blip-left blip-extra" style="--x: 70.2%; --y: 35.3%; --delay: 1.35s">
+        <span class="blip-wave"></span><span class="blip-wave blip-wave-2"></span>
+        <span class="blip-dot"></span><span class="blip-tag">старт</span>
+      </span>
+      <span class="blip blip-left" style="--x: 92.4%; --y: 41.0%; --delay: 1.95s">
+        <span class="blip-wave"></span><span class="blip-wave blip-wave-2"></span>
+        <span class="blip-dot"></span><span class="blip-tag">продакшен</span>
+      </span>
+    </div>
+
+    <!-- ореол идёт ДО завесы: под горизонтом она его срезает, иначе внизу
+         остаётся серая клякса. Сама шайба — после, она лежит на линии -->
+    <span class="radar-core-glow"></span>
+    <div class="radar-fade"></div>
+    <div class="radar-horizon"></div>
+
+    <span class="radar-core">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+           stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 11.5a8 8 0 0 0-14-4.7"/><path d="M4 12.5a8 8 0 0 0 14 4.7"/>
+        <path d="M6 3.2v3.6h3.6"/><path d="M18 20.8v-3.6h-3.6"/>
+      </svg>
+    </span>
+  </div>
+
+  <div class="wrap radar-copy">
+    <p class="radar-pill reveal">релизы</p>
+    <h2 class="radar-title reveal" id="release-title">Релиз под контролем</h2>
+    <div class="release-demo reveal" data-phase="live" role="group" aria-label="Демонстрация выпуска новой версии">
+      <ol class="release-flow" aria-label="Этапы релиза">
+        <li class="release-step" data-step="checks" data-state="done">
+          <h3><span>01</span> Проверки</h3>
+          <div class="release-art" aria-hidden="true">
+            <span class="release-aura"></span>
+            <svg viewBox="0 0 220 164" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <defs>
+                <linearGradient id="releaseGlass" x1="35" y1="20" x2="175" y2="150" gradientUnits="userSpaceOnUse"><stop stop-color="#b398ed" stop-opacity=".17"/><stop offset="1" stop-color="#8564ce" stop-opacity=".025"/></linearGradient>
+                <linearGradient id="releaseScan" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#cdb7f7" stop-opacity="0"/><stop offset=".64" stop-color="#cdb7f7" stop-opacity=".14"/><stop offset="1" stop-color="#e6dbff" stop-opacity=".5"/></linearGradient>
+                <clipPath id="releaseGlassClip"><rect x="36" y="24" width="148" height="116" rx="12"/></clipPath>
+              </defs>
+              <rect class="release-glass" x="36" y="24" width="148" height="116" rx="12"/>
+              <path class="release-line-dim" d="M36 47h148M49 35h3m6 0h3m6 0h3"/>
+              <rect class="release-progress-track" x="126" y="33" width="48" height="3"/>
+              <rect class="release-progress" x="126" y="33" width="48" height="3"/>
+              <g clip-path="url(#releaseGlassClip)"><rect class="release-scan" x="36" y="24" width="148" height="40"/></g>
+              <g class="release-spins">
+                <circle class="release-check-spin" cx="58" cy="66" r="8" pathLength="1" style="--check-delay: 0s"/>
+                <circle class="release-check-spin" cx="58" cy="94" r="8" pathLength="1" style="--check-delay: .8s"/>
+                <circle class="release-check-spin" cx="58" cy="122" r="8" pathLength="1" style="--check-delay: 1.6s"/>
+              </g>
+              <g class="release-check" style="--check-delay: 0s">
+                <circle class="release-check-ring" cx="58" cy="66" r="8"/><path class="release-check-tick" d="m54 66 3 3 5-6"/>
+                <path class="release-line" pathLength="1" d="M80 66h60"/><path class="release-line-dim" pathLength="1" d="M151 66h10"/>
+              </g>
+              <g class="release-check" style="--check-delay: .8s">
+                <circle class="release-check-ring" cx="58" cy="94" r="8"/><path class="release-check-tick" d="m54 94 3 3 5-6"/>
+                <path class="release-line" pathLength="1" d="M80 94h45"/><path class="release-line-dim" pathLength="1" d="M140 94h21"/>
+              </g>
+              <g class="release-check" style="--check-delay: 1.6s">
+                <circle class="release-check-ring" cx="58" cy="122" r="8"/><path class="release-check-tick" d="m54 122 3 3 5-6"/>
+                <path class="release-line" pathLength="1" d="M80 122h54"/><path class="release-line-dim" pathLength="1" d="M149 122h12"/>
+              </g>
+            </svg>
+          </div>
+          <p class="release-step-note">Пройдено</p>
+          <span class="release-bridge" aria-hidden="true"><i></i></span>
+        </li>
+        <li class="release-step" data-step="launch" data-state="done">
+          <h3><span>02</span> Запуск</h3>
+          <div class="release-art" aria-hidden="true">
+            <span class="release-aura"></span>
+            <svg viewBox="0 0 220 164" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <g class="scene-orbit release-orbit" transform="translate(110 141) scale(.52 .46)">
+                <use href="#sceneOrbitBase"/>
+                <g transform="translate(-151 14)"><g class="scene-orbit-spark"><use href="#sceneOrbitLight"/></g></g>
+                <g transform="translate(158 -10)"><g class="scene-orbit-spark scene-orbit-spark-b"><use href="#sceneOrbitLight"/></g></g>
+                <g transform="translate(65 24)"><g class="scene-orbit-spark scene-orbit-spark-c"><use href="#sceneOrbitLight"/></g></g>
+              </g>
+              <path class="release-server-top" d="m40 62 70-23 70 23-70 23Z"/>
+              <path class="release-server-face" d="m40 62 70 23v62l-70-23Zm70 23 70-23v62l-70 23Z"/>
+              <path class="release-line-dim" d="m40 83 70 23 70-23M40 104l70 23 70-23"/>
+              <path class="release-line release-server-flow" pathLength="1" d="m123 101 34-11m-34 31 34-11"/>
+              <g class="release-server-lights"><path style="--light: 0s" d="m53 87 8 3"/><path style="--light: .26s" d="m53 107 8 3"/></g>
+              <path class="release-land" d="m40 62 70-23 70 23-70 23Z"/>
+              <g class="release-package">
+                <path class="release-package-top" d="m86 24 24-9 24 9-24 9Z"/>
+                <path class="release-package-face" d="m86 24 24 9v25l-24-9Zm24 9 24-9v25l-24 9Z"/>
+                <path class="release-line" d="m96 39 7 3m14 0 7-3"/>
+              </g>
+            </svg>
+          </div>
+          <p class="release-step-note">Запущено</p>
+          <span class="release-bridge" aria-hidden="true"><i></i></span>
+        </li>
+        <li class="release-step" data-step="live" data-state="done">
+          <h3><span>03</span> В работе</h3>
+          <div class="release-art" aria-hidden="true">
+            <span class="release-aura"></span>
+            <svg viewBox="0 0 220 164" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <g class="release-version release-version-old">
+                <rect class="release-window" x="38" y="29" width="144" height="108" rx="11"/>
+                <path class="release-line-dim" d="M38 52h144M50 41h3m6 0h3M89 52v85M51 66h22m-22 14h16m-16 14h20"/>
+                <rect class="release-widget" x="102" y="65" width="64" height="23" rx="4" style="--w: 0s"/>
+                <circle class="release-live-dot" cx="170" cy="41" r="2.6"/>
+                <path class="release-line release-chart" pathLength="1" d="M103 101h47m-47 12h33"/>
+              </g>
+              <g class="release-version release-version-new">
+                <rect class="release-window" x="38" y="29" width="144" height="108" rx="11"/>
+                <path class="release-line-dim" d="M38 52h144M50 41h3m6 0h3M52 118h116"/>
+                <rect class="release-widget" x="52" y="65" width="33" height="25" rx="4" style="--w: 0s"/><rect class="release-widget" x="94" y="65" width="33" height="25" rx="4" style="--w: .12s"/><rect class="release-widget" x="136" y="65" width="32" height="25" rx="4" style="--w: .24s"/>
+                <circle class="release-live-dot" cx="170" cy="41" r="2.6"/>
+                <path class="release-line release-chart" pathLength="1" d="m54 111 24-8 22 5 27-12 18 7 20-8"/>
+              </g>
+            </svg>
+          </div>
+          <p class="release-step-note">Новая версия</p>
+        </li>
+      </ol>
+    </div>
+  </div>
+</section>
+
 <!-- ===================== КЛЮЧИ ===================== -->
 <!-- Поле шифротекста — ролик: он шире колонки текста и уходит под маску,
      видна только эллиптическая середина кадра (см. style.css).
@@ -2983,6 +2889,147 @@
           </div>
         </div>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ЧТО СОБИРАЕМ ===================== -->
+<!-- Тёмная плитка карточек разной ширины,
+     в каждой подпись сверху и живой макет интерфейса снизу. Макеты сверстаны,
+     а не нарисованы: остаются резкими на любом экране и весят ноль. -->
+<section class="tiles" id="tiles">
+  <div class="wrap">
+    <header class="tiles-head">
+      <h2 class="tiles-title reveal">Интерфейсы, которые мы собираем</h2>
+      <p class="tiles-lede reveal">
+        Не набор страниц, а рабочие инструменты: вход и права, админка с массовыми
+        действиями, карты, боты, распознавание на видео. Ниже — типы экранов,
+        которые встречаются в наших проектах чаще всего.
+      </p>
+    </header>
+
+    <div class="tiles-grid">
+      <div class="tiles-join" aria-hidden="true">
+        <svg width="0" height="0" focusable="false"><defs><clipPath id="tilesJoinClip" clipPathUnits="userSpaceOnUse"><path/></clipPath></defs></svg>
+        <i class="tiles-join-light"></i>
+      </div>
+
+      <!-- 1. Личные кабинеты -->
+      <article class="tile tile-a reveal">
+        <div class="tile-body">
+          <p class="tile-cap"><b>Вход и права.</b> Регистрация, роли, разграничение доступа.</p>
+          <div class="tile-art" aria-hidden="true">
+            <div class="mk mk-auth">
+              <div class="mk-roles"><i>админ</i><i>диспетчер</i><i>клиент</i></div>
+              <span class="mk-field"></span>
+              <span class="mk-field short"></span>
+              <span class="mk-btn"></span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- 2. Админка -->
+      <article class="tile tile-b reveal">
+        <div class="tile-body">
+          <p class="tile-cap"><b>Админка.</b> Таблицы, фильтры, массовые действия.</p>
+          <div class="tile-art" aria-hidden="true">
+            <div class="mk mk-table">
+              <div class="mk-row head"><i></i><span></span><span class="w2"></span><em></em></div>
+              <div class="mk-row on"><i class="ck"></i><span></span><span class="w2"></span><em></em></div>
+              <div class="mk-row on"><i class="ck"></i><span></span><span class="w2"></span><em></em></div>
+              <div class="mk-row"><i></i><span></span><span class="w2"></span><em></em></div>
+              <div class="mk-row"><i></i><span></span><span class="w2"></span><em></em></div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- 3. Круг: выкатка -->
+      <article class="tile tile-dial reveal">
+        <div class="dial" aria-hidden="true">
+          <span class="dial-orbit"></span>
+          <span class="dial-ver">v1.4</span>
+          <span class="dial-sub">выкачено</span>
+          <span class="dial-plus"></span>
+        </div>
+      </article>
+
+      <!-- 4. Боты -->
+      <article class="tile tile-c reveal">
+        <div class="tile-body">
+          <p class="tile-cap"><b>Боты.</b> Telegram и VK: заявки, уведомления, задания.</p>
+          <div class="tile-art" aria-hidden="true">
+            <div class="mk mk-chat">
+              <div class="bub in"><span></span><span class="w2"></span></div>
+              <div class="bub out"><span class="w2"></span></div>
+              <div class="bub in"><span></span></div>
+              <div class="mk-typing"><i></i><i></i><i></i></div>
+              <div class="mk-input"></div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- 5. Документы -->
+      <article class="tile tile-d reveal">
+        <div class="tile-body">
+          <p class="tile-cap"><b>Документы.</b> Отчёты, ревизии, хранение в S3.</p>
+          <div class="tile-art" aria-hidden="true">
+            <div class="mk mk-files">
+              <div class="file"><i></i><span></span><em></em></div>
+              <div class="file"><i></i><span class="w2"></span><em></em></div>
+              <div class="file"><i></i><span></span><em></em></div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- 6. Карты -->
+      <article class="tile tile-e reveal">
+        <div class="tile-body">
+          <p class="tile-cap"><b>Карты и маршруты.</b> Геозоны, треки, привязка к дорогам.</p>
+          <div class="tile-art" aria-hidden="true">
+            <svg class="mk mk-map" viewBox="0 0 420 200" preserveAspectRatio="xMidYMid meet">
+              <defs>
+                <pattern id="tgrid" width="34" height="34" patternUnits="userSpaceOnUse">
+                  <path d="M34 0H0v34" fill="none" stroke="rgba(255,255,255,.06)"/>
+                </pattern>
+              </defs>
+              <rect width="420" height="200" fill="url(#tgrid)"/>
+              <path class="map-route" d="M18 168C90 168 96 96 150 92s70 52 128 40 84-76 128-72"
+                    fill="none" stroke="var(--accent-hi)" stroke-width="2.5" stroke-linecap="round"/>
+              <circle cx="18" cy="168" r="5" fill="var(--accent-hi)"/>
+              <circle cx="406" cy="60" r="5" fill="var(--ok)"/>
+              <rect x="196" y="34" width="96" height="62" rx="10"
+                    fill="rgba(94,234,212,.1)" stroke="rgba(94,234,212,.5)" stroke-dasharray="5 4"/>
+              <g class="map-arrival" transform="translate(406 60)"><circle r="6"/></g>
+              <g class="map-moving">
+                <g class="map-traveller" transform="translate(406 60)">
+                  <circle class="map-halo" r="14"/>
+                  <circle class="map-dot" r="5"/>
+                </g>
+              </g>
+            </svg>
+          </div>
+        </div>
+      </article>
+
+      <!-- 7. Компьютерное зрение -->
+      <article class="tile tile-f reveal">
+        <div class="tile-body">
+          <p class="tile-cap"><b>Компьютерное зрение.</b> Детекция и трекинг объектов на видео.</p>
+          <div class="tile-art" aria-hidden="true">
+            <div class="mk mk-cv">
+              <span class="box b1"><i>0.94</i></span>
+              <span class="box b2"><i>0.87</i></span>
+              <span class="box b3"><i>0.71</i></span>
+              <span class="scan"></span>
+            </div>
+          </div>
+        </div>
+      </article>
+
     </div>
   </div>
 </section>
@@ -3139,144 +3186,101 @@
   </div>
 </section>
 
-<!-- ===================== ЧТО СОБИРАЕМ ===================== -->
-<!-- Тёмная плитка карточек разной ширины,
-     в каждой подпись сверху и живой макет интерфейса снизу. Макеты сверстаны,
-     а не нарисованы: остаются резкими на любом экране и весят ноль. -->
-<section class="tiles" id="tiles">
+<!-- ===================== ВАША ЗАДАЧА ===================== -->
+<section class="work" id="work" data-scenario="ai" aria-labelledby="work-title">
   <div class="wrap">
-    <header class="tiles-head">
-      <h2 class="tiles-title reveal">Интерфейсы, которые мы собираем</h2>
-      <p class="tiles-lede reveal">
-        Не набор страниц, а рабочие инструменты: вход и права, админка с массовыми
-        действиями, карты, боты, распознавание на видео. Ниже — типы экранов,
-        которые встречаются в наших проектах чаще всего.
-      </p>
+    <header class="work-head reveal">
+      <p class="work-eyebrow"><span></span> Подключаемся там, где нужны</p>
+      <h2 id="work-title">Начнём с <span>вашей задачи.</span></h2>
+      <p class="work-lede">Одна функция или целый сервис. Масштаб выбираете вы.</p>
     </header>
 
-    <div class="tiles-grid">
-      <div class="tiles-join" aria-hidden="true">
-        <svg width="0" height="0" focusable="false"><defs><clipPath id="tilesJoinClip" clipPathUnits="userSpaceOnUse"><path/></clipPath></defs></svg>
-        <i class="tiles-join-light"></i>
+    <div class="work-tabs" role="tablist" aria-label="С какой задачей вы приходите">
+      <button class="work-tab" id="work-tab-ai" type="button" role="tab" aria-selected="true" aria-controls="work-panel-ai" data-scenario="ai">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m12 3 2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5L12 3Z" stroke="currentColor" stroke-width="1.4"/></svg>
+        <span>Внедрить AI</span>
+      </button>
+      <button class="work-tab" id="work-tab-upgrade" type="button" role="tab" aria-selected="false" aria-controls="work-panel-upgrade" tabindex="-1" data-scenario="upgrade">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3.5" y="3.5" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.4"/><rect x="14.5" y="14.5" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.4"/><path d="M17.5 3v7M14 6.5h7M3.5 14.5h6v6h-6z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+        <span>Доработать<span class="work-tab-long"> сервис</span></span>
+      </button>
+      <button class="work-tab" id="work-tab-launch" type="button" role="tab" aria-selected="false" aria-controls="work-panel-launch" tabindex="-1" data-scenario="launch">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m12 3 9 5-9 5-9-5 9-5ZM3 12l9 5 9-5M3 16l9 5 9-5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>Создать с нуля</span>
+      </button>
+      <span class="work-tab-line" aria-hidden="true"></span>
+    </div>
+
+    <div class="work-body">
+      <div class="work-copy">
+        <div class="work-panel" id="work-panel-ai" role="tabpanel" aria-labelledby="work-tab-ai" tabindex="0">
+          <p class="work-kicker">Ваш сервис + AI</p>
+          <h3>Меньше рутины.<br>Больше возможностей.</h3>
+          <p class="work-description">Помощник, поиск по документам или обработка заявок — прямо в вашем сервисе.</p>
+          <a class="work-link" href="#contact">Обсудить внедрение <span aria-hidden="true">↗</span></a>
+        </div>
+        <div class="work-panel" id="work-panel-upgrade" role="tabpanel" aria-labelledby="work-tab-upgrade" tabindex="0" hidden>
+          <p class="work-kicker">Новый потенциал вашего сервиса</p>
+          <h3>Уже работает.<br>Будет ещё лучше.</h3>
+          <p class="work-description">Добавим нужную функцию, свяжем системы или ускорим то, что тормозит.</p>
+          <a class="work-link" href="#contact">Рассказать о доработке <span aria-hidden="true">↗</span></a>
+        </div>
+        <div class="work-panel" id="work-panel-launch" role="tabpanel" aria-labelledby="work-tab-launch" tabindex="0" hidden>
+          <p class="work-kicker">От идеи до первой версии</p>
+          <h3>Ваша идея.<br>Можно пользоваться.</h3>
+          <p class="work-description">Выделим главное и соберём первую версию, которую можно дать пользователям.</p>
+          <a class="work-link" href="#contact">Обсудить идею <span aria-hidden="true">↗</span></a>
+        </div>
       </div>
 
-      <!-- 1. Личные кабинеты -->
-      <article class="tile tile-a reveal">
-        <div class="tile-body">
-          <p class="tile-cap"><b>Вход и права.</b> Регистрация, роли, разграничение доступа.</p>
-          <div class="tile-art" aria-hidden="true">
-            <div class="mk mk-auth">
-              <div class="mk-roles"><i>админ</i><i>диспетчер</i><i>клиент</i></div>
-              <span class="mk-field"></span>
-              <span class="mk-field short"></span>
-              <span class="mk-btn"></span>
+      <!-- Одна основа приложения; сценарии меняют её слои. Весь дальний свет под общей точечной маской. -->
+      <div class="work-stage reveal" aria-hidden="true">
+        <div class="work-scene">
+          <div class="work-aura"></div>
+          <div class="work-orbit work-orbit-outer"><span class="work-orbit-trail"></span></div>
+          <div class="work-orbit work-orbit-inner"><span class="work-orbit-trail"></span></div>
+          <div class="work-floor"></div>
+          <div class="work-platform work-platform-back"><span>Данные</span></div>
+          <div class="work-platform work-platform-front"><span>Логика</span></div>
+
+          <div class="work-app">
+            <span class="work-edge work-edge-app"></span>
+            <div class="work-app-bar"><span class="work-app-logo">s<span>✦</span></span><span>Ваш сервис</span><i></i><span class="work-app-menu">···</span></div>
+            <div class="work-app-layout">
+              <div class="work-sidebar"><b></b><i></i><i></i><i></i><span></span></div>
+              <div class="work-app-content">
+                <div class="work-app-heading"><span class="work-app-heading-wide">Рабочее пространство</span><span class="work-app-heading-compact">Обзор сервиса</span><i>+</i></div>
+                <div class="work-metrics"><div><span></span><b></b><i></i></div><div><span></span><b></b><i></i></div><div><span></span><b></b><i></i></div></div>
+                <div class="work-chart"><span>Активность</span><div class="work-bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+                <div class="work-app-rows"><i></i><i></i></div>
+              </div>
             </div>
+            <div class="work-app-scan"></div>
           </div>
-        </div>
-      </article>
 
-      <!-- 2. Админка -->
-      <article class="tile tile-b reveal">
-        <div class="tile-body">
-          <p class="tile-cap"><b>Админка.</b> Таблицы, фильтры, массовые действия.</p>
-          <div class="tile-art" aria-hidden="true">
-            <div class="mk mk-table">
-              <div class="mk-row head"><i></i><span></span><span class="w2"></span><em></em></div>
-              <div class="mk-row on"><i class="ck"></i><span></span><span class="w2"></span><em></em></div>
-              <div class="mk-row on"><i class="ck"></i><span></span><span class="w2"></span><em></em></div>
-              <div class="mk-row"><i></i><span></span><span class="w2"></span><em></em></div>
-              <div class="mk-row"><i></i><span></span><span class="w2"></span><em></em></div>
-            </div>
+          <div class="work-satellite work-source"><span class="work-source-icon">▤</span><div><b>Ваши знания</b><span>Документы и данные</span></div><i>↗</i></div>
+          <div class="work-satellite work-assistant">
+            <span class="work-edge"></span>
+            <div class="work-assistant-top"><span class="work-spark">✦</span><b>AI-помощник</b><span class="work-live-dot"></span></div>
+            <div class="work-prompt">Найди главное в документе <span>↵</span></div>
+            <div class="work-answer"><span>✦</span><div><i></i><i></i><i></i></div></div>
+            <div class="work-assistant-foot"><span>На основе ваших данных</span><span>✓</span></div>
           </div>
-        </div>
-      </article>
 
-      <!-- 3. Круг: выкатка -->
-      <article class="tile tile-dial reveal">
-        <div class="dial" aria-hidden="true">
-          <span class="dial-orbit"></span>
-          <span class="dial-ver">v1.4</span>
-          <span class="dial-sub">выкачено</span>
-          <span class="dial-plus"></span>
-        </div>
-      </article>
+          <div class="work-satellite work-module"><span class="work-edge"></span><span class="work-module-icon">↗</span><b>Новая возможность</b><div class="work-module-bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><span class="work-module-foot">Встроена в ваш процесс <i>✓</i></span></div>
+          <div class="work-satellite work-update"><span>✓</span> Обновление установлено</div>
 
-      <!-- 4. Боты -->
-      <article class="tile tile-c reveal">
-        <div class="tile-body">
-          <p class="tile-cap"><b>Боты.</b> Telegram и VK: заявки, уведомления, задания.</p>
-          <div class="tile-art" aria-hidden="true">
-            <div class="mk mk-chat">
-              <div class="bub in"><span></span><span class="w2"></span></div>
-              <div class="bub out"><span class="w2"></span></div>
-              <div class="bub in"><span></span></div>
-              <div class="mk-typing"><i></i><i></i><i></i></div>
-              <div class="mk-input"></div>
-            </div>
-          </div>
+          <div class="work-satellite work-launch"><span class="work-edge"></span><span class="work-launch-icon">↗</span><div><b>Ваш сервис запущен</b><span>Всё готово к первому входу</span></div><i class="work-live-dot"></i></div>
+          <div class="work-scene-caption"><span></span><span class="work-caption-ai">Знакомый сервис. Новые возможности.</span><span class="work-caption-upgrade">Нужные изменения. На вашей основе.</span><span class="work-caption-launch">Всё складывается в работающий продукт.</span></div>
         </div>
-      </article>
-
-      <!-- 5. Документы -->
-      <article class="tile tile-d reveal">
-        <div class="tile-body">
-          <p class="tile-cap"><b>Документы.</b> Отчёты, ревизии, хранение в S3.</p>
-          <div class="tile-art" aria-hidden="true">
-            <div class="mk mk-files">
-              <div class="file"><i></i><span></span><em></em></div>
-              <div class="file"><i></i><span class="w2"></span><em></em></div>
-              <div class="file"><i></i><span></span><em></em></div>
-            </div>
-          </div>
-        </div>
-      </article>
-
-      <!-- 6. Карты -->
-      <article class="tile tile-e reveal">
-        <div class="tile-body">
-          <p class="tile-cap"><b>Карты и маршруты.</b> Геозоны, треки, привязка к дорогам.</p>
-          <div class="tile-art" aria-hidden="true">
-            <svg class="mk mk-map" viewBox="0 0 420 200" preserveAspectRatio="xMidYMid meet">
-              <defs>
-                <pattern id="tgrid" width="34" height="34" patternUnits="userSpaceOnUse">
-                  <path d="M34 0H0v34" fill="none" stroke="rgba(255,255,255,.06)"/>
-                </pattern>
-              </defs>
-              <rect width="420" height="200" fill="url(#tgrid)"/>
-              <path class="map-route" d="M18 168C90 168 96 96 150 92s70 52 128 40 84-76 128-72"
-                    fill="none" stroke="var(--accent-hi)" stroke-width="2.5" stroke-linecap="round"/>
-              <circle cx="18" cy="168" r="5" fill="var(--accent-hi)"/>
-              <circle cx="406" cy="60" r="5" fill="var(--ok)"/>
-              <rect x="196" y="34" width="96" height="62" rx="10"
-                    fill="rgba(94,234,212,.1)" stroke="rgba(94,234,212,.5)" stroke-dasharray="5 4"/>
-              <g class="map-arrival" transform="translate(406 60)"><circle r="6"/></g>
-              <g class="map-moving">
-                <g class="map-traveller" transform="translate(406 60)">
-                  <circle class="map-halo" r="14"/>
-                  <circle class="map-dot" r="5"/>
-                </g>
-              </g>
-            </svg>
-          </div>
-        </div>
-      </article>
-
-      <!-- 7. Компьютерное зрение -->
-      <article class="tile tile-f reveal">
-        <div class="tile-body">
-          <p class="tile-cap"><b>Компьютерное зрение.</b> Детекция и трекинг объектов на видео.</p>
-          <div class="tile-art" aria-hidden="true">
-            <div class="mk mk-cv">
-              <span class="box b1"><i>0.94</i></span>
-              <span class="box b2"><i>0.87</i></span>
-              <span class="box b3"><i>0.71</i></span>
-              <span class="scan"></span>
-            </div>
-          </div>
-        </div>
-      </article>
-
+      </div>
     </div>
+
+    <ul class="work-assurances">
+      <li><span aria-hidden="true">✓</span> Объём согласуем заранее</li>
+      <li><span aria-hidden="true">✓</span> Результат виден по ходу</li>
+      <li><span aria-hidden="true">✓</span> Код и доступы — у вас</li>
+    </ul>
   </div>
 </section>
 
