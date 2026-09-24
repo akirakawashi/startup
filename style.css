@@ -4924,7 +4924,10 @@ button, input, select, textarea { font: inherit; color: inherit; }
   background: radial-gradient(ellipse, rgba(var(--accent-rgb), .88), transparent 68%);
   filter: blur(8px); opacity: .12;
 }
-.signal-orbit .scene-orbit-spark { animation: none; }
+.signal-orbit { pointer-events: none; }
+.signal-field-haze { opacity: .5; }
+.signal-field-rim { opacity: .68; }
+.signal-field-traveler { opacity: 0; transform-box: view-box; transform-origin: 0 0; }
 .signal-bloom {
   position: absolute; left: 400px; top: 110px; width: 200px; height: 136px;
   background:

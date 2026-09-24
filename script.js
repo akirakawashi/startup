@@ -755,10 +755,11 @@
       parent.appendChild(node);
       return node;
     }
-    function animate(node, frames) {
+    function animate(node, frames, timing) {
+      var options = Object.assign({ duration: duration, iterations: Infinity, fill: 'both' }, timing);
       var animation = node.animate(frames.map(function (frame) {
-        return Object.assign({ offset: frame[0] / duration }, frame[1]);
-      }), { duration: duration, iterations: Infinity, fill: 'both' });
+        return Object.assign({ offset: frame[0] / options.duration }, frame[1]);
+      }), options);
       animation.pause();
       animation.currentTime = elapsed;
       animations.push(animation);
@@ -969,14 +970,30 @@
       fade($('.signal-aura', stage), [[0,.075],[2800,.075],[4200,.16],[6800,.2],[7450,.34],[8500,.13],[11000,.075],[duration,.075]]);
       fade($('.signal-emission', stage), [[0,.045],[3300,.045],[4900,.1],[6800,.12],[7480,.22],[8500,.07],[11000,.045],[duration,.045]]);
       fade($('.signal-floor', stage), [[0,.1],[3000,.1],[7000,.4],[8100,.3],[10000,.1],[duration,.1]]);
-      $$('.signal-orbit .scene-orbit-spark', stage).forEach(function (spark, index) {
-        var frames = [];
-        for (var step = 0; step <= 12; step++) {
-          var wave = Math.sin(step / 12 * Math.PI * 2 + index * Math.PI * 2 / 3);
-          frames.push([step * 1000, { opacity: .58 + wave * .27,
-            transform: 'translate(' + (wave * 4).toFixed(3) + 'px,' + (-wave).toFixed(3) + 'px)' }]);
+      fade($('.signal-field-haze', stage), [[0,.5],[3300,.5],[4900,.72],[7400,1],[8500,.7],[11000,.5],[duration,.5]]);
+      fade($('.signal-field-rim', stage), [[0,.68],[3300,.68],[4900,.82],[7400,1],[8500,.8],[11000,.68],[duration,.68]]);
+      $$('.signal-field-traveler', stage).forEach(function (traveler, index) {
+        var route = document.getElementById(traveler.dataset.fieldRoute);
+        var length = route.getTotalLength(), frames = [], previousAngle = null;
+        for (var step = 0; step <= 48; step++) {
+          var distance = length * step / 48;
+          var point = route.getPointAtLength(distance);
+          var before = route.getPointAtLength(Math.max(0, distance - .5));
+          var after = route.getPointAtLength(Math.min(length, distance + .5));
+          var angle = Math.atan2(after.y - before.y, after.x - before.x) * 180 / Math.PI;
+          if (previousAngle !== null) {
+            while (angle - previousAngle > 180) angle -= 360;
+            while (angle - previousAngle < -180) angle += 360;
+          }
+          previousAngle = angle;
+          frames.push([step / 48 * 3000, {
+            transform: 'translate(' + point.x.toFixed(3) + 'px,' + point.y.toFixed(3) + 'px) rotate(' + angle.toFixed(3) + 'deg)',
+            opacity: Math.min(1, step / 6, (48 - step) / 7)
+          }]);
         }
-        animate(spark, frames);
+        // Четыре прохода за общий цикл: движение не обрывается при его
+        // повторе, resize и паузе. Второй блик сдвинут на полпрохода.
+        animate(traveler, frames, { duration: 3000, delay: index * -1500 });
       });
       fade($('.signal-chip-core', stage), [[0,.08],[3500,.08],[4900,.25],[6800,.32],[7480,.6],[8500,.16],[duration,.08]]);
       fade($('.signal-bloom', stage), [[0,.015],[6900,.015],[7460,.55],[8300,.06],[10000,.015],[duration,.015]]);

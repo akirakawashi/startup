@@ -2363,11 +2363,51 @@
         <div class="signal-aura"></div>
         <div class="signal-floor"></div>
         <svg class="signal-orbit" viewBox="0 0 1000 440" fill="none">
-          <g class="scene-orbit" transform="translate(500 344) rotate(-4) scale(1.05 .95)">
-            <use href="#sceneOrbitBase"/>
-            <g transform="translate(-151 14)"><g class="scene-orbit-spark"><use href="#sceneOrbitLight"/></g></g>
-            <g transform="translate(158 -10)"><g class="scene-orbit-spark scene-orbit-spark-b"><use href="#sceneOrbitLight"/></g></g>
-            <g transform="translate(65 24)"><g class="scene-orbit-spark scene-orbit-spark-c"><use href="#sceneOrbitLight"/></g></g>
+          <defs>
+            <radialGradient id="signalFieldHaze">
+              <stop offset=".18" stop-color="#9e6aff" stop-opacity="0"/>
+              <stop offset=".57" stop-color="#9460ef" stop-opacity=".19"/>
+              <stop offset=".8" stop-color="#ad7df8" stop-opacity=".08"/>
+              <stop offset="1" stop-color="#9460ef" stop-opacity="0"/>
+            </radialGradient>
+            <linearGradient id="signalFieldGlass" x1="350" y1="290" x2="540" y2="378" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#b58aff" stop-opacity="0"/>
+              <stop offset=".48" stop-color="#aa78fa" stop-opacity=".03"/>
+              <stop offset=".86" stop-color="#be94ff" stop-opacity=".15"/>
+              <stop offset="1" stop-color="#c8aaff" stop-opacity=".02"/>
+            </linearGradient>
+            <linearGradient id="signalFieldEdge" x1="308" y1="280" x2="701" y2="366" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#9e6dec" stop-opacity="0"/>
+              <stop offset=".22" stop-color="#a97bf5" stop-opacity=".45"/>
+              <stop offset=".54" stop-color="#e0c9ff" stop-opacity=".95"/>
+              <stop offset=".82" stop-color="#bb8ff8" stop-opacity=".6"/>
+              <stop offset="1" stop-color="#a879ef" stop-opacity="0"/>
+            </linearGradient>
+            <filter id="signalFieldSoft" x="-15%" y="-50%" width="130%" height="200%"><feGaussianBlur stdDeviation="3"/></filter>
+            <path id="signalFieldFront" d="M301 285C320 329 406 367 506 373 600 379 679 359 698 329"/>
+            <path id="signalFieldLeft" d="M301 285C320 329 406 367 506 373"/>
+            <path id="signalFieldRight" d="M698 329C679 359 600 379 506 373"/>
+          </defs>
+          <g class="signal-field-haze">
+            <ellipse cx="500" cy="310" rx="229" ry="75" fill="url(#signalFieldHaze)"/>
+            <path d="M301 285C320 329 406 367 506 373 600 379 679 359 698 329C675 348 598 369 506 364 407 359 329 323 301 285Z" fill="url(#signalFieldGlass)"/>
+          </g>
+          <g stroke="url(#signalFieldEdge)" stroke-linecap="round">
+            <path d="M301 285C302 248 403 230 512 247 629 265 723 296 698 329" opacity=".25"/>
+            <path d="M330 274C373 247 568 250 674 302" stroke-dasharray="1 8" opacity=".25"/>
+            <g class="signal-field-rim">
+              <use href="#signalFieldFront" stroke-width="7" opacity=".28" filter="url(#signalFieldSoft)"/>
+              <use href="#signalFieldFront" stroke-width="1.05"/>
+              <path d="M332 315C376 348 471 378 575 367" stroke-width=".65" opacity=".28"/>
+            </g>
+          </g>
+          <g class="signal-field-traveler" data-field-route="signalFieldLeft">
+            <ellipse cx="-9" rx="21" ry="5" fill="url(#sceneOrbitSpark)"/>
+            <circle r="13" fill="url(#sceneOrbitSpark)"/><circle r="1.9" fill="#efddff"/>
+          </g>
+          <g class="signal-field-traveler" data-field-route="signalFieldRight">
+            <ellipse cx="-9" rx="21" ry="5" fill="url(#sceneOrbitSpark)"/>
+            <circle r="13" fill="url(#sceneOrbitSpark)"/><circle r="1.9" fill="#efddff"/>
           </g>
         </svg>
         <svg class="signal-emission" viewBox="0 0 1000 440" fill="none">
