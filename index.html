@@ -321,6 +321,29 @@
                 <stop stop-color="#b28bff" stop-opacity=".4" />
                 <stop offset="1" stop-color="#9e70e0" stop-opacity="0" />
               </radialGradient>
+              <!-- Орбита выдвинутой плиты, как у сопровождения в «Форматах»:
+                   кольцо в своей плоскости, комета обходит его. Половины режутся
+                   по диаметру: дальняя лежит за лучом, ближняя перед голограммой.
+                   Штрих не масштабируется, иначе сжатое кольцо было бы толстым
+                   на боках и нитью спереди. -->
+              <clipPath id="strataOrbitBackClip" clipPathUnits="userSpaceOnUse">
+                <rect x="-240" y="-240" width="480" height="240" />
+              </clipPath>
+              <clipPath id="strataOrbitFrontClip" clipPathUnits="userSpaceOnUse">
+                <rect x="-240" y="0" width="480" height="240" />
+              </clipPath>
+              <g id="strataOrbitRing">
+                <circle r="212" stroke="#7c3aed" stroke-opacity=".07" stroke-width="12" vector-effect="non-scaling-stroke" />
+                <circle r="212" stroke="#8b5cf6" stroke-opacity=".14" stroke-width="5" vector-effect="non-scaling-stroke" />
+                <circle r="212" stroke="#a78bfa" stroke-opacity=".6" stroke-width="1.3" vector-effect="non-scaling-stroke" />
+              </g>
+              <g id="strataOrbitComet">
+                <path d="M141.9-157.5A212 212 0 0 1 212 0" stroke="#7c4dff" stroke-opacity=".4" stroke-width="2.4" vector-effect="non-scaling-stroke" />
+                <path d="M183.6-106A212 212 0 0 1 212 0" stroke="#a78bfa" stroke-opacity=".65" stroke-width="2.4" vector-effect="non-scaling-stroke" />
+                <path d="M206.6-47.7A212 212 0 0 1 212 0" stroke="#e9dfff" stroke-width="2.4" vector-effect="non-scaling-stroke" />
+                <circle cx="212" r="30" fill="url(#sceneOrbitSpark)" />
+                <circle cx="212" r="6" fill="#f6f1ff" />
+              </g>
             </defs>
             <ellipse class="strata-aura" cx="700" cy="375" rx="290" ry="175" fill="url(#strataSoftLight)" />
             <ellipse class="strata-floor" cx="700" cy="512" rx="258" ry="38" fill="url(#strataSoftLight)" />
@@ -363,6 +386,12 @@
                 </g>
                 <g class="strata-projection" transform="matrix(.88 0 0 .88 -316.8 -346.72)">
                   <ellipse class="strata-projection-aura" cx="360" cy="205" rx="235" ry="200" fill="url(#strataSoftLight)" />
+                  <g class="strata-orbit" transform="translate(360 318) rotate(-9) scale(1 .28)">
+                    <g clip-path="url(#strataOrbitBackClip)">
+                      <use href="#strataOrbitRing" opacity=".55" />
+                      <use class="strata-orbit-runner" href="#strataOrbitComet" opacity=".8" />
+                    </g>
+                  </g>
                   <g class="strata-optics">
                     <path fill="url(#holoBeam)" d="M344 394 159 160h402L376 394Z" />
                     <path class="holo-ray" d="m360 394-161-208M360 394l153-203M360 394l-60-149M360 394l67-127" />
@@ -515,6 +544,12 @@
                       </g>
                     </g>
                   </g>
+                  <g class="strata-orbit" transform="translate(360 318) rotate(-9) scale(1 .28)">
+                    <g clip-path="url(#strataOrbitFrontClip)">
+                      <use href="#strataOrbitRing" />
+                      <use class="strata-orbit-runner" href="#strataOrbitComet" />
+                    </g>
+                  </g>
                   <g class="holo-build-scan">
                     <rect x="110" y="-7" width="510" height="14" rx="7" fill="url(#holoSweep)" opacity=".13" />
                     <rect x="110" y="-.8" width="510" height="1.6" rx=".8" fill="url(#holoSweep)" />
@@ -561,6 +596,12 @@
                 </g>
                 <g class="strata-projection" transform="matrix(.88 0 0 .88 -316.8 -346.72)">
                   <ellipse class="strata-projection-aura" cx="360" cy="205" rx="235" ry="200" fill="url(#strataSoftLight)" />
+                  <g class="strata-orbit" transform="translate(360 318) rotate(-9) scale(1 .28)">
+                    <g clip-path="url(#strataOrbitBackClip)">
+                      <use href="#strataOrbitRing" opacity=".55" />
+                      <use class="strata-orbit-runner" href="#strataOrbitComet" opacity=".8" />
+                    </g>
+                  </g>
                   <g class="strata-optics">
                     <path fill="url(#holoBeam)" d="M344 394 159 160h402L376 394Z" />
                     <path class="holo-ray" d="m360 394-161-208M360 394l153-203M360 394l-60-149M360 394l67-127" />
@@ -659,6 +700,12 @@
                       </g>
                     </g>
                   </g>
+                  <g class="strata-orbit" transform="translate(360 318) rotate(-9) scale(1 .28)">
+                    <g clip-path="url(#strataOrbitFrontClip)">
+                      <use href="#strataOrbitRing" />
+                      <use class="strata-orbit-runner" href="#strataOrbitComet" />
+                    </g>
+                  </g>
                   <g class="holo-build-scan">
                     <rect x="110" y="-7" width="510" height="14" rx="7" fill="url(#holoSweep)" opacity=".13" />
                     <rect x="110" y="-.8" width="510" height="1.6" rx=".8" fill="url(#holoSweep)" />
@@ -705,6 +752,12 @@
                 </g>
                 <g class="strata-projection" transform="matrix(.88 0 0 .88 -316.8 -346.72)">
                   <ellipse class="strata-projection-aura" cx="360" cy="205" rx="235" ry="200" fill="url(#strataSoftLight)" />
+                  <g class="strata-orbit" transform="translate(360 318) rotate(-9) scale(1 .28)">
+                    <g clip-path="url(#strataOrbitBackClip)">
+                      <use href="#strataOrbitRing" opacity=".55" />
+                      <use class="strata-orbit-runner" href="#strataOrbitComet" opacity=".8" />
+                    </g>
+                  </g>
                   <g class="strata-optics">
                     <path fill="url(#holoBeam)" d="M344 394 159 160h402L376 394Z" />
                     <path class="holo-ray" d="m360 394-161-208M360 394l153-203M360 394l-60-149M360 394l67-127" />
@@ -822,6 +875,12 @@
                       </g>
                     </g>
                   </g>
+                  <g class="strata-orbit" transform="translate(360 318) rotate(-9) scale(1 .28)">
+                    <g clip-path="url(#strataOrbitFrontClip)">
+                      <use href="#strataOrbitRing" />
+                      <use class="strata-orbit-runner" href="#strataOrbitComet" />
+                    </g>
+                  </g>
                   <g class="holo-build-scan">
                     <rect x="110" y="-7" width="510" height="14" rx="7" fill="url(#holoSweep)" opacity=".13" />
                     <rect x="110" y="-.8" width="510" height="1.6" rx=".8" fill="url(#holoSweep)" />
@@ -868,6 +927,12 @@
                 </g>
                 <g class="strata-projection" transform="matrix(.88 0 0 .88 -316.8 -346.72)">
                   <ellipse class="strata-projection-aura" cx="360" cy="205" rx="235" ry="200" fill="url(#strataSoftLight)" />
+                  <g class="strata-orbit" transform="translate(360 318) rotate(-9) scale(1 .28)">
+                    <g clip-path="url(#strataOrbitBackClip)">
+                      <use href="#strataOrbitRing" opacity=".55" />
+                      <use class="strata-orbit-runner" href="#strataOrbitComet" opacity=".8" />
+                    </g>
+                  </g>
                   <g class="strata-optics">
                     <path fill="url(#holoBeam)" d="M344 394 159 160h402L376 394Z" />
                     <path class="holo-ray" d="m360 394-161-208M360 394l153-203M360 394l-60-149M360 394l67-127" />
@@ -992,6 +1057,12 @@
                       </g>
                     </g>
                   </g>
+                  <g class="strata-orbit" transform="translate(360 318) rotate(-9) scale(1 .28)">
+                    <g clip-path="url(#strataOrbitFrontClip)">
+                      <use href="#strataOrbitRing" />
+                      <use class="strata-orbit-runner" href="#strataOrbitComet" />
+                    </g>
+                  </g>
                   <g class="holo-build-scan">
                     <rect x="110" y="-7" width="510" height="14" rx="7" fill="url(#holoSweep)" opacity=".13" />
                     <rect x="110" y="-.8" width="510" height="1.6" rx=".8" fill="url(#holoSweep)" />
@@ -1038,6 +1109,12 @@
                 </g>
                 <g class="strata-projection" transform="matrix(.88 0 0 .88 -316.8 -346.72)">
                   <ellipse class="strata-projection-aura" cx="360" cy="205" rx="235" ry="200" fill="url(#strataSoftLight)" />
+                  <g class="strata-orbit" transform="translate(360 318) rotate(-9) scale(1 .28)">
+                    <g clip-path="url(#strataOrbitBackClip)">
+                      <use href="#strataOrbitRing" opacity=".55" />
+                      <use class="strata-orbit-runner" href="#strataOrbitComet" opacity=".8" />
+                    </g>
+                  </g>
                   <g class="strata-optics">
                     <path fill="url(#holoBeam)" d="M344 394 159 160h402L376 394Z" />
                     <path class="holo-ray" d="m360 394-161-208M360 394l153-203M360 394l-60-149M360 394l67-127" />
@@ -1166,6 +1243,12 @@
                       </g>
                     </g>
                   </g>
+                  <g class="strata-orbit" transform="translate(360 318) rotate(-9) scale(1 .28)">
+                    <g clip-path="url(#strataOrbitFrontClip)">
+                      <use href="#strataOrbitRing" />
+                      <use class="strata-orbit-runner" href="#strataOrbitComet" />
+                    </g>
+                  </g>
                   <g class="holo-build-scan">
                     <rect x="110" y="-7" width="510" height="14" rx="7" fill="url(#holoSweep)" opacity=".13" />
                     <rect x="110" y="-.8" width="510" height="1.6" rx=".8" fill="url(#holoSweep)" />
@@ -1212,6 +1295,12 @@
                 </g>
                 <g class="strata-projection" transform="matrix(.88 0 0 .88 -316.8 -346.72)">
                   <ellipse class="strata-projection-aura" cx="360" cy="205" rx="235" ry="200" fill="url(#strataSoftLight)" />
+                  <g class="strata-orbit" transform="translate(360 318) rotate(-9) scale(1 .28)">
+                    <g clip-path="url(#strataOrbitBackClip)">
+                      <use href="#strataOrbitRing" opacity=".55" />
+                      <use class="strata-orbit-runner" href="#strataOrbitComet" opacity=".8" />
+                    </g>
+                  </g>
                   <g class="strata-optics">
                     <path fill="url(#holoBeam)" d="M344 394 159 160h402L376 394Z" />
                     <path class="holo-ray" d="m360 394-161-208M360 394l153-203M360 394l-60-149M360 394l67-127" />
@@ -1317,6 +1406,12 @@
                       </g>
                     </g>
                   </g>
+                  <g class="strata-orbit" transform="translate(360 318) rotate(-9) scale(1 .28)">
+                    <g clip-path="url(#strataOrbitFrontClip)">
+                      <use href="#strataOrbitRing" />
+                      <use class="strata-orbit-runner" href="#strataOrbitComet" />
+                    </g>
+                  </g>
                   <g class="holo-build-scan">
                     <rect x="110" y="-7" width="510" height="14" rx="7" fill="url(#holoSweep)" opacity=".13" />
                     <rect x="110" y="-.8" width="510" height="1.6" rx=".8" fill="url(#holoSweep)" />
@@ -1363,6 +1458,12 @@
                 </g>
                 <g class="strata-projection" transform="matrix(.88 0 0 .88 -316.8 -346.72)">
                   <ellipse class="strata-projection-aura" cx="360" cy="205" rx="235" ry="200" fill="url(#strataSoftLight)" />
+                  <g class="strata-orbit" transform="translate(360 318) rotate(-9) scale(1 .28)">
+                    <g clip-path="url(#strataOrbitBackClip)">
+                      <use href="#strataOrbitRing" opacity=".55" />
+                      <use class="strata-orbit-runner" href="#strataOrbitComet" opacity=".8" />
+                    </g>
+                  </g>
                   <g class="strata-optics">
                     <path fill="url(#holoBeam)" d="M344 394 159 160h402L376 394Z" />
                     <path class="holo-ray" d="m360 394-161-208M360 394l153-203M360 394l-60-149M360 394l67-127" />
@@ -1475,6 +1576,12 @@
                           </g>
                         </g>
                       </g>
+                    </g>
+                  </g>
+                  <g class="strata-orbit" transform="translate(360 318) rotate(-9) scale(1 .28)">
+                    <g clip-path="url(#strataOrbitFrontClip)">
+                      <use href="#strataOrbitRing" />
+                      <use class="strata-orbit-runner" href="#strataOrbitComet" />
                     </g>
                   </g>
                   <g class="holo-build-scan">

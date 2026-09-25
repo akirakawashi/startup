@@ -851,6 +851,18 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .strata-hologram.is-on .strata-hologram-float { animation: strataHologramFloat 6s ease-in-out infinite; }
 @keyframes strataHologramFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
 
+/* Орбита выдвинутой плиты — пассивное движение после сборки голограммы.
+   Кольцо у её основания; правый край левее угла стопки при любом слое.
+   Кометы двух половин идут одной анимацией и читаются одной. */
+.strata-orbit { opacity: 0; transition: opacity .18s var(--ease); }
+.strata-layer.is-on .strata-orbit { opacity: 1; transition: opacity .8s var(--ease) 1.1s; }
+.strata-orbit-runner { transform-box: view-box; transform-origin: 0 0; }
+.strata-layer.is-on .strata-orbit-runner {
+  animation: strataOrbit 7s linear infinite;
+  animation-delay: calc(0s - var(--shot-t, 0s));
+}
+@keyframes strataOrbit { to { transform: rotate(360deg); } }
+
 .strata-signal, .strata-emitter-flash { opacity: 0; transform-box: view-box; }
 .strata-signal { transform-origin: 0 0; }
 .strata-emitter-flash { transform-origin: 360px 394px; }
@@ -1091,11 +1103,15 @@ button, input, select, textarea { font: inherit; color: inherit; }
   .holo-parallax, .holo-parallax-near { transform: none; transition: none; }
   .strata-reflection, .strata-layer.is-on .strata-reflection { transition: none; }
   .strata-layer-motion, .strata-projection, .strata-layer.is-on .strata-projection { transition: none; }
-  .strata-hologram, .strata-hologram.is-on { transition: none; }
+  .strata-hologram, .strata-hologram.is-on,
+  .strata-orbit, .strata-layer.is-on .strata-orbit { transition: none; }
   .strata-hologram.is-on .strata-hologram-float,
   .strata-hologram.is-on .holo-packet,
   .strata-hologram.is-on .holo-ai-orbit,
-  .strata-hologram.is-on .holo-ai-core { animation: none; }
+  .strata-hologram.is-on .holo-ai-core,
+  .strata-layer.is-on .strata-orbit-runner { animation: none; }
+  /* Без движения комета стоит на ближней дуге, а не на стыке половин. */
+  .strata-orbit-runner { transform: rotate(60deg); }
 }
 
 /* ---------- 9. Ваша задача ---------- */
