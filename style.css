@@ -4589,6 +4589,10 @@ button, input, select, textarea { font: inherit; color: inherit; }
   border-radius: 26px 0 26px 26px;
 }
 .tile-a .tile-body { border-radius: 26px 26px 26px 0; }
+/* «Карты» стоят в углу у выкружки «Документов»: их угол повторяет её дугу
+   через зазор, центры дуг совпадают. С общим радиусом 26px тёмный канал
+   на изгибе сужался и дуги шли вразнобой. */
+.tile-e .tile-body { border-top-left-radius: calc(var(--fillet, 40px) - var(--tile-gap)); }
 
 /* Вогнутые выкружки на изломах — то, чем карточки перетекают друг в друга.
    Обычный border-radius здесь не работает: со стороны тёмной фигуры у излома
