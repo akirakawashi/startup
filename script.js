@@ -14,6 +14,38 @@
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
   var clamp = function (v, a, b) { return Math.max(a, Math.min(b, v)); };
 
+  /* Блики световых чаш: кадры transform строятся один раз по маршруту из SVG,
+     дальше это обычная CSS-анимация с паузой своей сцены. Угол ведётся без
+     скачка через ±180°: иначе на маршруте справа налево хвост делал полный
+     оборот за один кадр. */
+  function buildFieldTravel(travelers, name, delayStep) {
+    var style = document.createElement('style');
+    travelers.forEach(function (traveler, index) {
+      var route = document.getElementById(traveler.dataset.fieldRoute);
+      if (!route) return;
+      var length = route.getTotalLength(), frames = [], previousAngle = null;
+      for (var step = 0; step <= 32; step++) {
+        var distance = length * step / 32;
+        var point = route.getPointAtLength(distance);
+        var before = route.getPointAtLength(Math.max(0, distance - .5));
+        var after = route.getPointAtLength(Math.min(length, distance + .5));
+        var angle = Math.atan2(after.y - before.y, after.x - before.x) * 180 / Math.PI;
+        if (previousAngle !== null) {
+          while (angle - previousAngle > 180) angle -= 360;
+          while (angle - previousAngle < -180) angle += 360;
+        }
+        previousAngle = angle;
+        var opacity = Math.min(1, step / 4, (32 - step) / 5);
+        frames.push((step / 32 * 100) + '%{transform:translate(' + point.x.toFixed(3) + 'px,' +
+          point.y.toFixed(3) + 'px) rotate(' + angle.toFixed(3) + 'deg);opacity:' + opacity + '}');
+      }
+      traveler.style.setProperty('--field-motion', name + index);
+      traveler.style.setProperty('--field-delay', (index * delayStep) + 's');
+      style.textContent += '@keyframes ' + name + index + '{' + frames.join('') + '}';
+    });
+    document.head.appendChild(style);
+  }
+
   /* ============================================================
      Заголовок первого экрана: разбор на слова
      Слова после тире получают акцентный цвет.
@@ -551,27 +583,7 @@
 
     // Маршруты света берём из SVG один раз. Блики идут непрерывно со сдвигом
     // в полцикла; общий контроллер видимости сохраняет их фазу на паузе.
-    var fieldStyles = document.createElement('style');
-    $$('.system-field-traveler', merge).forEach(function (traveler, index) {
-      var route = document.getElementById(traveler.dataset.fieldRoute);
-      if (!route) return;
-      var length = route.getTotalLength(), frames = [];
-      for (var step = 0; step <= 32; step++) {
-        var distance = length * step / 32;
-        var point = route.getPointAtLength(distance);
-        var before = route.getPointAtLength(Math.max(0, distance - .5));
-        var after = route.getPointAtLength(Math.min(length, distance + .5));
-        var angle = Math.atan2(after.y - before.y, after.x - before.x) * 180 / Math.PI;
-        var opacity = Math.min(1, step / 4, (32 - step) / 5);
-        frames.push((step / 32 * 100) + '%{transform:translate(' + point.x.toFixed(3) + 'px,' +
-          point.y.toFixed(3) + 'px) rotate(' + angle.toFixed(3) + 'deg);opacity:' + opacity + '}');
-      }
-      var name = 'systemFieldTravel' + index;
-      traveler.style.setProperty('--field-motion', name);
-      traveler.style.setProperty('--field-delay', (index * -1.4) + 's');
-      fieldStyles.textContent += '@keyframes ' + name + '{' + frames.join('') + '}';
-    });
-    document.head.appendChild(fieldStyles);
+    buildFieldTravel($$('.system-field-traveler', merge), 'systemFieldTravel', -1.4);
 
     function show(i, instant) {
       index = i;
@@ -1060,34 +1072,9 @@
     var sequence = ['ready', 'checks', 'transfer', 'launch', 'deliver', 'live'];
     var timing = { ready: 1000, checks: 2600, transfer: 1500, launch: 2300, deliver: 1600, live: 1000 };
 
-    // Блики под сервером идут по передней дуге орбиты к центру со сдвигом
+    // Блики под сервером идут по передней кромке чаши к центру со сдвигом
     // в полпрохода. Кадры строятся один раз; фазу на паузе хранит motion-paused.
-    var orbitStyles = document.createElement('style');
-    $$('.release-orbit-traveler', demo).forEach(function (traveler, index) {
-      var route = document.getElementById(traveler.dataset.fieldRoute);
-      if (!route) return;
-      var length = route.getTotalLength(), frames = [], previousAngle = null;
-      for (var step = 0; step <= 32; step++) {
-        var distance = length * step / 32;
-        var point = route.getPointAtLength(distance);
-        var before = route.getPointAtLength(Math.max(0, distance - .5));
-        var after = route.getPointAtLength(Math.min(length, distance + .5));
-        var angle = Math.atan2(after.y - before.y, after.x - before.x) * 180 / Math.PI;
-        if (previousAngle !== null) {
-          while (angle - previousAngle > 180) angle -= 360;
-          while (angle - previousAngle < -180) angle += 360;
-        }
-        previousAngle = angle;
-        var opacity = Math.min(1, step / 4, (32 - step) / 5);
-        frames.push((step / 32 * 100) + '%{transform:translate(' + point.x.toFixed(3) + 'px,' +
-          point.y.toFixed(3) + 'px) rotate(' + angle.toFixed(3) + 'deg);opacity:' + opacity + '}');
-      }
-      var name = 'releaseOrbitTravel' + index;
-      traveler.style.setProperty('--field-motion', name);
-      traveler.style.setProperty('--field-delay', (index * -1.5) + 's');
-      orbitStyles.textContent += '@keyframes ' + name + '{' + frames.join('') + '}';
-    });
-    document.head.appendChild(orbitStyles);
+    buildFieldTravel($$('.release-field-traveler', demo), 'releaseFieldTravel', -1.5);
     /* Подписи сменяются небольшим падением. Новая строка сразу встаёт в поток
        на итоговое место и опускается в него сверху; прежняя закрепляется
        поверх в своих координатах, скрыта от скринридера, уходит вниз и
@@ -1710,6 +1697,14 @@
       }
     });
   });
+
+  /* Письмо: блики на передней дуге орбиты идут к конверту со сдвигом
+     в полпрохода. Цикл конверта — CSS, паузу даёт общий контроллер. */
+  (function initContactScene() {
+    var scene = $('.contact-scene');
+    if (!scene) return;
+    buildFieldTravel($$('.contact-field-traveler', scene), 'contactFieldTravel', -2.5);
+  })();
 
   /* Список строится из select: подписи и полные значения имеют один источник.
      До инициализации остаётся нативное поле. Фокус в открытом списке держит

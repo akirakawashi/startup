@@ -36,36 +36,11 @@
         <feFuncB type="linear" slope="1.085106" intercept="-.085106"/>
       </feComponentTransfer>
     </filter>
-    <radialGradient id="sceneOrbitMist">
-      <stop stop-color="#ad79ff" stop-opacity=".2"/>
-      <stop offset=".45" stop-color="#9865e9" stop-opacity=".1"/>
-      <stop offset="1" stop-color="#9865e9" stop-opacity="0"/>
-    </radialGradient>
-    <radialGradient id="sceneOrbitHaze">
-      <stop offset=".3" stop-color="#9b6bff" stop-opacity="0"/>
-      <stop offset=".65" stop-color="#9b6bff" stop-opacity=".13"/>
-      <stop offset="1" stop-color="#9b6bff" stop-opacity="0"/>
-    </radialGradient>
-    <linearGradient id="sceneOrbitEdge" x1="-190" y1="0" x2="190" y2="0" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#a879ef" stop-opacity="0"/>
-      <stop offset=".28" stop-color="#a879ef" stop-opacity=".45"/>
-      <stop offset=".65" stop-color="#ddc5ff" stop-opacity=".75"/>
-      <stop offset="1" stop-color="#a879ef" stop-opacity="0"/>
-    </linearGradient>
     <radialGradient id="sceneOrbitSpark">
       <stop stop-color="#e7d2ff" stop-opacity=".7"/>
       <stop offset=".22" stop-color="#b98aff" stop-opacity=".4"/>
       <stop offset="1" stop-color="#ad79ff" stop-opacity="0"/>
     </radialGradient>
-    <g id="sceneOrbitBase" fill="none">
-      <ellipse rx="225" ry="40" fill="url(#sceneOrbitHaze)"/>
-      <ellipse rx="152" ry="22" fill="url(#sceneOrbitMist)"/>
-      <g stroke="url(#sceneOrbitEdge)">
-        <ellipse rx="180" ry="26" opacity=".45" stroke-width=".7" vector-effect="non-scaling-stroke"/>
-        <ellipse rx="159" ry="21" opacity=".3" stroke-dasharray="1 8" stroke-width=".8" vector-effect="non-scaling-stroke"/>
-        <path d="M-178 4C-160 29-52 35 56 24 126 17 174 4 180-5" opacity=".8" stroke-width=".85" vector-effect="non-scaling-stroke"/>
-      </g>
-    </g>
   </defs>
 </svg>
 
@@ -1940,27 +1915,65 @@
             <span class="release-aura"></span>
             <svg viewBox="0 0 220 164" fill="none" stroke-linecap="round" stroke-linejoin="round">
               <defs>
-                <!-- Передняя дуга #sceneOrbitBase в координатах сцены: при смене
-                     transform у орбиты маршруты пересчитать. -->
-                <path id="releaseOrbitLeft" d="M17.4 142.8C25.1 152.3 64.5 155.9 109.6 154"/>
-                <path id="releaseOrbitRight" d="M203.6 138.7C200.5 142.8 175.5 148.8 139.1 152 129.2 152.9 119.2 153.6 109.6 154"/>
+                <radialGradient id="releaseFieldHaze">
+                  <stop offset=".18" stop-color="#9e6aff" stop-opacity="0"/>
+                  <stop offset=".57" stop-color="#9460ef" stop-opacity=".2"/>
+                  <stop offset=".8" stop-color="#ad7df8" stop-opacity=".08"/>
+                  <stop offset="1" stop-color="#9460ef" stop-opacity="0"/>
+                </radialGradient>
+                <radialGradient id="releaseFieldGlow">
+                  <stop stop-color="#b398ed" stop-opacity=".5"/>
+                  <stop offset=".38" stop-color="#b398ed" stop-opacity=".22"/>
+                  <stop offset="1" stop-color="#b398ed" stop-opacity="0"/>
+                </radialGradient>
+                <linearGradient id="releaseFieldGlass" x1="1.5" y1="118.8" x2="148.4" y2="165" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#b58aff" stop-opacity="0"/>
+                  <stop offset=".48" stop-color="#aa78fa" stop-opacity=".03"/>
+                  <stop offset=".86" stop-color="#be94ff" stop-opacity=".16"/>
+                  <stop offset="1" stop-color="#c8aaff" stop-opacity=".02"/>
+                </linearGradient>
+                <linearGradient id="releaseFieldEdge" x1="-13.1" y1="112.9" x2="233.1" y2="143.1" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#9e6dec" stop-opacity="0"/>
+                  <stop offset=".22" stop-color="#a97bf5" stop-opacity=".45"/>
+                  <stop offset=".54" stop-color="#e0c9ff" stop-opacity=".95"/>
+                  <stop offset=".82" stop-color="#bb8ff8" stop-opacity=".6"/>
+                  <stop offset="1" stop-color="#a879ef" stop-opacity="0"/>
+                </linearGradient>
+                <!-- Маршруты бликов лежат на передней кромке, но начинаются
+                     отступив от краёв: на крутом загибе прямой хвост торчал. -->
+                <path id="releaseFieldFront" d="M-13.1 112.9A124 32 7 0 0 110 160.2A124 32 7 0 0 233.1 143.1"/>
+                <path id="releaseFieldLeft" d="M-5.6 125.9A124 32 7 0 0 110 160.2"/>
+                <path id="releaseFieldRight" d="M222.7 153.9A124 32 7 0 1 110 160.2"/>
               </defs>
-              <g class="scene-orbit release-orbit" transform="translate(110 141) scale(.52 .46)">
-                <use href="#sceneOrbitBase"/>
-              </g>
-              <g class="release-orbit-traveler" data-field-route="releaseOrbitLeft">
-                <ellipse cx="-5" rx="13" ry="3" fill="url(#sceneOrbitSpark)"/>
-                <circle r="8" fill="url(#sceneOrbitSpark)"/><circle r="1.3" fill="#efddff"/>
-              </g>
-              <g class="release-orbit-traveler" data-field-route="releaseOrbitRight">
-                <ellipse cx="-5" rx="13" ry="3" fill="url(#sceneOrbitSpark)"/>
-                <circle r="8" fill="url(#sceneOrbitSpark)"/><circle r="1.3" fill="#efddff"/>
+              <!-- Чаша света по образцу базы: дальняя дуга уходит за стойку,
+                   передняя кромка лежит ниже её дна. Размытия нет — блики
+                   перерисовывают кромку в каждом кадре; мягкость дают слои штриха. -->
+              <g class="release-field-back">
+                <ellipse cx="110" cy="128" rx="148" ry="40" transform="rotate(7 110 128)" fill="url(#releaseFieldHaze)"/>
+                <path d="M-13.1 112.9A124 32 7 0 1 113.9 96.2A124 32 7 0 1 233.1 143.1" stroke="url(#releaseFieldEdge)" opacity=".4"/>
+                <path d="M5 107.6A111 27 7 0 1 113.3 101.2A111 27 7 0 1 213.4 130.5" stroke="url(#releaseFieldEdge)" stroke-dasharray="1 6" opacity=".34"/>
+                <path d="M-13.1 112.9A124 32 7 0 0 110 160.2A124 32 7 0 0 233.1 143.1A124 25 7 0 1 110 153.2A124 25 7 0 1 -13.1 112.9Z" fill="url(#releaseFieldGlass)"/>
+                <ellipse class="release-field-glow" cx="110" cy="142" rx="96" ry="20" fill="url(#releaseFieldGlow)"/>
               </g>
               <path class="release-server-top" d="m40 62 70-23 70 23-70 23Z"/>
               <path class="release-server-face" d="m40 62 70 23v62l-70-23Zm70 23 70-23v62l-70 23Z"/>
               <path class="release-line-dim" d="m40 83 70 23 70-23M40 104l70 23 70-23"/>
               <path class="release-line release-server-flow" pathLength="1" d="m123 101 34-11m-34 31 34-11"/>
               <g class="release-server-lights"><path style="--light: 0s" d="m53 87 8 3"/><path style="--light: .26s" d="m53 107 8 3"/></g>
+              <g class="release-field-front" stroke="url(#releaseFieldEdge)">
+                <use href="#releaseFieldFront" stroke-width="7" opacity=".08"/>
+                <use href="#releaseFieldFront" stroke-width="3.4" opacity=".18"/>
+                <use href="#releaseFieldFront" stroke-width="1.1"/>
+                <path d="M.8 122.5A114 27 7 0 0 110 155.2A114 27 7 0 0 177.1 157.7" stroke-width=".65" opacity=".3"/>
+              </g>
+              <g class="release-field-traveler" data-field-route="releaseFieldLeft">
+                <ellipse cx="-6" rx="16" ry="3.6" fill="url(#sceneOrbitSpark)"/>
+                <circle r="10" fill="url(#sceneOrbitSpark)"/><circle r="1.6" fill="#efddff"/>
+              </g>
+              <g class="release-field-traveler" data-field-route="releaseFieldRight">
+                <ellipse cx="-6" rx="16" ry="3.6" fill="url(#sceneOrbitSpark)"/>
+                <circle r="10" fill="url(#sceneOrbitSpark)"/><circle r="1.6" fill="#efddff"/>
+              </g>
               <path class="release-land" d="m40 62 70-23 70 23-70 23Z"/>
               <g class="release-package">
                 <path class="release-package-top" d="m86 24 24-9 24 9-24 9Z"/>
@@ -3508,7 +3521,16 @@
               <linearGradient id="contactEdge" x1="157" y1="103" x2="381" y2="267" gradientUnits="userSpaceOnUse"><stop stop-color="#ad86ec" stop-opacity=".25"/><stop offset=".42" stop-color="#e5d7ff" stop-opacity=".95"/><stop offset="1" stop-color="#9063ce" stop-opacity=".2"/></linearGradient>
               <linearGradient id="contactFold" x1="174" y1="217" x2="401" y2="267" gradientUnits="userSpaceOnUse"><stop stop-color="#322144"/><stop offset=".55" stop-color="#24182f"/><stop offset="1" stop-color="#191222"/></linearGradient>
               <linearGradient id="contactOrbit" x1="84" y1="229" x2="484" y2="267" gradientUnits="userSpaceOnUse"><stop stop-color="#a879ef" stop-opacity="0"/><stop offset=".3" stop-color="#a879ef" stop-opacity=".45"/><stop offset=".65" stop-color="#ddc5ff" stop-opacity=".7"/><stop offset="1" stop-color="#a879ef" stop-opacity="0"/></linearGradient>
+              <!-- Наружная сторона клапана: светлее у сгиба, темнее к вершине.
+                   Координаты открытого клапана, закрытый — его отражение. -->
+              <linearGradient id="contactFlap" x1="250" y1="117" x2="241" y2="44" gradientUnits="userSpaceOnUse"><stop stop-color="#3b2a55"/><stop offset="1" stop-color="#1e1531"/></linearGradient>
               <filter id="contactSoftGlow" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="6"/></filter>
+              <!-- Письмо уходит в конверт: ниже его дна рисунка нет. -->
+              <clipPath id="contactLetterClip"><path d="M0 0H560V204.5L0 316Z"/></clipPath>
+              <!-- Маршруты бликов лежат на передней дуге орбиты и начинаются там,
+                   где загиб у концов уже пологий. -->
+              <path id="contactOrbitLeft" d="M69.4 261.2C101 287.4 195.9 294.1 296 272.7"/>
+              <path id="contactOrbitRight" d="M489.2 184.9C470.9 214.2 401.4 247.5 312 269 306.7 270.3 301.3 271.5 296 272.7"/>
             </defs>
             <ellipse cx="281" cy="234" rx="255" ry="105" fill="url(#contactHalo)"/>
             <ellipse cx="282" cy="260" rx="143" ry="24" fill="#9b6bff" opacity=".07" filter="url(#contactSoftGlow)"/>
@@ -3516,30 +3538,58 @@
               <ellipse cx="280" cy="230" rx="222" ry="65" opacity=".28"/>
               <ellipse cx="280" cy="230" rx="198" ry="52" opacity=".35" stroke-dasharray="2 10"/>
             </g>
+            <!-- Цикл 10 с: письмо поднимается и заполняется, уходит внутрь,
+                 клапан закрывается, печать загорается, конверт приподнимается
+                 и возвращается открытым. Исходные позиции — готовый рисунок:
+                 его же видно при уменьшении движения. -->
             <g class="contact-envelope-motion">
-              <path d="m137 139 98-93a12 12 0 0 1 13-3l116 52-91 125Z" fill="#1b122c" stroke="url(#contactEdge)"/>
-              <path d="m145 142 99-85 108 43" stroke="#d3b4ff" stroke-opacity=".12"/>
-              <g class="contact-letter">
-                <path d="m175 91 148-29a10 10 0 0 1 12 8l30 144-169 34-30-145a10 10 0 0 1 9-12Z" fill="url(#contactPaper)" stroke="url(#contactEdge)"/>
-                <path d="m192 111 32-6m-28 25 117-23m-112 44 91-18m-87 38 109-22" stroke="#d9c5f5" stroke-opacity=".48" stroke-width="3" stroke-linecap="round"/>
-                <path d="m303 87 4-1" stroke="#eadfff" stroke-width="5" stroke-linecap="round"/>
+              <path d="M137 139 364 95 273 220Z" fill="#1b122c"/>
+              <g class="contact-flap contact-flap-back">
+                <path d="m137 139 98-93a12 12 0 0 1 13-3l116 52Z" fill="#1b122c" stroke="url(#contactEdge)"/>
+                <path d="m145 142 99-85 108 43" stroke="#d3b4ff" stroke-opacity=".12"/>
+              </g>
+              <g clip-path="url(#contactLetterClip)">
+                <g class="contact-letter">
+                  <path d="m175 91 148-29a10 10 0 0 1 12 8l30 144-169 34-30-145a10 10 0 0 1 9-12Z" fill="url(#contactPaper)" stroke="url(#contactEdge)"/>
+                  <g stroke="#d9c5f5" stroke-opacity=".48" stroke-width="3" stroke-linecap="round">
+                    <path class="contact-letter-line" d="m192 111 32-6"/>
+                    <path class="contact-letter-line" style="--contact-row: 1" d="m196 130 117-23"/>
+                    <path class="contact-letter-line" style="--contact-row: 2" d="m201 151 91-18"/>
+                    <path class="contact-letter-line" style="--contact-row: 3" d="m205 171 109-22"/>
+                  </g>
+                  <path class="contact-letter-pin" d="m303 87 4-1" stroke="#eadfff" stroke-width="5" stroke-linecap="round"/>
+                </g>
               </g>
               <path d="m137 139 226-44 44 140-226 45Z" fill="url(#contactGlass)" stroke="url(#contactEdge)"/>
               <path d="m181 280 226-45 2 8-226 45Z" fill="#21152f" stroke="#865cae" stroke-opacity=".3"/>
-              <path d="m137 139 130 62 96-106" stroke="#dac2ff" stroke-opacity=".64" stroke-width="1.2"/>
+              <path class="contact-envelope-v" d="m137 139 130 62 96-106" stroke="#dac2ff" stroke-opacity=".64" stroke-width="1.2"/>
               <path d="m181 280 81-103a8 8 0 0 1 10-2l135 60Z" fill="url(#contactFold)" stroke="url(#contactEdge)"/>
               <path d="m187 277 78-98a4 4 0 0 1 5-1l132 57" stroke="#e6ceff" stroke-opacity=".18"/>
               <path class="contact-envelope-shine" d="m183 280 116-23" stroke="#bd8afa" stroke-width="3" opacity=".45" filter="url(#contactSoftGlow)"/>
               <path d="m183 280 116-23" stroke="#d6b1ff" stroke-opacity=".55"/>
+              <!-- Закрытый клапан — отражение открытого через сгиб, поэтому лежит
+                   поверх нижнего клапана, как у настоящего конверта. -->
+              <g class="contact-flap contact-flap-front">
+                <path d="m137 139 98-93a12 12 0 0 1 13-3l116 52Z" fill="url(#contactFlap)" stroke="url(#contactEdge)"/>
+              </g>
               <g transform="translate(299 225)">
-                <circle r="17" fill="#241736" stroke="#c59aed" stroke-opacity=".55"/>
-                <path d="m-5 0 4 4 7-8" stroke="#e0c6ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle class="contact-seal-ring" r="17" stroke="#d6b1ff" stroke-width="1.2"/>
+                <g class="contact-seal">
+                  <circle r="17" fill="#241736" stroke="#c59aed" stroke-opacity=".55"/>
+                  <path class="contact-seal-check" d="m-5 0 4 4 7-8" stroke="#e0c6ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </g>
               </g>
             </g>
             <path d="M59 246c10 40 130 53 253 23 104-25 181-66 182-98" stroke="url(#contactOrbit)"/>
-            <g class="contact-spark contact-spark-a" transform="translate(99 257)"><circle r="10" fill="#ad79ff" opacity=".5" filter="url(#contactSoftGlow)"/><circle r="2.5" fill="#e7d2ff"/></g>
-            <g class="contact-spark contact-spark-b" transform="translate(449 212)"><circle r="9" fill="#ad79ff" opacity=".5" filter="url(#contactSoftGlow)"/><circle r="2" fill="#e7d2ff"/></g>
-            <g class="contact-spark contact-spark-c" stroke="#b99adf" stroke-linecap="round"><path d="M427 93v10m-5-5h10M121 103v6m-3-3h6"/></g>
+            <g class="contact-field-traveler" data-field-route="contactOrbitLeft">
+              <ellipse cx="-8" rx="20" ry="4.6" fill="url(#sceneOrbitSpark)"/>
+              <circle r="12" fill="url(#sceneOrbitSpark)"/><circle r="2.2" fill="#efddff"/>
+            </g>
+            <g class="contact-field-traveler" data-field-route="contactOrbitRight">
+              <ellipse cx="-8" rx="20" ry="4.6" fill="url(#sceneOrbitSpark)"/>
+              <circle r="12" fill="url(#sceneOrbitSpark)"/><circle r="2.2" fill="#efddff"/>
+            </g>
+            <g class="contact-spark" stroke="#b99adf" stroke-linecap="round"><path d="M427 93v10m-5-5h10M121 103v6m-3-3h6"/></g>
             <circle cx="78" cy="187" r="1.5" fill="#a48aba" opacity=".5"/>
             <circle cx="469" cy="136" r="1.5" fill="#a48aba" opacity=".6"/>
           </svg>
