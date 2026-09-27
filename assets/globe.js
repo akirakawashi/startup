@@ -1,5 +1,5 @@
-/* Globe coordinates: https://reflect.app/home/build/q-d6354721.js
-   Original projection: radius 200, camera distance 520, polar angle 1 rad,
+/* Dotted globe.
+   Projection: radius 200, camera distance 520, polar angle 1 rad,
    vertical FOV 60 degrees, viewport 1400 x 1200, crop y=89..509.
    The point buffer is uploaded once. Each frame changes only the camera angle. */
 (function () {
@@ -365,8 +365,8 @@
       angleUniform = gl.getUniformLocation(program, 'uAngle');
       scaleUniform = gl.getUniformLocation(program, 'uScale');
 
-      // Reflect uses this 16 x 16 circle as the point sprite. Keeping its
-      // filtered edge preserves the faint pixels around each bright core.
+      // A 16 x 16 circle is the point sprite. Keeping its filtered edge
+      // preserves the faint pixels around each bright core.
       var stamp = document.createElement('canvas');
       stamp.width = stamp.height = 16;
       var ink = stamp.getContext('2d');
@@ -397,8 +397,8 @@
   }
 
   function resize() {
-    // One sample per CSS pixel, as in Reflect. Retina does not multiply
-    // the framebuffer; image-rendering keeps the point texture crisp.
+    // One sample per CSS pixel. Retina does not multiply the framebuffer;
+    // image-rendering keeps the point texture crisp.
     var width = Math.round(canvas.clientWidth);
     var height = Math.round(canvas.clientHeight);
     if (canvas.width === width && canvas.height === height) return false;

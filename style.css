@@ -2019,7 +2019,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
   .faq-ambient, .faq-glint, .faq-item::before, .faq-item::after { display: none; }
 }
 
-/* ---------- Предложение: сфера из Reflect ----------
+/* ---------- Предложение: сфера ----------
    Исходный PNG 1488 × 1674 содержит свет, меридианы и отражение.
    Шесть исходных масок лежат в assets/orb-masks.css: под каждой движется
    одна полоса градиента. Маски неподвижны, а transform композится по
@@ -2209,7 +2209,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 }
 
 
-/* ---------- AI: портал и демонстрация Reflect ---------- */
+/* ---------- AI: портал и демонстрация ---------- */
 .ai {
   position: relative; isolation: isolate; overflow: hidden;
   padding: 96px 0 104px;
@@ -2233,8 +2233,8 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .ai-description { max-width: 640px; margin: 20px auto 0; color: var(--muted); font-size: .9375rem; line-height: 24px; }
 .ai-stage { position: relative; height: 487px; }
 
-/* Координаты оригинала: картинка 1440 × 835, карточка на y=256,
-   основание портала на y=476. Фактура — на свете, кромка отдельно. */
+/* Координаты картинки 1440 × 835: карточка на y=256, основание портала
+   на y=476. Фактура — на свете, кромка отдельно. */
 .ai-art {
   position: absolute; top: -112px; left: 50%;
   width: 1440px; height: 835px; transform: translateX(-50%);
@@ -2448,7 +2448,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
   .ai-stars i, .ai-rays i::before, .ai-border-light::before { animation: none; }
 }
 
-/* ---------- Отзывы: сердце и две ленты Reflect ---------- */
+/* ---------- Отзывы: сердце и две ленты ---------- */
 .love {
   --love-card: 480px; --love-gap: 24px;
   position: relative; isolation: isolate; overflow: hidden;
@@ -2588,7 +2588,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 }
 @media (prefers-reduced-motion: reduce) { .love-stars i { animation: none; } }
 
-/* ---------- О нас: точечный глобус Reflect ---------- */
+/* ---------- О нас: точечный глобус ---------- */
 .team {
   --globe-width: clamp(800px, 120vw, 1400px);
   position: relative;
@@ -2639,7 +2639,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 }
 .team-lines::after { transform: scaleY(-1); }
 
-/* Система координат оригинала: 1400 × 1200, камера 60°, радиус 200.
+/* Система координат сцены: 1400 × 1200, камера 60°, радиус 200.
    На экран попадает полоса y=89..509; рисуем только эти 420 px.
    Маска плавно гасит низ, а фактуру дают сами отдельные точки. */
 .team-globe {
@@ -3036,9 +3036,8 @@ button, input, select, textarea { font: inherit; color: inherit; }
 
 
 /* ---------- Релизы: радар ----------
-   Устройство подсмотрено у reflect.app, но собрано иначе: у них кольца —
-   растровая картинка, у нас svg (одна разметка, резко на любом экране).
-   Остальное — CSS.
+   Кольца — svg, а не растровая картинка: одна разметка, резко на любом
+   экране. Остальное — CSS.
 
    Три вещи держат композицию:
      1. Видна только верхняя половина радара. Нижнюю закрывает завеса цвета
@@ -3061,8 +3060,8 @@ button, input, select, textarea { font: inherit; color: inherit; }
   color: var(--text);
 }
 
-/* короткие вертикальные рейки от горизонта вниз — деталь образца: они
-   привязывают радар к колонке текста. z-index нужен, иначе их накроет завеса */
+/* короткие вертикальные рейки от горизонта вниз привязывают радар
+   к колонке текста. z-index нужен, иначе их накроет завеса */
 .radar::before, .radar::after {
   content: ""; position: absolute; z-index: 1;
   top: calc(var(--radar-top) + var(--radar) / 2);
@@ -3095,8 +3094,8 @@ button, input, select, textarea { font: inherit; color: inherit; }
   background: conic-gradient(from 0deg,
       transparent 0 83%, rgba(var(--accent-rgb), .08) 88%,
       rgba(var(--accent-rgb), .24) 95%, rgba(var(--accent-rgb), .46) 100%);
-  /* луч доходит до обода и гаснет ровно на нём: у образца он тоже идёт во всю
-     длину, а у нас маска съедала его на середине и сектор терялся */
+  /* луч доходит до обода и гаснет ровно на нём: когда маска съедала его
+     на середине, сектор терялся */
   -webkit-mask-image: radial-gradient(circle closest-side, #000 0 88%, transparent 96%);
           mask-image: radial-gradient(circle closest-side, #000 0 88%, transparent 96%);
   animation: radarSpin 9s linear infinite;
@@ -3487,7 +3486,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 /* --- панель --- */
 /* Свет вокруг окна рисует canvas .checks-glow (см. script.js, «Свет у
    панели проверок»): два источника, тёплый и холодный, обходят рамку по
-   кругу, как в видео у huly.io. Здесь только размещение холста и безель. */
+   кругу. Здесь только размещение холста и безель. */
 .checks-shot {
   position: relative;
   margin-top: clamp(64px, 8vw, 112px);
@@ -4030,16 +4029,15 @@ button, input, select, textarea { font: inherit; color: inherit; }
 }
 
 /* ---------- Ключи: поле шифротекста ----------
-   Образец — блок «Hardened security» на reflect.app: фон там видео 1920×1080
-   (VP9), показанное шире колонки текста и убранное под радиальную маску.
-   Поле пробовали собирать разметкой — тремя слоями текста с кольцом-маской
-   по зарегистрированной переменной радиуса. Вышло и дороже (двести слов с
-   тенями перерисовывались под движущейся маской каждый кадр), и грубее
-   ролика: у него за кольцом живой ореол, заливающий междустрочье, а
-   text-shadow тонкой буквы этого не даёт. Оставлен ролик, как у образца.
+   Фон — ролик, показанный шире колонки текста и убранный под радиальную
+   маску. Поле пробовали собирать разметкой — тремя слоями текста с
+   кольцом-маской по зарегистрированной переменной радиуса. Вышло и дороже
+   (двести слов с тенями перерисовывались под движущейся маской каждый
+   кадр), и грубее ролика: у него за кольцом живой ореол, заливающий
+   междустрочье, а text-shadow тонкой буквы этого не даёт. Оставлен ролик.
 
    Кадр шире колонки: эллипс занимает около 70 % его ширины, поэтому на
-   показе в 1568 px он выходит примерно на те же 1090 px, что и у образца.
+   показе в 1568 px он выходит примерно на 1090 px.
    По высоте кадр обрезан (object-fit: cover): в 16:9 над и под эллипсом
    лежит пустая темнота, а места над замком всего --pad-t, и полный кадр
    верхом упирался бы в край секции с её overflow: hidden — срез шёл бы
@@ -5224,6 +5222,12 @@ button, input, select, textarea { font: inherit; color: inherit; }
   .orb-trail i { animation: none; }
   /* ролик «Ключей» останавливает скрипт: на месте остаётся постер — тот же
      кадр покоя, что и в начале ролика */
+}
+
+/* Без JavaScript класс .in ставить некому: блоки видны сразу. */
+@media (scripting: none) {
+  .reveal { opacity: 1; transform: none; }
+  .underline-grow::after { transform: scaleX(1); }
 }
 
 @media print {

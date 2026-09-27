@@ -51,7 +51,7 @@
 
 <header class="topbar" id="topbar">
   <div class="wrap topbar-inner">
-    <a class="wordmark" href="#top" aria-label="На главную">
+    <a class="wordmark" href="#top" aria-label="VoidLabs — на главную">
       <span class="wordmark-mark" aria-hidden="true">
         <svg viewBox="0 0 100 100" width="26" height="26">
           <ellipse cx="50" cy="50" rx="26" ry="26" fill="none" stroke="currentColor" stroke-width="9"/>
@@ -1855,8 +1855,8 @@
   <div class="radar-stage" aria-hidden="true">
     <svg class="radar-net" viewBox="0 0 900 900" aria-hidden="true">
       <defs>
-        <!-- общий спад яркости от центра к ободу: у них он плавный, а не
-             ступенями по кольцам. Замер: rgb(36,23,114) в центре при фоне (3,0,20) -->
+        <!-- общий спад яркости от центра к ободу: плавный, а не ступенями
+             по кольцам. В центре rgb(36,23,114) при фоне (3,0,20) -->
         <radialGradient id="radarDome">
           <stop offset="0"   stop-color="#7a5cff" stop-opacity=".15"/>
           <stop offset=".38" stop-color="#7a5cff" stop-opacity=".105"/>
@@ -2122,9 +2122,9 @@
 
 <!-- ===================== ПРОВЕРКИ ===================== -->
 <!-- Свечение вокруг панели рисует canvas (script.js, «Свет у панели
-     проверок»): два источника света обходят рамку по кругу. У huly.io это
-     видео на 9,6 МБ под панелью с фиксированными пропорциями; у нас высота
-     панели зависит от текста, поэтому тот же свет считается на лету. -->
+     проверок»): два источника света обходят рамку по кругу. Высота панели
+     зависит от текста, поэтому свет считается на лету, а не идёт видео
+     с фиксированными пропорциями. -->
 <section class="checks" id="checks">
   <div class="wrap">
     <h2 class="checks-title reveal">Проверки, которые<br>нельзя обойти.</h2>
@@ -2210,7 +2210,7 @@
 <section class="portfolio" id="cases" aria-labelledby="portfolio-title">
   <div class="wrap">
     <header class="portfolio-head reveal">
-      <p class="portfolio-eyebrow">03 / избранные проекты</p>
+      <p class="portfolio-eyebrow">02 / избранные проекты</p>
       <h2 id="portfolio-title">Проекты,<br><span>которые работают.</span></h2>
     </header>
 
@@ -2362,7 +2362,7 @@
 <section class="stack" id="stack" aria-labelledby="stack-title">
   <div class="wrap">
     <header class="stack-head reveal">
-      <p class="stack-eyebrow">04 / технологии</p>
+      <p class="stack-eyebrow">03 / технологии</p>
       <h2 id="stack-title">Технологии <span>под вашу задачу.</span></h2>
       <p class="stack-lede">Выбираем стек под задачу, нагрузку и развитие.</p>
     </header>
@@ -3408,8 +3408,8 @@
 </section>
 
 <!-- ===================== ПРЕДЛОЖЕНИЕ ===================== -->
-<!-- Сфера и шесть масок световых дорожек из https://reflect.app/home#pricing.
-     Изображение уже содержит кромку, меридианы и отражение. Полосы света
+<!-- Сфера и шесть масок световых дорожек. Изображение уже содержит
+     кромку, меридианы и отражение. Полосы света
      движутся под неподвижными масками, частицы поднимаются отдельными слоями.
      Цены на сайте не называются (см. «Вопросы»), поэтому на месте суммы
      стоит то, что мы обещаем: один договор и одна точка
@@ -3523,9 +3523,9 @@
 </section>
 
 <!-- ===================== О НАС ===================== -->
-<!-- Геометрия точечного глобуса и композиция — https://reflect.app/home.
-     assets/globe.js рисует исходные точки; PNG остаётся при reduced motion
-     и недоступном WebGL. Весь декоративный слой скрыт от скринридера. -->
+<!-- Точечный глобус: assets/globe.js рисует точки на WebGL; PNG остаётся
+     при reduced motion и недоступном WebGL. Весь декоративный слой скрыт
+     от скринридера. -->
 <section class="team idle" id="about" aria-labelledby="about-title">
   <div class="team-lines" aria-hidden="true"></div>
 
@@ -3708,7 +3708,7 @@
             <span><b>Telegram</b><small>Написать напрямую</small></span>
             <svg class="contact-channel-action" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M5 15 15 5M5 5h10v10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </a>
-          <button class="contact-channel copy-btn" type="button" data-copy="akirakawashikz@gmail.com" aria-label="Скопировать почту akirakawashikz@gmail.com">
+          <button class="contact-channel copy-btn" type="button" data-copy="akirakawashikz@gmail.com" aria-label="Почта: скопировать адрес akirakawashikz@gmail.com">
             <span class="contact-channel-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="3" stroke="currentColor" stroke-width="1.4"/><path d="m4 7 8 6 8-6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span><b>Почта</b><small>Скопировать адрес</small></span>
             <svg class="contact-channel-action" viewBox="0 0 20 20" fill="none" aria-hidden="true"><rect x="7" y="7" width="9" height="10" rx="2" stroke="currentColor" stroke-width="1.3"/><path d="M12 7V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2" stroke="currentColor" stroke-width="1.3"/></svg>
